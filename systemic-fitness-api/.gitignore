@@ -1,0 +1,24 @@
+# Binaries
+/bin/
+/tmp/
+/server
+/fitcoach-api
+*.exe
+*.test
+
+# Go build
+*.out
+
+# Runtime data
+/uploads/
+
+# Secrets (NEVER commit)
+.env
+.env.local
+.env.*.local
+
+# IDE / OS junk
+.DS_Store
+.idea/
+.vscode/
+*.swp

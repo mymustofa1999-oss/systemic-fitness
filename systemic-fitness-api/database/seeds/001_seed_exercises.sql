@@ -1,0 +1,252 @@
+-- ═══════════════════════════════════════════════════════════════════
+--  Seed: Exercise Library (system defaults)
+--  35 common exercises across all muscle groups
+-- ═══════════════════════════════════════════════════════════════════
+
+INSERT INTO exercises (name, description, muscle_group, equipment, difficulty, video_url, instructions, is_system) VALUES
+
+-- ─── CHEST ──────────────────────────────────────────────────────
+('Barbell Bench Press',
+ 'Compound chest exercise. The king of upper body pressing movements.',
+ ARRAY['chest', 'triceps', 'shoulders'], 'barbell', 'intermediate',
+ 'https://www.youtube.com/watch?v=rT7DgCr-3pg',
+ ARRAY['Lie flat on bench with feet on floor', 'Grip bar slightly wider than shoulder width', 'Unrack and lower bar to mid-chest', 'Press up to full lockout'],
+ TRUE),
+
+('Dumbbell Incline Press',
+ 'Upper chest focused pressing movement on an incline bench.',
+ ARRAY['chest', 'shoulders', 'triceps'], 'dumbbell', 'intermediate',
+ 'https://www.youtube.com/watch?v=8iPEnn-ltC8',
+ ARRAY['Set bench to 30-45 degree incline', 'Press dumbbells from shoulder level to full extension', 'Lower with control'],
+ TRUE),
+
+('Push-Up',
+ 'Bodyweight chest exercise. Fundamental pushing movement.',
+ ARRAY['chest', 'triceps', 'shoulders', 'core'], 'bodyweight', 'beginner',
+ 'https://www.youtube.com/watch?v=IODxDxX7oi4',
+ ARRAY['Start in plank position with hands shoulder-width apart', 'Lower chest to floor', 'Push back up to starting position', 'Keep core tight throughout'],
+ TRUE),
+
+('Dumbbell Chest Fly',
+ 'Isolation exercise targeting the chest with a wide arc motion.',
+ ARRAY['chest'], 'dumbbell', 'beginner',
+ 'https://www.youtube.com/watch?v=eozdVDA78K0',
+ ARRAY['Lie flat on bench holding dumbbells above chest', 'Open arms wide in arc motion with slight bend in elbows', 'Squeeze chest to bring dumbbells back together'],
+ TRUE),
+
+-- ─── BACK ───────────────────────────────────────────────────────
+('Barbell Deadlift',
+ 'Full-body compound lift. The ultimate strength builder.',
+ ARRAY['back', 'hamstrings', 'glutes', 'core'], 'barbell', 'advanced',
+ 'https://www.youtube.com/watch?v=op9kVnSso6Q',
+ ARRAY['Stand with feet hip-width, bar over mid-foot', 'Hinge at hips, grip bar outside knees', 'Drive through floor, keeping bar close to body', 'Stand tall, squeeze glutes at top', 'Return bar to floor with control'],
+ TRUE),
+
+('Pull-Up',
+ 'Bodyweight back exercise. Gold standard for upper back development.',
+ ARRAY['back', 'biceps', 'core'], 'pull-up bar', 'intermediate',
+ 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
+ ARRAY['Hang from bar with overhand grip, slightly wider than shoulders', 'Pull up until chin clears bar', 'Lower with control to full hang'],
+ TRUE),
+
+('Barbell Bent-Over Row',
+ 'Compound back exercise building thickness.',
+ ARRAY['back', 'biceps', 'core'], 'barbell', 'intermediate',
+ 'https://www.youtube.com/watch?v=FWJR5Ve8bnQ',
+ ARRAY['Hinge at hips about 45 degrees', 'Pull bar to lower chest/upper abdomen', 'Squeeze shoulder blades at top', 'Lower with control'],
+ TRUE),
+
+('Lat Pulldown',
+ 'Machine back exercise targeting lats. Easier alternative to pull-ups.',
+ ARRAY['back', 'biceps'], 'cable machine', 'beginner',
+ 'https://www.youtube.com/watch?v=CAwf7n6Luuc',
+ ARRAY['Grip bar wider than shoulder width', 'Pull bar down to upper chest', 'Squeeze lats at bottom', 'Return with control'],
+ TRUE),
+
+('Seated Cable Row',
+ 'Machine back exercise targeting mid-back thickness.',
+ ARRAY['back', 'biceps'], 'cable machine', 'beginner',
+ 'https://www.youtube.com/watch?v=GZbfZ033f74',
+ ARRAY['Sit with feet on platform, slight knee bend', 'Pull handle to abdomen', 'Squeeze shoulder blades together', 'Extend arms with control'],
+ TRUE),
+
+-- ─── LEGS ───────────────────────────────────────────────────────
+('Barbell Back Squat',
+ 'King of leg exercises. Full lower body compound movement.',
+ ARRAY['quadriceps', 'glutes', 'hamstrings', 'core'], 'barbell', 'intermediate',
+ 'https://www.youtube.com/watch?v=ultWZbUMPL8',
+ ARRAY['Bar on upper traps, feet shoulder-width apart', 'Break at hips and knees simultaneously', 'Descend until thighs are parallel or below', 'Drive up through heels'],
+ TRUE),
+
+('Romanian Deadlift',
+ 'Hip-hinge movement targeting posterior chain.',
+ ARRAY['hamstrings', 'glutes', 'back'], 'barbell', 'intermediate',
+ 'https://www.youtube.com/watch?v=7j-2w4-P14I',
+ ARRAY['Hold bar at hip level with slight knee bend', 'Hinge at hips, pushing them back', 'Lower bar along thighs until hamstring stretch', 'Drive hips forward to return'],
+ TRUE),
+
+('Leg Press',
+ 'Machine compound leg exercise. Safer alternative to squats.',
+ ARRAY['quadriceps', 'glutes'], 'machine', 'beginner',
+ 'https://www.youtube.com/watch?v=IZxyjW7MPJQ',
+ ARRAY['Sit in machine with feet shoulder-width on platform', 'Release safety and lower platform', 'Press through feet to extend legs', 'Do not lock knees at top'],
+ TRUE),
+
+('Walking Lunges',
+ 'Unilateral leg exercise improving balance and strength.',
+ ARRAY['quadriceps', 'glutes', 'hamstrings'], 'dumbbell', 'beginner',
+ 'https://www.youtube.com/watch?v=L8fvypPrzzs',
+ ARRAY['Hold dumbbells at sides', 'Step forward into lunge, both knees at 90 degrees', 'Push off front foot to step forward into next lunge'],
+ TRUE),
+
+('Leg Curl',
+ 'Isolation exercise for hamstrings.',
+ ARRAY['hamstrings'], 'machine', 'beginner',
+ 'https://www.youtube.com/watch?v=1Tq3QdYUuHs',
+ ARRAY['Lie face down on machine', 'Curl weight by bending knees', 'Squeeze hamstrings at top', 'Lower with control'],
+ TRUE),
+
+('Leg Extension',
+ 'Isolation exercise for quadriceps.',
+ ARRAY['quadriceps'], 'machine', 'beginner',
+ 'https://www.youtube.com/watch?v=YyvSfVjQeL0',
+ ARRAY['Sit in machine with pad on shins', 'Extend legs to full lockout', 'Squeeze quads at top', 'Lower with control'],
+ TRUE),
+
+('Calf Raise',
+ 'Isolation exercise for calves. Can be done standing or seated.',
+ ARRAY['calves'], 'machine', 'beginner',
+ 'https://www.youtube.com/watch?v=gwLzBJYoWlI',
+ ARRAY['Stand on edge of platform with heels hanging off', 'Rise up onto toes as high as possible', 'Lower heels below platform for full stretch'],
+ TRUE),
+
+-- ─── SHOULDERS ──────────────────────────────────────────────────
+('Overhead Press',
+ 'Compound shoulder exercise. Primary deltoid builder.',
+ ARRAY['shoulders', 'triceps', 'core'], 'barbell', 'intermediate',
+ 'https://www.youtube.com/watch?v=2yjwXTZQDDI',
+ ARRAY['Start with bar at shoulder height', 'Press overhead to full lockout', 'Move head forward once bar passes face', 'Lower with control'],
+ TRUE),
+
+('Dumbbell Lateral Raise',
+ 'Isolation exercise for side delts. Builds shoulder width.',
+ ARRAY['shoulders'], 'dumbbell', 'beginner',
+ 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+ ARRAY['Stand with dumbbells at sides', 'Raise arms out to sides until parallel with floor', 'Slight bend in elbows throughout', 'Lower with control'],
+ TRUE),
+
+('Face Pull',
+ 'Rear delt and rotator cuff exercise. Essential for shoulder health.',
+ ARRAY['shoulders', 'back'], 'cable machine', 'beginner',
+ 'https://www.youtube.com/watch?v=rep-qVOkqgk',
+ ARRAY['Set cable at face height with rope attachment', 'Pull rope to face, separating ends', 'Squeeze rear delts and external rotate', 'Return with control'],
+ TRUE),
+
+-- ─── ARMS ───────────────────────────────────────────────────────
+('Barbell Curl',
+ 'Classic bicep exercise for building arm size.',
+ ARRAY['biceps'], 'barbell', 'beginner',
+ 'https://www.youtube.com/watch?v=kwG2ipFRgfo',
+ ARRAY['Stand with bar at arms length, underhand grip', 'Curl bar to shoulder level', 'Keep elbows stationary at sides', 'Lower with control'],
+ TRUE),
+
+('Dumbbell Hammer Curl',
+ 'Bicep and forearm exercise with neutral grip.',
+ ARRAY['biceps', 'forearms'], 'dumbbell', 'beginner',
+ 'https://www.youtube.com/watch?v=zC3nLlEvin4',
+ ARRAY['Hold dumbbells with palms facing each other', 'Curl up keeping neutral grip', 'Lower with control'],
+ TRUE),
+
+('Tricep Pushdown',
+ 'Cable isolation exercise for triceps.',
+ ARRAY['triceps'], 'cable machine', 'beginner',
+ 'https://www.youtube.com/watch?v=2-LAMcpzODU',
+ ARRAY['Stand at cable machine with bar/rope at chest height', 'Push down to full extension', 'Keep elbows pinned at sides', 'Return with control'],
+ TRUE),
+
+('Close-Grip Bench Press',
+ 'Compound tricep exercise. Targets triceps with chest assistance.',
+ ARRAY['triceps', 'chest', 'shoulders'], 'barbell', 'intermediate',
+ 'https://www.youtube.com/watch?v=nEF0bv2FW94',
+ ARRAY['Lie on bench with hands shoulder-width apart', 'Lower bar to lower chest', 'Press up focusing on tricep contraction', 'Keep elbows closer to body than standard bench'],
+ TRUE),
+
+-- ─── CORE ───────────────────────────────────────────────────────
+('Plank',
+ 'Isometric core exercise. Foundation of core training.',
+ ARRAY['core'], 'bodyweight', 'beginner',
+ 'https://www.youtube.com/watch?v=ASdvN_XEl_c',
+ ARRAY['Forearms on ground, body in straight line', 'Squeeze glutes and brace core', 'Hold position for prescribed duration', 'Do not let hips sag or pike'],
+ TRUE),
+
+('Hanging Leg Raise',
+ 'Advanced core exercise targeting lower abs.',
+ ARRAY['core'], 'pull-up bar', 'advanced',
+ 'https://www.youtube.com/watch?v=hdng3Nm1x_E',
+ ARRAY['Hang from bar with straight arms', 'Raise legs until parallel or higher', 'Lower with control, no swinging', 'Keep core engaged throughout'],
+ TRUE),
+
+('Russian Twist',
+ 'Rotational core exercise targeting obliques.',
+ ARRAY['core'], 'bodyweight', 'beginner',
+ 'https://www.youtube.com/watch?v=wkD8rjkodUI',
+ ARRAY['Sit with knees bent, lean back slightly', 'Hold weight or hands together at chest', 'Rotate torso side to side', 'Keep feet elevated for added difficulty'],
+ TRUE),
+
+('Ab Wheel Rollout',
+ 'Advanced core exercise for full abdominal development.',
+ ARRAY['core', 'shoulders'], 'ab wheel', 'advanced',
+ 'https://www.youtube.com/watch?v=uYBOBBv9GzY',
+ ARRAY['Kneel with ab wheel in front', 'Roll forward extending body', 'Maintain tight core, do not arch back', 'Roll back to starting position'],
+ TRUE),
+
+-- ─── GLUTES ─────────────────────────────────────────────────────
+('Hip Thrust',
+ 'The best glute isolation exercise. Maximum glute activation.',
+ ARRAY['glutes', 'hamstrings'], 'barbell', 'intermediate',
+ 'https://www.youtube.com/watch?v=SEdqd1n0cvg',
+ ARRAY['Upper back on bench, bar across hips', 'Drive hips up until body is in straight line', 'Squeeze glutes hard at top', 'Lower with control'],
+ TRUE),
+
+('Bulgarian Split Squat',
+ 'Unilateral leg exercise with heavy glute emphasis.',
+ ARRAY['glutes', 'quadriceps', 'hamstrings'], 'dumbbell', 'intermediate',
+ 'https://www.youtube.com/watch?v=2C-uNgKwPLE',
+ ARRAY['Rear foot elevated on bench', 'Lower into lunge until rear knee nearly touches floor', 'Drive through front heel to stand', 'Keep torso upright'],
+ TRUE),
+
+-- ─── CARDIO ─────────────────────────────────────────────────────
+('Treadmill Run',
+ 'Cardiovascular exercise on treadmill. Adjustable speed and incline.',
+ ARRAY['cardio'], 'treadmill', 'beginner',
+ 'https://www.youtube.com/watch?v=8_gMCkbJ0NM',
+ ARRAY['Set desired speed and incline', 'Maintain steady pace for prescribed duration', 'Use incline for added intensity'],
+ TRUE),
+
+('Rowing Machine',
+ 'Full body cardiovascular exercise with back emphasis.',
+ ARRAY['cardio', 'back', 'legs'], 'rowing machine', 'beginner',
+ 'https://www.youtube.com/watch?v=kzuMvBCmn3I',
+ ARRAY['Drive with legs first, then lean back, then pull arms', 'Return in reverse order: arms, body, legs', 'Maintain steady rhythm'],
+ TRUE),
+
+('Jump Rope',
+ 'High-intensity cardio exercise improving coordination.',
+ ARRAY['cardio', 'calves'], 'jump rope', 'beginner',
+ 'https://www.youtube.com/watch?v=FJmRQ5iTXKE',
+ ARRAY['Hold rope handles at hip level', 'Jump with small hops, staying on balls of feet', 'Rotate rope with wrists not arms'],
+ TRUE),
+
+('Battle Ropes',
+ 'High-intensity upper body cardio exercise.',
+ ARRAY['cardio', 'shoulders', 'core'], 'battle ropes', 'intermediate',
+ 'https://www.youtube.com/watch?v=dsSahKBwefs',
+ ARRAY['Hold one end in each hand', 'Create waves by alternating arm slams', 'Maintain slight squat position', 'Keep core braced'],
+ TRUE),
+
+('Burpees',
+ 'Full-body cardio exercise. Maximum calorie burn.',
+ ARRAY['cardio', 'chest', 'core', 'legs'], 'bodyweight', 'intermediate',
+ 'https://www.youtube.com/watch?v=dZgVxmf6jkA',
+ ARRAY['Stand, then squat down placing hands on floor', 'Jump feet back to plank position', 'Do a push-up', 'Jump feet forward and explosively jump up with arms overhead'],
+ TRUE);

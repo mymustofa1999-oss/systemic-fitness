@@ -1,0 +1,104 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "SF Mobile - Poco F5 (Debug)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "93f47ff",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "SF Mobile - Poco F5 (Local API)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "93f47ff",
+      "flutterMode": "debug",
+      "args": [
+        "--dart-define=API_BASE_URL=http://192.168.1.171:8080/api",
+        "--dart-define=API_WS_URL=ws://192.168.1.171:8080/ws/messages"
+      ]
+    },
+    {
+      "name": "SF Mobile - Poco F5 (Profile)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "93f47ff",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "SF Mobile - Poco F5 (Release)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "93f47ff",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Flutter - Debug (Auto Device)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Flutter - SOV36 (Real Device)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "QV706R6011",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Flutter - SOV36 Profile (Real Device)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "QV706R6011",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Flutter - SOV36 Release (Real Device)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "QV706R6011",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Flutter - iPhone (Real Device)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "00008120-000661EC26C3601E",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Flutter - iPhone Profile (Real Device)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "00008120-000661EC26C3601E",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Flutter - iPhone Release (Real Device)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "00008120-000661EC26C3601E",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Flutter - Chrome (Web)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "chrome",
+      "flutterMode": "debug"
+    }
+  ]
+}

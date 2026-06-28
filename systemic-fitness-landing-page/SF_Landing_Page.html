@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Systemic Fitness — Human System Optimization</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A1628;
+  --navy-mid: #1B3A5C;
+  --blue: #2E6DA4;
+  --gold: #B8922E;
+  --gold-light: #D4A84B;
+  --teal: #0B5C5C;
+  --white: #FFFFFF;
+  --warm-white: #F8F6F1;
+  --charcoal: #2C2C2A;
+  --gray: #6B6B68;
+  --light-blue: #E8F0F8;
+  --border: rgba(255,255,255,0.1);
+  --border-dark: rgba(10,22,40,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--warm-white);
+  color: var(--charcoal);
+  overflow-x: hidden;
+}
+
+/* ── NAV ─────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 5%;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(10,22,40,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+}
+.nav-logo {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--white);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+}
+.nav-logo span { color: var(--gold-light); }
+.nav-links {
+  display: flex; align-items: center; gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 13px; color: rgba(255,255,255,0.6);
+  text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: var(--gold);
+  color: var(--white) !important;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: #a07828 !important; }
+
+/* ── HERO ────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex; align-items: center;
+  padding: 120px 5% 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-orb-1 {
+  position: absolute; top: -10%; right: -5%;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,146,46,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-orb-2 {
+  position: absolute; bottom: -10%; left: -5%;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(46,109,164,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.hero-content {
+  max-width: 720px;
+  position: relative; z-index: 2;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(184,146,46,0.15);
+  border: 0.5px solid rgba(184,146,46,0.4);
+  color: var(--gold-light);
+  font-size: 11px; letter-spacing: 0.14em;
+  padding: 6px 14px; border-radius: 20px;
+  margin-bottom: 32px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold-light);
+}
+
+.hero-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero-headline em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.hero-sub {
+  font-size: 17px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 48px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.hero-ctas {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.btn-primary {
+  background: var(--gold);
+  color: var(--white);
+  padding: 16px 36px;
+  border-radius: 8px;
+  font-size: 15px; font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+  display: inline-block;
+}
+.btn-primary:hover { background: #a07828; transform: translateY(-1px); }
+.btn-secondary {
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  padding: 16px 36px;
+  border-radius: 8px;
+  font-size: 15px;
+  border: 0.5px solid rgba(255,255,255,0.25);
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-secondary:hover { border-color: rgba(255,255,255,0.5); color: var(--white); }
+
+.hero-metrics {
+  margin-top: 64px;
+  display: flex; gap: 48px;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+.metric-item { border-left: 2px solid rgba(184,146,46,0.4); padding-left: 16px; }
+.metric-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 28px; color: var(--gold-light);
+}
+.metric-label {
+  font-size: 12px; color: rgba(255,255,255,0.45);
+  margin-top: 2px; line-height: 1.4;
+}
+
+/* ── SIGNAL SECTION ──────────────────────────── */
+.signals-section {
+  background: var(--white);
+  padding: 100px 5%;
+}
+.section-tag {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--gray);
+  margin-bottom: 12px;
+}
+.section-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.section-sub {
+  font-size: 16px; color: var(--gray);
+  line-height: 1.7; max-width: 520px;
+  margin-bottom: 56px;
+}
+
+.signals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+.signal-card {
+  background: var(--warm-white);
+  border: 0.5px solid var(--border-dark);
+  border-radius: 14px;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.signal-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(10,22,40,0.08); }
+.signal-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.sc-1::before { background: #E67E22; }
+.sc-2::before { background: var(--blue); }
+.sc-3::before { background: #8E44AD; }
+.sc-4::before { background: var(--gold); }
+
+.signal-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+.sc-1 .signal-icon { background: rgba(230,126,34,0.1); color: #E67E22; }
+.sc-2 .signal-icon { background: rgba(46,109,164,0.1); color: var(--blue); }
+.sc-3 .signal-icon { background: rgba(142,68,173,0.1); color: #8E44AD; }
+.sc-4 .signal-icon { background: rgba(184,146,46,0.1); color: var(--gold); }
+
+.signal-title {
+  font-size: 15px; font-weight: 500;
+  color: var(--navy); margin-bottom: 8px;
+}
+.signal-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+/* ── METHOD SECTION ──────────────────────────── */
+.method-section {
+  background: var(--navy);
+  padding: 100px 5%;
+  position: relative; overflow: hidden;
+}
+.method-section .hero-orb-1 { opacity: 0.5; }
+
+.method-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start;
+}
+@media (max-width: 768px) {
+  .method-layout { grid-template-columns: 1fr; gap: 48px; }
+}
+
+.method-left .section-tag { color: var(--gold-light); }
+.method-left .section-headline { color: var(--white); }
+.method-left .section-sub { color: rgba(255,255,255,0.5); }
+
+.tagline-box {
+  background: rgba(184,146,46,0.1);
+  border: 0.5px solid rgba(184,146,46,0.3);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-top: 32px;
+}
+.tagline-box p {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-style: italic;
+  color: var(--gold-light); line-height: 1.5;
+}
+.tagline-box span {
+  display: block; margin-top: 8px;
+  font-size: 12px; color: rgba(255,255,255,0.4);
+  font-style: normal; font-family: 'DM Sans', sans-serif;
+}
+
+.variables-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.var-card {
+  background: rgba(255,255,255,0.05);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px 18px;
+  position: relative; overflow: hidden;
+}
+.var-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.vc-blue::before { background: var(--blue); }
+.vc-teal::before { background: var(--teal); }
+.vc-gold::before { background: var(--gold); }
+.vc-purple::before { background: #5B2D8E; }
+
+.var-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; color: rgba(255,255,255,0.25);
+  margin-bottom: 8px;
+}
+.var-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 6px; }
+.var-desc { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+.pillars-row {
+  margin-top: 20px;
+  display: flex; gap: 8px;
+}
+.pillar-chip {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.pc-fc { background: rgba(11,92,92,0.2); color: #5DCAA5; border: 0.5px solid rgba(11,92,92,0.4); }
+.pc-cc { background: rgba(46,109,164,0.2); color: #85B7EB; border: 0.5px solid rgba(46,109,164,0.4); }
+.pc-mc { background: rgba(184,146,46,0.2); color: var(--gold-light); border: 0.5px solid rgba(184,146,46,0.4); }
+
+.pillar-full { font-size: 9px; margin-top: 3px; opacity: 0.6; }
+
+/* ── PROGRAMS SECTION ────────────────────────── */
+.programs-section {
+  background: var(--warm-white);
+  padding: 100px 5%;
+}
+.programs-header {
+  max-width: 600px; margin-bottom: 56px;
+}
+
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.prog-card {
+  background: var(--white);
+  border: 0.5px solid var(--border-dark);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.prog-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(10,22,40,0.1); }
+
+.prog-header {
+  padding: 28px 28px 20px;
+  border-bottom: 0.5px solid var(--border-dark);
+}
+.prog-tier {
+  display: inline-block;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 4px 10px; border-radius: 20px;
+  margin-bottom: 14px;
+}
+.pt-blue { background: rgba(46,109,164,0.1); color: #185FA5; }
+.pt-teal { background: rgba(11,92,92,0.1); color: var(--teal); }
+.pt-gold { background: rgba(184,146,46,0.12); color: #7A5000; }
+
+.prog-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 400;
+  color: var(--navy); margin-bottom: 8px; line-height: 1.3;
+}
+.prog-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+.prog-body { padding: 20px 28px 24px; }
+.prog-feature {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-bottom: 10px; font-size: 13px; color: var(--charcoal);
+}
+.prog-feature::before {
+  content: '—';
+  color: var(--gray); flex-shrink: 0; margin-top: 1px;
+}
+.prog-meta {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 0.5px solid var(--border-dark);
+  display: flex; gap: 20px;
+}
+.prog-meta-item { font-size: 12px; }
+.prog-meta-item strong { display: block; font-size: 14px; color: var(--navy); }
+.prog-meta-item span { color: var(--gray); }
+
+/* ── SCORE SECTION ───────────────────────────── */
+.score-section {
+  background: var(--navy);
+  padding: 100px 5%;
+}
+.score-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+@media (max-width: 768px) { .score-layout { grid-template-columns: 1fr; gap: 48px; } }
+
+.score-display {
+  background: rgba(255,255,255,0.05);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 40px;
+}
+.score-top {
+  display: flex; align-items: center; gap: 24px; margin-bottom: 32px;
+}
+.score-circle {
+  width: 100px; height: 100px; border-radius: 50%;
+  border: 3px solid var(--gold);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.score-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 32px; color: var(--gold-light); line-height: 1;
+}
+.score-word { font-size: 10px; color: rgba(212,168,75,0.6); letter-spacing: 0.1em; margin-top: 3px; }
+
+.score-bars { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-label { font-size: 12px; color: rgba(255,255,255,0.45); width: 60px; flex-shrink: 0; }
+.bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; }
+.bar-val { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.5); width: 24px; text-align: right; }
+
+.score-domains {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.domain-chip {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.domain-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.domain-text { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.4; }
+.domain-text strong { display: block; color: rgba(255,255,255,0.8); font-size: 13px; }
+
+.score-right .section-tag { color: var(--gold-light); }
+.score-right .section-headline { color: var(--white); margin-bottom: 20px; }
+.score-right .section-sub { color: rgba(255,255,255,0.5); margin-bottom: 32px; }
+
+.formula-box {
+  background: rgba(255,255,255,0.05);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  padding: 16px 20px; margin-bottom: 32px;
+}
+.formula-box p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+.formula-box strong { color: var(--gold-light); }
+
+/* ── HOW IT WORKS ────────────────────────────── */
+.how-section {
+  background: var(--white);
+  padding: 100px 5%;
+}
+.steps-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0;
+  margin-top: 56px;
+  position: relative;
+}
+.steps-row::before {
+  content: '';
+  position: absolute;
+  top: 28px; left: 14%; right: 14%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-dark) 20%, var(--border-dark) 80%, transparent);
+}
+.step-item { text-align: center; padding: 0 20px; position: relative; }
+.step-num {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  position: relative; z-index: 1;
+}
+.step-item:nth-child(2) .step-num { background: var(--teal); }
+.step-item:nth-child(3) .step-num { background: var(--blue); }
+.step-item:nth-child(4) .step-num { background: var(--gold); }
+
+.step-title { font-size: 15px; font-weight: 500; color: var(--navy); margin-bottom: 8px; }
+.step-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+/* ── PARTNER SECTION ─────────────────────────── */
+.partner-section {
+  background: var(--warm-white);
+  padding: 100px 5%;
+  border-top: 0.5px solid var(--border-dark);
+}
+.partner-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+@media (max-width: 768px) { .partner-layout { grid-template-columns: 1fr; gap: 48px; } }
+
+.partner-list {
+  display: flex; flex-direction: column; gap: 12px;
+  margin-top: 32px;
+}
+.partner-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: var(--white);
+  border: 0.5px solid var(--border-dark);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.partner-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--light-blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+  color: var(--blue);
+}
+.partner-text strong { display: block; font-size: 14px; color: var(--navy); margin-bottom: 3px; }
+.partner-text span { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+.partner-quote {
+  background: var(--navy);
+  border-radius: 16px;
+  padding: 40px;
+}
+.quote-tag {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--gold-light);
+  margin-bottom: 20px;
+}
+.quote-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-style: italic; font-weight: 400;
+  color: var(--white);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+.quote-attr {
+  font-size: 13px; color: rgba(255,255,255,0.45);
+  padding-top: 20px;
+  border-top: 0.5px solid rgba(255,255,255,0.1);
+}
+.quote-attr strong { color: rgba(255,255,255,0.7); font-weight: 500; display: block; margin-bottom: 2px; }
+
+.partner-cta-box {
+  margin-top: 32px;
+  background: var(--white);
+  border: 0.5px solid var(--border-dark);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.partner-cta-box p { font-size: 14px; color: var(--charcoal); line-height: 1.5; }
+.partner-cta-box p strong { color: var(--navy); }
+.btn-sm {
+  background: var(--navy);
+  color: var(--white);
+  padding: 10px 20px;
+  border-radius: 7px;
+  font-size: 13px; font-weight: 500;
+  text-decoration: none; white-space: nowrap;
+  transition: background 0.2s;
+}
+.btn-sm:hover { background: var(--navy-mid); }
+
+/* ── PRICING ─────────────────────────────────── */
+.pricing-section {
+  background: var(--white);
+  padding: 100px 5%;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 56px;
+}
+.price-card {
+  border: 0.5px solid var(--border-dark);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.price-card:hover { transform: translateY(-2px); }
+.price-card.featured { border-color: var(--blue); border-width: 1.5px; }
+
+.price-head {
+  padding: 24px 24px 20px;
+  border-bottom: 0.5px solid var(--border-dark);
+}
+.price-name { font-size: 16px; font-weight: 500; color: var(--navy); margin-bottom: 4px; }
+.price-for { font-size: 12px; color: var(--gray); margin-bottom: 16px; line-height: 1.4; }
+.price-amount {
+  font-family: 'DM Mono', monospace;
+  font-size: 24px; color: var(--navy);
+}
+.price-amount span { font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--gray); }
+
+.price-body { padding: 20px 24px 24px; }
+.price-feature {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; color: var(--charcoal);
+  margin-bottom: 8px; line-height: 1.5;
+}
+.price-feature::before { content: '✓'; color: var(--teal); font-weight: 600; flex-shrink: 0; }
+.price-cta {
+  display: block; text-align: center;
+  margin-top: 20px;
+  padding: 11px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.pc-outline {
+  border: 0.5px solid var(--border-dark);
+  color: var(--navy);
+}
+.pc-outline:hover { background: var(--warm-white); }
+.pc-solid { background: var(--navy); color: var(--white); }
+.pc-solid:hover { background: var(--navy-mid); }
+.pc-gold { background: var(--gold); color: var(--white); }
+.pc-gold:hover { background: #a07828; }
+
+.popular-badge {
+  display: inline-block;
+  background: var(--light-blue);
+  color: #185FA5;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 3px 10px; border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+/* ── FINAL CTA ───────────────────────────────── */
+.final-cta {
+  background: var(--navy);
+  padding: 120px 5%;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.final-cta .hero-orb-1 { left: 50%; transform: translateX(-50%); top: -30%; opacity: 0.4; }
+
+.final-cta-content { position: relative; z-index: 2; max-width: 640px; margin: 0 auto; }
+.final-cta-tag {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+  color: var(--gold-light); margin-bottom: 20px;
+}
+.final-cta h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 400; color: var(--white);
+  line-height: 1.2; margin-bottom: 20px;
+}
+.final-cta h2 em { font-style: italic; color: var(--gold-light); }
+.final-cta p {
+  font-size: 16px; color: rgba(255,255,255,0.5);
+  line-height: 1.7; margin-bottom: 48px;
+}
+.final-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+.assessment-note {
+  margin-top: 24px;
+  font-size: 13px; color: rgba(255,255,255,0.3);
+}
+
+/* ── FOOTER ──────────────────────────────────── */
+footer {
+  background: var(--navy);
+  border-top: 0.5px solid rgba(255,255,255,0.08);
+  padding: 48px 5%;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 20px;
+}
+.footer-logo {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500; font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.08em;
+}
+.footer-logo span { color: var(--gold-light); }
+.footer-links {
+  display: flex; gap: 24px; list-style: none;
+}
+.footer-links a { font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none; }
+.footer-links a:hover { color: rgba(255,255,255,0.6); }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
+
+/* ── ANIMATIONS ──────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media (max-width: 600px) {
+  nav .nav-links { display: none; }
+  .hero-metrics { flex-wrap: wrap; gap: 24px; }
+  .steps-row::before { display: none; }
+  .partner-cta-box { flex-direction: column; }
+  footer { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">SYSTEMIC <span>FITNESS</span></a>
+  <ul class="nav-links">
+    <li><a href="#method">Metode</a></li>
+    <li><a href="#programs">Program</a></li>
+    <li><a href="#partner">Kemitraan</a></li>
+    <li><a href="#pricing">Harga</a></li>
+    <li><a href="#assessment" class="nav-cta">Mulai Assessment</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb-1"></div>
+  <div class="hero-orb-2"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">HUMAN SYSTEM OPTIMIZATION PLATFORM</div>
+    <h1 class="hero-headline">
+      Tubuhmu adalah sistem.<br>
+      Kami <em>mengoptimalkannya.</em>
+    </h1>
+    <p class="hero-sub">
+      Bukan program olahraga generik. Systemic Fitness adalah prescripsi gerakan berbasis kondisi medis — dikalibrasi terhadap 4 variabel spesifik, disampaikan melalui sistem yang bekerja untuk tubuhmu secara personal.
+    </p>
+    <div class="hero-ctas">
+      <a href="#assessment" class="btn-primary">Mulai Assessment Gratis →</a>
+      <a href="#method" class="btn-secondary">Pelajari Metodenya</a>
+    </div>
+    <div class="hero-metrics">
+      <div class="metric-item">
+        <div class="metric-num">4</div>
+        <div class="metric-label">Variabel fisiologis<br>per sesi</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">3</div>
+        <div class="metric-label">Program berbeda<br>satu assessment</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">23+</div>
+        <div class="metric-label">Kondisi kesehatan<br>yang ditangani</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNAL SECTION -->
+<section class="signals-section">
+  <div class="reveal">
+    <p class="section-tag">SIAPA YANG DATANG KE SINI</p>
+    <h2 class="section-headline">Sinyal yang sering<br>diabaikan — tapi nyata.</h2>
+    <p class="section-sub">Jika salah satu dari ini terdengar familiar, kamu sudah di tempat yang tepat.</p>
+  </div>
+  <div class="signals-grid reveal">
+    <div class="signal-card sc-1">
+      <div class="signal-icon">◎</div>
+      <div class="signal-title">Tensi, kolesterol, atau gula darah mulai tidak optimal</div>
+      <div class="signal-desc">Angka laboratorium mulai bergerak ke arah yang tidak diinginkan. Masih bisa diintervensi — dengan cara yang tepat.</div>
+    </div>
+    <div class="signal-card sc-2">
+      <div class="signal-icon">◈</div>
+      <div class="signal-title">Ada keluhan yang mengganggu — sendi, asam urat, imun, atau kondisi kronis</div>
+      <div class="signal-desc">Kondisi aktif yang butuh program gerakan yang diprescribe secara presisi, bukan gerakan generik yang bisa memperburuk.</div>
+    </div>
+    <div class="signal-card sc-3">
+      <div class="signal-icon">∿</div>
+      <div class="signal-title">Hormonal tidak seimbang — PCOS, tiroid, atau perimenopause</div>
+      <div class="signal-desc">Sistem hormonal yang terganggu merespons sangat spesifik terhadap jenis, waktu, dan intensitas gerakan yang tepat.</div>
+    </div>
+    <div class="signal-card sc-4">
+      <div class="signal-icon">⊡</div>
+      <div class="signal-title">Ingin optimalkan performa — stamina, kekuatan, dan vitalitas yang lebih konsisten</div>
+      <div class="signal-desc">Masih aktif, tidak ada kondisi medis — tapi tahu ada potensi yang belum sepenuhnya dimanfaatkan dari sistem tubuh.</div>
+    </div>
+  </div>
+</section>
+
+<!-- METHOD SECTION -->
+<section class="method-section" id="method">
+  <div class="hero-orb-1" style="opacity:0.4"></div>
+  <div class="method-layout">
+    <div class="method-left reveal">
+      <p class="section-tag">METODE SYSTEMIC FITNESS</p>
+      <h2 class="section-headline" style="color:white">Bukan olahraga.<br>Prescripsi fisiologis.</h2>
+      <p class="section-sub">Setiap sesi dikontrol oleh 4 variabel yang, ketika dikalibrasi terhadap kondisi spesifik, menghasilkan respons fisiologis yang ditargetkan — bukan sekadar peningkatan kebugaran umum.</p>
+      <div class="tagline-box">
+        <p>"We don't train bodies. We optimize systems."</p>
+        <span>— Citra Hann, Founder & Human System Optimization Advisor</span>
+      </div>
+    </div>
+    <div class="method-right reveal">
+      <div class="variables-grid">
+        <div class="var-card vc-blue">
+          <div class="var-num">01</div>
+          <div class="var-name">Load</div>
+          <div class="var-desc">Beban mekanis yang tepat mengaktifkan mekanotransduksi selular dan sintesis protein otot</div>
+        </div>
+        <div class="var-card vc-teal">
+          <div class="var-num">02</div>
+          <div class="var-name">Movement Pattern</div>
+          <div class="var-desc">Pola gerakan yang dipilih menentukan sistem fisiologis mana yang diaktifkan dalam sesi</div>
+        </div>
+        <div class="var-card vc-gold">
+          <div class="var-num">03</div>
+          <div class="var-name">Tempo / BPM</div>
+          <div class="var-desc">Ritme jantung yang dikendalikan menentukan respons otonom, termogenesis, dan adaptasi kardiak</div>
+        </div>
+        <div class="var-card vc-purple">
+          <div class="var-num">04</div>
+          <div class="var-name">Breathing Pattern</div>
+          <div class="var-desc">Pola napas mengatur tonus vagal, kadar kortisol, dan optimasi pengiriman oksigen selular</div>
+        </div>
+      </div>
+      <div class="pillars-row">
+        <div class="pillar-chip pc-fc">
+          FC
+          <div class="pillar-full">Functional<br>Conditioning</div>
+        </div>
+        <div class="pillar-chip pc-cc">
+          CC
+          <div class="pillar-full">Cardiorespiratory<br>Conditioning</div>
+        </div>
+        <div class="pillar-chip pc-mc">
+          MC
+          <div class="pillar-full">Metabolic<br>Conditioning</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS SECTION -->
+<section class="programs-section" id="programs">
+  <div class="programs-header reveal">
+    <p class="section-tag">TIGA PROGRAM — SATU ASSESSMENT</p>
+    <h2 class="section-headline">Program yang lahir<br>dari kondisimu.</h2>
+    <p class="section-sub">Assessment menentukan program mana yang tepat untukmu. Tidak ada overlap, tidak ada tebakan.</p>
+  </div>
+  <div class="programs-grid reveal">
+
+    <div class="prog-card">
+      <div class="prog-header">
+        <div class="prog-tier pt-blue">LEVEL 4–5</div>
+        <div class="prog-name">Condition-Specific Program</div>
+        <div class="prog-desc">Untuk kondisi medis aktif yang masih bisa bergerak mandiri. Program dikurasi oleh Health Consultant berdasarkan kondisi spesifik.</div>
+      </div>
+      <div class="prog-body">
+        <div class="prog-feature">Health Consultant mengkurasi setiap Session Card</div>
+        <div class="prog-feature">Prescripsi outcome berbasis kondisi medis</div>
+        <div class="prog-feature">Chronobiology window per kondisi</div>
+        <div class="prog-feature">Nutrition guidance spesifik kondisi</div>
+        <div class="prog-meta">
+          <div class="prog-meta-item"><strong>60 mnt</strong><span>Full 2×/minggu</span></div>
+          <div class="prog-meta-item"><strong>30 mnt</strong><span>Reset 2–3×/minggu</span></div>
+          <div class="prog-meta-item"><strong>Konsultan</strong><span>Kurasi manual</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prog-card">
+      <div class="prog-header">
+        <div class="prog-tier pt-teal">LEVEL 5</div>
+        <div class="prog-name">Preventive Optimization</div>
+        <div class="prog-desc">Tanpa kondisi medis aktif. Program otomatis penuh untuk mempertahankan dan mengoptimalkan kapasitas sistem tubuh.</div>
+      </div>
+      <div class="prog-body">
+        <div class="prog-feature">Fully automated — tidak perlu Consultant</div>
+        <div class="prog-feature">Session Card berbasis movement test awal</div>
+        <div class="prog-feature">Chronobiology window personal</div>
+        <div class="prog-feature">Performance diet guidance</div>
+        <div class="prog-meta">
+          <div class="prog-meta-item"><strong>60 mnt</strong><span>Full 2×/minggu</span></div>
+          <div class="prog-meta-item"><strong>30 mnt</strong><span>Reset 2–3×/minggu</span></div>
+          <div class="prog-meta-item"><strong>Otomatis</strong><span>Self-guided</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prog-card">
+      <div class="prog-header">
+        <div class="prog-tier pt-gold">ADVANCED</div>
+        <div class="prog-name">Performance 35–60</div>
+        <div class="prog-desc">Optimasi hormonal dan performa untuk pria atau wanita usia 35–60. Sub-program spesifik usia, gender, dan profil hormonal.</div>
+      </div>
+      <div class="prog-body">
+        <div class="prog-feature">Women's Program: 35–45 dan 46–60</div>
+        <div class="prog-feature">Men's Program: 35–45 dan 46–60</div>
+        <div class="prog-feature">Window sesi berbasis hormonal peak</div>
+        <div class="prog-feature">Hormonal optimization diet guidance</div>
+        <div class="prog-meta">
+          <div class="prog-meta-item"><strong>Women's</strong><span>35–45 / 46–60</span></div>
+          <div class="prog-meta-item"><strong>Men's</strong><span>35–45 / 46–60</span></div>
+          <div class="prog-meta-item"><strong>Otomatis</strong><span>Gender-specific</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SCORE SECTION -->
+<section class="score-section">
+  <div class="score-layout">
+    <div class="score-display reveal">
+      <div class="score-top">
+        <div class="score-circle">
+          <div class="score-num">81</div>
+          <div class="score-word">OPTIMAL</div>
+        </div>
+        <div class="score-bars">
+          <div class="bar-row">
+            <div class="bar-label">Gerak</div>
+            <div class="bar-track"><div class="bar-fill" style="width:83%;background:#B8922E"></div></div>
+            <div class="bar-val">83</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Nutrisi</div>
+            <div class="bar-track"><div class="bar-fill" style="width:79%;background:#2E6DA4"></div></div>
+            <div class="bar-val">79</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Istirahat</div>
+            <div class="bar-track"><div class="bar-fill" style="width:80%;background:#0B5C5C"></div></div>
+            <div class="bar-val">80</div>
+          </div>
+        </div>
+      </div>
+      <div class="score-domains">
+        <div class="domain-chip"><div class="domain-dot" style="background:#B8922E"></div><div class="domain-text"><strong>Olahraga</strong>35% bobot skor</div></div>
+        <div class="domain-chip"><div class="domain-dot" style="background:#2E6DA4"></div><div class="domain-text"><strong>Nutrisi</strong>35% bobot skor</div></div>
+        <div class="domain-chip"><div class="domain-dot" style="background:#0B5C5C"></div><div class="domain-text"><strong>Istirahat</strong>30% bobot skor</div></div>
+        <div class="domain-chip"><div class="domain-dot" style="background:#D4A84B"></div><div class="domain-text"><strong>Update</strong>Setiap sesi selesai</div></div>
+      </div>
+    </div>
+    <div class="score-right reveal">
+      <p class="section-tag">SYSTEM SCORE</p>
+      <h2 class="section-headline" style="color:white;font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,42px);font-weight:400;line-height:1.2;margin-bottom:20px">Tubuhmu punya skor.<br>Dari 3 dimensi nyata.</h2>
+      <p class="section-sub">Bukan motivasi. Bukan estimasi. System Score adalah angka nyata yang lahir dari keseimbangan tiga domain fisiologis yang paling menentukan kualitas hidupmu.</p>
+      <div class="formula-box">
+        <p><strong>Olahraga 35%</strong> + <strong>Nutrisi 35%</strong> + <strong>Istirahat 30%</strong> = System Score<br>
+        Diukur dari assessment awal dan diperbarui setiap sesi selesai.</p>
+      </div>
+      <a href="#assessment" class="btn-primary" style="display:inline-block">Lihat System Score-mu →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="reveal" style="max-width:560px">
+    <p class="section-tag">CARA KERJA</p>
+    <h2 class="section-headline">Dari assessment<br>ke program aktif.</h2>
+  </div>
+  <div class="steps-row reveal">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-title">Assessment</div>
+      <div class="step-desc">25 pertanyaan tentang kondisi gerak, kesehatan, pola tidur, dan nutrisi. Gratis, 10 menit.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-title">System Score</div>
+      <div class="step-desc">Platform menghitung level, program yang tepat, dan window sesi optimal berdasarkan kronobiologimu.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-title">Program Aktif</div>
+      <div class="step-desc">Session Card siap — dengan variabel yang sudah dikalibrasi khusus untuk kondisi dan jadwal hidupmu.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">4</div>
+      <div class="step-title">Progres Terukur</div>
+      <div class="step-desc">System Score diperbarui setiap sesi. Program berkembang seiring kondisi tubuhmu membaik.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER SECTION -->
+<section class="partner-section" id="partner">
+  <div class="partner-layout">
+    <div class="reveal">
+      <p class="section-tag">UNTUK MITRA MEDIS & KORPORAT</p>
+      <h2 class="section-headline">Jangkauan klinis<br>yang lebih luas.</h2>
+      <p class="section-sub" style="margin-bottom:0">Systemic Fitness memperpanjang jangkauan klinis Anda ke dalam kehidupan harian pasien — dengan protokol keamanan, pemantauan real-time, dan data yang kembali kepada Anda.</p>
+      <div class="partner-list">
+        <div class="partner-item">
+          <div class="partner-icon">◎</div>
+          <div class="partner-text">
+            <strong>Untuk Dokter & Spesialis</strong>
+            <span>Clinical Advisor atau Health Educator Partner. Prescribe outcome, pantau progres klien, eskalasi kasus kompleks.</span>
+          </div>
+        </div>
+        <div class="partner-item">
+          <div class="partner-icon">◈</div>
+          <div class="partner-text">
+            <strong>Untuk Program Corporate Wellness</strong>
+            <span>Program kesehatan berbasis kondisi karyawan — bukan program fitness generik yang tidak terukur hasilnya.</span>
+          </div>
+        </div>
+        <div class="partner-item">
+          <div class="partner-icon">⊡</div>
+          <div class="partner-text">
+            <strong>Untuk Certified Trainer</strong>
+            <span>Bergabung sebagai eksekutor program dengan Session Card yang sudah diprescribe — jalankan dengan presisi.</span>
+          </div>
+        </div>
+      </div>
+      <div class="partner-cta-box">
+        <p><strong>Tertarik berdiskusi?</strong><br>Kami mengundang percakapan ilmiah — bukan komitmen langsung.</p>
+        <a href="#assessment" class="btn-sm">Hubungi Kami</a>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="partner-quote">
+        <div class="quote-tag">PERSPEKTIF PENDIRI</div>
+        <div class="quote-text">"Dokter tahu bahwa pasien perlu bergerak. Gap terbesar selalu ada di antara pengetahuan itu dan eksekusi yang aman dan presisi di kehidupan sehari-hari pasien."</div>
+        <div class="quote-attr">
+          <strong>Citra Hann</strong>
+          Founder & Human System Optimization Advisor<br>
+          Systemic Fitness Pte. Ltd.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="reveal" style="max-width:560px">
+    <p class="section-tag">PAKET LANGGANAN</p>
+    <h2 class="section-headline">Mulai sesuai<br>kondisi dan kebutuhanmu.</h2>
+    <p class="section-sub">Semua paket berbayar dilengkapi System Assessment, System Score, dan Nutrition Guidance. Minimum komitmen 3 bulan.</p>
+  </div>
+  <div class="pricing-grid reveal">
+
+    <div class="price-card">
+      <div class="price-head">
+        <div class="price-name">System Check</div>
+        <div class="price-for">Kenali kondisi sistemmu dulu</div>
+        <div class="price-amount">Gratis <span>/ selamanya</span></div>
+      </div>
+      <div class="price-body">
+        <div class="price-feature">SF System Assessment (25Q)</div>
+        <div class="price-feature">System Score awal</div>
+        <div class="price-feature">Chronobiology Window</div>
+        <div class="price-feature">Akses modul dasar</div>
+        <a href="#assessment" class="price-cta pc-outline">Mulai Gratis</a>
+      </div>
+    </div>
+
+    <div class="price-card">
+      <div class="price-head">
+        <div class="price-name">Preventive Auto</div>
+        <div class="price-for">Level 5 — tanpa kondisi medis</div>
+        <div class="price-amount">399K <span>/ bulan</span></div>
+      </div>
+      <div class="price-body">
+        <div class="price-feature">Program otomatis penuh</div>
+        <div class="price-feature">Full Program + Daily Reset</div>
+        <div class="price-feature">Session Card + video</div>
+        <div class="price-feature">Nutrition Guidance AI</div>
+        <a href="#assessment" class="price-cta pc-outline">Mulai Assessment</a>
+      </div>
+    </div>
+
+    <div class="price-card featured">
+      <div class="price-head">
+        <div class="popular-badge">PALING POPULER</div>
+        <div class="price-name">Performance</div>
+        <div class="price-for">Pria atau wanita 35–60</div>
+        <div class="price-amount">499K <span>/ bulan</span></div>
+      </div>
+      <div class="price-body">
+        <div class="price-feature">Women's atau Men's Program</div>
+        <div class="price-feature">Sub-program spesifik usia</div>
+        <div class="price-feature">Hormonal optimization guide</div>
+        <div class="price-feature">Monthly program progression</div>
+        <a href="#assessment" class="price-cta pc-solid">Mulai Assessment</a>
+      </div>
+    </div>
+
+    <div class="price-card">
+      <div class="price-head">
+        <div class="price-name">System Active</div>
+        <div class="price-for">Level 4–5 dengan kondisi medis</div>
+        <div class="price-amount">799K <span>/ bulan</span></div>
+      </div>
+      <div class="price-body">
+        <div class="price-feature">Health Consultant penuh</div>
+        <div class="price-feature">Program dikurasi manual</div>
+        <div class="price-feature">Medical Flag monitoring</div>
+        <div class="price-feature">Lab Consultation (wajib, 350K)</div>
+        <a href="#assessment" class="price-cta pc-gold">Mulai Assessment</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="assessment">
+  <div class="hero-orb-1"></div>
+  <div class="final-cta-content reveal">
+    <p class="final-cta-tag">MULAI DI SINI</p>
+    <h2>Temukan kondisi<br>sistem tubuhmu — <em>gratis.</em></h2>
+    <p>Assessment 25 pertanyaan. Tidak butuh kartu kredit. Tidak ada komitmen. Hanya data yang jujur tentang kondisi sistem tubuhmu saat ini.</p>
+    <div class="final-ctas">
+      <a href="#" class="btn-primary" style="font-size:16px;padding:18px 44px">Mulai Assessment Gratis →</a>
+    </div>
+    <p class="assessment-note">Tersedia di app dan web · Gratis selamanya untuk System Check</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SYSTEMIC <span>FITNESS</span><br><span style="font-size:10px;letter-spacing:0.08em;color:rgba(255,255,255,0.25)">Human System Optimization</span></div>
+  <ul class="footer-links">
+    <li><a href="#method">Metode</a></li>
+    <li><a href="#programs">Program</a></li>
+    <li><a href="#partner">Kemitraan</a></li>
+    <li><a href="#pricing">Harga</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 Systemic Fitness Pte. Ltd.</div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

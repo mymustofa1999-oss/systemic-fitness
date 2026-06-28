@@ -1,0 +1,41 @@
+-- +migrate Up
+-- ═══════════════════════════════════════════════════════════════════
+--  048: SF Phase 7a — Consultant Role
+--
+--  Why:
+--    Phase 6 (Lab Consultation + Tier 4 waitlist) memerlukan role baru
+--    "consultant" untuk Health Consultant yang me-review hasil Asesmen v2,
+--    menulis catatan klinis, dan handle Lab Consultation assignment.
+--    Sebelumnya semua review klinis dipaksa lewat role 'admin' / 'trainer',
+--    yang tidak match dengan workflow + RBAC scope yang berbeda.
+--
+--  Design:
+--    Additive only — tambahkan value 'consultant' ke enum user_role.
+--    Posisi di-set AFTER 'trainer' supaya hierarchy ordering tetap natural
+--    (owner > admin > finance > consultant > trainer > client).
+--
+--    Application-side hierarchy (pkg model.Role.Hierarchy):
+--      owner=100, admin=80, finance=60, consultant=50, trainer=40, client=20.
+--
+--  Note on PostgreSQL enum extension:
+--    PG 12+ allows ALTER TYPE ... ADD VALUE inside a transaction, EXCEPT
+--    when the new value is referenced in the same transaction. Migration
+--    ini hanya menambah value (tidak ada INSERT yang pakai 'consultant'),
+--    jadi aman dijalankan oleh run-sql-dir.sh (psql -1).
+-- ═══════════════════════════════════════════════════════════════════
+
+ALTER TYPE user_role ADD VALUE IF NOT EXISTS 'consultant' AFTER 'trainer';
+
+-- +migrate Down
+-- Removing an enum value is not supported in PostgreSQL without recreating
+-- the type. Down migration is intentionally a no-op to avoid data loss.
+-- Manual rollback steps (jangan dijalankan kecuali yakin tidak ada user
+-- dengan role='consultant'):
+--   1. UPDATE users SET role='admin' WHERE role='consultant';
+--   2. CREATE TYPE user_role_new AS ENUM ('owner','admin','finance','trainer','client');
+--   3. ALTER TABLE users ALTER COLUMN role TYPE user_role_new
+--      USING role::text::user_role_new;
+--   4. -- repeat ALTER COLUMN for tables menus, announcements, dll yang pakai user_role
+--   5. DROP TYPE user_role;
+--   6. ALTER TYPE user_role_new RENAME TO user_role;
+SELECT 1;

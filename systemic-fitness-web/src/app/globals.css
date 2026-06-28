@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #F8FAFC;
+    --foreground: #0F172A;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --ring: #4F46E5;
+  }
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] font-body antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl shadow-card border border-slate-100
+           transition-shadow hover:shadow-card-hover;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-brand-600 text-white px-4 py-2.5 rounded-lg font-medium text-sm
+           hover:bg-brand-700 active:bg-brand-800 transition-colors
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-white text-slate-700 px-4 py-2.5 rounded-lg font-medium text-sm
+           border border-slate-200
+           hover:bg-slate-50 active:bg-slate-100 transition-colors
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+  }
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2
+           bg-rose-500 text-white px-4 py-2.5 rounded-lg font-medium text-sm
+           hover:bg-rose-600 transition-colors;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2
+           text-slate-600 px-3 py-2 rounded-lg text-sm
+           hover:bg-slate-100 transition-colors;
+  }
+  .input {
+    @apply w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm bg-white
+           placeholder:text-slate-400
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+           transition-colors;
+  }
+  .label {
+    @apply block text-sm font-medium text-slate-700 mb-1.5;
+  }
+  .skeleton {
+    @apply bg-slate-200 rounded-lg animate-pulse;
+  }
+
+  /* SF brand utility classes (Phase 0 — Spec Lock & Branding Tokens).
+     Apply these on a per-element basis on new SF pages while legacy pages
+     continue using .font-heading / .font-body. */
+  .sf-headline {
+    @apply font-dm-serif tracking-tight text-sf-charcoal;
+  }
+  .sf-body {
+    @apply font-dm-sans text-sf-charcoal;
+  }
+  .sf-data {
+    @apply font-dm-mono text-sf-charcoal;
+  }
+  .sf-cta-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-sf-warmGold text-white px-5 py-3 rounded-lg font-dm-sans font-medium text-sm
+           hover:bg-sf-warmGoldDark transition-colors
+           focus:outline-none focus:ring-2 focus:ring-sf-warmGold focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .sf-cta-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-transparent text-sf-systemBlue px-5 py-3 rounded-lg font-dm-sans font-medium text-sm
+           border border-sf-systemBlue/60
+           hover:bg-sf-iceBlue transition-colors
+           focus:outline-none focus:ring-2 focus:ring-sf-systemBlue focus:ring-offset-2;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-slate-300 rounded; }
+::-webkit-scrollbar-thumb:hover { @apply bg-slate-400; }

@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #f9f1d7;
+  --bg-contrast: #2b2b2b;
+  --text-primary: #2b2b2b;
+  --text-on-dark: #f9f1d7;
+  --border-dark: rgba(43, 43, 43, 0.12);
+  --accent-yellow: #f9c509;
+  --accent-red: #a51700;
+}
+
+.dark {
+  --bg-primary: #1a1a1a;
+  --bg-contrast: #2b2b2b;
+  --text-primary: #f9f1d7;
+  --text-on-dark: #f9f1d7;
+  --border-dark: rgba(249, 241, 215, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-montserrat), sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+@layer utilities {
+  .font-display,
+  .font-serif {
+    font-family: var(--font-playfair), serif;
+  }
+  .font-mono {
+    font-family: var(--font-dm-mono), monospace;
+  }
+
+  .bg-surface {
+    background: var(--bg-primary);
+  }
+  .text-primary {
+    color: var(--text-primary);
+  }
+}
+
+/* Animated trace border on card hover */
+.trace-rect {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.trace-wrap:hover .trace-rect {
+  stroke-dashoffset: 0;
+}
+
+/* Infinite marquee for testimonials */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-scroll 45s linear infinite;
+  will-change: transform;
+}
+.marquee-wrap:hover .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}

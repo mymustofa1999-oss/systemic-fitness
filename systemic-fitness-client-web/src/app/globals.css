@@ -1,0 +1,213 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base Background and Text Colors */
+    --bg-primary: #F8F6F1;
+    --bg-card: #FFFFFF;
+    --text-primary: #444444;
+    --text-secondary: #6B7280;
+    --border-color: #E5E7EB;
+
+    /* SF Brand Colors (Fixed) */
+    --sf-deepNavy: #0A1628;
+    --sf-charcoal: #444444;
+    --sf-midnightBlue: #1B3A5C;
+    --sf-systemBlue: #2E6DA4;
+    --sf-warmGold: #B8922E;
+    --sf-warmGoldDark: #A07828;
+    --sf-deepTeal: #0B5C5C;
+    --sf-iceBlue: #E8F0F8;
+    --sf-warmWhite: #F8F6F1;
+
+    /* Training Card — Light Mode */
+    --tc-bg: #F8F6F1;
+    --tc-card: #FFFFFF;
+    --tc-card-inner: #F5F3EE;
+    --tc-border: #E5E7EB;
+    --tc-border-subtle: #E5E7EB;
+    --tc-divider: #E5E7EB;
+    --tc-text: #1a1a1a;
+    --tc-text-secondary: #5B564E;
+    --tc-text-muted: #7A756D;
+    --tc-text-dim: #9E9A92;
+    --tc-gold: #B8922E;
+    --tc-gold-bg: #f5f0e4;
+    --tc-gold-border: #e0d2a8;
+    --tc-gold-dim: #9a7e30;
+    --tc-toggle-bg: #f0ede6;
+    --tc-toggle-border: #e0dcd4;
+    --tc-toggle-active: #f9f5ec;
+    --tc-chip-bg: #f0ede6;
+    --tc-chip-border: #e0dcd4;
+    --tc-chip-text: #5C4E32;
+    --tc-breath-d-bg: #e8f0ff;
+    --tc-breath-c-bg: #e8f8ee;
+  }
+
+  .dark {
+    /* Dark Mode Overrides */
+    --bg-primary: #0A1628; /* deepNavy */
+    --bg-card: #1B3A5C; /* midnightBlue */
+    --text-primary: #F8F6F1; /* warmWhite */
+    --text-secondary: #9CA3AF;
+    --border-color: rgba(255, 255, 255, 0.1);
+
+    /* Training Card — Dark Mode */
+    --tc-bg: #0b0b0d;
+    --tc-card: #161518;
+    --tc-card-inner: #1a1818;
+    --tc-border: #1e1c1a;
+    --tc-border-subtle: #0f0e0c;
+    --tc-divider: #0f0e0c;
+    --tc-text: #e8e0d4;
+    --tc-text-secondary: #C5BBAA;
+    --tc-text-muted: #9F9582;
+    --tc-text-dim: #6D6554;
+    --tc-gold: #c9a96e;
+    --tc-gold-bg: #1e1608;
+    --tc-gold-border: #c9a96e30;
+    --tc-gold-dim: #6a5a3a;
+    --tc-toggle-bg: #0f0e0c;
+    --tc-toggle-border: #1e1c1a;
+    --tc-toggle-active: #1e1c15;
+    --tc-chip-bg: #1a1810;
+    --tc-chip-border: #2a2510;
+    --tc-chip-text: #E8E0D4;
+    --tc-breath-d-bg: #0d1d35;
+    --tc-breath-c-bg: #091e10;
+  }
+  body {
+    @apply bg-bg-primary text-text-primary font-body antialiased transition-colors duration-200;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-text-primary;
+  }
+}
+
+@layer components {
+  /* ── Cards (mobile-style: subtle border, soft shadow) ────── */
+  .card {
+    @apply bg-bg-card rounded-2xl border border-border-color
+           transition-all duration-200;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+
+  /* ── Section labels (like mobile ACCOUNT / SETTINGS) ──── */
+  .section-label {
+    @apply text-[11px] font-bold tracking-[0.8px] text-text-secondary uppercase mb-2;
+  }
+
+  /* ── SF CTA Buttons ────────────────────────────────────── */
+  .sf-cta-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-sf-warmGold text-white px-5 py-3 rounded-xl font-body font-semibold text-sm
+           hover:bg-sf-warmGoldDark active:scale-[0.98] transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-sf-warmGold/50 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed
+           shadow-sm hover:shadow-glow-gold;
+  }
+  .sf-cta-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-transparent text-sf-systemBlue px-5 py-3 rounded-xl font-body font-semibold text-sm
+           border border-sf-systemBlue/30
+           hover:bg-sf-iceBlue active:scale-[0.98] transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-sf-systemBlue/50 focus:ring-offset-2;
+  }
+  .sf-cta-ghost {
+    @apply inline-flex items-center justify-center gap-2
+           text-sf-charcoal px-4 py-2.5 rounded-xl text-sm font-medium
+           hover:bg-gray-100 active:scale-[0.98] transition-all duration-200;
+  }
+  .sf-cta-danger {
+    @apply inline-flex items-center justify-center gap-2
+           bg-transparent text-rose-500 px-5 py-3 rounded-xl font-body font-semibold text-sm
+           border border-rose-300
+           hover:bg-rose-50 active:scale-[0.98] transition-all duration-200;
+  }
+
+  /* ── SF Typography ─────────────────────────────────────── */
+  .sf-headline {
+    @apply font-heading tracking-tight text-sf-deepNavy;
+  }
+  .sf-body {
+    @apply font-body text-sf-charcoal;
+  }
+  .sf-data {
+    @apply font-mono text-sf-charcoal;
+  }
+
+  /* ── Form Inputs ───────────────────────────────────────── */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border border-border-color text-sm bg-bg-card text-text-primary
+           placeholder:text-text-secondary
+           focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 focus:border-sf-warmGold
+           transition-all duration-200;
+  }
+  .label {
+    @apply block text-sm font-medium text-text-primary mb-1.5;
+  }
+
+  /* ── Skeleton ──────────────────────────────────────────── */
+  .skeleton {
+    @apply bg-gray-200 rounded-xl animate-pulse;
+  }
+
+  /* ── Badge ─────────────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-gold {
+    @apply badge bg-sf-warmGold/10 text-sf-warmGold;
+  }
+  .badge-blue {
+    @apply badge bg-sf-systemBlue/10 text-sf-systemBlue;
+  }
+  .badge-teal {
+    @apply badge bg-sf-deepTeal/10 text-sf-deepTeal;
+  }
+
+  /* ── Menu Item (profile list style) ────────────────────── */
+  .menu-item {
+    @apply flex items-center gap-3 py-3.5 px-1 cursor-pointer
+           transition-colors duration-150 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg;
+  }
+  .menu-item-icon {
+    @apply w-10 h-10 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0;
+  }
+
+  /* ── Divider ───────────────────────────────────────────── */
+  .divider {
+    @apply border-t border-border-color my-0.5;
+  }
+
+  /* ── Quick Action Card ─────────────────────────────────── */
+  .quick-action {
+    @apply flex flex-col items-center justify-center p-3 rounded-2xl bg-bg-card
+           border border-border-color aspect-square cursor-pointer
+           transition-all duration-200 hover:shadow-md active:scale-[0.97];
+  }
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-gray-300 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-gray-400; }
+
+/* ── Touch optimizations for mobile ─────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ── Bottom nav safe area ────────────────────────────────── */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
