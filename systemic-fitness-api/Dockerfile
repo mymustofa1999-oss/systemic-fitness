@@ -14,5 +14,10 @@ RUN apk --no-cache add ca-certificates tzdata
 WORKDIR /app
 COPY --from=builder /fitcoach-api .
 
+ENV ENV="production"
+ENV DATABASE_URL="postgres://postgres.udaihnvoqvrfzniqzqun:Fitcoach2026@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres"
+ENV CORS_ALLOWED_ORIGINS="*"
+ENV JWT_SECRET="FitcoachSecret2026!"
+
 EXPOSE 8080
 CMD ["./fitcoach-api"]
