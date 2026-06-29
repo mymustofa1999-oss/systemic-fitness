@@ -13,7 +13,6 @@ FROM alpine:3.20
 RUN apk --no-cache add ca-certificates tzdata
 WORKDIR /app
 COPY --from=builder /fitcoach-api .
-COPY systemic-fitness-api/.env.example .env
 
 EXPOSE 8080
 CMD ["./fitcoach-api"]
