@@ -22,16 +22,18 @@ const LEVEL_THEMES: Record<number, { headerBg: string; accent: string }> = {
 };
 
 export default function ModulCardPage() {
-  const { data: levels = [], isLoading: isLoadingLevels } = useDLLevels();
+  const { data: levelsData, isLoading: isLoadingLevels } = useDLLevels();
+  const levels = (levelsData?.data ?? []) as any[];
   
   // Exclude level 0 based on user requirements
-  const activeLevels = levels.filter(l => l.level_number > 0).sort((a, b) => a.level_number - b.level_number);
+  const activeLevels = levels.filter((l: any) => l.level_number > 0).sort((a: any, b: any) => a.level_number - b.level_number);
   
   const [selectedLevel, setSelectedLevel] = useState<number>(1);
-  const selectedLevelData = activeLevels.find(l => l.level_number === selectedLevel);
+  const selectedLevelData = activeLevels.find((l: any) => l.level_number === selectedLevel);
   
   // We use 'fc' as the base category to fetch menu items since they are identical across FC, CC, MC
-  const { data: menuItems = [], isLoading: isLoadingItems } = useDLMenuItems("fc", selectedLevel);
+  const { data: menuData, isLoading: isLoadingItems } = useDLMenuItems("fc", selectedLevel);
+  const menuItems = (menuData?.data ?? []) as any[];
   
   const addMutation = useAddModulCardItem();
   const deleteMutation = useDeleteModulCardItem();
