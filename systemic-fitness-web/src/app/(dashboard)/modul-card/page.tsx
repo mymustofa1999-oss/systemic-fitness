@@ -110,8 +110,14 @@ export default function ModulCardPage() {
               icon={Video}
               title="Belum ada latihan"
               description={`Tambahkan latihan pertama untuk ${selectedLevelData?.name}`}
-              actionLabel="Tambah Latihan"
-              onAction={() => setIsAddModalOpen(true)}
+              action={
+                <button 
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+                >
+                  Tambah Latihan
+                </button>
+              }
             />
           ) : (
             <div className="divide-y divide-slate-100">
