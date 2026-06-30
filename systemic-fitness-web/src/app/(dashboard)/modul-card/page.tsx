@@ -212,7 +212,7 @@ function AddMovementModal({
     search: search.length >= 2 ? search : undefined,
   });
 
-  const movements = movementsData?.data || [];
+  const movements = (movementsData?.data || []) as any[];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
