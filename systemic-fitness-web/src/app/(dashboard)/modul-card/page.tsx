@@ -173,7 +173,7 @@ export default function ModulCardPage() {
       )}
 
       <ConfirmDialog
-        isOpen={!!itemToDelete}
+        open={!!itemToDelete}
         onClose={() => setItemToDelete(null)}
         onConfirm={async () => {
           if (itemToDelete) {
@@ -187,7 +187,6 @@ export default function ModulCardPage() {
         title="Hapus Latihan"
         description={`Apakah Anda yakin ingin menghapus "${itemToDelete?.movement?.name}" dari Level ${selectedLevel}? Tindakan ini akan menghapusnya dari semua kategori (FC, CC, MC).`}
         confirmLabel={deleteMutation.isPending ? "Menghapus..." : "Hapus"}
-        isDestructive
       />
     </div>
   );
