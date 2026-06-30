@@ -356,11 +356,66 @@ func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCo
 		); err != nil {
 			return nil, err
 		}
-		_ = levelNum
+		m.Level = &levelNum
 		mi.Movement = &m
 		items = append(items, mi)
 	}
-	return items, rows.Err()
+	return items, nil
+}
+
+// AddModulCardItem adds a movement to a specific level for ALL categories (FC, CC, MC)
+func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID string, movementID string) error {
+	cats, err := r.ListCategories(ctx)
+	if err != nil {
+		return err
+	}
+
+	var maxSort int
+	err = r.db.QueryRow(ctx, "SELECT COALESCE(MAX(sort_order), 0) FROM dl_menu_items WHERE level_id = $1", levelID).Scan(&maxSort)
+	if err != nil && err != pgx.ErrNoRows {
+		return err
+	}
+	nextSort := maxSort + 1
+
+	tx, err := r.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+
+	var bodyPart string
+	err = tx.QueryRow(ctx, "SELECT body_part FROM dl_movements WHERE id = $1", movementID).Scan(&bodyPart)
+	if err != nil {
+		return err
+	}
+
+	for _, c := range cats {
+		// Check if it already exists to avoid duplicates
+		var exists bool
+		err = tx.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM dl_menu_items WHERE category_id = $1 AND level_id = $2 AND movement_id = $3)", c.ID, levelID, movementID).Scan(&exists)
+		if err != nil {
+			return err
+		}
+		if exists {
+			continue
+		}
+
+		_, err = tx.Exec(ctx, `
+			INSERT INTO dl_menu_items (category_id, level_id, movement_id, body_part, sort_order)
+			VALUES ($1, $2, $3, $4, $5)`,
+			c.ID, levelID, movementID, bodyPart, nextSort)
+		if err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit(ctx)
+}
+
+// RemoveModulCardItem removes a movement from a specific level for ALL categories (FC, CC, MC)
+func (r *DigitalLibraryRepository) RemoveModulCardItem(ctx context.Context, levelID string, movementID string) error {
+	_, err := r.db.Exec(ctx, "DELETE FROM dl_menu_items WHERE level_id = $1 AND movement_id = $2", levelID, movementID)
+	return err
 }
 
 func (r *DigitalLibraryRepository) CreateMenuItem(ctx context.Context, mi *DLMenuItem) error {

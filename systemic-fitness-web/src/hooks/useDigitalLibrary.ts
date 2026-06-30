@@ -112,3 +112,27 @@ export function useDLProgramOverview(code: string) {
     enabled: !!code,
   });
 }
+
+// ─── Modul Card Mutations ───────────────────────────────────────
+
+export function useAddModulCardItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { level_id: string; movement_id: string }) =>
+      apiPost(`/api/digital-library/modul-cards`, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dl-menu"] });
+    },
+  });
+}
+
+export function useDeleteModulCardItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { level_id: string; movement_id: string }) =>
+      apiDelete(`/api/digital-library/modul-cards/${data.level_id}/${data.movement_id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dl-menu"] });
+    },
+  });
+}

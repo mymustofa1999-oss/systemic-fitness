@@ -19,7 +19,7 @@ INSERT INTO dl_levels (level_number, name, name_id, description) VALUES
 (2, 'Level 2 - Standing',     'Level 2 - Berdiri',             'Client can stand. Standing exercises with chair/TRX support for balance and safety.'),
 (3, 'Level 3 - Limited Walk', 'Level 3 - Jalan Terbatas',      'Client can walk with limitations. Chair-supported exercises with more variety including lunges and lateral movements.'),
 (4, 'Level 4 - Normal Walk',  'Level 4 - Jalan Normal',        'Client walks normally. Introduction of dynamic paired movements (upper + lower simultaneously). Chair support optional.'),
-(5, 'Level 5 - Full Dynamic', 'Level 5 - Dynamic Full BPM',    'Full dynamic training at target BPM. All movements without support, including advanced compound exercises.');
+(5, 'Level 5 - Full Dynamic', 'Level 5 - Dynamic Full BPM',    'Full dynamic training at target BPM. All movements without support, including advanced compound exercises.') ON CONFLICT DO NOTHING;
 
 -- ─── 3. All Unique Movements ────────────────────────────────────
 -- Classified by body_part and which categories they appear in
@@ -104,7 +104,7 @@ INSERT INTO dl_movements (name, body_part, video_url_male, video_url_female, cat
 ('Sit Up Band', 'core', NULL, NULL, '{mc}'),
 ('Glute Bridge Band', 'core', NULL, 'https://youtu.be/2DzvTS7g394', '{mc}'),
 ('Spider Lunge', 'core', NULL, NULL, '{mc}'),
-('Pedal Band', 'core', NULL, NULL, '{mc}');
+('Pedal Band', 'core', NULL, NULL, '{mc}') ON CONFLICT (name) DO NOTHING;
 
 
 -- ═══════════════════════════════════════════════════════════════════

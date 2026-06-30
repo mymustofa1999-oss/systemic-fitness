@@ -29,16 +29,17 @@ ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO menus (id, parent_id, code, label, icon, href, sort_order) VALUES
   ('a0000000-0000-0000-0000-000000000011', 'a0000000-0000-0000-0000-000000000010', 'digital-library',     'Digital Library',     'BookOpen',        '/digital-library',     1),
-  ('a0000000-0000-0000-0000-000000000012', 'a0000000-0000-0000-0000-000000000010', 'programs',            'Programs',            'CalendarRange',   '/programs',            2),
-  ('a0000000-0000-0000-0000-000000000013', 'a0000000-0000-0000-0000-000000000010', 'workouts',            'Workouts',            'ClipboardList',   '/workouts',            3),
-  ('a0000000-0000-0000-0000-000000000014', 'a0000000-0000-0000-0000-000000000010', 'exercises',           'Exercises',           'Dumbbell',        '/exercises',           4),
-  ('a0000000-0000-0000-0000-000000000015', 'a0000000-0000-0000-0000-000000000010', 'meals',               'Meals',               'UtensilsCrossed', '/nutrition',           5),
-  ('a0000000-0000-0000-0000-000000000016', 'a0000000-0000-0000-0000-000000000010', 'foods',               'Foods',               'Cookie',          '/foods',               6),
-  ('a0000000-0000-0000-0000-000000000017', 'a0000000-0000-0000-0000-000000000010', 'habits',              'Habits',              'Repeat',          '/habits',              7),
-  ('a0000000-0000-0000-0000-000000000018', 'a0000000-0000-0000-0000-000000000010', 'medicines',           'Daftar Obat',         'Pill',            '/medicines',           8),
-  ('a0000000-0000-0000-0000-000000000019', 'a0000000-0000-0000-0000-000000000010', 'program-categories',  'Program Categories',  'Layers',          '/program-categories',  9),
-  ('a0000000-0000-0000-0000-00000000001a', 'a0000000-0000-0000-0000-000000000010', 'trainer-card-types',  'Training Card Types',  'ClipboardCheck',  '/training-card-types', 10),
-  ('a0000000-0000-0000-0000-00000000001b', 'a0000000-0000-0000-0000-000000000010', 'forms',               'Forms',               'FileText',        '/forms',              11)
+  ('a0000000-0000-0000-0000-000000000099', 'a0000000-0000-0000-0000-000000000010', 'modul-card',          'Modul Card',          'Layers',          '/modul-card',          2),
+  ('a0000000-0000-0000-0000-000000000012', 'a0000000-0000-0000-0000-000000000010', 'programs',            'Programs',            'CalendarRange',   '/programs',            3),
+  ('a0000000-0000-0000-0000-000000000013', 'a0000000-0000-0000-0000-000000000010', 'workouts',            'Workouts',            'ClipboardList',   '/workouts',            4),
+  ('a0000000-0000-0000-0000-000000000014', 'a0000000-0000-0000-0000-000000000010', 'exercises',           'Exercises',           'Dumbbell',        '/exercises',           5),
+  ('a0000000-0000-0000-0000-000000000015', 'a0000000-0000-0000-0000-000000000010', 'meals',               'Meals',               'UtensilsCrossed', '/nutrition',           6),
+  ('a0000000-0000-0000-0000-000000000016', 'a0000000-0000-0000-0000-000000000010', 'foods',               'Foods',               'Cookie',          '/foods',               7),
+  ('a0000000-0000-0000-0000-000000000017', 'a0000000-0000-0000-0000-000000000010', 'habits',              'Habits',              'Repeat',          '/habits',              8),
+  ('a0000000-0000-0000-0000-000000000018', 'a0000000-0000-0000-0000-000000000010', 'medicines',           'Daftar Obat',         'Pill',            '/medicines',           9),
+  ('a0000000-0000-0000-0000-000000000019', 'a0000000-0000-0000-0000-000000000010', 'program-categories',  'Program Categories',  'Layers',          '/program-categories',  10),
+  ('a0000000-0000-0000-0000-00000000001a', 'a0000000-0000-0000-0000-000000000010', 'trainer-card-types',  'Training Card Types',  'ClipboardCheck',  '/training-card-types', 11),
+  ('a0000000-0000-0000-0000-00000000001b', 'a0000000-0000-0000-0000-000000000010', 'forms',               'Forms',               'FileText',        '/forms',              12)
 ON CONFLICT (code) DO NOTHING;
 
 -- ── Scheduling children ────────────────────────────────────────────

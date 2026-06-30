@@ -965,6 +965,11 @@ func main() {
 					r.Get("/dynamic", dlHandler.ListDynamicItems)
 					r.Get("/program", dlHandler.GetProgramOverview)
 				})
+
+				r.Route("/modul-cards", func(r chi.Router) {
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleOwner)).Post("/", dlHandler.AddModulCardItem)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleOwner)).Delete("/{levelID}/{movementID}", dlHandler.DeleteModulCardItem)
+				})
 			})
 
 			// ── Assessments (v1 — DEPRECATED) ───────────────

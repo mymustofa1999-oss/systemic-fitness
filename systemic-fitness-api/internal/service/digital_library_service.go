@@ -164,13 +164,31 @@ func (s *DigitalLibraryService) DeleteMovement(ctx context.Context, id string) e
 
 // ─── Menu Items ─────────────────────────────────────────────────
 
-func (s *DigitalLibraryService) ListMenuItems(ctx context.Context, categoryCode string, levelNumber *int) ([]repository.DLMenuItem, error) {
-	items, err := s.dlRepo.ListMenuItems(ctx, categoryCode, levelNumber)
+func (s *DigitalLibraryService) ListMenuItems(ctx context.Context, code string, levelNumber *int) ([]repository.DLMenuItem, error) {
+	items, err := s.dlRepo.ListMenuItems(ctx, code, levelNumber)
 	if err != nil {
-		s.logger.Error("list dl menu items", "category", categoryCode, "error", err)
+		s.logger.Error("list dl menu items", "code", code, "error", err)
 		return nil, err
 	}
 	return items, nil
+}
+
+func (s *DigitalLibraryService) AddModulCardItem(ctx context.Context, levelID string, movementID string) error {
+	err := s.dlRepo.AddModulCardItem(ctx, levelID, movementID)
+	if err != nil {
+		s.logger.Error("add modul card item", "level_id", levelID, "movement_id", movementID, "error", err)
+		return err
+	}
+	return nil
+}
+
+func (s *DigitalLibraryService) RemoveModulCardItem(ctx context.Context, levelID string, movementID string) error {
+	err := s.dlRepo.RemoveModulCardItem(ctx, levelID, movementID)
+	if err != nil {
+		s.logger.Error("remove modul card item", "level_id", levelID, "movement_id", movementID, "error", err)
+		return err
+	}
+	return nil
 }
 
 // ─── Isolate Items ──────────────────────────────────────────────

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"errors"
 	"log/slog"
 	"net/http"
@@ -178,6 +179,36 @@ func (h *DigitalLibraryHandler) ListMenuItems(w http.ResponseWriter, r *http.Req
 		return
 	}
 	response.OK(w, items)
+}
+
+// ─── Modul Card ─────────────────────────────────────────────────
+
+// POST /api/digital-library/modul-cards
+func (h *DigitalLibraryHandler) AddModulCardItem(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		LevelID    string `json:"level_id"`
+		MovementID string `json:"movement_id"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		response.BadRequest(w, "Invalid request body")
+		return
+	}
+	if err := h.dlService.AddModulCardItem(r.Context(), req.LevelID, req.MovementID); err != nil {
+		response.InternalError(w, "Failed to add modul card item")
+		return
+	}
+	response.SuccessMessage(w, "Movement added to level")
+}
+
+// DELETE /api/digital-library/modul-cards/{levelID}/{movementID}
+func (h *DigitalLibraryHandler) DeleteModulCardItem(w http.ResponseWriter, r *http.Request) {
+	levelID := chi.URLParam(r, "levelID")
+	movementID := chi.URLParam(r, "movementID")
+	if err := h.dlService.RemoveModulCardItem(r.Context(), levelID, movementID); err != nil {
+		response.InternalError(w, "Failed to remove modul card item")
+		return
+	}
+	response.SuccessMessage(w, "Movement removed from level")
 }
 
 // ─── Isolate Items ──────────────────────────────────────────────
