@@ -36,10 +36,14 @@ export default function ModulCardPage() {
   
   const isLoadingItems = isLoadingFC || isLoadingCC || isLoadingMC;
   
+  const fcItems = Array.isArray(fcData?.data) ? fcData.data : [];
+  const ccItems = Array.isArray(ccData?.data) ? ccData.data : [];
+  const mcItems = Array.isArray(mcData?.data) ? mcData.data : [];
+
   const allItems = [
-    ...(fcData?.data ?? []).map((i: any) => ({ ...i, sequence: "FC" })),
-    ...(ccData?.data ?? []).map((i: any) => ({ ...i, sequence: "CC" })),
-    ...(mcData?.data ?? []).map((i: any) => ({ ...i, sequence: "MC" }))
+    ...fcItems.map((i: any) => ({ ...i, sequence: "FC" })),
+    ...ccItems.map((i: any) => ({ ...i, sequence: "CC" })),
+    ...mcItems.map((i: any) => ({ ...i, sequence: "MC" }))
   ];
 
   const groupedData: any[] = [];
