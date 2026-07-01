@@ -29,7 +29,7 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { SearchableSelect } from "@/components/shared/SearchableSelect";
 import {
   ArrowLeft, Plus, Trash2, Save, Loader2, Check, X, ChevronDown, Info, Pill, ExternalLink, ClipboardCheck,
-  Crown, Star, Zap, Clock, CreditCard,
+  Crown, Star, Zap, Clock, CreditCard, FileText,
 } from "lucide-react";
 import { cn, getInitials, formatCurrency, formatDate } from "@/lib/utils";
 

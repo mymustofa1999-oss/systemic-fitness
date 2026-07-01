@@ -58,6 +58,7 @@ export default function TrainerAssessmentFormPage() {
             physical_status_level: phaseA.physical_status_level as any,
             gender: phaseA.gender as any,
             age_bucket: phaseA.age_bucket as any,
+            primary_goal: phaseA.primary_goal as any,
           },
           phase_b: phaseB,
           phase_c: phaseC,
