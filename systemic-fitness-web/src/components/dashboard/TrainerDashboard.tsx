@@ -264,6 +264,46 @@ export function TrainerDashboard() {
         )}
       </div>
 
+      {/* Needs Re-assessment Widget */}
+      {(() => {
+        const clientsNeedingReassessment = allClients.filter((c: any) => c.needs_reassessment);
+        if (clientsNeedingReassessment.length === 0) return null;
+        
+        return (
+          <div className="card overflow-hidden border-red-200">
+            <div className="px-5 py-4 border-b border-red-100 bg-red-50 flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-semibold text-red-900">Perlu Re-assessment Bulanan</h3>
+                <p className="text-xs text-red-600 mt-0.5">
+                  Klien yang asesmen terakhirnya sudah lebih dari 30 hari.
+                </p>
+              </div>
+            </div>
+            <div className="divide-y divide-slate-50">
+              {clientsNeedingReassessment.map((c) => (
+                <div key={c.id} className="px-5 py-3 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-red-100 text-red-700 flex items-center justify-center text-xs font-bold">
+                      {getInitials(c.full_name)}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-slate-900">{c.full_name}</p>
+                      <p className="text-xs text-slate-500">{c.email}</p>
+                    </div>
+                  </div>
+                  <Link
+                    href={`/clients/${c.id}`}
+                    className="text-xs font-medium text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    Lihat Profil
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Compact week schedule */}
       <div className="card overflow-hidden">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">

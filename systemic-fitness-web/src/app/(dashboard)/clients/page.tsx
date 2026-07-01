@@ -207,9 +207,16 @@ export default function ClientsPage() {
                 </Link>
 
                 {/* Status Badge */}
-                <span className={cn("px-2 py-0.5 rounded-full text-xs font-medium capitalize", statusStyles[client.status] || "bg-slate-100 text-slate-500")}>
-                  {client.status}
-                </span>
+                <div className="flex flex-col gap-1 items-end shrink-0">
+                  <span className={cn("px-2 py-0.5 rounded-full text-xs font-medium capitalize", statusStyles[client.status] || "bg-slate-100 text-slate-500")}>
+                    {client.status}
+                  </span>
+                  {client.needs_reassessment && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-100 text-red-600 border border-red-200">
+                      Re-assessment Due
+                    </span>
+                  )}
+                </div>
 
                 {canEdit && (
                   <button

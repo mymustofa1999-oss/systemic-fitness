@@ -190,8 +190,12 @@ func (r *UserRepository) List(ctx context.Context, params model.PaginationParams
 
 	// ── Select ──────────────────────────────────────────────────
 	listQuery := fmt.Sprintf(`
-		SELECT %s
+		SELECT %s,
+		       COALESCE(EXTRACT(DAY FROM NOW() - a.created_at) >= 30, true) as needs_reassessment
 		FROM users u %s
+		LEFT JOIN LATERAL (
+		    SELECT created_at FROM assessments WHERE user_id = u.id AND version='v2' ORDER BY created_at DESC LIMIT 1
+		) a ON true
 		WHERE %s
 		ORDER BY %s %s
 		LIMIT $%d OFFSET $%d`,
@@ -211,6 +215,7 @@ func (r *UserRepository) List(ctx context.Context, params model.PaginationParams
 			&u.ID, &u.Email, &u.PasswordHash, &u.FullName,
 			&u.Phone, &u.AvatarURL, &u.Role, &u.Status,
 			&u.Timezone, &u.CreatedAt, &u.UpdatedAt, &u.DeletedAt,
+			&u.NeedsReassessment,
 		); err != nil {
 			return nil, 0, fmt.Errorf("scan user row: %w", err)
 		}

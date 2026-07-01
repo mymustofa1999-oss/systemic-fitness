@@ -89,8 +89,9 @@ type User struct {
 	Status       UserStatus `json:"status"`
 	Timezone     string     `json:"timezone"`
 	CreatedAt    time.Time  `json:"created_at"`
-	UpdatedAt    time.Time  `json:"updated_at"`
-	DeletedAt    *time.Time `json:"deleted_at,omitempty"`
+	UpdatedAt         time.Time  `json:"updated_at"`
+	DeletedAt         *time.Time `json:"deleted_at,omitempty"`
+	NeedsReassessment bool       `json:"needs_reassessment"`
 }
 
 type UserProfile struct {

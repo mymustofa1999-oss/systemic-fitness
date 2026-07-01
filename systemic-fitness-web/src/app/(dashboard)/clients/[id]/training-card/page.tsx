@@ -189,10 +189,11 @@ function getClientCategoryAndLoads(
 
 export default function TrainingCardPage({ params }: { params: { id: string } }) {
   const customerId = params.id;
-  // Trainers get a read-only view: no create / edit / delete.
-  const { isTrainer } = useAuth();
-  const canEdit = !isTrainer;
+  const { isTrainer, user: authUser } = useAuth();
   const { data: userData, isLoading: userLoading } = useUser(customerId);
+  const subscriptionTier = (userData?.data as any)?.subscription?.tier;
+  const isTier1 = !subscriptionTier || subscriptionTier === "sf_tier_1";
+  const canEdit = authUser?.role === "admin" ? true : !isTier1;
   const { data: cardData, isLoading: cardLoading } = useTrainerCard(customerId);
   const { data: typesData } = useTrainerCardTypes();
   const { data: programsData } = useCustomerPrograms(customerId);
@@ -598,6 +599,22 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       <Link href={`/clients/${customerId}`} className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
         <ArrowLeft className="h-4 w-4" /> Kembali ke Detail Client
       </Link>
+
+      {isTier1 && (
+        <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg flex items-start gap-3">
+          <div className="mt-0.5">
+            <svg className="h-5 w-5 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold">Training Card Mandiri (Tier 1)</h4>
+            <p className="text-xs mt-0.5">
+              Program ini dibuat otomatis oleh sistem dan bersifat read-only. Client perlu mengupgrade paket untuk mendapatkan penyesuaian khusus dari Trainer.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* ═══ TRAINING CARD HEADER ═══════════════════════════════ */}
       <div className="border border-slate-200 rounded-lg overflow-hidden shadow-sm">
