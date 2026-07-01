@@ -56,6 +56,33 @@ func (h *AssessmentV2Handler) Submit(w http.ResponseWriter, r *http.Request) {
 	response.Created(w, a)
 }
 
+// POST /api/v2/assessments/user/{userId} — admin/trainer only.
+func (h *AssessmentV2Handler) SubmitForUser(w http.ResponseWriter, r *http.Request) {
+	userID := chi.URLParam(r, "userId")
+	if userID == "" {
+		response.BadRequest(w, "Missing userId")
+		return
+	}
+
+	var in service.SubmitV2Input
+	if err := response.DecodeJSON(r, &in); err != nil {
+		response.BadRequest(w, "Invalid request body: "+err.Error())
+		return
+	}
+	if errs := validateStruct(&in); errs != nil {
+		response.ValidationError(w, errs)
+		return
+	}
+
+	a, err := h.service.Submit(r.Context(), userID, &in)
+	if err != nil {
+		slog.Error("[AssessmentV2.SubmitForUser] failed", "user_id", userID, "error", err)
+		response.InternalError(w, "Failed to submit assessment")
+		return
+	}
+	response.Created(w, a)
+}
+
 // GET /api/v2/assessments/latest
 func (h *AssessmentV2Handler) Latest(w http.ResponseWriter, r *http.Request) {
 	userID := middleware.GetUserID(r.Context())

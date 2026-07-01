@@ -61,7 +61,7 @@ export default function ModulCardPage() {
     }
 
     let isFirstSeqRow = true;
-    let seqRowspan = seqItems.length;
+    const seqRowspan = seqItems.length;
 
     for (const [setName, setItems] of Array.from(setsMap.entries())) {
       const typesMap = new Map<string, any[]>();
@@ -72,11 +72,11 @@ export default function ModulCardPage() {
       }
 
       let isFirstSetRow = true;
-      let setRowspan = setItems.length;
+      const setRowspan = setItems.length;
 
       for (const [typeName, typeItems] of Array.from(typesMap.entries())) {
         let isFirstTypeRow = true;
-        let typeRowspan = typeItems.length;
+        const typeRowspan = typeItems.length;
 
         for (const item of typeItems) {
           groupedData.push({

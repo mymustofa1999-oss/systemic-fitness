@@ -870,6 +870,9 @@ func main() {
 					Get("/user/{userId}/latest", assessmentV2Handler.LatestForUser)
 
 				r.With(middleware.RequireMinRole(model.RoleTrainer)).
+					Post("/user/{userId}", assessmentV2Handler.SubmitForUser)
+
+				r.With(middleware.RequireMinRole(model.RoleTrainer)).
 					Get("/user/{userId}/training-card", assessmentV2Handler.GetTrainingCardForUser)
 
 				r.Get("/{id}", assessmentV2Handler.Get)

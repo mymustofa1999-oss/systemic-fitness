@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { apiGet } from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiGet, apiPost } from "@/lib/api";
+import { toast } from "@/stores/toastStore";
 
 // SF Phase 3 — Assessment v2 read hooks (web admin viewer).
 
@@ -158,5 +159,18 @@ export function useTrainingCardForUser(userId: string | undefined) {
     queryFn: () => apiGet<TrainingCardResponse>(`/api/v2/assessments/user/${userId}/training-card`),
     enabled: !!userId,
     retry: false, // Don't retry on 404 (no assessment) or 402 (no subscription)
+  });
+}
+
+export function useSubmitAssessmentForUser() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ userId, data }: { userId: string; data: { phase_a: PhaseAInput; phase_b?: PhaseBInput; phase_c?: PhaseCInput } }) =>
+      apiPost(`/api/v2/assessments/user/${userId}`, data),
+    onSuccess: (_, { userId }) => {
+      qc.invalidateQueries({ queryKey: ["assessment-v2", "latest", userId] });
+      toast.success("Assessment submitted successfully!");
+    },
+    onError: (err: Error) => toast.error(err.message),
   });
 }

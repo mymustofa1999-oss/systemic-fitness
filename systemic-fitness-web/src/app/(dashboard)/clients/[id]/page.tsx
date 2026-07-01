@@ -128,23 +128,42 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
       </Link>
 
       {/* ═══ SF ASESMEN V2 SHORTCUT ════════════════════════════ */}
-      <Link
-        href={`/clients/${params.id}/assessment-v2`}
-        className="card flex items-center justify-between px-4 py-3 hover:bg-sf-iceBlue transition-colors group"
-      >
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-sf-deepNavy text-sf-warmGold">
-            <ClipboardCheck className="h-5 w-5" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Link
+          href={`/clients/${params.id}/assessment-v2`}
+          className="card flex items-center justify-between px-4 py-3 hover:bg-sf-iceBlue transition-colors group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-sf-deepNavy text-sf-warmGold">
+              <ClipboardCheck className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-900">Hasil Asesmen v2</p>
+              <p className="text-xs text-slate-500">
+                System Score, Chronobiology Window, Phase A/B/C
+              </p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Hasil Asesmen v2</p>
-            <p className="text-xs text-slate-500">
-              System Score, Chronobiology Window, Phase A/B/C — hasil yang diisi klien dari mobile app
-            </p>
+          <ChevronDown className="h-4 w-4 text-slate-400 -rotate-90 group-hover:text-slate-600" />
+        </Link>
+        <Link
+          href={`/clients/${params.id}/assessment`}
+          className="card flex items-center justify-between px-4 py-3 hover:bg-sf-iceBlue transition-colors group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-green-600 text-white">
+              <FileText className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-900">Isi Assessment Manual</p>
+              <p className="text-xs text-slate-500">
+                Isi Assessment V2 atas nama klien
+              </p>
+            </div>
           </div>
-        </div>
-        <ChevronDown className="h-4 w-4 text-slate-400 -rotate-90 group-hover:text-slate-600" />
-      </Link>
+          <ChevronDown className="h-4 w-4 text-slate-400 -rotate-90 group-hover:text-slate-600" />
+        </Link>
+      </div>
 
       {/* ═══ BOTTOM SECTION: Monthly Session Journal ═══════════ */}
       <SessionJournalTable customerId={params.id} />
