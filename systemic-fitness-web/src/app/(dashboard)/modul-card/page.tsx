@@ -25,16 +25,70 @@ export default function ModulCardPage() {
   const { data: levelsData, isLoading: isLoadingLevels } = useDLLevels();
   const levels = (levelsData?.data ?? []) as any[];
   
-  // Exclude level 0 based on user requirements
   const activeLevels = levels.filter((l: any) => l.level_number > 0).sort((a: any, b: any) => a.level_number - b.level_number);
   
   const [selectedLevel, setSelectedLevel] = useState<number>(1);
   const selectedLevelData = activeLevels.find((l: any) => l.level_number === selectedLevel);
   
-  // We use 'fc' as the base category to fetch menu items since they are identical across FC, CC, MC
-  const { data: menuData, isLoading: isLoadingItems } = useDLMenuItems("fc", selectedLevel);
-  const menuItems = (menuData?.data ?? []) as any[];
+  const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", selectedLevel);
+  const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", selectedLevel);
+  const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", selectedLevel);
   
+  const isLoadingItems = isLoadingFC || isLoadingCC || isLoadingMC;
+  
+  const allItems = [
+    ...(fcData?.data ?? []).map((i: any) => ({ ...i, sequence: "FC" })),
+    ...(ccData?.data ?? []).map((i: any) => ({ ...i, sequence: "CC" })),
+    ...(mcData?.data ?? []).map((i: any) => ({ ...i, sequence: "MC" }))
+  ];
+
+  const groupedData: any[] = [];
+  const sequences = ["FC", "CC", "MC"];
+  
+  for (const seq of sequences) {
+    const seqItems = allItems.filter(i => i.sequence === seq).sort((a,b) => a.sort_order - b.sort_order);
+    if (seqItems.length === 0) continue;
+
+    const setsMap = new Map<string, any[]>();
+    for (const item of seqItems) {
+      const setName = item.set_name || "Uncategorized";
+      if (!setsMap.has(setName)) setsMap.set(setName, []);
+      setsMap.get(setName)!.push(item);
+    }
+
+    let isFirstSeqRow = true;
+    let seqRowspan = seqItems.length;
+
+    for (const [setName, setItems] of Array.from(setsMap.entries())) {
+      const typesMap = new Map<string, any[]>();
+      for (const item of setItems) {
+        const typeName = item.group_type || item.body_part || "Mixed";
+        if (!typesMap.has(typeName)) typesMap.set(typeName, []);
+        typesMap.get(typeName)!.push(item);
+      }
+
+      let isFirstSetRow = true;
+      let setRowspan = setItems.length;
+
+      for (const [typeName, typeItems] of Array.from(typesMap.entries())) {
+        let isFirstTypeRow = true;
+        let typeRowspan = typeItems.length;
+
+        for (const item of typeItems) {
+          groupedData.push({
+            ...item,
+            renderSeq: isFirstSeqRow ? { name: seq, span: seqRowspan } : null,
+            renderSet: isFirstSetRow ? { name: setName, span: setRowspan } : null,
+            renderType: isFirstTypeRow ? { name: typeName, span: typeRowspan } : null,
+          });
+          isFirstSeqRow = false;
+          isFirstSetRow = false;
+          isFirstTypeRow = false;
+        }
+      }
+    }
+  }
+
   const addMutation = useAddModulCardItem();
   const deleteMutation = useDeleteModulCardItem();
   
@@ -57,12 +111,11 @@ export default function ModulCardPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Modul Card</h1>
           <p className="text-sm text-slate-500 mt-1">
-            Kelola daftar latihan berdasarkan Level (Level 1 - 5).
+            Kelola daftar latihan berdasarkan Level persis seperti format Excel.
           </p>
         </div>
       </div>
 
-      {/* Level Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
         {activeLevels.map((lvl) => {
           const isActive = selectedLevel === lvl.level_number;
@@ -84,7 +137,6 @@ export default function ModulCardPage() {
         })}
       </div>
 
-      {/* Content Area */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className={cn("px-6 py-4 flex justify-between items-center text-white", theme.headerBg)}>
           <div>
@@ -100,12 +152,12 @@ export default function ModulCardPage() {
           </button>
         </div>
 
-        <div className="p-0">
+        <div className="p-0 overflow-x-auto">
           {isLoadingItems ? (
             <div className="flex justify-center p-12">
               <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
             </div>
-          ) : menuItems.length === 0 ? (
+          ) : allItems.length === 0 ? (
             <EmptyState
               icon={Video}
               title="Belum ada latihan"
@@ -120,39 +172,76 @@ export default function ModulCardPage() {
               }
             />
           ) : (
-            <div className="divide-y divide-slate-100">
-              {menuItems.map((item, idx) => (
-                <div key={item.id} className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div className={cn(
-                      "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold",
-                      theme.accent, theme.headerBg.replace('bg-', 'text-')
-                    )}>
-                      {idx + 1}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-900">{item.movement?.name}</p>
-                      <div className="flex gap-2 text-xs mt-1">
-                        <span className="text-slate-500 uppercase tracking-wider">{item.body_part}</span>
-                        {item.movement?.type && (
-                          <>
-                            <span className="text-slate-300">•</span>
-                            <span className="text-slate-500">{item.movement.type}</span>
-                          </>
+            <table className="w-full text-sm text-left border-collapse">
+              <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
+                <tr>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-16 text-center">SEQUENCE</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">SET</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-32">TYPE</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200">FEMALE</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200">MALE</th>
+                  <th className="px-4 py-3 font-semibold w-12 text-center"></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {groupedData.map((row, idx) => (
+                  <tr key={row.id} className="hover:bg-slate-50/50 transition-colors">
+                    {row.renderSeq && (
+                      <td 
+                        rowSpan={row.renderSeq.span} 
+                        className="px-4 py-3 border-r border-slate-200 text-center font-bold text-slate-700 align-top"
+                      >
+                        {row.renderSeq.name}
+                      </td>
+                    )}
+                    {row.renderSet && (
+                      <td 
+                        rowSpan={row.renderSet.span} 
+                        className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top font-medium"
+                      >
+                        {row.renderSet.name}
+                      </td>
+                    )}
+                    {row.renderType && (
+                      <td 
+                        rowSpan={row.renderType.span} 
+                        className="px-4 py-3 border-r border-slate-200 text-slate-600 align-top"
+                      >
+                        {row.renderType.name}
+                      </td>
+                    )}
+                    <td className="px-4 py-3 border-r border-slate-200">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                        {row.movement?.video_url_female && (
+                          <a href={row.movement.video_url_female} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                            <Video className="w-4 h-4" />
+                          </a>
                         )}
                       </div>
-                    </div>
-                  </div>
-                  
-                  <button
-                    onClick={() => setItemToDelete(item)}
-                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
+                    </td>
+                    <td className="px-4 py-3 border-r border-slate-200">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                        {row.movement?.video_url_male && (
+                          <a href={row.movement.video_url_male} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                            <Video className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-center align-top">
+                      <button
+                        onClick={() => setItemToDelete(row)}
+                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       </div>
@@ -185,7 +274,7 @@ export default function ModulCardPage() {
           }
         }}
         title="Hapus Latihan"
-        description={`Apakah Anda yakin ingin menghapus "${itemToDelete?.movement?.name}" dari Level ${selectedLevel}? Tindakan ini akan menghapusnya dari semua kategori (FC, CC, MC).`}
+        description={`Apakah Anda yakin ingin menghapus "${itemToDelete?.movement?.name}"?`}
         confirmLabel={deleteMutation.isPending ? "Menghapus..." : "Hapus"}
       />
     </div>

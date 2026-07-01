@@ -68,14 +68,16 @@ type DLMovement struct {
 }
 
 type DLMenuItem struct {
-	ID         string     `json:"id"`
-	CategoryID string     `json:"category_id"`
-	LevelID    string     `json:"level_id"`
-	MovementID string     `json:"movement_id"`
-	BodyPart   string     `json:"body_part"`
-	SortOrder  int        `json:"sort_order"`
-	CreatedAt  time.Time  `json:"created_at"`
-	UpdatedAt  time.Time  `json:"updated_at"`
+	ID         string      `json:"id"`
+	CategoryID string      `json:"category_id"`
+	LevelID    string      `json:"level_id"`
+	MovementID string      `json:"movement_id"`
+	BodyPart   string      `json:"body_part"`
+	SortOrder  int         `json:"sort_order"`
+	SetName    *string     `json:"set_name,omitempty"`
+	GroupType  *string     `json:"group_type,omitempty"`
+	CreatedAt  time.Time   `json:"created_at"`
+	UpdatedAt  time.Time   `json:"updated_at"`
 	Movement   *DLMovement `json:"movement,omitempty"`
 }
 
@@ -322,7 +324,7 @@ func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCo
 	}
 
 	query := fmt.Sprintf(`
-		SELECT mi.id, mi.category_id, mi.level_id, mi.movement_id, mi.body_part, mi.sort_order,
+		SELECT mi.id, mi.category_id, mi.level_id, mi.movement_id, mi.body_part, mi.sort_order, mi.set_name, mi.group_type,
 		       mi.created_at, mi.updated_at,
 		       m.id, m.name, m.body_part, m.video_url_male, m.video_url_female, m.image_url,
 		       m.instructions, m.categories, m.type, m.pattern, m.level, m.created_at, m.updated_at,
@@ -347,7 +349,7 @@ func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCo
 		var m DLMovement
 		var levelNum int
 		if err := rows.Scan(
-			&mi.ID, &mi.CategoryID, &mi.LevelID, &mi.MovementID, &mi.BodyPart, &mi.SortOrder,
+			&mi.ID, &mi.CategoryID, &mi.LevelID, &mi.MovementID, &mi.BodyPart, &mi.SortOrder, &mi.SetName, &mi.GroupType,
 			&mi.CreatedAt, &mi.UpdatedAt,
 			&m.ID, &m.Name, &m.BodyPart, &m.VideoURLMale, &m.VideoURLFemale, &m.ImageURL,
 			&m.Instructions, &m.Categories, &m.Type, &m.Pattern, &m.Level, &m.CreatedAt, &m.UpdatedAt,

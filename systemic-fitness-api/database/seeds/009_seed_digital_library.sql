@@ -9,7 +9,7 @@
 INSERT INTO dl_categories (code, name, description) VALUES
 ('fc', 'Functional Conditioning', 'Functional movement patterns for rehabilitation and conditioning. Focuses on basic movement quality, joint stability, and progressive mobility from bed-bound to full dynamic movement.'),
 ('cc', 'Cardio Conditioning', 'Cardiovascular conditioning movements designed to improve heart rate response, endurance, and aerobic capacity progressively from seated to full dynamic training.'),
-('mc', 'Metabolic Conditioning', 'Metabolic and muscle-building movements using resistance bands and bodyweight. Targets muscle hypertrophy, metabolic rate improvement, and core stability.');
+('mc', 'Metabolic Conditioning', 'Metabolic and muscle-building movements using resistance bands and bodyweight. Targets muscle hypertrophy, metabolic rate improvement, and core stability.') ON CONFLICT DO NOTHING;
 
 -- ─── 2. Training Levels ─────────────────────────────────────────
 
