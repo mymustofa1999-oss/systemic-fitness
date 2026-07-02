@@ -220,10 +220,8 @@ export default function ModulCardPage() {
                   <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">SET/TRACK</th>
                   <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">TYPE</th>
                   <th className="px-4 py-3 font-semibold border-r border-slate-200 w-32 text-center">SECTION</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200">FEMALE UPPER</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200">FEMALE LOWER</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200">MALE UPPER</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200">MALE LOWER</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200">FEMALE</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200">MALE</th>
                   <th className="px-4 py-3 font-semibold w-12 text-center"></th>
                 </tr>
               </thead>
@@ -263,52 +261,24 @@ export default function ModulCardPage() {
                       </td>
                     )}
                     <td className="px-4 py-3 border-r border-slate-200">
-                      {row.body_part === "upper" && (
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-medium text-slate-900">{row.movement?.name}</span>
-                          {row.movement?.video_url_female && (
-                            <a href={row.movement.video_url_female} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
-                              <Video className="w-4 h-4" />
-                            </a>
-                          )}
-                        </div>
-                      )}
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                        {row.movement?.video_url_female && (
+                          <a href={row.movement.video_url_female} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                            <Video className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3 border-r border-slate-200">
-                      {row.body_part === "lower" && (
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-medium text-slate-900">{row.movement?.name}</span>
-                          {row.movement?.video_url_female && (
-                            <a href={row.movement.video_url_female} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
-                              <Video className="w-4 h-4" />
-                            </a>
-                          )}
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 border-r border-slate-200">
-                      {row.body_part === "upper" && (
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-medium text-slate-900">{row.movement?.name}</span>
-                          {row.movement?.video_url_male && (
-                            <a href={row.movement.video_url_male} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
-                              <Video className="w-4 h-4" />
-                            </a>
-                          )}
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 border-r border-slate-200">
-                      {row.body_part === "lower" && (
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-medium text-slate-900">{row.movement?.name}</span>
-                          {row.movement?.video_url_male && (
-                            <a href={row.movement.video_url_male} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
-                              <Video className="w-4 h-4" />
-                            </a>
-                          )}
-                        </div>
-                      )}
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                        {row.movement?.video_url_male && (
+                          <a href={row.movement.video_url_male} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                            <Video className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-center align-top">
                       <button
