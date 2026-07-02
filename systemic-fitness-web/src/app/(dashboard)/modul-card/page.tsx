@@ -7,11 +7,33 @@ import {
   useDLLevels,
   useDLMenuItems,
   useDLMovements,
-  useAddModulCardItem,
-  useDeleteModulCardItem,
 } from "@/hooks/useDigitalLibrary";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiPost, apiDelete } from "@/lib/api";
+
+export function useAddModulCardItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { level_id: string; movement_id: string }) =>
+      apiPost(`/api/digital-library/modul-cards`, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dl-menu"] });
+    },
+  });
+}
+
+export function useDeleteModulCardItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { level_id: string; movement_id: string }) =>
+      apiDelete(`/api/digital-library/modul-cards/${data.level_id}/${data.movement_id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dl-menu"] });
+    },
+  });
+}
 
 const LEVEL_THEMES: Record<number, { headerBg: string; accent: string }> = {
   1: { headerBg: "bg-amber-500",   accent: "bg-amber-50" },
@@ -22,6 +44,7 @@ const LEVEL_THEMES: Record<number, { headerBg: string; accent: string }> = {
 };
 
 export default function ModulCardPage() {
+  // force recompile
   const { data: levelsData, isLoading: isLoadingLevels } = useDLLevels();
   const levels = (levelsData?.data ?? []) as any[];
   
@@ -64,30 +87,44 @@ export default function ModulCardPage() {
     const seqRowspan = seqItems.length;
 
     for (const [setName, setItems] of Array.from(setsMap.entries())) {
-      const typesMap = new Map<string, any[]>();
+      const patternsMap = new Map<string, any[]>();
       for (const item of setItems) {
-        const typeName = item.group_type || item.body_part || "Mixed";
-        if (!typesMap.has(typeName)) typesMap.set(typeName, []);
-        typesMap.get(typeName)!.push(item);
+        const patternName = item.movement?.pattern || "Isolate";
+        if (!patternsMap.has(patternName)) patternsMap.set(patternName, []);
+        patternsMap.get(patternName)!.push(item);
       }
 
       let isFirstSetRow = true;
       const setRowspan = setItems.length;
 
-      for (const [typeName, typeItems] of Array.from(typesMap.entries())) {
-        let isFirstTypeRow = true;
-        const typeRowspan = typeItems.length;
+      for (const [patternName, patternItems] of Array.from(patternsMap.entries())) {
+        const sectionsMap = new Map<string, any[]>();
+        for (const item of patternItems) {
+          const sectionName = item.group_type || "Mixed";
+          if (!sectionsMap.has(sectionName)) sectionsMap.set(sectionName, []);
+          sectionsMap.get(sectionName)!.push(item);
+        }
 
-        for (const item of typeItems) {
-          groupedData.push({
-            ...item,
-            renderSeq: isFirstSeqRow ? { name: seq, span: seqRowspan } : null,
-            renderSet: isFirstSetRow ? { name: setName, span: setRowspan } : null,
-            renderType: isFirstTypeRow ? { name: typeName, span: typeRowspan } : null,
-          });
-          isFirstSeqRow = false;
-          isFirstSetRow = false;
-          isFirstTypeRow = false;
+        let isFirstPatternRow = true;
+        const patternRowspan = patternItems.length;
+
+        for (const [sectionName, sectionItems] of Array.from(sectionsMap.entries())) {
+          let isFirstSectionRow = true;
+          const sectionRowspan = sectionItems.length;
+
+          for (const item of sectionItems) {
+            groupedData.push({
+              ...item,
+              renderSeq: isFirstSeqRow ? { name: seq, span: seqRowspan } : null,
+              renderSet: isFirstSetRow ? { name: setName, span: setRowspan } : null,
+              renderPattern: isFirstPatternRow ? { name: patternName, span: patternRowspan } : null,
+              renderSection: isFirstSectionRow ? { name: sectionName, span: sectionRowspan } : null,
+            });
+            isFirstSeqRow = false;
+            isFirstSetRow = false;
+            isFirstPatternRow = false;
+            isFirstSectionRow = false;
+          }
         }
       }
     }
@@ -180,10 +217,13 @@ export default function ModulCardPage() {
               <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
                 <tr>
                   <th className="px-4 py-3 font-semibold border-r border-slate-200 w-16 text-center">SEQUENCE</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">SET</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-32">TYPE</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200">FEMALE</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200">MALE</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">SET/TRACK</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">TYPE</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-32 text-center">SECTION</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200">FEMALE UPPER</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200">FEMALE LOWER</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200">MALE UPPER</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200">MALE LOWER</th>
                   <th className="px-4 py-3 font-semibold w-12 text-center"></th>
                 </tr>
               </thead>
@@ -206,33 +246,69 @@ export default function ModulCardPage() {
                         {row.renderSet.name}
                       </td>
                     )}
-                    {row.renderType && (
+                    {row.renderPattern && (
                       <td 
-                        rowSpan={row.renderType.span} 
-                        className="px-4 py-3 border-r border-slate-200 text-slate-600 align-top"
+                        rowSpan={row.renderPattern.span} 
+                        className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top"
                       >
-                        {row.renderType.name}
+                        {row.renderPattern.name}
+                      </td>
+                    )}
+                    {row.renderSection && (
+                      <td 
+                        rowSpan={row.renderSection.span} 
+                        className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top"
+                      >
+                        {row.renderSection.name}
                       </td>
                     )}
                     <td className="px-4 py-3 border-r border-slate-200">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium text-slate-900">{row.movement?.name}</span>
-                        {row.movement?.video_url_female && (
-                          <a href={row.movement.video_url_female} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
-                            <Video className="w-4 h-4" />
-                          </a>
-                        )}
-                      </div>
+                      {row.body_part === "upper" && (
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                          {row.movement?.video_url_female && (
+                            <a href={row.movement.video_url_female} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                              <Video className="w-4 h-4" />
+                            </a>
+                          )}
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-3 border-r border-slate-200">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium text-slate-900">{row.movement?.name}</span>
-                        {row.movement?.video_url_male && (
-                          <a href={row.movement.video_url_male} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
-                            <Video className="w-4 h-4" />
-                          </a>
-                        )}
-                      </div>
+                      {row.body_part === "lower" && (
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                          {row.movement?.video_url_female && (
+                            <a href={row.movement.video_url_female} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                              <Video className="w-4 h-4" />
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 border-r border-slate-200">
+                      {row.body_part === "upper" && (
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                          {row.movement?.video_url_male && (
+                            <a href={row.movement.video_url_male} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                              <Video className="w-4 h-4" />
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 border-r border-slate-200">
+                      {row.body_part === "lower" && (
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                          {row.movement?.video_url_male && (
+                            <a href={row.movement.video_url_male} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                              <Video className="w-4 h-4" />
+                            </a>
+                          )}
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-center align-top">
                       <button

@@ -85,7 +85,7 @@ func (h *ConsultantHandler) Clients(w http.ResponseWriter, r *http.Request) {
 // ─── Clinical notes CRUD ───────────────────────────────────────────
 
 type clinicalNoteCreateInput struct {
-	AssessmentID      *string         `json:"assessment_id,omitempty"`
+	AssessmentID      *string         `json:"assessment_id,omitempty" validate:"omitempty,uuid"`
 	ClientID          string          `json:"client_id" validate:"required,uuid"`
 	Title             string          `json:"title"     validate:"omitempty,max=160"`
 	Content           string          `json:"content"   validate:"required,min=1,max=20000"`
@@ -110,6 +110,7 @@ func (h *ConsultantHandler) CreateNote(w http.ResponseWriter, r *http.Request) {
 		response.Unauthorized(w, "Authentication required")
 		return
 	}
+	slog.Info("Creating clinical note payload", "payload", in)
 
 	n := &repository.ClinicalNote{
 		AssessmentID:      in.AssessmentID,

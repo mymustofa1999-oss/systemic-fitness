@@ -963,10 +963,14 @@ function MenuTab() {
                           {item.body_part}
                         </span>
                         {item.movement?.video_url_male && (
-                          <Video className="h-3 w-3 text-blue-400 shrink-0" />
+                          <a href={item.movement.video_url_male} target="_blank" rel="noreferrer" className="hover:opacity-75 transition-opacity">
+                            <Video className="h-3 w-3 text-blue-400 shrink-0" />
+                          </a>
                         )}
                         {item.movement?.video_url_female && (
-                          <Video className="h-3 w-3 text-rose-400 shrink-0" />
+                          <a href={item.movement.video_url_female} target="_blank" rel="noreferrer" className="hover:opacity-75 transition-opacity">
+                            <Video className="h-3 w-3 text-rose-400 shrink-0" />
+                          </a>
                         )}
                       </div>
                     ))}
@@ -1062,10 +1066,14 @@ function IsolateTab() {
                 {item.movement?.body_part}
               </span>
               {item.movement?.video_url_male && (
-                <Video className="h-3 w-3 text-blue-400 shrink-0" />
+                <a href={item.movement.video_url_male} target="_blank" rel="noreferrer" className="hover:opacity-75 transition-opacity">
+                  <Video className="h-3 w-3 text-blue-400 shrink-0" />
+                </a>
               )}
               {item.movement?.video_url_female && (
-                <Video className="h-3 w-3 text-rose-400 shrink-0" />
+                <a href={item.movement.video_url_female} target="_blank" rel="noreferrer" className="hover:opacity-75 transition-opacity">
+                  <Video className="h-3 w-3 text-rose-400 shrink-0" />
+                </a>
               )}
             </div>
           ))}

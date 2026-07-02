@@ -296,10 +296,10 @@ func main() {
 				r.With(middleware.RequireRole(model.RoleAdmin)).Post("/invite", userHandler.Invite)
 
 				r.Route("/{id}", func(r chi.Router) {
-					r.With(middleware.RequireSelfOrRole(model.RoleAdmin, model.RoleTrainer)).Get("/", userHandler.GetByID)
+					r.With(middleware.RequireSelfOrRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant)).Get("/", userHandler.GetByID)
 					r.With(middleware.RequireSelfOrRole(model.RoleAdmin)).Put("/", userHandler.Update)
 					r.With(middleware.RequireRole(model.RoleAdmin)).Delete("/", userHandler.Delete)
-					r.With(middleware.RequireSelfOrRole(model.RoleAdmin, model.RoleTrainer)).Get("/stats", userHandler.Stats)
+					r.With(middleware.RequireSelfOrRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant)).Get("/stats", userHandler.Stats)
 					r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/assessments", assessmentHandler.ListByUser)
 				})
 			})

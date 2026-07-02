@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"path/filepath"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -16,6 +17,8 @@ func checkSheets(filename string) {
 }
 
 func main() {
-	checkSheets("movment/FEMALE SYSTEMIC MOVEMENT.xlsx")
-	checkSheets("movment/MALE SYSTEMIC MOVEMENT.xlsx")
+	files, _ := filepath.Glob("movment/LEVEL *.xlsx")
+	for _, f := range files {
+		checkSheets(f)
+	}
 }
