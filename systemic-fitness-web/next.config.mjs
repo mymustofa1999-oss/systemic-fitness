@@ -25,7 +25,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "systemic-fitness-api.mandalikasolusi.co.id",
+        hostname: "systemic-fitness-production.up.railway.app",
         pathname: "/uploads/**",
       },
     ],
