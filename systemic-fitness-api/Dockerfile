@@ -15,7 +15,7 @@ WORKDIR /app
 COPY --from=builder /fitcoach-api .
 
 ENV ENV="production"
-ENV DATABASE_URL="postgres://postgres.udaihnvoqvrfzniqzqun:Fitcoach2026@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres"
+ENV DATABASE_URL="postgres://postgres.udaihnvoqvrfzniqzqun:Fitcoach2026@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres?sslmode=disable"
 ENV CORS_ALLOWED_ORIGINS="*"
 ENV JWT_SECRET="FitcoachSecret2026!"
 
