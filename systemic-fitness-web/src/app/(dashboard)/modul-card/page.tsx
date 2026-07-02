@@ -13,7 +13,7 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiPost, apiDelete } from "@/lib/api";
 
-export function useAddModulCardItem() {
+function useAddModulCardItem() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: { level_id: string; movement_id: string }) =>
@@ -24,7 +24,7 @@ export function useAddModulCardItem() {
   });
 }
 
-export function useDeleteModulCardItem() {
+function useDeleteModulCardItem() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: { level_id: string; movement_id: string }) =>
