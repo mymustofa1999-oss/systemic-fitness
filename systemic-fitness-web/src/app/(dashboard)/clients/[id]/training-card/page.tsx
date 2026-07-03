@@ -773,7 +773,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
               </>
             ) : (
               <>
-                <button onClick={startEdit} className="px-3 py-1.5 text-xs rounded-md bg-white/10 hover:bg-white/20 flex items-center gap-1.5 transition-colors">
+                <button onClick={() => startEdit()} className="px-3 py-1.5 text-xs rounded-md bg-white/10 hover:bg-white/20 flex items-center gap-1.5 transition-colors">
                   <Pencil className="h-3.5 w-3.5" /> Edit
                 </button>
                 {card && (
