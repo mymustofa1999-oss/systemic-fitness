@@ -695,38 +695,38 @@ func main() {
 
 			// ── Customer Setup ──────────────────────────────
 			r.Route("/customers/{customerId}", func(r chi.Router) {
-				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Get("/setup", customerSetupHandler.GetFullSetup)
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant)).Get("/setup", customerSetupHandler.GetFullSetup)
 
 				r.Route("/staff", func(r chi.Router) {
-					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer))
+					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant))
 					r.Get("/", customerSetupHandler.GetStaff)
 					r.Post("/", customerSetupHandler.AssignStaff)
 				})
 
-				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Put("/priority", customerSetupHandler.UpdatePriority)
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant)).Put("/priority", customerSetupHandler.UpdatePriority)
 
 				r.Route("/hr-zone", func(r chi.Router) {
-					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer))
+					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant))
 					r.Get("/", customerSetupHandler.GetHRZone)
 					r.Put("/", customerSetupHandler.UpsertHRZone)
 				})
 
 				r.Route("/medicines", func(r chi.Router) {
-					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer))
+					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant))
 					r.Get("/", customerSetupHandler.ListMedicines)
 					r.Post("/", customerSetupHandler.AddMedicine)
 					r.Delete("/{medicineId}", customerSetupHandler.RemoveMedicine)
 				})
 
 				r.Route("/programs", func(r chi.Router) {
-					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer))
+					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant))
 					r.Get("/", customerSetupHandler.ListPrograms)
 					r.Post("/", customerSetupHandler.UpsertProgram)
 					r.Delete("/{programCategoryId}", customerSetupHandler.RemoveProgram)
 				})
 
 				r.Route("/journal", func(r chi.Router) {
-					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer))
+					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant))
 					r.Get("/", dailyJournalHandler.ListByMonth)
 					r.Get("/months", dailyJournalHandler.ListMonths)
 					r.Post("/", dailyJournalHandler.UpsertSession)
