@@ -548,9 +548,9 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
           .filter((p: any) => p.is_active)
           .map((p: any, i: number) => {
             let menuItems: any[] = [];
-            if (p.program_category_code === "functional") menuItems = fcItemsParam || fcData?.data || [];
-            if (p.program_category_code === "cardiorespiratory") menuItems = ccItemsParam || ccData?.data || [];
-            if (p.program_category_code === "metabolic") menuItems = mcItemsParam || mcData?.data || [];
+            if (p.program_category_code === "functional") menuItems = fcItemsParam || (fcData as any)?.data || [];
+            if (p.program_category_code === "cardiorespiratory") menuItems = ccItemsParam || (ccData as any)?.data || [];
+            if (p.program_category_code === "metabolic") menuItems = mcItemsParam || (mcData as any)?.data || [];
             
             return {
               program_category_id: p.program_category_id,
