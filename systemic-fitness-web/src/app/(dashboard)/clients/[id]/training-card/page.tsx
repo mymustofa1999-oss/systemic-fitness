@@ -1528,9 +1528,20 @@ function MovementSelect({
   onUpdate: (p: Partial<CardItem>) => void;
   onRemove: () => void;
 }) {
-  let filtered = options.filter(m => m.sublabel === bodyPart || m.sublabel === "whole body");
+  let filtered = options.filter(m => {
+    const sub = (m.sublabel || "").toLowerCase();
+    const bp = (bodyPart || "").toLowerCase();
+    return sub === bp || sub === "whole body";
+  });
+
   if (selectedPatterns && selectedPatterns.length > 0) {
-    filtered = filtered.filter(m => selectedPatterns.includes(m.pattern || ""));
+    filtered = filtered.filter(m => {
+      const p = (m.pattern || "").toLowerCase();
+      if (!p) return false;
+      return selectedPatterns.some(sp => 
+        sp.toLowerCase().includes(p) || p.includes(sp.toLowerCase())
+      );
+    });
   }
   const customLabel = item.movement_name || "";
   const allOpts = [
