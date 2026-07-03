@@ -74,6 +74,12 @@ const LEVELS = [
   { value: "1-499", label: "Level 1 (499)" },
   { value: "1-799", label: "Level 1 (799)" },
   { value: "5-6", label: "Level group (5-6)" },
+  { value: "level_0_1", label: "Level 0-1" },
+  { value: "level_2_3", label: "Level 2-3" },
+  { value: "level_4_5_perf", label: "Level 4-5 / Performance" },
+  { value: "level_4_5_health", label: "Level 4-5 / Health" },
+  { value: "level_6_perf", label: "Level 6 / Performance" },
+  { value: "level_6_health", label: "Level 6 / Health" },
 ];
 
 const getLevelLabel = (val: string) => {
@@ -412,15 +418,8 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         })),
       });
     } else {
-      let defaultLevel = "";
       const physicalLevel = latestAssessmentData?.data?.physical_status_level;
-      if (physicalLevel === "level_0_1") {
-        defaultLevel = "1";
-      } else if (physicalLevel === "level_2_3") {
-        defaultLevel = "2";
-      } else if (physicalLevel === "level_4_5_perf") {
-        defaultLevel = "5";
-      }
+      let defaultLevel = physicalLevel || "";
 
       setForm({
         level: defaultLevel,
@@ -682,7 +681,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
                   </div>
                 ) : (
                   <span className="inline-flex px-3 py-1 bg-sf-iceBlue text-sf-deepNavy font-bold text-sm rounded-md">
-                    {getLevelLabel(displayData?.level || "") || "-"}
+                    {getLevelLabel(displayData?.level || latestAssessmentData?.data?.physical_status_level || "") || "-"}
                   </span>
                 )}
               </td>
