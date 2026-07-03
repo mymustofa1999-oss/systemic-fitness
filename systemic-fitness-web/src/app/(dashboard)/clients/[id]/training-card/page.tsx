@@ -847,7 +847,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         <div className="border border-dashed border-slate-300 rounded-lg p-12 text-center">
           <p className="text-slate-400 text-sm mb-4">Belum ada Training Card untuk customer ini</p>
           {canEdit && (
-            <button onClick={startEdit} className="btn-primary">
+            <button onClick={() => startEdit()} className="btn-primary">
               <Plus className="h-4 w-4" /> Buat Training Card
             </button>
           )}
