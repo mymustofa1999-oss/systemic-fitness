@@ -250,18 +250,21 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const canEdit = ["owner", "admin", "consultant", "trainer"].includes(authUser?.role ?? "");
   const { data: cardData, isLoading: cardLoading } = useTrainerCard(customerId);
   const { data: typesData } = useTrainerCardTypes();
-  const { data: programsData } = useCustomerPrograms(customerId);
+  const { data: programsData, isLoading: isLoadingPrograms } = useCustomerPrograms(customerId);
   const { data: movementsData } = useDLMovements({ limit: 500 });
   const { data: equipUpperData } = useEquipments({ category: "upper", limit: 100 });
   const { data: equipLowerData } = useEquipments({ category: "lower", limit: 100 });
-  const { data: latestAssessmentData } = useLatestAssessmentV2(customerId);
+  const { data: latestAssessmentData, isLoading: isLoadingAssessment } = useLatestAssessmentV2(customerId);
   const physicalLevel = latestAssessmentData?.data?.physical_status_level;
   
   const mappedLevel = useMemo(() => {
-    if (physicalLevel === "level_0_1") return "1";
-    if (physicalLevel === "level_2_3") return "2";
-    if (physicalLevel === "level_4_5_perf") return "5";
-    return physicalLevel || "";
+    if (!physicalLevel) return "";
+    if (physicalLevel.includes("0_1")) return "1";
+    if (physicalLevel.includes("2_3")) return "2";
+    if (physicalLevel.includes("4_5")) return "4";
+    if (physicalLevel.includes("6")) return "6";
+    const match = physicalLevel.match(/\d+/);
+    return match ? match[0] : "";
   }, [physicalLevel]);
 
   const parsedMappedLevel = parseInt(mappedLevel) || 1;
@@ -419,6 +422,8 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       !cardLoading &&
       !isLoadingTemplate &&
       !isLoadingMenu &&
+      !isLoadingAssessment &&
+      !isLoadingPrograms &&
       !card &&
       !editing &&
       canEdit &&
@@ -427,9 +432,9 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       (templateCard || presetCard || customerPrograms.length > 0)
     ) {
       hasAutoStarted.current = true;
-      startEdit();
+      startEdit(fcData?.data as any[], ccData?.data as any[], mcData?.data as any[]);
     }
-  }, [cardLoading, isLoadingTemplate, isLoadingMenu, card, editing, canEdit, templateCard, presetCard, customerPrograms]);
+  }, [cardLoading, isLoadingTemplate, isLoadingMenu, isLoadingAssessment, isLoadingPrograms, card, editing, canEdit, templateCard, presetCard, customerPrograms, fcData, ccData, mcData]);
 
   // Build SearchableSelect options
   const typeOptions = useMemo(() =>
@@ -461,7 +466,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     })), [equipLower]);
 
   // ── Form init ──────────────────────────────────────────────
-  function startEdit() {
+  function startEdit(fcItemsParam?: any[], ccItemsParam?: any[], mcItemsParam?: any[]) {
     if (card) {
       setForm({
         level: card.level || "",
@@ -543,9 +548,9 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
           .filter((p: any) => p.is_active)
           .map((p: any, i: number) => {
             let menuItems: any[] = [];
-            if (p.program_category_code === "functional") menuItems = fcData?.data || [];
-            if (p.program_category_code === "cardiorespiratory") menuItems = ccData?.data || [];
-            if (p.program_category_code === "metabolic") menuItems = mcData?.data || [];
+            if (p.program_category_code === "functional") menuItems = fcItemsParam || fcData?.data || [];
+            if (p.program_category_code === "cardiorespiratory") menuItems = ccItemsParam || ccData?.data || [];
+            if (p.program_category_code === "metabolic") menuItems = mcItemsParam || mcData?.data || [];
             
             return {
               program_category_id: p.program_category_id,
