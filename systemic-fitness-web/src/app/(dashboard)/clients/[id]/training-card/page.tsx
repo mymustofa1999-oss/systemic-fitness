@@ -12,7 +12,7 @@ import {
   useCustomerPrograms,
   useEquipments,
 } from "@/hooks/useNewFeatures";
-import { CardSequence, CardSet, CardItem, CardForm } from "@/types/trainingCard";
+
 
 function buildSetsFromMenuItems(menuItems: any[]) {
   if (!menuItems || menuItems.length === 0) return [];
