@@ -307,8 +307,8 @@ func main() {
 			// ── Clients (dedicated) ─────────────────────────
 			r.Route("/clients", func(r chi.Router) {
 				r.Get("/", userHandler.ListClients)
-				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Post("/assign", userHandler.AssignClient)
-				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Post("/unassign", userHandler.UnassignClient)
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant)).Post("/assign", userHandler.AssignClient)
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant)).Post("/unassign", userHandler.UnassignClient)
 			})
 
 			// ── Team (dedicated) ────────────────────────────
@@ -734,7 +734,7 @@ func main() {
 				})
 
 				r.Route("/training-card", func(r chi.Router) {
-					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer))
+					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant))
 					r.Get("/", trainerCardHandler.GetCard)
 					r.Post("/", trainerCardHandler.UpsertCard)
 					r.Delete("/", trainerCardHandler.DeleteCard)

@@ -193,7 +193,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const { data: userData, isLoading: userLoading } = useUser(customerId);
   const subscriptionTier = (userData?.data as any)?.subscription?.tier;
   const isTier1 = !subscriptionTier || subscriptionTier === "sf_tier_1";
-  const canEdit = authUser?.role === "admin" ? true : !isTier1;
+  const canEdit = ["owner", "admin", "consultant", "trainer"].includes(authUser?.role ?? "");
   const { data: cardData, isLoading: cardLoading } = useTrainerCard(customerId);
   const { data: typesData } = useTrainerCardTypes();
   const { data: programsData } = useCustomerPrograms(customerId);

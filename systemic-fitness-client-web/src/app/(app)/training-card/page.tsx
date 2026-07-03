@@ -2000,7 +2000,7 @@ export default function TrainingCardPage() {
   // pause/resume, finish modal). Defined once and reused in both render paths.
   const workoutSessionOverlay = (
     <>
-      {isLevel5or6 && !sessionStarted && (
+      {!sessionStarted && (
         <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-black/75 backdrop-blur-md p-6 text-center animate-fade-in">
           <div className="max-w-sm w-full bg-slate-900 border border-sf-warmGold/35 rounded-3xl p-8 shadow-2xl text-white space-y-6">
             <div className="w-16 h-16 rounded-2xl bg-sf-warmGold/10 flex items-center justify-center mx-auto border border-sf-warmGold/30">
@@ -2012,8 +2012,8 @@ export default function TrainingCardPage() {
               </h3>
               <p className="text-xs text-white/70 leading-relaxed">
                 {lang === "en"
-                  ? "Click start to begin your Level 5/6 workout session. An active timer will track your workout duration."
-                  : "Klik mulai untuk memulai sesi latihan Level 5/6 Anda. Timer aktif akan mencatat durasi latihan Anda secara realtime."}
+                  ? "Click start to begin your workout session. An active timer will track your workout duration."
+                  : "Klik mulai untuk memulai sesi latihan Anda. Timer aktif akan mencatat durasi latihan Anda secara realtime."}
               </p>
             </div>
             <button
@@ -2026,7 +2026,7 @@ export default function TrainingCardPage() {
         </div>
       )}
 
-      {isLevel5or6 && sessionStarted && (
+      {sessionStarted && (
         <div className="fixed bottom-20 left-0 right-0 z-40 px-4 pointer-events-none">
           <div className="max-w-lg mx-auto bg-slate-900/90 dark:bg-slate-900/95 backdrop-blur-md border border-sf-warmGold/30 rounded-2xl p-4 shadow-xl flex items-center justify-between gap-3 pointer-events-auto">
             <div className="flex items-center gap-3 min-w-0">

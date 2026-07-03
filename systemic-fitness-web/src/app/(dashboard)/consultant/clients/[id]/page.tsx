@@ -105,13 +105,21 @@ export default function ConsultantClientDetailPage({ params }: { params: { id: s
       </Link>
 
       {/* ─── Header ───────────────────────────────────────────── */}
-      <div className="card p-5">
-        <h1 className="sf-headline text-2xl">{user.full_name}</h1>
-        <div className="flex flex-wrap items-center gap-4 mt-1 text-sm text-slate-500 font-dm-sans">
-          <span>{user.email}</span>
-          {user.phone && <span>· {user.phone}</span>}
-          <span>· Bergabung {fmtDate(user.created_at)}</span>
+      <div className="card p-5 flex flex-col md:flex-row md:items-start justify-between gap-4">
+        <div>
+          <h1 className="sf-headline text-2xl">{user.full_name}</h1>
+          <div className="flex flex-wrap items-center gap-4 mt-1 text-sm text-slate-500 font-dm-sans">
+            <span>{user.email}</span>
+            {user.phone && <span>· {user.phone}</span>}
+            <span>· Bergabung {fmtDate(user.created_at)}</span>
+          </div>
         </div>
+        <Link
+          href={`/clients/${params.id}`}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-sf-warmGold hover:bg-sf-warmGoldDark text-sf-deepNavy font-semibold rounded-lg text-sm transition-colors shadow-sm"
+        >
+          Buat Modul Card & Assign Trainer <ExternalLink size={16} />
+        </Link>
       </div>
 
       {/* ─── Asesmen v2 + Lab History ────────────────────────── */}
