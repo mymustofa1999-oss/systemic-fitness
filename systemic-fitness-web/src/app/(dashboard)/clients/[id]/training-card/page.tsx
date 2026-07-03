@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useUser } from "@/hooks/useUsers";
 import { useAuth } from "@/hooks/useAuth";
@@ -217,7 +217,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     return physicalLevel || "";
   }, [physicalLevel]);
 
-  const { data: templateData } = useTemplate(mappedLevel);
+  const { data: templateData, isLoading: isLoadingTemplate } = useTemplate(mappedLevel);
   const templateCard = templateData?.data as any;
 
   const upsertCard = useUpsertTrainerCard();
@@ -359,6 +359,22 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<CardForm | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const hasAutoStarted = useRef(false);
+  useEffect(() => {
+    if (
+      !cardLoading &&
+      !isLoadingTemplate &&
+      !card &&
+      !editing &&
+      canEdit &&
+      !hasAutoStarted.current &&
+      (templateCard || presetCard)
+    ) {
+      hasAutoStarted.current = true;
+      startEdit();
+    }
+  }, [cardLoading, isLoadingTemplate, card, editing, canEdit, templateCard, presetCard]);
 
   // Build SearchableSelect options
   const typeOptions = useMemo(() =>
