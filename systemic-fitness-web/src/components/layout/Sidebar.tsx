@@ -76,7 +76,16 @@ export function Sidebar() {
 
   // Fetch menus from API
   const { data: menuResponse, isLoading } = useMyMenus();
-  const menus: MenuItem[] = menuResponse?.data || fallbackNavigation;
+  const rawMenus: MenuItem[] = menuResponse?.data || fallbackNavigation;
+  
+  // Ensure Dashboard is always present at the top
+  const hasDashboard = rawMenus.some((m) => m.code === "dashboard" || m.href === "/");
+  const menus: MenuItem[] = hasDashboard 
+    ? rawMenus 
+    : [
+        { id: "static-dashboard", parent_id: null, code: "dashboard", label: "Dashboard", icon: "LayoutDashboard", href: "/", sort_order: 0, is_active: true, created_at: "", updated_at: "", children: [] },
+        ...rawMenus
+      ];
 
   function toggleGroup(code: string) {
     setExpandedGroups((prev) =>

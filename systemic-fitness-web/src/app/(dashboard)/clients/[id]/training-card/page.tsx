@@ -12,6 +12,7 @@ import {
   useCustomerPrograms,
   useEquipments,
 } from "@/hooks/useNewFeatures";
+import { useTemplate } from "@/hooks/useTrainerCardTemplates";
 import { useDLMovements } from "@/hooks/useDigitalLibrary";
 import { useLatestAssessmentV2 } from "@/hooks/useAssessmentV2";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
@@ -207,6 +208,9 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const { data: equipUpperData } = useEquipments({ category: "upper", limit: 100 });
   const { data: equipLowerData } = useEquipments({ category: "lower", limit: 100 });
   const { data: latestAssessmentData } = useLatestAssessmentV2(customerId);
+  const physicalLevel = latestAssessmentData?.data?.physical_status_level;
+  const { data: templateData } = useTemplate(physicalLevel || "");
+  const templateCard = templateData?.data as any;
 
   const upsertCard = useUpsertTrainerCard();
   const deleteCard = useDeleteTrainerCard();
@@ -418,13 +422,45 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         })),
       });
     } else {
-      const physicalLevel = latestAssessmentData?.data?.physical_status_level;
       const defaultLevel = physicalLevel || "";
+      const defaultCard = templateCard || presetCard;
 
       setForm({
         level: defaultLevel,
-        notes: "",
-        sequences: customerPrograms
+        notes: defaultCard?.notes || "",
+        sequences: defaultCard ? defaultCard.sequences.map((s: any, si: number) => ({
+          program_category_id: s.program_category_id,
+          program_category_name: s.program_category_name,
+          program_category_code: s.program_category_code,
+          duration: s.duration || "",
+          sort_order: si,
+          sets: (s.sets || []).map((set: any, seti: number) => ({
+            set_number: set.set_number,
+            duration: set.duration || "",
+            equipment_upper: set.equipment_upper || "",
+            equipment_lower: set.equipment_lower || "",
+            type_id: set.type_id || "",
+            type_name: set.type_name || "",
+            bpm: set.bpm || "",
+            extra_load: set.extra_load || "",
+            pattern: set.pattern || "",
+            breathing_core: set.breathing_core || "",
+            breathing_diaphragm: set.breathing_diaphragm || "",
+            notes: set.notes || "",
+            sort_order: seti,
+            items: (set.items || []).map((item: any, ii: number) => ({
+              movement_id: item.movement_id || null,
+              movement_name: item.movement_name || "",
+              body_part: item.body_part || "upper",
+              equipment: item.equipment || "",
+              reps: item.reps ?? null,
+              sets_count: item.sets_count ?? 1,
+              breathing_core: item.breathing_core || "",
+              breathing_diaphragm: item.breathing_diaphragm || "",
+              sort_order: ii,
+            })),
+          })),
+        })) : customerPrograms
           .filter((p: any) => p.is_active)
           .map((p: any, i: number) => ({
             program_category_id: p.program_category_id,
