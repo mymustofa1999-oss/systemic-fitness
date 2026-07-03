@@ -12,8 +12,55 @@ import {
   useCustomerPrograms,
   useEquipments,
 } from "@/hooks/useNewFeatures";
+import { CardSequence, CardSet, CardItem, CardForm } from "@/types/trainingCard";
+
+function buildSetsFromMenuItems(menuItems: any[]) {
+  if (!menuItems || menuItems.length === 0) return [];
+  
+  const setsMap = new Map<string, any[]>();
+  for (const item of menuItems) {
+    const setName = item.set_name || "Set 1";
+    if (!setsMap.has(setName)) setsMap.set(setName, []);
+    setsMap.get(setName)!.push(item);
+  }
+  
+  const sets: any[] = [];
+  let setNumber = 1;
+  for (const [setName, items] of Array.from(setsMap.entries())) {
+    const parsedSetNum = parseInt(setName.replace(/\D/g, '')) || setNumber;
+    sets.push({
+      set_number: parsedSetNum,
+      duration: "",
+      equipment_upper: "",
+      equipment_lower: "",
+      type_id: "",
+      type_name: "",
+      bpm: "",
+      extra_load: "",
+      pattern: "",
+      breathing_core: "",
+      breathing_diaphragm: "",
+      notes: "",
+      sort_order: setNumber - 1,
+      items: items.map((item, ii) => ({
+        movement_id: item.movement_id || null,
+        movement_name: item.movement?.name || "",
+        body_part: item.movement?.body_part || "upper",
+        equipment: item.movement?.equipment || "",
+        reps: null,
+        sets_count: 1,
+        breathing_core: "",
+        breathing_diaphragm: "",
+        sort_order: ii,
+      }))
+    });
+    setNumber++;
+  }
+  return sets;
+}
+
 import { useTemplate } from "@/hooks/useTrainerCardTemplates";
-import { useDLMovements } from "@/hooks/useDigitalLibrary";
+import { useDLMovements, useDLMenuItems } from "@/hooks/useDigitalLibrary";
 import { useLatestAssessmentV2 } from "@/hooks/useAssessmentV2";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { SearchableSelect } from "@/components/shared/SearchableSelect";
@@ -217,6 +264,12 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     return physicalLevel || "";
   }, [physicalLevel]);
 
+  const parsedMappedLevel = parseInt(mappedLevel) || 1;
+  const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", parsedMappedLevel);
+  const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", parsedMappedLevel);
+  const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", parsedMappedLevel);
+  const isLoadingMenu = isLoadingFC || isLoadingCC || isLoadingMC;
+
   const { data: templateData, isLoading: isLoadingTemplate } = useTemplate(mappedLevel);
   const templateCard = templateData?.data as any;
 
@@ -365,16 +418,18 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     if (
       !cardLoading &&
       !isLoadingTemplate &&
+      !isLoadingMenu &&
       !card &&
       !editing &&
       canEdit &&
       !hasAutoStarted.current &&
-      (templateCard || presetCard)
+      // auto-start if there is a template, or preset, or at least active customer programs to map Modul Card to
+      (templateCard || presetCard || customerPrograms.length > 0)
     ) {
       hasAutoStarted.current = true;
       startEdit();
     }
-  }, [cardLoading, isLoadingTemplate, card, editing, canEdit, templateCard, presetCard]);
+  }, [cardLoading, isLoadingTemplate, isLoadingMenu, card, editing, canEdit, templateCard, presetCard, customerPrograms]);
 
   // Build SearchableSelect options
   const typeOptions = useMemo(() =>
@@ -486,14 +541,21 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
           })),
         })) : customerPrograms
           .filter((p: any) => p.is_active)
-          .map((p: any, i: number) => ({
-            program_category_id: p.program_category_id,
-            program_category_name: p.program_category_name,
-            program_category_code: p.program_category_code,
-            duration: "",
-            sort_order: i,
-            sets: [],
-          })),
+          .map((p: any, i: number) => {
+            let menuItems: any[] = [];
+            if (p.program_category_code === "functional") menuItems = fcData?.data || [];
+            if (p.program_category_code === "cardiorespiratory") menuItems = ccData?.data || [];
+            if (p.program_category_code === "metabolic") menuItems = mcData?.data || [];
+            
+            return {
+              program_category_id: p.program_category_id,
+              program_category_name: p.program_category_name,
+              program_category_code: p.program_category_code,
+              duration: "",
+              sort_order: i,
+              sets: buildSetsFromMenuItems(menuItems),
+            };
+          }),
       });
     }
     setEditing(true);
