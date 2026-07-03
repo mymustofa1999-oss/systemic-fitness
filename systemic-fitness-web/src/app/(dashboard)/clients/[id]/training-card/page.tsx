@@ -419,7 +419,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       });
     } else {
       const physicalLevel = latestAssessmentData?.data?.physical_status_level;
-      let defaultLevel = physicalLevel || "";
+      const defaultLevel = physicalLevel || "";
 
       setForm({
         level: defaultLevel,
