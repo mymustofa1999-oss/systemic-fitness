@@ -209,7 +209,15 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const { data: equipLowerData } = useEquipments({ category: "lower", limit: 100 });
   const { data: latestAssessmentData } = useLatestAssessmentV2(customerId);
   const physicalLevel = latestAssessmentData?.data?.physical_status_level;
-  const { data: templateData } = useTemplate(physicalLevel || "");
+  
+  const mappedLevel = useMemo(() => {
+    if (physicalLevel === "level_0_1") return "1";
+    if (physicalLevel === "level_2_3") return "2";
+    if (physicalLevel === "level_4_5_perf") return "5";
+    return physicalLevel || "";
+  }, [physicalLevel]);
+
+  const { data: templateData } = useTemplate(mappedLevel);
   const templateCard = templateData?.data as any;
 
   const upsertCard = useUpsertTrainerCard();
