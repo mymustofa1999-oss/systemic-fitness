@@ -260,7 +260,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const mappedLevel = useMemo(() => {
     if (!physicalLevel) return "";
     if (physicalLevel.includes("0_1")) return "1";
-    if (physicalLevel.includes("2_3")) return "2";
+    if (physicalLevel.includes("2_3")) return "1"; // Map point 2 to level 1
     if (physicalLevel.includes("4_5")) return "4";
     if (physicalLevel.includes("6")) return "6";
     const match = physicalLevel.match(/\d+/);
