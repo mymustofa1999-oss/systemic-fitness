@@ -29,9 +29,9 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { SearchableSelect } from "@/components/shared/SearchableSelect";
 import {
   ArrowLeft, Plus, Trash2, Save, Loader2, Check, X, ChevronDown, Info, Pill, ExternalLink, ClipboardCheck,
-  Crown, Star, Zap, Clock, CreditCard, FileText,
+  Crown, Star, Zap, Clock, CreditCard, FileText, User, Activity, Phone, ActivitySquare
 } from "lucide-react";
-import { cn, getInitials, formatCurrency, formatDate } from "@/lib/utils";
+import { cn, formatCurrency, formatDate } from "@/lib/utils";
 
 // ── Page ────────────────────────────────────────────────────────
 
@@ -74,99 +74,114 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 pb-20">
       <Link href="/clients" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
         <ArrowLeft className="h-4 w-4" /> Kembali ke Clients
       </Link>
 
-      {/* ═══ SUBSCRIPTION & PAYMENT HISTORY ════════════════════ */}
-      <ClientSubscriptionSection clientId={params.id} clientName={user.full_name} />
-
-      <div className="h-6" />
-
-      {/* ═══ TOP SECTION: Client Info + Setup ═══════════════════ */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-
-        {/* ── Col 1: Client Info + HR Zone (4 cols) ────────────── */}
-        <div className="lg:col-span-4 space-y-4">
-          {/* Client Info Card */}
-          <ClientInfoCard userId={params.id} user={user} profile={profile} age={age} />
-
-          {/* HR Zone Card */}
-          <HRZoneCard customerId={params.id} data={setup?.hr_zone} />
+      {/* ═══ 1. HERO PROFILE & QUICK ACTIONS ═══ */}
+      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+        {/* Top Dark Banner */}
+        <div className="bg-sf-deepNavy px-6 py-6 text-white flex flex-col md:flex-row md:items-end justify-between gap-4 relative overflow-hidden">
+           <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
+              <Crown className="w-64 h-64 -mt-16 -mr-16" />
+           </div>
+           
+           <div className="relative z-10">
+              <h1 className="text-2xl font-bold mb-2 capitalize">{user.full_name}</h1>
+              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-300">
+                <span className="flex items-center gap-1.5"><User className="h-4 w-4 text-sf-warmGold" /> {age ? `${age} tahun` : "-"} • {profile?.gender || "-"}</span>
+                <span className="flex items-center gap-1.5"><ActivitySquare className="h-4 w-4 text-sf-warmGold" /> {profile?.height_cm || "-"} cm • {profile?.weight_kg || "-"} kg</span>
+                <span className="flex items-center gap-1.5"><Phone className="h-4 w-4 text-sf-warmGold" /> {user.phone || "-"}</span>
+              </div>
+           </div>
         </div>
 
-        {/* ── Col 2: Daftar Obat (3 cols) ──────────────────────── */}
-        <div className="lg:col-span-3">
-          <MedicinesCard customerId={params.id} data={setup?.medicines ?? []} />
-        </div>
-
-        {/* ── Col 3: Consultant/Trainer + Program (5 cols) ─────── */}
-        <div className="lg:col-span-5 space-y-4">
-          <StaffCard customerId={params.id} staff={setup?.staff} />
-
-          {/* Program Conditioning */}
-          <ProgramsCard customerId={params.id} data={setup?.programs ?? []} />
+        {/* Quick Actions Bar */}
+        <div className="bg-slate-50 border-t border-slate-100 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+             <Link href={`/clients/${params.id}/training-card`} className="bg-sf-deepNavy text-white hover:bg-slate-800 transition-colors rounded-xl p-3 flex items-center justify-between group shadow-sm">
+               <div className="flex items-center gap-3">
+                 <div className="bg-white/20 p-2 rounded-lg"><ClipboardCheck className="h-5 w-5 text-white" /></div>
+                 <div className="text-left">
+                   <p className="text-sm font-bold">Training Card</p>
+                   <p className="text-[10px] text-slate-300">Set & lihat program latihan</p>
+                 </div>
+               </div>
+               <ChevronDown className="h-4 w-4 text-slate-400 -rotate-90 group-hover:text-white transition-colors" />
+             </Link>
+             <Link href={`/clients/${params.id}/assessment-v2`} className="bg-white border border-slate-200 hover:border-sf-deepNavy transition-colors rounded-xl p-3 flex items-center justify-between group shadow-sm">
+               <div className="flex items-center gap-3">
+                 <div className="p-2 rounded-lg bg-slate-100 text-sf-deepNavy group-hover:bg-sf-deepNavy/10 transition-colors"><Star className="h-5 w-5" /></div>
+                 <div className="text-left">
+                   <p className="text-sm font-bold text-slate-900">Hasil Asesmen v2</p>
+                   <p className="text-[10px] text-slate-500">Score, Chronobiology, Phase</p>
+                 </div>
+               </div>
+               <ChevronDown className="h-4 w-4 text-slate-300 -rotate-90 group-hover:text-sf-deepNavy transition-colors" />
+             </Link>
+             <Link href={`/clients/${params.id}/assessment`} className="bg-white border border-slate-200 hover:border-green-600 transition-colors rounded-xl p-3 flex items-center justify-between group shadow-sm">
+               <div className="flex items-center gap-3">
+                 <div className="p-2 rounded-lg bg-green-50 text-green-600 group-hover:bg-green-100 transition-colors"><FileText className="h-5 w-5" /></div>
+                 <div className="text-left">
+                   <p className="text-sm font-bold text-slate-900">Isi Assessment Manual</p>
+                   <p className="text-[10px] text-slate-500">Isi form manual V2</p>
+                 </div>
+               </div>
+               <ChevronDown className="h-4 w-4 text-slate-300 -rotate-90 group-hover:text-green-600 transition-colors" />
+             </Link>
+          </div>
         </div>
       </div>
 
-      {/* ═══ TRAINING CARD SHORTCUT ═════════════════════════════ */}
-      <Link
-        href={`/clients/${params.id}/training-card`}
-        className="card flex items-center justify-between px-4 py-3 hover:bg-slate-50 transition-colors group"
-      >
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-slate-800 text-white">
-            <ClipboardCheck className="h-5 w-5" />
+      {/* ═══ 2. MAIN GRID (LEFT: INFO/MEDIS/TIM | RIGHT: LANGGANAN/JURNAL) ═══ */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* LEFT COLUMN (70%) */}
+        <div className="lg:col-span-8 space-y-6">
+          
+          {/* Detail Profil & Edit */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <User className="h-4 w-4 text-sf-deepNavy" /> Detail Profil & Edit
+            </h2>
+            <ClientInfoCard userId={params.id} user={user} profile={profile} age={age} />
           </div>
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Training Card</p>
-            <p className="text-xs text-slate-500">Kartu acuan latihan yang di-set oleh Konsultan</p>
+
+          {/* Program & Tim Penanganan */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+               <Crown className="h-4 w-4 text-sf-warmGold" /> Program & Tim Penanganan
+             </h2>
+             <div className="space-y-4">
+               <StaffCard customerId={params.id} staff={setup?.staff} />
+               <ProgramsCard customerId={params.id} data={setup?.programs ?? []} />
+             </div>
           </div>
+
+          {/* Medis & Biometrik */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+               <Activity className="h-4 w-4 text-rose-500" /> Medis & Biometrik
+             </h2>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <HRZoneCard customerId={params.id} data={setup?.hr_zone} />
+                <MedicinesCard customerId={params.id} data={setup?.medicines ?? []} />
+             </div>
+          </div>
+
         </div>
-        <ChevronDown className="h-4 w-4 text-slate-400 -rotate-90 group-hover:text-slate-600" />
-      </Link>
 
-      {/* ═══ SF ASESMEN V2 SHORTCUT ════════════════════════════ */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link
-          href={`/clients/${params.id}/assessment-v2`}
-          className="card flex items-center justify-between px-4 py-3 hover:bg-sf-iceBlue transition-colors group"
-        >
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-sf-deepNavy text-sf-warmGold">
-              <ClipboardCheck className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-900">Hasil Asesmen v2</p>
-              <p className="text-xs text-slate-500">
-                System Score, Chronobiology Window, Phase A/B/C
-              </p>
-            </div>
-          </div>
-          <ChevronDown className="h-4 w-4 text-slate-400 -rotate-90 group-hover:text-slate-600" />
-        </Link>
-        <Link
-          href={`/clients/${params.id}/assessment`}
-          className="card flex items-center justify-between px-4 py-3 hover:bg-sf-iceBlue transition-colors group"
-        >
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-600 text-white">
-              <FileText className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-900">Isi Assessment Manual</p>
-              <p className="text-xs text-slate-500">
-                Isi Assessment V2 atas nama klien
-              </p>
-            </div>
-          </div>
-          <ChevronDown className="h-4 w-4 text-slate-400 -rotate-90 group-hover:text-slate-600" />
-        </Link>
+        {/* RIGHT COLUMN (30%) */}
+        <div className="lg:col-span-4 space-y-6">
+           <ClientSubscriptionSection clientId={params.id} clientName={user.full_name} />
+           
+           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <SessionJournalTable customerId={params.id} />
+           </div>
+        </div>
+
       </div>
-
-      {/* ═══ BOTTOM SECTION: Monthly Session Journal ═══════════ */}
-      <SessionJournalTable customerId={params.id} />
     </div>
   );
 }
@@ -219,8 +234,8 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
   const inp = "w-full border border-slate-200 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-sf-warmGold/40";
 
   return (
-    <div className="card overflow-hidden">
-      <div className="flex items-center justify-between px-3 py-1.5 bg-slate-50 border-b border-slate-100">
+    <div className="overflow-hidden border border-slate-100 rounded-xl">
+      <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Info Client</span>
         {!editing ? (
           <button onClick={() => setEditing(true)} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium">Edit</button>
@@ -345,7 +360,7 @@ function StaffCard({ customerId, staff }: { customerId: string; staff: any }) {
   const val = "px-3 py-2.5";
 
   return (
-    <div className="card overflow-hidden">
+    <div className="overflow-hidden border border-slate-100 rounded-xl">
       <table className="w-full text-sm">
         <tbody>
           {/* Consultant */}
@@ -483,7 +498,7 @@ function HRZoneCard({ customerId, data }: { customerId: string; data: any }) {
   ];
 
   return (
-    <div className="card overflow-hidden">
+    <div className="overflow-hidden border border-slate-100 rounded-xl">
       <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">HR Zone</span>
         {!editing ? (
@@ -552,7 +567,7 @@ function MedicinesCard({ customerId, data }: { customerId: string; data: any[] }
   }
 
   return (
-    <div className="card overflow-hidden h-full flex flex-col">
+    <div className="overflow-hidden border border-slate-100 rounded-xl h-full flex flex-col">
       <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Daftar Obat</span>
         <button onClick={() => setShowAdd(!showAdd)} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium flex items-center gap-1">
@@ -742,7 +757,7 @@ function ProgramsCard({ customerId, data }: { customerId: string; data: any[] })
   }
 
   return (
-    <div className="card overflow-hidden">
+    <div className="overflow-hidden border border-slate-100 rounded-xl">
       <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Program</span>
         <button onClick={() => setShowAdd(!showAdd)} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium flex items-center gap-1">
