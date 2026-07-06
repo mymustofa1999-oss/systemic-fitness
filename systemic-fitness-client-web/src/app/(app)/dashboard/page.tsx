@@ -583,19 +583,35 @@ export default function DashboardPage() {
             {levelInfo.details}
           </p>
 
-          <div className="flex gap-2 w-full max-w-sm">
-            <Link
-              href={`/assessment/result?id=${latestAssessment.id}`}
-              className="flex-1 border border-white/20 hover:bg-white/5 text-white font-semibold py-3 rounded-xl text-[11px] transition-colors tracking-wider uppercase text-center flex items-center justify-center gap-1"
-            >
-              Lihat Hasil 📋
-            </Link>
+          <div className="flex flex-col gap-2 w-full max-w-sm mt-2">
             <button
               onClick={handleAmbilPaket}
-              className="flex-1 bg-sf-warmGold hover:bg-sf-warmGoldDark text-white font-semibold py-3 rounded-xl text-[11px] transition-colors tracking-wider uppercase flex items-center justify-center gap-1"
+              className="w-full bg-sf-warmGold hover:bg-sf-warmGoldDark text-white font-bold py-3.5 rounded-xl text-[12px] transition-colors tracking-widest uppercase flex items-center justify-center gap-2 shadow-lg shadow-sf-warmGold/20"
             >
               Ambil Paket 🔑
             </button>
+            <Link
+              href="/training-card"
+              className="w-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold py-3 rounded-xl text-[11px] transition-colors tracking-widest uppercase flex items-center justify-center gap-2"
+            >
+              Lihat Cuplikan Latihan Gratis 🎁
+            </Link>
+            <div className="flex gap-2 w-full">
+              <Link
+                href={`/assessment/result?id=${latestAssessment.id}`}
+                className="flex-1 border border-white/10 hover:bg-white/5 text-white/80 hover:text-white font-semibold py-2.5 rounded-xl text-[10px] transition-colors tracking-wider uppercase flex items-center justify-center gap-1"
+              >
+                Hasil Asesmen 📋
+              </Link>
+              <a
+                href="https://wa.me/081234567890"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 text-green-400 font-semibold py-2.5 rounded-xl text-[10px] transition-colors tracking-wider uppercase flex items-center justify-center gap-1"
+              >
+                Hubungi Consultant 💬
+              </a>
+            </div>
           </div>
         </div>
       ) : null}
