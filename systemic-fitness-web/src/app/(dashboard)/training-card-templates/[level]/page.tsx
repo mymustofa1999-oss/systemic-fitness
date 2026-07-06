@@ -691,65 +691,42 @@ function SequenceTable({
       </div>
 
       {expanded && (
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs border-collapse min-w-[900px]">
-            <thead>
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[60px]" rowSpan={2}>SET</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[120px]" rowSpan={2}>Pola</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[120px]" rowSpan={2}>Napas</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[80px]" rowSpan={2}>DURATION</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200" colSpan={2}>EQUIPMENT</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200" colSpan={isMetabolic ? 4 : 3}>KOMPONEN</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[100px]" rowSpan={2}>{isMetabolic ? "Reps" : "Reps / Mins"}</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[80px]" rowSpan={2}>Sets</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[70px]" rowSpan={2}>Paket</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[110px]" rowSpan={2}>{isMetabolic ? "Extra Load" : "Bpm"}</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[100px]" rowSpan={2}>Notes</th>
-                {editing && <th className="px-2 py-1 text-center font-bold text-slate-500 w-[50px]" rowSpan={2}>Aksi</th>}
-              </tr>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[100px]">Upper</th>
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[100px]">Lower</th>
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[90px]">Tipe</th>
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[160px]">Upper</th>
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[160px]">Lower</th>
-                {isMetabolic && <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[140px]">Core</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {seq.sets.map((set, seti) => (
-                <SetBlock
-                  key={seti}
-                  set={set}
-                  seti={seti}
-                  level={level}
-                  isMetabolic={isMetabolic}
-                  editing={editing}
-                  typeOptions={typeOptions}
-                  movementOptions={movementOptions}
-                  movementMap={movementMap}
-                  types={types}
-                  tierPackages={tierPackages}
-                  upperOptions={upperOptions}
-                  lowerOptions={lowerOptions}
-                  onUpdateSet={(p) => onUpdateSet(seti, p)}
-                  onRemoveSet={() => onRemoveSet(seti)}
-                  onAddItem={(bp) => onAddItem(seti, bp)}
-                  onRemoveItem={(ii) => onRemoveItem(seti, ii)}
-                  onUpdateItem={(ii, p) => onUpdateItem(seti, ii, p)}
-                />
-              ))}
+        <div className="p-4 space-y-4 bg-slate-50/50">
+          {seq.sets.map((set, seti) => (
+            <SetBlock
+              key={seti}
+              set={set}
+              seti={seti}
+              level={level}
+              isMetabolic={isMetabolic}
+              editing={editing}
+              typeOptions={typeOptions}
+              movementOptions={movementOptions}
+              movementMap={movementMap}
+              types={types}
+              tierPackages={tierPackages}
+              upperOptions={upperOptions}
+              lowerOptions={lowerOptions}
+              onUpdateSet={(p) => onUpdateSet(seti, p)}
+              onRemoveSet={() => onRemoveSet(seti)}
+              onAddItem={(bp) => onAddItem(seti, bp)}
+              onRemoveItem={(ii) => onRemoveItem(seti, ii)}
+              onUpdateItem={(ii, p) => onUpdateItem(seti, ii, p)}
+            />
+          ))}
 
-              {seq.sets.length === 0 && !editing && (
-                <tr>
-                  <td colSpan={20} className="text-center py-6 text-slate-400">
-                    Tidak ada set
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          {seq.sets.length === 0 && !editing && (
+            <div className="text-center py-6 text-slate-400">
+              Tidak ada set
+            </div>
+          )}
+
+          {/* Add Set */}
+          {editing && (
+            <button onClick={onAddSet} className="w-full py-2.5 mt-2 rounded-lg border-2 border-dashed border-slate-300 text-slate-500 hover:text-sf-deepNavy hover:border-sf-deepNavy hover:bg-sf-deepNavy/5 font-medium flex items-center justify-center gap-2 transition-colors">
+              <Plus className="h-4 w-4" /> Tambah Set Baru
+            </button>
+          )}
         </div>
       )}
     </div>
@@ -775,503 +752,338 @@ function SetBlock({
   onRemoveItem: (ii: number) => void;
   onUpdateItem: (ii: number, p: Partial<CardItem>) => void;
 }) {
-  const typeName = set.type_name || types.find((t: any) => t.id === set.type_id)?.name || "";
-  const rowCount = Math.max(set.items.length, 1);
-  const items = set.items.length > 0 ? set.items : [null];
-
+  const items = set.items || [];
   const selectedPatterns = set.pattern ? set.pattern.split(",").map(p => p.trim()).filter(Boolean) : [];
 
   return (
-    <>
-      {items.map((item, ii) => (
-        <tr key={ii} className={cn(
-          "border-b border-slate-100 hover:bg-slate-50/50 transition-colors",
-          ii === 0 && "border-t border-slate-200"
-        )}>
-          {/* Set-level cells — only on first row (rowSpan) */}
-          {ii === 0 && (
-            <>
-              {/* SEQUENCE (Set #) */}
-              <td className={cn(cellBase, "text-center font-bold text-slate-700 bg-slate-50 border-r border-slate-200")} rowSpan={rowCount}>
-                Set {set.set_number}
-              </td>
-              {/* PATTERN */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <Popover.Root>
-                    <Popover.Trigger asChild>
-                      <button type="button" className={cn(inpCell, "text-left truncate bg-white border border-slate-200 rounded px-2 py-1 text-slate-700 w-full min-w-[120px] flex items-center justify-between")}>
-                        <span className="truncate">{selectedPatterns.length > 0 ? selectedPatterns.join(", ") : "Pilih..."}</span>
-                        <ChevronDown className="h-3 w-3 text-slate-400 shrink-0 ml-1" />
-                      </button>
-                    </Popover.Trigger>
-                    <Popover.Portal>
-                      <Popover.Content align="start" className="z-50 bg-white rounded-lg shadow-lg border border-slate-200 p-2 space-y-1 w-[180px]">
-                        {[
-                          "Isolate FC",
-                          "Dynamic FC",
-                          "Isolate CC",
-                          "Dynamic CC",
-                          "Metabolic Basic",
-                          "Metabolic Core",
-                        ].map((p) => {
-                          const isChecked = selectedPatterns.includes(p);
-                          return (
-                            <label key={p} className="flex items-center gap-2 px-2 py-1 hover:bg-slate-50 rounded text-xs cursor-pointer select-none">
-                              <input
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={() => {
-                                  let next;
-                                  if (isChecked) {
-                                    next = selectedPatterns.filter(x => x !== p);
-                                  } else {
-                                    next = [...selectedPatterns, p];
-                                  }
-                                  onUpdateSet({ pattern: next.join(",") });
-                                }}
-                                className="rounded border-slate-300 text-sf-deepNavy focus:ring-sf-warmGold/40 h-3.5 w-3.5"
-                              />
-                              <span>{p}</span>
-                            </label>
-                          );
-                        })}
-                      </Popover.Content>
-                    </Popover.Portal>
-                  </Popover.Root>
-                ) : (
-                  <span className="text-slate-600 block text-[11px] leading-tight font-medium">{set.pattern ? set.pattern.split(",").join(", ") : "-"}</span>
-                )}
-              </td>
-              {/* BREATHING (SET) */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <div className="space-y-1 min-w-[120px]">
-                    <div className="flex items-center gap-1">
-                      <span className="text-[10px] text-slate-400 font-medium shrink-0 w-8">Core:</span>
-                      <select
-                        value={set.breathing_core || ""}
-                        onChange={(e) => onUpdateSet({ breathing_core: e.target.value })}
-                        className={cn(inpCell, "flex-1 py-0.5")}
-                      >
-                        <option value="">Pilih...</option>
-                        <option value="Tarik Napas">Tarik Napas</option>
-                        <option value="Buang Napas">Buang Napas</option>
-                        <option value="Tahan Napas">Tahan Napas</option>
-                        <option value="Napas Normal">Napas Normal</option>
-                      </select>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-[10px] text-slate-400 font-medium shrink-0 w-8">Diaf:</span>
-                      <select
-                        value={set.breathing_diaphragm || ""}
-                        onChange={(e) => onUpdateSet({ breathing_diaphragm: e.target.value })}
-                        className={cn(inpCell, "flex-1 py-0.5")}
-                      >
-                        <option value="">Pilih...</option>
-                        <option value="Tarik Napas">Tarik Napas</option>
-                        <option value="Buang Napas">Buang Napas</option>
-                        <option value="Tahan Napas">Tahan Napas</option>
-                        <option value="Napas Normal">Napas Normal</option>
-                      </select>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-[10px] space-y-0.5">
-                    <div><span className="text-slate-400">Core:</span> <span className="font-medium text-slate-700">{set.breathing_core || "-"}</span></div>
-                    <div><span className="text-slate-400">Diaf:</span> <span className="font-medium text-slate-700">{set.breathing_diaphragm || "-"}</span></div>
-                  </div>
-                )}
-              </td>
-              {/* DURATION */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <input value={set.duration || ""} onChange={(e) => onUpdateSet({ duration: e.target.value })} className={cn(inpCell, "w-full")} placeholder="3-5 mins" />
-                ) : <span className="text-slate-600">{set.duration || ""}</span>}
-              </td>
-              {/* EQUIPMENT Upper */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <div className="min-w-[110px]">
-                    <SearchableSelect
-                      options={upperOptions}
-                      value={set.equipment_upper || ""}
-                      onChange={(v) => onUpdateSet({ equipment_upper: v })}
-                      placeholder="Pilih..."
-                      searchPlaceholder="Cari upper..."
-                    />
-                  </div>
-                ) : <span className="text-slate-500 font-semibold">{set.equipment_upper ? `💪 ${formatWeight(set.equipment_upper)}` : ""}</span>}
-              </td>
-              {/* EQUIPMENT Lower */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <div className="min-w-[110px]">
-                    <SearchableSelect
-                      options={lowerOptions}
-                      value={set.equipment_lower || ""}
-                      onChange={(v) => onUpdateSet({ equipment_lower: v })}
-                      placeholder="Pilih..."
-                      searchPlaceholder="Cari lower..."
-                    />
-                  </div>
-                ) : <span className="text-slate-500 font-semibold">{set.equipment_lower ? `🦵 ${formatWeight(set.equipment_lower)}` : ""}</span>}
-              </td>
-              {/* TIPE */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <SearchableSelect
-                    options={typeOptions}
-                    value={set.type_id || ""}
-                    onChange={(v) => onUpdateSet({ type_id: v })}
-                    placeholder="Tipe..."
-                    searchPlaceholder="Cari tipe..."
-                  />
-                ) : (
-                  <span className={cn(
-                    "inline-flex px-2 py-0.5 rounded text-[10px] font-bold",
-                    typeName === "Dynamic" ? "bg-blue-50 text-blue-700" :
-                    typeName === "Isolate" ? "bg-amber-50 text-amber-700" :
-                    "bg-slate-100 text-slate-600"
-                  )}>{typeName || "-"}</span>
-                )}
-              </td>
-            </>
-          )}
+    <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+      {/* HEADER CARD */}
+      <div className="bg-slate-100 border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="bg-sf-deepNavy text-white font-bold text-xs px-2.5 py-1 rounded-md">
+            SET {set.set_number}
+          </span>
+        </div>
+        {editing && (
+          <button onClick={onRemoveSet} className="text-slate-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded transition-colors" title="Hapus Set">
+            <Trash2 className="h-4 w-4" />
+          </button>
+        )}
+      </div>
 
-          {/* Item-level cells */}
-          {item ? (
-            <>
-              {/* Upper movement column */}
-              <td className={cn(cellBase, "border-r border-slate-200")}>
-                {item.body_part === "upper" ? (
-                  editing ? (
-                    <div className="space-y-1">
-                      <MovementSelect
-                        options={movementOptions}
-                        movementMap={movementMap}
-                        item={item}
-                        bodyPart="upper"
-                        selectedPatterns={selectedPatterns}
-                        onUpdate={(p) => onUpdateItem(ii, p)}
-                        onRemove={() => onRemoveItem(ii)}
-                      />
-                      {level === "1" && (
-                        <div className="mt-1 pt-1 border-t border-slate-100 space-y-1">
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Core:</span>
-                            <select
-                              value={item.breathing_core || ""}
-                              onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
-                              className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                            >
-                              <option value="">Pilih...</option>
-                              <option value="Tarik Napas">Tarik Napas</option>
-                              <option value="Buang Napas">Buang Napas</option>
-                              <option value="Tahan Napas">Tahan Napas</option>
-                              <option value="Napas Normal">Napas Normal</option>
-                            </select>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Diaf:</span>
-                            <select
-                              value={item.breathing_diaphragm || ""}
-                              onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
-                              className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                            >
-                              <option value="">Pilih...</option>
-                              <option value="Tarik Napas">Tarik Napas</option>
-                              <option value="Buang Napas">Buang Napas</option>
-                              <option value="Tahan Napas">Tahan Napas</option>
-                              <option value="Napas Normal">Napas Normal</option>
-                            </select>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div>
-                      <span className="text-slate-800 font-medium">{item.movement_name || ""}</span>
-                      {level === "1" && (item.breathing_core || item.breathing_diaphragm) && (
-                        <div className="mt-1 text-[9px] text-slate-500 bg-slate-50 p-1 rounded border border-slate-100">
-                          {item.breathing_core && <div>Core: {item.breathing_core}</div>}
-                          {item.breathing_diaphragm && <div>Diaf: {item.breathing_diaphragm}</div>}
-                        </div>
-                      )}
-                    </div>
-                  )
-                ) : null}
-              </td>
-              {/* Lower movement column */}
-              <td className={cn(cellBase, "border-r border-slate-200")}>
-                {item.body_part === "lower" ? (
-                  editing ? (
-                    <div className="space-y-1">
-                      <MovementSelect
-                        options={movementOptions}
-                        movementMap={movementMap}
-                        item={item}
-                        bodyPart="lower"
-                        selectedPatterns={selectedPatterns}
-                        onUpdate={(p) => onUpdateItem(ii, p)}
-                        onRemove={() => onRemoveItem(ii)}
-                      />
-                      {level === "1" && (
-                        <div className="mt-1 pt-1 border-t border-slate-100 space-y-1">
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Core:</span>
-                            <select
-                              value={item.breathing_core || ""}
-                              onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
-                              className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                            >
-                              <option value="">Pilih...</option>
-                              <option value="Tarik Napas">Tarik Napas</option>
-                              <option value="Buang Napas">Buang Napas</option>
-                              <option value="Tahan Napas">Tahan Napas</option>
-                              <option value="Napas Normal">Napas Normal</option>
-                            </select>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Diaf:</span>
-                            <select
-                              value={item.breathing_diaphragm || ""}
-                              onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
-                              className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                            >
-                              <option value="">Pilih...</option>
-                              <option value="Tarik Napas">Tarik Napas</option>
-                              <option value="Buang Napas">Buang Napas</option>
-                              <option value="Tahan Napas">Tahan Napas</option>
-                              <option value="Napas Normal">Napas Normal</option>
-                            </select>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div>
-                      <span className="text-slate-800 font-medium">{item.movement_name || ""}</span>
-                      {level === "1" && (item.breathing_core || item.breathing_diaphragm) && (
-                        <div className="mt-1 text-[9px] text-slate-500 bg-slate-50 p-1 rounded border border-slate-100">
-                          {item.breathing_core && <div>Core: {item.breathing_core}</div>}
-                          {item.breathing_diaphragm && <div>Diaf: {item.breathing_diaphragm}</div>}
-                        </div>
-                      )}
-                    </div>
-                  )
-                ) : null}
-              </td>
-              {/* Core movement column (Metabolic only) */}
-              {isMetabolic && (
-                <td className={cn(cellBase, "border-r border-slate-200")}>
-                  {item.body_part === "core" ? (
-                    editing ? (
-                      <div className="space-y-1">
-                        <MovementSelect
-                          options={movementOptions}
-                          movementMap={movementMap}
-                          item={item}
-                          bodyPart="core"
-                          selectedPatterns={selectedPatterns}
-                          onUpdate={(p) => onUpdateItem(ii, p)}
-                          onRemove={() => onRemoveItem(ii)}
-                        />
-                        {level === "1" && (
-                          <div className="mt-1 pt-1 border-t border-slate-100 space-y-1">
-                            <div className="flex items-center gap-1">
-                              <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Core:</span>
-                              <select
-                                value={item.breathing_core || ""}
-                                onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
-                                className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                              >
-                                <option value="">Pilih...</option>
-                                <option value="Tarik Napas">Tarik Napas</option>
-                                <option value="Buang Napas">Buang Napas</option>
-                                <option value="Tahan Napas">Tahan Napas</option>
-                                <option value="Napas Normal">Napas Normal</option>
-                              </select>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Diaf:</span>
-                              <select
-                                value={item.breathing_diaphragm || ""}
-                                onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
-                                className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                              >
-                                <option value="">Pilih...</option>
-                                <option value="Tarik Napas">Tarik Napas</option>
-                                <option value="Buang Napas">Buang Napas</option>
-                                <option value="Tahan Napas">Tahan Napas</option>
-                                <option value="Napas Normal">Napas Normal</option>
-                              </select>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div>
-                        <span className="text-slate-800 font-medium">{item.movement_name || ""}</span>
-                        {level === "1" && (item.breathing_core || item.breathing_diaphragm) && (
-                          <div className="mt-1 text-[9px] text-slate-500 bg-slate-50 p-1 rounded border border-slate-100">
-                            {item.breathing_core && <div>Core: {item.breathing_core}</div>}
-                            {item.breathing_diaphragm && <div>Diaf: {item.breathing_diaphragm}</div>}
-                          </div>
-                        )}
-                      </div>
-                    )
-                  ) : null}
-                </td>
+      <div className="p-4 flex flex-col md:flex-row gap-6">
+        {/* LEFT COLUMN: Properties */}
+        <div className="md:w-1/3 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            {/* Pattern */}
+            <div className="space-y-1.5 col-span-2">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pola Gerak</label>
+              {editing ? (
+                <Popover.Root>
+                  <Popover.Trigger asChild>
+                    <button type="button" className="text-left truncate bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 w-full flex items-center justify-between hover:border-slate-300 transition-colors">
+                      <span className="truncate">{selectedPatterns.length > 0 ? selectedPatterns.join(", ") : "Pilih Pola..."}</span>
+                      <ChevronDown className="h-4 w-4 text-slate-400 shrink-0 ml-1" />
+                    </button>
+                  </Popover.Trigger>
+                  <Popover.Portal>
+                    <Popover.Content align="start" className="z-50 bg-white rounded-lg shadow-xl border border-slate-200 p-2 space-y-1 w-[220px]">
+                      {[
+                        "Isolate FC", "Dynamic FC", "Isolate CC", "Dynamic CC", "Metabolic Basic", "Metabolic Core"
+                      ].map((p) => {
+                        const isChecked = selectedPatterns.includes(p);
+                        return (
+                          <label key={p} className="flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-md cursor-pointer select-none transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {
+                                let next;
+                                if (isChecked) {
+                                  next = selectedPatterns.filter(x => x !== p);
+                                } else {
+                                  next = [...selectedPatterns, p];
+                                }
+                                onUpdateSet({ pattern: next.join(",") });
+                              }}
+                              className="rounded border-slate-300 text-sf-deepNavy focus:ring-sf-warmGold/40 h-4 w-4"
+                            />
+                            <span className="text-sm font-medium text-slate-700">{p}</span>
+                          </label>
+                        );
+                      })}
+                    </Popover.Content>
+                  </Popover.Portal>
+                </Popover.Root>
+              ) : (
+                <div className="text-sm font-medium text-slate-800 bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+                  {set.pattern ? set.pattern.split(",").join(", ") : "-"}
+                </div>
               )}
-              {/* Reps */}
-              <td className={cn(cellBase, "text-center border-r border-slate-200")}>
-                {editing ? (
-                  <input type="number" value={item.reps ?? ""} onChange={(e) => onUpdateItem(ii, { reps: e.target.value ? +e.target.value : null })} className={cn(inpCell, "w-full text-center min-w-[72px] h-9")} />
-                ) : <span className="text-slate-700">{item.reps ?? ""}</span>}
-              </td>
-              {/* Sets count */}
-              <td className={cn(cellBase, "text-center border-r border-slate-200")}>
-                {editing ? (
-                  <input type="number" value={item.sets_count ?? ""} onChange={(e) => onUpdateItem(ii, { sets_count: e.target.value ? +e.target.value : null })} className={cn(inpCell, "w-full text-center min-w-[60px] h-9")} />
-                ) : <span className="text-slate-700">{item.sets_count ?? ""}</span>}
-              </td>
-              {/* PAKET — per-movement package access (empty = semua paket) */}
-              <td className={cn(cellBase, "text-center border-r border-slate-200")}>
-                {editing ? (
-                  <div className="flex flex-col gap-1 min-w-[64px]">
-                    {tierPackages.map((pkg) => {
-                      const active = (item.allowed_tiers || []).includes(pkg.code);
-                      return (
-                        <button
-                          key={pkg.code}
-                          type="button"
-                          title={`${pkg.name} — ${pkg.label}`}
-                          onClick={() => {
-                            const cur = item.allowed_tiers || [];
-                            onUpdateItem(ii, { allowed_tiers: active ? cur.filter((t) => t !== pkg.code) : [...cur, pkg.code] });
-                          }}
-                          className={cn(
-                            "px-1 py-0.5 rounded text-[10px] font-bold border transition-colors",
-                            active ? "bg-sf-warmGold text-white border-sf-warmGold" : "bg-white text-slate-400 border-slate-200 hover:border-slate-300"
-                          )}
-                        >
-                          {pkg.label}
-                        </button>
-                      );
-                    })}
-                    {(item.allowed_tiers || []).length === 0 && <span className="text-[9px] text-slate-400">Semua paket</span>}
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap gap-0.5 justify-center">
-                    {(item.allowed_tiers || []).length === 0 ? (
-                      <span className="text-[10px] text-slate-400">Semua</span>
-                    ) : (item.allowed_tiers || []).map((t) => {
-                      const pkg = tierPackages.find((p) => p.code === t);
-                      return (
-                        <span key={t} title={pkg?.name || t} className="px-1 rounded bg-sf-warmGold/10 text-sf-warmGold text-[9px] font-bold">
-                          {pkg?.label || t}
-                        </span>
-                      );
-                    })}
-                  </div>
-                )}
-              </td>
-            </>
-          ) : (
-            <>
-              {/* Empty placeholder */}
-              <td className={cn(cellBase, "border-r border-slate-200 text-slate-400 italic text-center")} colSpan={isMetabolic ? 3 : 2}>
-                {editing ? "Tambah gerakan di bawah" : "Belum ada gerakan"}
-              </td>
-              {/* Reps + Sets + Paket empty */}
-              <td className={cn(cellBase, "border-r border-slate-200")} />
-              <td className={cn(cellBase, "border-r border-slate-200")} />
-              <td className={cn(cellBase, "border-r border-slate-200")} />
-            </>
-          )}
+            </div>
 
-          {/* BPM / Extra Load — only on first row */}
-          {ii === 0 ? (
-            <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
+            {/* Duration */}
+            <div className="space-y-1.5 col-span-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Durasi</label>
+              {editing ? (
+                <input 
+                  value={set.duration || ""} 
+                  onChange={(e) => onUpdateSet({ duration: e.target.value })} 
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-sf-deepNavy/20 focus:border-sf-deepNavy transition-all" 
+                  placeholder="e.g. 5 mins" 
+                />
+              ) : (
+                <div className="text-sm font-medium text-slate-800 bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">{set.duration || "-"}</div>
+              )}
+            </div>
+
+            {/* BPM / Extra Load */}
+            <div className="space-y-1.5 col-span-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{isMetabolic ? "Extra Load" : "BPM / Zona"}</label>
               {editing ? (
                 <input
                   value={isMetabolic ? (set.extra_load || "") : (set.bpm || "")}
                   onChange={(e) => isMetabolic ? onUpdateSet({ extra_load: e.target.value }) : onUpdateSet({ bpm: e.target.value })}
-                  className={cn(inpCell, "w-full min-w-[90px] h-9")}
-                  placeholder={isMetabolic ? "Extra load" : "zona 1-2"}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-sf-deepNavy/20 focus:border-sf-deepNavy transition-all"
+                  placeholder={isMetabolic ? "10kg" : "120 bpm"}
                 />
               ) : (
-                <span className="text-slate-500">{isMetabolic ? (set.extra_load || "") : (set.bpm || "")}</span>
+                <div className="text-sm font-medium text-slate-800 bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+                  {isMetabolic ? (set.extra_load || "-") : (set.bpm || "-")}
+                </div>
               )}
-            </td>
-          ) : null}
+            </div>
+          </div>
 
-          {/* Notes column */}
-          {ii === 0 ? (
-            <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-              {editing ? (
-                <input
-                  value={set.notes || ""}
-                  onChange={(e) => onUpdateSet({ notes: e.target.value })}
-                  className={cn(inpCell, "w-full")}
-                  placeholder="Notes..."
-                />
-              ) : (
-                set.notes && <span className="text-slate-500 text-[10px]">{set.notes}</span>
-              )}
-            </td>
-          ) : null}
-          {/* Aksi column (edit mode only) */}
-          {editing && ii === 0 ? (
-            <td className={cn(cellBase, "text-center")} rowSpan={rowCount}>
-              <button onClick={onRemoveSet} className="p-1.5 rounded bg-red-500 text-white hover:bg-red-600 transition-colors" title="Hapus set">
-                <Trash2 className="h-3.5 w-3.5" />
-              </button>
-            </td>
-          ) : null}
-        </tr>
-      ))}
+          <div className="space-y-3 pt-3 border-t border-slate-100">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Peralatan (Equipment)</label>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <span className="text-[11px] font-semibold text-slate-500">Upper</span>
+                {editing ? (
+                  <SearchableSelect
+                    options={upperOptions}
+                    value={set.equipment_upper || ""}
+                    onChange={(v) => onUpdateSet({ equipment_upper: v })}
+                    placeholder="Pilih..."
+                    searchPlaceholder="Cari..."
+                  />
+                ) : (
+                  <div className="text-sm font-medium text-slate-700">{set.equipment_upper ? formatWeight(set.equipment_upper) : "-"}</div>
+                )}
+              </div>
+              <div className="space-y-1.5">
+                <span className="text-[11px] font-semibold text-slate-500">Lower</span>
+                {editing ? (
+                  <SearchableSelect
+                    options={lowerOptions}
+                    value={set.equipment_lower || ""}
+                    onChange={(v) => onUpdateSet({ equipment_lower: v })}
+                    placeholder="Pilih..."
+                    searchPlaceholder="Cari..."
+                  />
+                ) : (
+                  <div className="text-sm font-medium text-slate-700">{set.equipment_lower ? formatWeight(set.equipment_lower) : "-"}</div>
+                )}
+              </div>
+            </div>
+          </div>
 
-      {/* Add buttons aligned under each movement column */}
-      {editing && (
-        <tr className="border-b border-slate-200">
-          {/* Empty columns (SET, Pola, Napas, DURATION, EQUIPMENT x2, TIPE) */}
-          <td colSpan={7} className={cn(cellBase, "border-r border-slate-200 bg-slate-50/50")} />
-          {/* + Upper */}
-          <td className={cn(cellBase, "border-r border-slate-200 bg-slate-50/50 align-top")}>
-            <button
-              onClick={() => onAddItem("upper")}
-              className="w-full py-1.5 text-[10px] rounded border border-dashed border-blue-300 text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 font-medium"
-            >
-              <Plus className="h-3 w-3" /> Tambah Upper
-            </button>
-          </td>
-          {/* + Lower */}
-          <td className={cn(cellBase, "border-r border-slate-200 bg-slate-50/50 align-top")}>
-            <button
-              onClick={() => onAddItem("lower")}
-              className="w-full py-1.5 text-[10px] rounded border border-dashed border-green-300 text-green-600 bg-green-50 hover:bg-green-100 transition-colors flex items-center justify-center gap-1 font-medium"
-            >
-              <Plus className="h-3 w-3" /> Tambah Lower
-            </button>
-          </td>
-          {/* + Core (Metabolic only) */}
-          {isMetabolic && (
-            <td className={cn(cellBase, "border-r border-slate-200 bg-slate-50/50 align-top")}>
-              <button
-                onClick={() => onAddItem("core")}
-                className="w-full py-1.5 text-[10px] rounded border border-dashed border-amber-300 text-amber-600 bg-amber-50 hover:bg-amber-100 transition-colors flex items-center justify-center gap-1 font-medium"
-              >
-                <Plus className="h-3 w-3" /> Tambah Core
-              </button>
-            </td>
-          )}
-          {/* Empty trailing columns */}
-          <td colSpan={6} className={cn(cellBase, "bg-slate-50/50")} />
-        </tr>
-      )}
-    </>
+          {/* Notes */}
+          <div className="space-y-1.5 pt-3 border-t border-slate-100">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Catatan Khusus (Notes)</label>
+            {editing ? (
+              <textarea
+                value={set.notes || ""}
+                onChange={(e) => onUpdateSet({ notes: e.target.value })}
+                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-sf-deepNavy/20 focus:border-sf-deepNavy transition-all min-h-[80px]"
+                placeholder="Tulis instruksi tambahan..."
+              />
+            ) : (
+              <div className="text-sm text-slate-600 bg-amber-50/50 border border-amber-100 rounded-lg px-3 py-2 min-h-[60px] whitespace-pre-wrap">
+                {set.notes || <span className="text-slate-400 italic">Tidak ada catatan</span>}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: Movements */}
+        <div className="md:w-2/3 border-t md:border-t-0 md:border-l border-slate-100 md:pl-6 pt-4 md:pt-0">
+          <div className="flex items-center justify-between mb-4">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Daftar Gerakan (Movements)</label>
+            {editing && (
+              <div className="flex gap-2">
+                <button onClick={() => onAddItem("upper")} className="px-2.5 py-1 text-[11px] font-bold rounded bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
+                  + Upper
+                </button>
+                <button onClick={() => onAddItem("lower")} className="px-2.5 py-1 text-[11px] font-bold rounded bg-green-50 text-green-600 hover:bg-green-100 transition-colors">
+                  + Lower
+                </button>
+                {isMetabolic && (
+                  <button onClick={() => onAddItem("core")} className="px-2.5 py-1 text-[11px] font-bold rounded bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors">
+                    + Core
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            {items.length === 0 ? (
+              <div className="text-center py-8 bg-slate-50 border border-dashed border-slate-200 rounded-xl">
+                <p className="text-sm text-slate-400 font-medium">Belum ada gerakan di set ini.</p>
+              </div>
+            ) : (
+              items.map((item, ii) => (
+                <div key={ii} className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col md:flex-row gap-4 relative group hover:border-slate-300 transition-colors">
+                  
+                  {/* Bagian Tubuh Badge */}
+                  <div className="shrink-0 pt-1">
+                    <span className={cn(
+                      "inline-block px-2 py-1 text-[10px] font-bold rounded uppercase tracking-wider",
+                      item.body_part === "upper" ? "bg-blue-100 text-blue-700" :
+                      item.body_part === "lower" ? "bg-green-100 text-green-700" :
+                      "bg-amber-100 text-amber-700"
+                    )}>
+                      {item.body_part}
+                    </span>
+                  </div>
+
+                  <div className="flex-1 space-y-3">
+                    {/* Gerakan */}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        {editing ? (
+                          <MovementSelect
+                            options={movementOptions}
+                            movementMap={movementMap}
+                            item={item}
+                            bodyPart={item.body_part || ""}
+                            selectedPatterns={selectedPatterns}
+                            onUpdate={(p) => onUpdateItem(ii, p)}
+                          />
+                        ) : (
+                          <div className="font-bold text-slate-800 text-base">{item.movement_name || "Gerakan tidak diketahui"}</div>
+                        )}
+                      </div>
+                      
+                      {editing && (
+                        <button onClick={() => onRemoveItem(ii)} className="text-slate-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded transition-colors shrink-0" title="Hapus Gerakan">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Metrik: Reps & Sets & Paket */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <div>
+                        <span className="text-[10px] text-slate-500 font-medium block mb-1">Reps / Mins</span>
+                        {editing ? (
+                          <input type="number" value={item.reps ?? ""} onChange={(e) => onUpdateItem(ii, { reps: e.target.value ? +e.target.value : null })} className="w-full bg-white border border-slate-200 rounded px-2 py-1 text-sm text-center focus:outline-none focus:border-sf-deepNavy" />
+                        ) : (
+                          <div className="font-bold text-slate-700 text-sm bg-white border border-slate-100 rounded px-2 py-1 text-center">{item.reps ?? "-"}</div>
+                        )}
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-slate-500 font-medium block mb-1">Sets</span>
+                        {editing ? (
+                          <input type="number" value={item.sets_count ?? ""} onChange={(e) => onUpdateItem(ii, { sets_count: e.target.value ? +e.target.value : null })} className="w-full bg-white border border-slate-200 rounded px-2 py-1 text-sm text-center focus:outline-none focus:border-sf-deepNavy" />
+                        ) : (
+                          <div className="font-bold text-slate-700 text-sm bg-white border border-slate-100 rounded px-2 py-1 text-center">{item.sets_count ?? "-"}</div>
+                        )}
+                      </div>
+                      <div className="col-span-2">
+                        <span className="text-[10px] text-slate-500 font-medium block mb-1">Paket yang Tersedia</span>
+                        {editing ? (
+                          <div className="flex flex-wrap gap-1">
+                            {tierPackages.map((pkg) => {
+                              const active = (item.allowed_tiers || []).includes(pkg.code);
+                              return (
+                                <button
+                                  key={pkg.code}
+                                  type="button"
+                                  title={`${pkg.name} — ${pkg.label}`}
+                                  onClick={() => {
+                                    const cur = item.allowed_tiers || [];
+                                    onUpdateItem(ii, { allowed_tiers: active ? cur.filter((t) => t !== pkg.code) : [...cur, pkg.code] });
+                                  }}
+                                  className={cn(
+                                    "px-2 py-1 rounded text-[10px] font-bold border transition-colors",
+                                    active ? "bg-sf-warmGold text-white border-sf-warmGold" : "bg-white text-slate-400 border-slate-200 hover:border-slate-300"
+                                  )}
+                                >
+                                  {pkg.label}
+                                </button>
+                              );
+                            })}
+                            {(item.allowed_tiers || []).length === 0 && <span className="text-[10px] text-slate-400 py-1 px-1 font-medium bg-white border border-slate-200 rounded">Semua Paket</span>}
+                          </div>
+                        ) : (
+                          <div className="flex flex-wrap gap-1">
+                            {(item.allowed_tiers || []).length === 0 ? (
+                              <span className="px-2 py-1 rounded bg-slate-100 border border-slate-200 text-slate-500 text-[10px] font-bold">Semua Paket</span>
+                            ) : (item.allowed_tiers || []).map((t) => {
+                              const pkg = tierPackages.find((p) => p.code === t);
+                              return (
+                                <span key={t} title={pkg?.name || t} className="px-2 py-1 rounded bg-sf-warmGold/10 border border-sf-warmGold/20 text-sf-warmGold text-[10px] font-bold">
+                                  {pkg?.label || t}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Level 1 Only: Breathing Core & Diaphragm */}
+                    {level === "1" && (
+                      <div className="pt-2 border-t border-slate-200/60 flex flex-col md:flex-row gap-4">
+                         <div className="flex-1 flex items-center gap-2">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase w-8">Core</span>
+                            {editing ? (
+                              <select
+                                value={item.breathing_core || ""}
+                                onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
+                                className="flex-1 bg-white border border-slate-200 rounded px-2 py-1 text-xs text-slate-700 focus:outline-none"
+                              >
+                                <option value="">Pilih...</option>
+                                <option value="Tarik Napas">Tarik Napas</option>
+                                <option value="Buang Napas">Buang Napas</option>
+                                <option value="Tahan Napas">Tahan Napas</option>
+                                <option value="Napas Normal">Napas Normal</option>
+                              </select>
+                            ) : (
+                              <span className="text-xs font-medium text-slate-700">{item.breathing_core || "-"}</span>
+                            )}
+                         </div>
+                         <div className="flex-1 flex items-center gap-2">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase w-8">Diaf</span>
+                            {editing ? (
+                              <select
+                                value={item.breathing_diaphragm || ""}
+                                onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
+                                className="flex-1 bg-white border border-slate-200 rounded px-2 py-1 text-xs text-slate-700 focus:outline-none"
+                              >
+                                <option value="">Pilih...</option>
+                                <option value="Tarik Napas">Tarik Napas</option>
+                                <option value="Buang Napas">Buang Napas</option>
+                                <option value="Tahan Napas">Tahan Napas</option>
+                                <option value="Napas Normal">Napas Normal</option>
+                              </select>
+                            ) : (
+                              <span className="text-xs font-medium text-slate-700">{item.breathing_diaphragm || "-"}</span>
+                            )}
+                         </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -1280,7 +1092,7 @@ function SetBlock({
 // ═══════════════════════════════════════════════════════════════
 
 function MovementSelect({
-  options, movementMap, item, bodyPart, selectedPatterns, onUpdate, onRemove,
+  options, movementMap, item, bodyPart, selectedPatterns, onUpdate
 }: {
   options: { value: string; label: string; sublabel?: string; pattern?: string | null }[];
   movementMap: Record<string, string>;
@@ -1288,11 +1100,21 @@ function MovementSelect({
   bodyPart: string;
   selectedPatterns: string[];
   onUpdate: (p: Partial<CardItem>) => void;
-  onRemove: () => void;
 }) {
-  let filtered = options.filter(m => m.sublabel === bodyPart || m.sublabel === "whole body");
+  let filtered = options.filter(m => {
+    const sub = (m.sublabel || "").toLowerCase();
+    const bp = (bodyPart || "").toLowerCase();
+    return sub === bp || sub === "whole body";
+  });
+
   if (selectedPatterns && selectedPatterns.length > 0) {
-    filtered = filtered.filter(m => selectedPatterns.includes(m.pattern || ""));
+    filtered = filtered.filter(m => {
+      const p = (m.pattern || "").toLowerCase();
+      if (!p) return false;
+      return selectedPatterns.some(sp => 
+        sp.toLowerCase().includes(p) || p.includes(sp.toLowerCase())
+      );
+    });
   }
   const customLabel = item.movement_name || "";
   const allOpts = [
@@ -1319,17 +1141,10 @@ function MovementSelect({
         <input
           value={item.movement_name || ""}
           onChange={(e) => onUpdate({ movement_name: e.target.value })}
-          className="mt-1 w-full border border-slate-200 rounded px-1.5 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-sf-warmGold/40"
+          className="mt-1.5 w-full border border-slate-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-sf-deepNavy bg-white"
           placeholder="Atau ketik manual..."
         />
       )}
-      <button
-        onClick={onRemove}
-        className="mt-1 w-full py-1 rounded text-[11px] font-bold text-white bg-red-500 hover:bg-red-600 transition-colors flex items-center justify-center gap-1"
-        title="Hapus gerakan"
-      >
-        <Trash2 className="h-3 w-3" /> Hapus
-      </button>
     </div>
   );
 }

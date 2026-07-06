@@ -693,6 +693,19 @@ export function useUpsertTrainerCard() {
   });
 }
 
+export function usePublishTrainerCard() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (customerId: string) =>
+      apiPost(`/api/customers/${customerId}/training-card/publish`, {}),
+    onSuccess: (_d, vars) => {
+      qc.invalidateQueries({ queryKey: ["trainer-card", vars] });
+      toast.success("Training card berhasil dikirim ke Trainer");
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+}
+
 export function useDeleteTrainerCard() {
   const qc = useQueryClient();
   return useMutation({

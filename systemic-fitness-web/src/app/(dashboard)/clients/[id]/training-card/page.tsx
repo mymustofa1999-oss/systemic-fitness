@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   useTrainerCard,
   useUpsertTrainerCard,
+  usePublishTrainerCard,
   useDeleteTrainerCard,
   useTrainerCardTypes,
   useCustomerPrograms,
@@ -67,7 +68,7 @@ import { SearchableSelect } from "@/components/shared/SearchableSelect";
 import * as Popover from "@radix-ui/react-popover";
 import {
   ArrowLeft, Plus, Trash2, Save, Loader2, Pencil, X,
-  ChevronDown, ChevronRight,
+  ChevronDown, ChevronRight, Send,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -277,6 +278,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const templateCard = templateData?.data as any;
 
   const upsertCard = useUpsertTrainerCard();
+  const publishCard = usePublishTrainerCard();
   const deleteCard = useDeleteTrainerCard();
 
   const user = (userData?.data as any)?.user;
@@ -753,6 +755,11 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
                 Preset Card (SF Tier {isTier2 ? "2" : "3"})
               </span>
             )}
+            {card && (
+              <span className={cn("px-3 py-1.5 text-xs font-bold rounded border mr-2", card.status === "published" ? "bg-green-500/20 text-green-400 border-green-500/30" : "bg-orange-500/20 text-orange-400 border-orange-500/30")}>
+                {card.status === "published" ? "Published" : "Draft"}
+              </span>
+            )}
             {!canEdit ? (
               <span className="px-3 py-1.5 text-xs font-medium bg-white/10 text-white/80 rounded border border-white/15">
                 Mode lihat saja
@@ -779,6 +786,16 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
                 {card && (
                   <button onClick={() => setDeleteOpen(true)} className="px-3 py-1.5 text-xs rounded-md bg-red-500/80 hover:bg-red-500 flex items-center gap-1.5 transition-colors">
                     <Trash2 className="h-3.5 w-3.5" /> Hapus
+                  </button>
+                )}
+                {card && card.status !== "published" && (
+                  <button 
+                    onClick={() => publishCard.mutate(customerId as string)}
+                    disabled={publishCard.isPending}
+                    className="px-3 py-1.5 text-xs font-medium rounded-md bg-green-600 hover:bg-green-500 text-white flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                  >
+                    {publishCard.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+                    Kirim ke Trainer
                   </button>
                 )}
               </>
@@ -1023,79 +1040,42 @@ function SequenceTable({
       </div>
 
       {expanded && (
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs border-collapse min-w-[900px]">
-            {/* Column headers — mirroring Excel */}
-            <thead>
-              {/* Row 1: Group headers */}
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[60px]" rowSpan={2}>SEQUENCE</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[100px]" rowSpan={2}>PATTERN</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[140px]" rowSpan={2}>BREATHING</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[80px]" rowSpan={2}>DURATION</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200" colSpan={2}>EQUIPMENT</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200" colSpan={isMetabolic ? 4 : 3}>KOMPONEN</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[70px]" rowSpan={2}>{isMetabolic ? "Reps" : "Reps / Mins"}</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[50px]" rowSpan={2}>Set</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[90px]" rowSpan={2}>{isMetabolic ? "Extra Load" : "Bpm"}</th>
-                <th className="px-2 py-1 text-center font-bold text-slate-500 border-r border-slate-200 w-[100px]" rowSpan={2}>Notes</th>
-                {editing && <th className="px-2 py-1 text-center font-bold text-slate-500 w-[50px]" rowSpan={2}>Aksi</th>}
-              </tr>
-              {/* Row 2: Sub headers */}
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[100px]">Upper</th>
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[100px]">Lower</th>
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[90px]">Tipe</th>
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[160px]">Upper</th>
-                <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[160px]">Lower</th>
-                {isMetabolic && (
-                  <th className="px-2 py-1 text-center font-semibold text-slate-500 border-r border-slate-200 w-[140px]">Core</th>
-                )}
-              </tr>
-            </thead>
+        <div className="p-4 space-y-4 bg-slate-50/50">
+          {seq.sets.map((set, seti) => (
+            <SetBlock
+              key={seti}
+              set={set}
+              seti={seti}
+              level={level}
+              isMetabolic={isMetabolic}
+              editing={editing}
+              typeOptions={typeOptions}
+              movementOptions={movementOptions}
+              movementMap={movementMap}
+              types={types}
+              upperOptions={upperOptions}
+              lowerOptions={lowerOptions}
+              recommendedUpper={recommendedUpper}
+              recommendedLower={recommendedLower}
+              onUpdateSet={(p) => onUpdateSet(seti, p)}
+              onRemoveSet={() => onRemoveSet(seti)}
+              onAddItem={(bp) => onAddItem(seti, bp)}
+              onRemoveItem={(ii) => onRemoveItem(seti, ii)}
+              onUpdateItem={(ii, p) => onUpdateItem(seti, ii, p)}
+            />
+          ))}
 
-            <tbody>
-              {seq.sets.map((set, seti) => (
-                <SetBlock
-                  key={seti}
-                  set={set}
-                  seti={seti}
-                  level={level}
-                  isMetabolic={isMetabolic}
-                  editing={editing}
-                  typeOptions={typeOptions}
-                  movementOptions={movementOptions}
-                  movementMap={movementMap}
-                  types={types}
-                  upperOptions={upperOptions}
-                  lowerOptions={lowerOptions}
-                  recommendedUpper={recommendedUpper}
-                  recommendedLower={recommendedLower}
-                  onUpdateSet={(p) => onUpdateSet(seti, p)}
-                  onRemoveSet={() => onRemoveSet(seti)}
-                  onAddItem={(bp) => onAddItem(seti, bp)}
-                  onRemoveItem={(ii) => onRemoveItem(seti, ii)}
-                  onUpdateItem={(ii, p) => onUpdateItem(seti, ii, p)}
-                />
-              ))}
-
-              {seq.sets.length === 0 && !editing && (
-                <tr>
-                  <td colSpan={20} className="text-center py-6 text-slate-400">
-                    Tidak ada set
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          {seq.sets.length === 0 && !editing && (
+            <div className="text-center py-6 text-slate-400">
+              Tidak ada set
+            </div>
+          )}
 
           {/* Add Set */}
           {editing && (
-            <div className="border-t border-slate-200 px-3 py-2 bg-slate-50/50">
-              <button onClick={onAddSet} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium flex items-center gap-1">
-                <Plus className="h-3.5 w-3.5" /> Tambah Set
-              </button>
-            </div>
+            <button onClick={onAddSet} className="w-full py-2.5 mt-2 rounded-lg border-2 border-dashed border-slate-300 text-slate-500 hover:text-sf-deepNavy hover:border-sf-deepNavy hover:bg-sf-deepNavy/5 font-medium flex items-center justify-center gap-2 transition-colors">
+              <Plus className="h-4 w-4" /> Tambah Set Baru
+            </button>
           )}
         </div>
       )}
@@ -1127,472 +1107,352 @@ function SetBlock({
   onRemoveItem: (ii: number) => void;
   onUpdateItem: (ii: number, p: Partial<CardItem>) => void;
 }) {
-  const typeName = set.type_name || types.find((t: any) => t.id === set.type_id)?.name || "";
-  const rowCount = Math.max(set.items.length, 1);
-  const items = set.items.length > 0 ? set.items : [null]; // null = empty placeholder row
-
   const selectedPatterns = set.pattern ? set.pattern.split(",").map(p => p.trim()).filter(Boolean) : [];
   const isLevel1 = level === "1" || level === "1-499" || level === "1-799";
 
   return (
-    <>
-      {items.map((item, ii) => (
-        <tr key={ii} className={cn(
-          "border-b border-slate-100 hover:bg-slate-50/50 transition-colors",
-          ii === 0 && "border-t border-slate-200"
-        )}>
-          {/* Set-level cells — only on first row (rowSpan) */}
-          {ii === 0 && (
-            <>
-              {/* SEQUENCE (Set #) */}
-              <td className={cn(cellBase, "text-center font-bold text-slate-700 bg-slate-50 border-r border-slate-200")} rowSpan={rowCount}>
-                Set {set.set_number}
-              </td>
-              {/* PATTERN */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <Popover.Root>
-                    <Popover.Trigger asChild>
-                      <button type="button" className={cn(inpCell, "text-left truncate bg-white border border-slate-200 rounded px-2 py-1 text-slate-700 w-full min-w-[120px] flex items-center justify-between")}>
-                        <span className="truncate">{selectedPatterns.length > 0 ? selectedPatterns.join(", ") : "Pilih..."}</span>
-                        <ChevronDown className="h-3 w-3 text-slate-400 shrink-0 ml-1" />
-                      </button>
-                    </Popover.Trigger>
-                    <Popover.Portal>
-                      <Popover.Content align="start" className="z-50 bg-white rounded-lg shadow-lg border border-slate-200 p-2 space-y-1 w-[180px]">
-                        {[
-                          "Isolate FC",
-                          "Dynamic FC",
-                          "Isolate CC",
-                          "Dynamic CC",
-                          "Metabolic Basic",
-                          "Metabolic Core",
-                        ].map((p) => {
-                          const isChecked = selectedPatterns.includes(p);
-                          return (
-                            <label key={p} className="flex items-center gap-2 px-2 py-1 hover:bg-slate-50 rounded text-xs cursor-pointer select-none">
-                              <input
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={() => {
-                                  let next;
-                                  if (isChecked) {
-                                    next = selectedPatterns.filter(x => x !== p);
-                                  } else {
-                                    next = [...selectedPatterns, p];
-                                  }
-                                  onUpdateSet({ pattern: next.join(",") });
-                                }}
-                                className="rounded border-slate-300 text-sf-deepNavy focus:ring-sf-warmGold/40 h-3.5 w-3.5"
-                              />
-                              <span>{p}</span>
-                            </label>
-                          );
-                        })}
-                      </Popover.Content>
-                    </Popover.Portal>
-                  </Popover.Root>
-                ) : (
-                  <span className="text-slate-600 block text-[11px] leading-tight font-medium">{set.pattern ? set.pattern.split(",").join(", ") : "-"}</span>
-                )}
-              </td>
-              {/* BREATHING (SET) */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <div className="space-y-1 min-w-[120px]">
-                    <div className="flex items-center gap-1">
-                      <span className="text-[10px] text-slate-400 font-medium shrink-0 w-8">Core:</span>
-                      <select
-                        value={set.breathing_core || ""}
-                        onChange={(e) => onUpdateSet({ breathing_core: e.target.value })}
-                        className={cn(inpCell, "flex-1 py-0.5")}
-                      >
-                        <option value="">Pilih...</option>
-                        <option value="Tarik Napas">Tarik Napas</option>
-                        <option value="Buang Napas">Buang Napas</option>
-                        <option value="Tahan Napas">Tahan Napas</option>
-                        <option value="Napas Normal">Napas Normal</option>
-                      </select>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-[10px] text-slate-400 font-medium shrink-0 w-8">Diaf:</span>
-                      <select
-                        value={set.breathing_diaphragm || ""}
-                        onChange={(e) => onUpdateSet({ breathing_diaphragm: e.target.value })}
-                        className={cn(inpCell, "flex-1 py-0.5")}
-                      >
-                        <option value="">Pilih...</option>
-                        <option value="Tarik Napas">Tarik Napas</option>
-                        <option value="Buang Napas">Buang Napas</option>
-                        <option value="Tahan Napas">Tahan Napas</option>
-                        <option value="Napas Normal">Napas Normal</option>
-                      </select>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-[10px] space-y-0.5">
-                    <div><span className="text-slate-400">Core:</span> <span className="font-medium text-slate-700">{set.breathing_core || "-"}</span></div>
-                    <div><span className="text-slate-400">Diaf:</span> <span className="font-medium text-slate-700">{set.breathing_diaphragm || "-"}</span></div>
-                  </div>
-                )}
-              </td>
-              {/* DURATION */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <input value={set.duration || ""} onChange={(e) => onUpdateSet({ duration: e.target.value })} className={cn(inpCell, "w-full")} placeholder="3-5 mins" />
-                ) : <span className="text-slate-600">{set.duration || ""}</span>}
-              </td>
-              {/* EQUIPMENT Upper */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <div className="min-w-[110px]">
+    <div className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden flex flex-col">
+      {/* Set Header */}
+      <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+        <span className="font-bold text-slate-700">Set {set.set_number}</span>
+        {editing && (
+          <button onClick={onRemoveSet} className="text-red-500 hover:text-red-600 p-1 transition-colors" title="Hapus set">
+            <Trash2 className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+
+      {/* Set Properties Grid */}
+      <div className="p-4 border-b border-slate-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Pattern */}
+          <div>
+            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Pattern</label>
+            {editing ? (
+              <Popover.Root>
+                <Popover.Trigger asChild>
+                  <button type="button" className="text-left truncate bg-white border border-slate-200 rounded-md px-3 py-1.5 text-slate-700 w-full flex items-center justify-between hover:border-slate-300 transition-colors">
+                    <span className="truncate text-sm">{selectedPatterns.length > 0 ? selectedPatterns.join(", ") : "Pilih..."}</span>
+                    <ChevronDown className="h-4 w-4 text-slate-400 shrink-0 ml-1" />
+                  </button>
+                </Popover.Trigger>
+                <Popover.Portal>
+                  <Popover.Content align="start" className="z-50 bg-white rounded-lg shadow-lg border border-slate-200 p-2 space-y-1 w-[200px]">
+                    {[
+                      "Isolate FC",
+                      "Dynamic FC",
+                      "Isolate CC",
+                      "Dynamic CC",
+                      "Metabolic Basic",
+                      "Metabolic Core",
+                    ].map((p) => {
+                      const isChecked = selectedPatterns.includes(p);
+                      return (
+                        <label key={p} className="flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 rounded text-sm cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => {
+                              let next;
+                              if (isChecked) {
+                                next = selectedPatterns.filter(x => x !== p);
+                              } else {
+                                next = [...selectedPatterns, p];
+                              }
+                              onUpdateSet({ pattern: next.join(",") });
+                            }}
+                            className="rounded border-slate-300 text-sf-deepNavy focus:ring-sf-warmGold/40 h-4 w-4"
+                          />
+                          <span>{p}</span>
+                        </label>
+                      );
+                    })}
+                  </Popover.Content>
+                </Popover.Portal>
+              </Popover.Root>
+            ) : (
+              <span className="text-sm font-medium text-slate-800">{set.pattern ? set.pattern.split(",").join(", ") : "-"}</span>
+            )}
+          </div>
+
+          {/* Breathing */}
+          <div>
+            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Breathing</label>
+            {editing ? (
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <span className="text-[10px] text-slate-400 block mb-0.5">Core</span>
+                  <select
+                    value={set.breathing_core || ""}
+                    onChange={(e) => onUpdateSet({ breathing_core: e.target.value })}
+                    className="w-full text-sm border border-slate-200 rounded-md px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy bg-white"
+                  >
+                    <option value="">Pilih...</option>
+                    <option value="Tarik Napas">Tarik Napas</option>
+                    <option value="Buang Napas">Buang Napas</option>
+                    <option value="Tahan Napas">Tahan Napas</option>
+                    <option value="Napas Normal">Napas Normal</option>
+                  </select>
+                </div>
+                <div className="flex-1">
+                  <span className="text-[10px] text-slate-400 block mb-0.5">Diafragma</span>
+                  <select
+                    value={set.breathing_diaphragm || ""}
+                    onChange={(e) => onUpdateSet({ breathing_diaphragm: e.target.value })}
+                    className="w-full text-sm border border-slate-200 rounded-md px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy bg-white"
+                  >
+                    <option value="">Pilih...</option>
+                    <option value="Tarik Napas">Tarik Napas</option>
+                    <option value="Buang Napas">Buang Napas</option>
+                    <option value="Tahan Napas">Tahan Napas</option>
+                    <option value="Napas Normal">Napas Normal</option>
+                  </select>
+                </div>
+              </div>
+            ) : (
+              <div className="text-sm space-y-0.5">
+                <div><span className="text-slate-400">Core:</span> <span className="font-medium text-slate-700">{set.breathing_core || "-"}</span></div>
+                <div><span className="text-slate-400">Diaf:</span> <span className="font-medium text-slate-700">{set.breathing_diaphragm || "-"}</span></div>
+              </div>
+            )}
+          </div>
+
+          {/* Duration & Load/BPM */}
+          <div>
+            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Duration / {isMetabolic ? "Extra Load" : "BPM"}</label>
+            {editing ? (
+              <div className="flex gap-2">
+                <input 
+                  value={set.duration || ""} 
+                  onChange={(e) => onUpdateSet({ duration: e.target.value })} 
+                  className="w-1/2 text-sm border border-slate-200 rounded-md px-3 py-1.5 focus:outline-none focus:border-sf-deepNavy" 
+                  placeholder="Durasi (3-5 min)" 
+                />
+                <input
+                  value={isMetabolic ? (set.extra_load || "") : (set.bpm || "")}
+                  onChange={(e) => isMetabolic ? onUpdateSet({ extra_load: e.target.value }) : onUpdateSet({ bpm: e.target.value })}
+                  className="w-1/2 text-sm border border-slate-200 rounded-md px-3 py-1.5 focus:outline-none focus:border-sf-deepNavy"
+                  placeholder={isMetabolic ? "Load" : "Zona 1-2"}
+                />
+              </div>
+            ) : (
+              <div className="text-sm space-y-0.5">
+                <div><span className="text-slate-400">Durasi:</span> <span className="font-medium text-slate-700">{set.duration || "-"}</span></div>
+                <div><span className="text-slate-400">{isMetabolic ? "Load:" : "BPM:"}</span> <span className="font-medium text-slate-700">{isMetabolic ? (set.extra_load || "-") : (set.bpm || "-")}</span></div>
+              </div>
+            )}
+          </div>
+
+          {/* Equipment */}
+          <div>
+             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Equipment</label>
+             {editing ? (
+               <div className="flex gap-2">
+                 <div className="flex-1 min-w-0">
+                    <span className="text-[10px] text-slate-400 block mb-0.5">Upper {recommendedUpper && `(${recommendedUpper})`}</span>
                     <SearchableSelect
                       options={upperOptions}
                       value={set.equipment_upper || ""}
                       onChange={(v) => onUpdateSet({ equipment_upper: v })}
-                      placeholder="Pilih..."
-                      searchPlaceholder="Cari upper..."
+                      placeholder="Upper..."
+                      searchPlaceholder="Cari..."
                     />
-                    {recommendedUpper && (
-                      <div className="text-[10px] text-slate-400 mt-1 text-center font-medium">
-                        Rekomendasi: {recommendedUpper}
-                      </div>
-                    )}
-                  </div>
-                ) : <span className="text-slate-500 font-semibold">{set.equipment_upper ? `💪 ${formatWeight(set.equipment_upper)}` : ""}</span>}
-              </td>
-              {/* EQUIPMENT Lower */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <div className="min-w-[110px]">
+                 </div>
+                 <div className="flex-1 min-w-0">
+                    <span className="text-[10px] text-slate-400 block mb-0.5">Lower {recommendedLower && `(${recommendedLower})`}</span>
                     <SearchableSelect
                       options={lowerOptions}
                       value={set.equipment_lower || ""}
                       onChange={(v) => onUpdateSet({ equipment_lower: v })}
-                      placeholder="Pilih..."
-                      searchPlaceholder="Cari lower..."
+                      placeholder="Lower..."
+                      searchPlaceholder="Cari..."
                     />
-                    {recommendedLower && (
-                      <div className="text-[10px] text-slate-400 mt-1 text-center font-medium">
-                        Rekomendasi: {recommendedLower}
-                      </div>
+                 </div>
+               </div>
+             ) : (
+               <div className="text-sm space-y-0.5">
+                 <div><span className="text-slate-400">Upper:</span> <span className="font-semibold text-slate-600">{set.equipment_upper ? `💪 ${formatWeight(set.equipment_upper)}` : "-"}</span></div>
+                 <div><span className="text-slate-400">Lower:</span> <span className="font-semibold text-slate-600">{set.equipment_lower ? `🦵 ${formatWeight(set.equipment_lower)}` : "-"}</span></div>
+               </div>
+             )}
+          </div>
+
+          {/* Notes */}
+          <div className="md:col-span-2 lg:col-span-4 mt-2">
+            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Notes</label>
+            {editing ? (
+              <input
+                value={set.notes || ""}
+                onChange={(e) => onUpdateSet({ notes: e.target.value })}
+                className="w-full text-sm border border-slate-200 rounded-md px-3 py-2 focus:outline-none focus:border-sf-deepNavy"
+                placeholder="Tambahkan catatan khusus untuk set ini..."
+              />
+            ) : (
+              <span className="text-sm text-slate-600">{set.notes || "-"}</span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Movements / Items List */}
+      <div className="bg-slate-50 p-4">
+        <h4 className="text-[11px] font-bold text-slate-600 mb-3 uppercase tracking-widest flex items-center gap-2">
+          Gerakan (Movements)
+          <span className="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-[9px]">{set.items.length}</span>
+        </h4>
+        
+        {set.items.length === 0 ? (
+          <div className="text-sm text-slate-400 italic mb-4 bg-white p-4 rounded border border-dashed border-slate-300 text-center">
+            Belum ada gerakan
+          </div>
+        ) : (
+          <div className="space-y-3 mb-4">
+            {set.items.map((item, ii) => (
+              <div key={ii} className="flex flex-col md:flex-row gap-4 bg-white p-3 border border-slate-200 rounded-md shadow-sm relative">
+                
+                {/* Bagian Nama & Body Part */}
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className={cn(
+                      "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider",
+                      item.body_part === "upper" ? "bg-blue-100 text-blue-700" :
+                      item.body_part === "lower" ? "bg-green-100 text-green-700" :
+                      "bg-amber-100 text-amber-700"
+                    )}>
+                      {item.body_part}
+                    </span>
+                    {editing && (
+                      <button onClick={() => onRemoveItem(ii)} className="text-red-400 hover:text-red-600 transition-colors md:hidden">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     )}
                   </div>
-                ) : <span className="text-slate-500 font-semibold">{set.equipment_lower ? `🦵 ${formatWeight(set.equipment_lower)}` : ""}</span>}
-              </td>
-              {/* TIPE */}
-              <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-                {editing ? (
-                  <SearchableSelect
-                    options={typeOptions}
-                    value={set.type_id || ""}
-                    onChange={(v) => onUpdateSet({ type_id: v })}
-                    placeholder="Tipe..."
-                    searchPlaceholder="Cari tipe..."
-                  />
-                ) : (
-                  <span className={cn(
-                    "inline-flex px-2 py-0.5 rounded text-[10px] font-bold",
-                    typeName === "Dynamic" ? "bg-blue-50 text-blue-700" :
-                    typeName === "Isolate" ? "bg-amber-50 text-amber-700" :
-                    "bg-slate-100 text-slate-600"
-                  )}>{typeName || "-"}</span>
-                )}
-              </td>
-            </>
-          )}
+                  
+                  {editing ? (
+                    <MovementSelect
+                      options={movementOptions}
+                      movementMap={movementMap}
+                      item={item}
+                      bodyPart={item.body_part}
+                      selectedPatterns={selectedPatterns}
+                      onUpdate={(p) => onUpdateItem(ii, p)}
+                    />
+                  ) : (
+                    <div className="font-semibold text-slate-800 text-sm mt-1">{item.movement_name || "-"}</div>
+                  )}
+                </div>
 
-          {/* Item-level cells */}
-          {item ? (
-            <>
-              {/* Upper movement column */}
-              <td className={cn(cellBase, "border-r border-slate-200")}>
-                {item.body_part === "upper" ? (
-                  editing ? (
-                    <div className="space-y-1">
-                      <MovementSelect
-                        options={movementOptions}
-                        movementMap={movementMap}
-                        item={item}
-                        bodyPart="upper"
-                        selectedPatterns={selectedPatterns}
-                        onUpdate={(p) => onUpdateItem(ii, p)}
-                        onRemove={() => onRemoveItem(ii)}
+                {/* Bagian Reps & Breathing Khusus (Jika Level 1) */}
+                <div className="flex items-end gap-3 md:w-auto w-full border-t border-slate-100 md:border-none pt-3 md:pt-0">
+                  {/* Reps */}
+                  <div className="w-20 shrink-0">
+                    <label className="block text-[10px] text-slate-400 mb-1">{isMetabolic ? "Reps" : "Reps / Mins"}</label>
+                    {editing ? (
+                      <input 
+                        type="number" 
+                        value={item.reps ?? ""} 
+                        onChange={(e) => onUpdateItem(ii, { reps: e.target.value ? +e.target.value : null })} 
+                        className="w-full text-sm border border-slate-200 rounded px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy text-center" 
                       />
-                      {isLevel1 && (
-                        <div className="mt-1 pt-1 border-t border-slate-100 space-y-1">
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Core:</span>
-                            <select
-                              value={item.breathing_core || ""}
-                              onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
-                              className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                            >
-                              <option value="">Pilih...</option>
-                              <option value="Tarik Napas">Tarik Napas</option>
-                              <option value="Buang Napas">Buang Napas</option>
-                              <option value="Tahan Napas">Tahan Napas</option>
-                              <option value="Napas Normal">Napas Normal</option>
-                            </select>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Diaf:</span>
-                            <select
-                              value={item.breathing_diaphragm || ""}
-                              onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
-                              className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                            >
-                              <option value="">Pilih...</option>
-                              <option value="Tarik Napas">Tarik Napas</option>
-                              <option value="Buang Napas">Buang Napas</option>
-                              <option value="Tahan Napas">Tahan Napas</option>
-                              <option value="Napas Normal">Napas Normal</option>
-                            </select>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div>
-                      <span className="text-slate-800 font-medium">{item.movement_name || ""}</span>
-                      {isLevel1 && (item.breathing_core || item.breathing_diaphragm) && (
-                        <div className="mt-1 text-[9px] text-slate-500 bg-slate-50 p-1 rounded border border-slate-100">
-                          {item.breathing_core && <div>Core: {item.breathing_core}</div>}
-                          {item.breathing_diaphragm && <div>Diaf: {item.breathing_diaphragm}</div>}
-                        </div>
-                      )}
-                    </div>
-                  )
-                ) : null}
-              </td>
-              {/* Lower movement column */}
-              <td className={cn(cellBase, "border-r border-slate-200")}>
-                {item.body_part === "lower" ? (
-                  editing ? (
-                    <div className="space-y-1">
-                      <MovementSelect
-                        options={movementOptions}
-                        movementMap={movementMap}
-                        item={item}
-                        bodyPart="lower"
-                        selectedPatterns={selectedPatterns}
-                        onUpdate={(p) => onUpdateItem(ii, p)}
-                        onRemove={() => onRemoveItem(ii)}
-                      />
-                      {isLevel1 && (
-                        <div className="mt-1 pt-1 border-t border-slate-100 space-y-1">
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Core:</span>
-                            <select
-                              value={item.breathing_core || ""}
-                              onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
-                              className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                            >
-                              <option value="">Pilih...</option>
-                              <option value="Tarik Napas">Tarik Napas</option>
-                              <option value="Buang Napas">Buang Napas</option>
-                              <option value="Tahan Napas">Tahan Napas</option>
-                              <option value="Napas Normal">Napas Normal</option>
-                            </select>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Diaf:</span>
-                            <select
-                              value={item.breathing_diaphragm || ""}
-                              onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
-                              className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                            >
-                              <option value="">Pilih...</option>
-                              <option value="Tarik Napas">Tarik Napas</option>
-                              <option value="Buang Napas">Buang Napas</option>
-                              <option value="Tahan Napas">Tahan Napas</option>
-                              <option value="Napas Normal">Napas Normal</option>
-                            </select>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div>
-                      <span className="text-slate-800 font-medium">{item.movement_name || ""}</span>
-                      {isLevel1 && (item.breathing_core || item.breathing_diaphragm) && (
-                        <div className="mt-1 text-[9px] text-slate-500 bg-slate-50 p-1 rounded border border-slate-100">
-                          {item.breathing_core && <div>Core: {item.breathing_core}</div>}
-                          {item.breathing_diaphragm && <div>Diaf: {item.breathing_diaphragm}</div>}
-                        </div>
-                      )}
-                    </div>
-                  )
-                ) : null}
-              </td>
-              {/* Core movement column (Metabolic only) */}
-              {isMetabolic && (
-                <td className={cn(cellBase, "border-r border-slate-200")}>
-                  {item.body_part === "core" ? (
-                    editing ? (
-                      <div className="space-y-1">
-                        <MovementSelect
-                          options={movementOptions}
-                          movementMap={movementMap}
-                          item={item}
-                          bodyPart="core"
-                          selectedPatterns={selectedPatterns}
-                          onUpdate={(p) => onUpdateItem(ii, p)}
-                          onRemove={() => onRemoveItem(ii)}
-                        />
-                        {isLevel1 && (
-                          <div className="mt-1 pt-1 border-t border-slate-100 space-y-1">
-                            <div className="flex items-center gap-1">
-                              <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Core:</span>
-                              <select
-                                value={item.breathing_core || ""}
-                                onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
-                                className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                              >
-                                <option value="">Pilih...</option>
-                                <option value="Tarik Napas">Tarik Napas</option>
-                                <option value="Buang Napas">Buang Napas</option>
-                                <option value="Tahan Napas">Tahan Napas</option>
-                                <option value="Napas Normal">Napas Normal</option>
-                              </select>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <span className="text-[9px] text-slate-400 font-medium w-8 shrink-0">Diaf:</span>
-                              <select
-                                value={item.breathing_diaphragm || ""}
-                                onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
-                                className="text-[10px] w-full border border-slate-200 rounded px-1 py-0.5 focus:outline-none bg-white"
-                              >
-                                <option value="">Pilih...</option>
-                                <option value="Tarik Napas">Tarik Napas</option>
-                                <option value="Buang Napas">Buang Napas</option>
-                                <option value="Tahan Napas">Tahan Napas</option>
-                                <option value="Napas Normal">Napas Normal</option>
-                              </select>
-                            </div>
-                          </div>
-                        )}
-                      </div>
                     ) : (
-                      <div>
-                        <span className="text-slate-800 font-medium">{item.movement_name || ""}</span>
-                        {isLevel1 && (item.breathing_core || item.breathing_diaphragm) && (
-                          <div className="mt-1 text-[9px] text-slate-500 bg-slate-50 p-1 rounded border border-slate-100">
-                            {item.breathing_core && <div>Core: {item.breathing_core}</div>}
-                            {item.breathing_diaphragm && <div>Diaf: {item.breathing_diaphragm}</div>}
+                      <div className="font-medium text-sm text-center">{item.reps ?? "-"}</div>
+                    )}
+                  </div>
+                  
+                  {/* Sets Count (Terkadang digunakan) */}
+                  <div className="w-16 shrink-0">
+                    <label className="block text-[10px] text-slate-400 mb-1">Set</label>
+                    {editing ? (
+                      <input 
+                        type="number" 
+                        value={item.sets_count ?? ""} 
+                        onChange={(e) => onUpdateItem(ii, { sets_count: e.target.value ? +e.target.value : null })} 
+                        className="w-full text-sm border border-slate-200 rounded px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy text-center" 
+                      />
+                    ) : (
+                      <div className="font-medium text-sm text-center">{item.sets_count ?? "-"}</div>
+                    )}
+                  </div>
+
+                  {/* Breathing khusus level 1 per item */}
+                  {isLevel1 && (
+                    <div className="w-32 shrink-0 space-y-1">
+                      {editing ? (
+                        <>
+                          <select
+                            value={item.breathing_core || ""}
+                            onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
+                            className="text-[10px] w-full border border-slate-200 rounded px-1.5 py-1 focus:outline-none bg-white"
+                          >
+                            <option value="">Core...</option>
+                            <option value="Tarik Napas">Tarik</option>
+                            <option value="Buang Napas">Buang</option>
+                            <option value="Tahan Napas">Tahan</option>
+                            <option value="Napas Normal">Normal</option>
+                          </select>
+                          <select
+                            value={item.breathing_diaphragm || ""}
+                            onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
+                            className="text-[10px] w-full border border-slate-200 rounded px-1.5 py-1 focus:outline-none bg-white"
+                          >
+                            <option value="">Diaf...</option>
+                            <option value="Tarik Napas">Tarik</option>
+                            <option value="Buang Napas">Buang</option>
+                            <option value="Tahan Napas">Tahan</option>
+                            <option value="Napas Normal">Normal</option>
+                          </select>
+                        </>
+                      ) : (
+                        (item.breathing_core || item.breathing_diaphragm) && (
+                          <div className="text-[9px] text-slate-500 bg-slate-100 p-1 rounded">
+                            {item.breathing_core && <div>C: {item.breathing_core}</div>}
+                            {item.breathing_diaphragm && <div>D: {item.breathing_diaphragm}</div>}
                           </div>
-                        )}
-                      </div>
-                    )
-                  ) : null}
-                </td>
-              )}
-              {/* Reps */}
-              <td className={cn(cellBase, "text-center border-r border-slate-200")}>
-                {editing ? (
-                  <input type="number" value={item.reps ?? ""} onChange={(e) => onUpdateItem(ii, { reps: e.target.value ? +e.target.value : null })} className={cn(inpCell, "w-14 text-center")} />
-                ) : <span className="text-slate-700">{item.reps ?? ""}</span>}
-              </td>
-              {/* Sets count */}
-              <td className={cn(cellBase, "text-center border-r border-slate-200")}>
-                {editing ? (
-                  <input type="number" value={item.sets_count ?? ""} onChange={(e) => onUpdateItem(ii, { sets_count: e.target.value ? +e.target.value : null })} className={cn(inpCell, "w-12 text-center")} />
-                ) : <span className="text-slate-700">{item.sets_count ?? ""}</span>}
-              </td>
-            </>
-          ) : (
-            <>
-              {/* Empty placeholder */}
-              <td className={cn(cellBase, "border-r border-slate-200 text-slate-400 italic text-center")} colSpan={isMetabolic ? 3 : 2}>
-                {editing ? "Tambah gerakan di bawah" : "Belum ada gerakan"}
-              </td>
-              {/* Reps + Sets empty */}
-              <td className={cn(cellBase, "border-r border-slate-200")} />
-              <td className={cn(cellBase, "border-r border-slate-200")} />
-            </>
-          )}
+                        )
+                      )}
+                    </div>
+                  )}
 
-          {/* BPM / Extra Load — only on first row */}
-          {ii === 0 ? (
-            <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-              {editing ? (
-                <input
-                  value={isMetabolic ? (set.extra_load || "") : (set.bpm || "")}
-                  onChange={(e) => isMetabolic ? onUpdateSet({ extra_load: e.target.value }) : onUpdateSet({ bpm: e.target.value })}
-                  className={cn(inpCell, "w-full")}
-                  placeholder={isMetabolic ? "Extra load" : "zona 1-2"}
-                />
-              ) : (
-                <span className="text-slate-500">{isMetabolic ? (set.extra_load || "") : (set.bpm || "")}</span>
-              )}
-            </td>
-          ) : null}
+                  {/* Desktop Delete button */}
+                  {editing && (
+                    <button onClick={() => onRemoveItem(ii)} className="hidden md:flex text-red-400 hover:text-red-600 transition-colors p-2 mb-0.5" title="Hapus gerakan">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
 
-          {/* Notes column */}
-          {ii === 0 ? (
-            <td className={cn(cellBase, "border-r border-slate-200")} rowSpan={rowCount}>
-              {editing ? (
-                <input
-                  value={set.notes || ""}
-                  onChange={(e) => onUpdateSet({ notes: e.target.value })}
-                  className={cn(inpCell, "w-full")}
-                  placeholder="Notes..."
-                />
-              ) : (
-                set.notes && <span className="text-slate-500 text-[10px]">{set.notes}</span>
-              )}
-            </td>
-          ) : null}
-          {/* Aksi column (edit mode only) */}
-          {editing && ii === 0 ? (
-            <td className={cn(cellBase, "text-center")} rowSpan={rowCount}>
-              <button onClick={onRemoveSet} className="p-1.5 rounded bg-red-500 text-white hover:bg-red-600 transition-colors" title="Hapus set">
-                <Trash2 className="h-3.5 w-3.5" />
-              </button>
-            </td>
-          ) : null}
-        </tr>
-      ))}
+              </div>
+            ))}
+          </div>
+        )}
 
-      {/* Add buttons aligned under each movement column */}
-      {editing && (
-        <tr className="border-b border-slate-200">
-          {/* Empty columns */}
-          <td colSpan={7} className={cn(cellBase, "border-r border-slate-200 bg-slate-50/50")} />
-          {/* + Upper */}
-          <td className={cn(cellBase, "border-r border-slate-200 bg-slate-50/50 align-top")}>
+        {/* Add Movement Buttons */}
+        {editing && (
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => onAddItem("upper")}
-              className="w-full py-1.5 text-[10px] rounded border border-dashed border-blue-300 text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 font-medium"
+              className="px-4 py-2 text-xs rounded border border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
             >
-              <Plus className="h-3 w-3" /> Tambah Upper
+              <Plus className="h-3.5 w-3.5" /> Tambah Upper
             </button>
-          </td>
-          {/* + Lower */}
-          <td className={cn(cellBase, "border-r border-slate-200 bg-slate-50/50 align-top")}>
             <button
               onClick={() => onAddItem("lower")}
-              className="w-full py-1.5 text-[10px] rounded border border-dashed border-green-300 text-green-600 bg-green-50 hover:bg-green-100 transition-colors flex items-center justify-center gap-1 font-medium"
+              className="px-4 py-2 text-xs rounded border border-green-200 text-green-700 bg-green-50 hover:bg-green-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
             >
-              <Plus className="h-3 w-3" /> Tambah Lower
+              <Plus className="h-3.5 w-3.5" /> Tambah Lower
             </button>
-          </td>
-          {/* + Core (Metabolic only) */}
-          {isMetabolic && (
-            <td className={cn(cellBase, "border-r border-slate-200 bg-slate-50/50 align-top")}>
+            {isMetabolic && (
               <button
                 onClick={() => onAddItem("core")}
-                className="w-full py-1.5 text-[10px] rounded border border-dashed border-amber-300 text-amber-600 bg-amber-50 hover:bg-amber-100 transition-colors flex items-center justify-center gap-1 font-medium"
+                className="px-4 py-2 text-xs rounded border border-amber-200 text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
               >
-                <Plus className="h-3 w-3" /> Tambah Core
+                <Plus className="h-3.5 w-3.5" /> Tambah Core
               </button>
-            </td>
-          )}
-          {/* Empty trailing columns */}
-          <td colSpan={5} className={cn(cellBase, "bg-slate-50/50")} />
-        </tr>
-      )}
-    </>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -1601,7 +1461,7 @@ function SetBlock({
 // ═══════════════════════════════════════════════════════════════
 
 function MovementSelect({
-  options, movementMap, item, bodyPart, selectedPatterns, onUpdate, onRemove,
+  options, movementMap, item, bodyPart, selectedPatterns, onUpdate
 }: {
   options: { value: string; label: string; sublabel?: string; pattern?: string | null }[];
   movementMap: Record<string, string>;
@@ -1609,7 +1469,6 @@ function MovementSelect({
   bodyPart: string;
   selectedPatterns: string[];
   onUpdate: (p: Partial<CardItem>) => void;
-  onRemove: () => void;
 }) {
   let filtered = options.filter(m => {
     const sub = (m.sublabel || "").toLowerCase();
@@ -1651,17 +1510,10 @@ function MovementSelect({
         <input
           value={item.movement_name || ""}
           onChange={(e) => onUpdate({ movement_name: e.target.value })}
-          className="mt-1 w-full border border-slate-200 rounded px-1.5 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-sf-warmGold/40"
+          className="mt-1.5 w-full border border-slate-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-sf-deepNavy bg-white"
           placeholder="Atau ketik manual..."
         />
       )}
-      <button
-        onClick={onRemove}
-        className="mt-1 w-full py-1 rounded text-[11px] font-bold text-white bg-red-500 hover:bg-red-600 transition-colors flex items-center justify-center gap-1"
-        title="Hapus gerakan"
-      >
-        <Trash2 className="h-3 w-3" /> Hapus
-      </button>
     </div>
   );
 }
