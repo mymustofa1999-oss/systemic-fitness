@@ -763,7 +763,28 @@ export default function DashboardPage() {
           {lang === "en" ? "Recommended Doctor Videos" : "Rekomendasi Video Dokter"}
         </h2>
         <div className="grid grid-cols-2 gap-3">
-          {videosRes?.data?.map((video: any) => {
+          {[
+            {
+              id: "dummy-1",
+              title: "Tips Latihan Kardio Aman untuk Jantung",
+              title_en: "Safe Cardio Tips for Your Heart",
+              thumbnail_url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
+              video_url: "https://www.youtube.com/embed/dQw4w9WgXcQ", // using generic yt link
+              doctor_name: "dr. Andi Wijaya, Sp.JP",
+              doctor_specialty: "Spesialis Jantung & Pembuluh Darah",
+              description: "Panduan melakukan latihan kardiovaskuler secara aman, khususnya bagi pasien dengan riwayat penyakit jantung."
+            },
+            {
+              id: "dummy-2",
+              title: "Mengapa Diet Ketat Sering Gagal?",
+              title_en: "Why Strict Diets Often Fail?",
+              thumbnail_url: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&q=80",
+              video_url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+              doctor_name: "dr. Sarah Smith, Sp.GK",
+              doctor_specialty: "Spesialis Gizi Klinik",
+              description: "Penjelasan medis mengenai metabolisme tubuh saat melakukan diet ekstrim dan mengapa diet seimbang lebih direkomendasikan."
+            }
+          ].map((video: any) => {
             const displayTitle = lang === "en" && video.title_en ? video.title_en : video.title;
             return (
               <div
@@ -810,11 +831,6 @@ export default function DashboardPage() {
             );
           })}
         </div>
-        {!videosRes?.data?.length && (
-          <p className="text-xs text-text-secondary text-center py-4">
-            {lang === "en" ? "No recommended videos available." : "Belum ada video rekomendasi."}
-          </p>
-        )}
       </section>
 
       {/* ── Article Detail Modal ─────────────────────────── */}
