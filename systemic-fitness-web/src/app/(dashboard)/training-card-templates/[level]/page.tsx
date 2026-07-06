@@ -997,7 +997,7 @@ function SetBlock({
                     {/* Metrik: Reps & Sets & Paket */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       <div>
-                        <span className="text-[10px] text-slate-500 font-medium block mb-1">Reps / Mins</span>
+                        <span className="text-[10px] text-slate-500 font-medium block mb-1">Reps</span>
                         {editing ? (
                           <input type="number" value={item.reps ?? ""} onChange={(e) => onUpdateItem(ii, { reps: e.target.value ? +e.target.value : null })} className="w-full bg-white border border-slate-200 rounded px-2 py-1 text-sm text-center focus:outline-none focus:border-sf-deepNavy" />
                         ) : (

@@ -1343,7 +1343,7 @@ function SetBlock({
                 <div className="flex items-end gap-3 md:w-auto w-full border-t border-slate-100 md:border-none pt-3 md:pt-0">
                   {/* Reps */}
                   <div className="w-20 shrink-0">
-                    <label className="block text-[10px] text-slate-400 mb-1">{isMetabolic ? "Reps" : "Reps / Mins"}</label>
+                    <label className="block text-[10px] text-slate-400 mb-1">Reps</label>
                     {editing ? (
                       <input 
                         type="number" 
