@@ -757,32 +757,54 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* ── Doctor Videos Section ─────────────────────────── */}
-      <section className="space-y-3">
-        <h2 className="text-sm font-bold text-text-primary">
-          {lang === "en" ? "Recommended Doctor Videos" : "Rekomendasi Video Dokter"}
-        </h2>
+      {/* ── Free Workout Preview Section (Level 4-5) ─────────────────────────── */}
+      <section className="space-y-3 mt-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-bold text-text-primary flex items-center gap-2">
+            <span className="text-sf-warmGold">🎁</span>
+            {lang === "en" ? "Free Workout Preview (Level 4-5)" : "Cuplikan Latihan Gratis (Level 4-5)"}
+          </h2>
+          <span className="text-[10px] text-sf-warmGold font-semibold bg-sf-warmGold/10 px-2 py-1 rounded-md">
+            PREVIEW
+          </span>
+        </div>
+        <p className="text-xs text-text-secondary leading-relaxed mb-3">
+          {lang === "en" 
+            ? "Here are 3 example movements from your personalized program. Subscribe to unlock the full daily routine!" 
+            : "Berikut 3 contoh gerakan dari program Anda. Berlangganan untuk membuka seluruh rutinitas harian!"}
+        </p>
+        
         <div className="grid grid-cols-2 gap-3">
           {[
             {
-              id: "dummy-1",
-              title: "Tips Latihan Kardio Aman untuk Jantung",
-              title_en: "Safe Cardio Tips for Your Heart",
-              thumbnail_url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
+              id: "workout-1",
+              title: "Dumbbell Goblet Squat",
+              title_en: "Dumbbell Goblet Squat",
+              thumbnail_url: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
               video_url: "https://www.youtube.com/embed/dQw4w9WgXcQ", // using generic yt link
-              doctor_name: "dr. Andi Wijaya, Sp.JP",
-              doctor_specialty: "Spesialis Jantung & Pembuluh Darah",
-              description: "Panduan melakukan latihan kardiovaskuler secara aman, khususnya bagi pasien dengan riwayat penyakit jantung."
+              doctor_name: "Set 1: 12 Reps",
+              doctor_specialty: "Functional Strength",
+              description: "Fokus pada postur punggung lurus dan turun hingga pinggul sejajar dengan lutut."
             },
             {
-              id: "dummy-2",
-              title: "Mengapa Diet Ketat Sering Gagal?",
-              title_en: "Why Strict Diets Often Fail?",
-              thumbnail_url: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&q=80",
+              id: "workout-2",
+              title: "Kettlebell Swing",
+              title_en: "Kettlebell Swing",
+              thumbnail_url: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
               video_url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-              doctor_name: "dr. Sarah Smith, Sp.GK",
-              doctor_specialty: "Spesialis Gizi Klinik",
-              description: "Penjelasan medis mengenai metabolisme tubuh saat melakukan diet ekstrim dan mengapa diet seimbang lebih direkomendasikan."
+              doctor_name: "Set 1: 15 Reps",
+              doctor_specialty: "Metabolic Conditioning",
+              description: "Gunakan dorongan pinggul (hip hinge), bukan lengan, untuk mengayunkan beban."
+            },
+            {
+              id: "workout-3",
+              title: "Plank with Shoulder Tap",
+              title_en: "Plank with Shoulder Tap",
+              thumbnail_url: "https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=800&q=80",
+              video_url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+              doctor_name: "Set 1: 20 Reps",
+              doctor_specialty: "Core Stability",
+              description: "Jaga panggul tetap stabil dan tidak bergoyang saat tangan menyentuh bahu silang."
             }
           ].map((video: any) => {
             const displayTitle = lang === "en" && video.title_en ? video.title_en : video.title;
@@ -790,7 +812,7 @@ export default function DashboardPage() {
               <div
                 key={video.id}
                 onClick={() => setSelectedVideo(video)}
-                className="card overflow-hidden hover:border-sf-warmGold/40 cursor-pointer transition-all duration-200"
+                className="card overflow-hidden border border-sf-warmGold/20 hover:border-sf-warmGold/60 cursor-pointer transition-all duration-200"
               >
                 <div className="relative aspect-video bg-black flex items-center justify-center">
                   {video.thumbnail_url ? (
@@ -803,25 +825,25 @@ export default function DashboardPage() {
                     <div className="w-full h-full bg-slate-200 dark:bg-white/5" />
                   )}
                   {/* Play Button Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/25">
-                    <div className="w-9 h-9 rounded-full bg-white/90 dark:bg-sf-deepNavy/90 flex items-center justify-center shadow-md">
-                      <span className="text-sf-warmGold text-xs ml-0.5">▶</span>
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                    <div className="w-9 h-9 rounded-full bg-sf-warmGold flex items-center justify-center shadow-lg shadow-sf-warmGold/30">
+                      <span className="text-white text-xs ml-0.5">▶</span>
                     </div>
                   </div>
                 </div>
-                <div className="p-2.5 space-y-1.5">
-                  <h3 className="text-[11px] font-bold text-text-primary line-clamp-2 leading-snug">
+                <div className="p-2.5 space-y-1.5 bg-sf-deepNavy">
+                  <h3 className="text-[11px] font-bold text-white line-clamp-2 leading-snug">
                     {displayTitle}
                   </h3>
                   <div className="flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-full bg-sf-warmGold/10 flex items-center justify-center shrink-0">
-                      <span className="text-[9px] font-bold text-sf-warmGold">D</span>
+                    <div className="w-5 h-5 rounded-full bg-sf-warmGold/20 flex items-center justify-center shrink-0">
+                      <span className="text-[9px] font-bold text-sf-warmGold">🔥</span>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] font-bold text-text-primary truncate">
+                      <p className="text-[9px] font-bold text-white truncate">
                         {video.doctor_name}
                       </p>
-                      <p className="text-[8px] text-text-secondary truncate">
+                      <p className="text-[8px] text-sf-warmGold truncate">
                         {video.doctor_specialty}
                       </p>
                     </div>
