@@ -28,7 +28,7 @@ func NewTrainerCardHandler(cs *service.TrainerCardService) *TrainerCardHandler {
 // ────────────────────────────────────────────────────────────────
 
 func (h *TrainerCardHandler) PublishCard(w http.ResponseWriter, r *http.Request) {
-	customerID := chi.URLParam(r, "id")
+	customerID := chi.URLParam(r, "customerId")
 	if customerID == "" {
 		response.BadRequest(w, "customer_id is required")
 		return
@@ -167,7 +167,7 @@ func (h *TrainerCardHandler) DeleteType(w http.ResponseWriter, r *http.Request) 
 // ────────────────────────────────────────────────────────────────
 
 func (h *TrainerCardHandler) GetCard(w http.ResponseWriter, r *http.Request) {
-	customerID := chi.URLParam(r, "id")
+	customerID := chi.URLParam(r, "customerId")
 	card, err := h.cardService.GetByCustomerID(r.Context(), customerID)
 	if err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
@@ -229,7 +229,7 @@ type upsertSequenceInput struct {
 }
 
 func (h *TrainerCardHandler) UpsertCard(w http.ResponseWriter, r *http.Request) {
-	customerID := chi.URLParam(r, "id")
+	customerID := chi.URLParam(r, "customerId")
 
 	var input struct {
 		Level     string                `json:"level"     validate:"required,min=1,max=10"`
@@ -338,7 +338,7 @@ func (h *TrainerCardHandler) UpsertCard(w http.ResponseWriter, r *http.Request) 
 // ────────────────────────────────────────────────────────────────
 
 func (h *TrainerCardHandler) DeleteCard(w http.ResponseWriter, r *http.Request) {
-	customerID := chi.URLParam(r, "id")
+	customerID := chi.URLParam(r, "customerId")
 	if err := h.cardService.DeleteCard(r.Context(), customerID); err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
 			response.NotFound(w, "Training card not found")
