@@ -76,9 +76,10 @@ interface TrainerCard {
   customer_name?: string;
   level: string;
   notes?: string | null;
-  sequences: CardSequence[];
-  full_program?: ProgramCategory[];
-  daily_reset?: ProgramCategory[];
+	sequences: CardSequence[];
+	full_program?: ProgramCategory[];
+	daily_reset?: ProgramCategory[];
+	is_preview?: boolean;
 }
 
 // ════════════════════════════════════════════════════════════════════
@@ -1955,27 +1956,37 @@ export default function TrainingCardPage() {
   // Free (registered-but-unpaid) clients are NOT blocked here anymore — the API
   // serves them the shared "free" program template, which renders below with an
   // upgrade banner.
-  const freeBanner = isFree ? (
-    <div className="mb-4 rounded-2xl border border-sf-warmGold/30 bg-sf-warmGold/10 px-4 py-3 flex items-start gap-3">
+  const freeBanner = (isFree || card?.is_preview) ? (
+    <div className="mb-4 rounded-2xl border border-sf-warmGold/30 bg-sf-warmGold/10 px-4 py-3 flex flex-col sm:flex-row sm:items-start gap-3">
       <div className="shrink-0 w-9 h-9 rounded-xl bg-sf-warmGold/20 flex items-center justify-center text-sf-warmGold">
         <Info size={18} />
       </div>
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 mb-2 sm:mb-0">
         <p className="text-sm font-bold text-sf-deepNavy dark:text-white">
-          {lang === "en" ? "Free Program" : "Program Gratis"}
+          {lang === "en" ? "Free Preview" : "Cuplikan Gratis"}
         </p>
         <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 leading-relaxed">
           {lang === "en"
-            ? "You're viewing the free program. Subscribe to unlock your personalized Training Card."
-            : "Anda sedang melihat program gratis. Berlangganan untuk membuka Training Card yang dipersonalisasi."}
+            ? "You're viewing a free preview of your Training Card. Subscribe to unlock your full personalized program."
+            : "Anda sedang melihat cuplikan gratis 3 latihan dari program Anda. Berlangganan untuk membuka seluruh Training Card yang dipersonalisasi."}
         </p>
       </div>
-      <Link
-        href="/dashboard"
-        className="shrink-0 self-center px-3 py-1.5 bg-gradient-to-r from-sf-warmGold to-sf-warmGoldDark text-white font-bold text-xs rounded-lg shadow-glow-gold transition-transform active:scale-95"
-      >
-        Upgrade
-      </Link>
+      <div className="flex shrink-0 gap-2 self-start sm:self-center">
+        <a
+          href="https://wa.me/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white font-bold text-xs rounded-lg shadow-soft transition-transform active:scale-95 flex items-center gap-1.5"
+        >
+          Hubungi Consultant
+        </a>
+        <Link
+          href="/dashboard"
+          className="shrink-0 px-3 py-1.5 bg-gradient-to-r from-sf-warmGold to-sf-warmGoldDark text-white font-bold text-xs rounded-lg shadow-glow-gold transition-transform active:scale-95 flex items-center"
+        >
+          Upgrade
+        </Link>
+      </div>
     </div>
   ) : null;
 
