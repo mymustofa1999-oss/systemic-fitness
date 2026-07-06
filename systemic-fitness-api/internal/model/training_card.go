@@ -17,6 +17,8 @@ type TrainingCardResponse struct {
 
 	FullProgram []ProgramCategory `json:"full_program"`
 	DailyReset  []ProgramCategory `json:"daily_reset"`
+	
+	IsPreview   *bool             `json:"is_preview,omitempty"`
 }
 
 // ProgramCategory groups sets under a specific workout type (e.g. FUNCTIONAL).

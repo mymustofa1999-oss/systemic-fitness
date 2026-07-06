@@ -363,20 +363,43 @@ func (s *AssessmentV2Service) GetTrainingCard(ctx context.Context, userID string
 	// If the user has a card and it's published, they should see it (e.g. trainer manually assigned it)
 	hasPublishedCard := cerr == nil && card != nil && card.Status == "published"
 
+	var isPreview bool
 	if !isPaidActive && !hasPublishedCard {
-		// Free tier: serve the shared "free" level template directly. Template
-		// items already resolve their movement video URLs, so they map straight
-		// into the same response shape as a personalized card.
-		tmpl, terr := s.trainerCardService.GetTemplateByLevel(ctx, freeTemplateLevel)
-		if terr != nil {
-			if errors.Is(terr, repository.ErrNotFound) {
-				// No free template configured yet — surface as "no card" so the
-				// client renders an empty state instead of a payment wall.
+		isPreview = true
+		
+		if card != nil && card.Level != "" {
+			tmpl, terr := s.trainerCardService.GetTemplateByLevel(ctx, card.Level)
+			if terr == nil {
+				dbCard = templateToTrainerCard(tmpl, userID)
+				truncateToNVideos(dbCard, 3)
+			}
+		}
+
+		if dbCard == nil {
+			tmpl4, terr4 := s.trainerCardService.GetTemplateByLevel(ctx, "4")
+			tmpl5, terr5 := s.trainerCardService.GetTemplateByLevel(ctx, "5")
+			
+			dbCard = &repository.TrainerCard{
+				CustomerID: userID,
+				Level:      "4 & 5",
+				Sequences:  make([]repository.TrainerCardSequence, 0),
+			}
+
+			if terr4 == nil && tmpl4 != nil {
+				card4 := templateToTrainerCard(tmpl4, userID)
+				truncateToNVideos(card4, 3)
+				dbCard.Sequences = append(dbCard.Sequences, card4.Sequences...)
+			}
+			if terr5 == nil && tmpl5 != nil {
+				card5 := templateToTrainerCard(tmpl5, userID)
+				truncateToNVideos(card5, 3)
+				dbCard.Sequences = append(dbCard.Sequences, card5.Sequences...)
+			}
+
+			if len(dbCard.Sequences) == 0 {
 				return nil, repository.ErrNotFound
 			}
-			return nil, fmt.Errorf("getting free template: %w", terr)
 		}
-		dbCard = templateToTrainerCard(tmpl, userID)
 	} else {
 		if cerr != nil {
 			// If they are paid active but have no card/assessment at all
@@ -620,6 +643,11 @@ func (s *AssessmentV2Service) GetTrainingCard(ctx context.Context, userID string
 		FullProgram:  mapSequences(clientSeqs),
 		DailyReset:   mapSequences(clientSeqs), // both tabs show user's customized card
 	}
+	
+	if isPreview {
+		previewFlag := true
+		res.IsPreview = &previewFlag
+	}
 
 	return res, nil
 }
@@ -633,4 +661,42 @@ func cleanWeightString(w string) string {
 	w = reDec2.ReplaceAllString(w, "$1")
 	w = reDec1.ReplaceAllString(w, "${1}")
 	return w
+}
+
+func truncateToNVideos(dbCard *repository.TrainerCard, n int) {
+	if dbCard == nil {
+		return
+	}
+	itemCount := 0
+	var newSeqs []repository.TrainerCardSequence
+
+	for _, seq := range dbCard.Sequences {
+		if itemCount >= n {
+			break
+		}
+		var newSets []repository.TrainerCardSet
+		for _, set := range seq.Sets {
+			if itemCount >= n {
+				break
+			}
+			var newItems []repository.TrainerCardSetItem
+			for _, item := range set.Items {
+				if itemCount < n {
+					newItems = append(newItems, item)
+					itemCount++
+				} else {
+					break
+				}
+			}
+			if len(newItems) > 0 {
+				set.Items = newItems
+				newSets = append(newSets, set)
+			}
+		}
+		if len(newSets) > 0 {
+			seq.Sets = newSets
+			newSeqs = append(newSeqs, seq)
+		}
+	}
+	dbCard.Sequences = newSeqs
 }
