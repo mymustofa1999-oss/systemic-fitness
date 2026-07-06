@@ -731,7 +731,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         <Link href={`/clients/${customerId}`} className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
           <ArrowLeft className="h-4 w-4" /> Kembali ke Detail Client
         </Link>
-        {card && (
+        {card ? (
           <Link 
             href={`/clients/${customerId}/live-session`}
             className="inline-flex items-center gap-2 bg-sf-deepNavy text-white px-6 py-2.5 rounded-lg font-bold hover:bg-slate-800 transition-colors shadow-sm"
@@ -739,6 +739,14 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             <svg className="w-4 h-4 text-sf-warmGold" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
             Mulai Latihan (Live Session)
           </Link>
+        ) : (
+          <button 
+            disabled
+            className="inline-flex items-center gap-2 bg-slate-200 text-slate-400 px-6 py-2.5 rounded-lg font-bold cursor-not-allowed"
+          >
+            <svg className="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+            Simpan Kartu untuk Mulai Latihan
+          </button>
         )}
       </div>
       {isTier1 && (
