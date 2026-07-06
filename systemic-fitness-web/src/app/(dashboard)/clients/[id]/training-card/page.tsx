@@ -727,10 +727,20 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
   return (
     <div className="space-y-4 max-w-[1400px]">
-      <Link href={`/clients/${customerId}`} className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
-        <ArrowLeft className="h-4 w-4" /> Kembali ke Detail Client
-      </Link>
-
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <Link href={`/clients/${customerId}`} className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
+          <ArrowLeft className="h-4 w-4" /> Kembali ke Detail Client
+        </Link>
+        {card && (
+          <Link 
+            href={`/clients/${customerId}/live-session`}
+            className="inline-flex items-center gap-2 bg-sf-deepNavy text-white px-6 py-2.5 rounded-lg font-bold hover:bg-slate-800 transition-colors shadow-sm"
+          >
+            <svg className="w-4 h-4 text-sf-warmGold" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+            Mulai Latihan (Live Session)
+          </Link>
+        )}
+      </div>
       {isTier1 && (
         <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg flex items-start gap-3">
           <div className="mt-0.5">
