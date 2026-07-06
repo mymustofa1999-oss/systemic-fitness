@@ -101,16 +101,16 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showEndModal, setShowEndModal] = useState(false);
 
-  // Flatten the training card sequences into a linear playlist of exercises
   const playlist = useMemo(() => {
-    if (!cardData?.data?.sequences) return [];
+    const data = cardData?.data as any;
+    if (!data?.sequences) return [];
     
     const clientGender = (userData?.data as any)?.profile?.gender?.toLowerCase() === "male" ? "male" : "female";
     const allMovements = (movementsData?.data ?? []) as any[];
     
     const items: any[] = [];
     
-    cardData.data.sequences.forEach((seq: any, sIdx: number) => {
+    data.sequences.forEach((seq: any, sIdx: number) => {
       seq.sets?.forEach((set: any, setIdx: number) => {
         // Find movement details
         const movement = allMovements.find((m) => m.id === set.movement_id);
@@ -157,7 +157,7 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === playlist.length - 1;
 
-  const handleFinish = async (rating: number, notes: string) => {
+  const handleFinish = async (_rating: number, _notes: string) => {
     // TODO: Connect this to actual backend endpoint when available
     toast.success("Sesi latihan berhasil diselesaikan!");
     router.push(`/clients/${customerId}/training-card`);
