@@ -354,8 +354,16 @@ func (s *AssessmentV2Service) GetTrainingCard(ctx context.Context, userID string
 	userProfile, _ := s.userRepo.GetProfile(ctx, userID)
 
 	var dbCard *repository.TrainerCard
+	
+	// 2. Fetch the trainer card. GetByCustomerID auto-creates one from the
+	//    assessment-derived level when none exists; if the user has neither a
+	//    card nor an assessment yet, it returns ErrNotFound (handler → 404).
+	card, cerr := s.trainerCardService.GetByCustomerID(ctx, userID)
+	
+	// If the user has a card and it's published, they should see it (e.g. trainer manually assigned it)
+	hasPublishedCard := cerr == nil && card != nil && card.Status == "published"
 
-	if !isPaidActive {
+	if !isPaidActive && !hasPublishedCard {
 		// Free tier: serve the shared "free" level template directly. Template
 		// items already resolve their movement video URLs, so they map straight
 		// into the same response shape as a personalized card.
@@ -370,16 +378,20 @@ func (s *AssessmentV2Service) GetTrainingCard(ctx context.Context, userID string
 		}
 		dbCard = templateToTrainerCard(tmpl, userID)
 	} else {
-		// 2. Fetch the trainer card. GetByCustomerID auto-creates one from the
-		//    assessment-derived level when none exists; if the user has neither a
-		//    card nor an assessment yet, it returns ErrNotFound (handler → 404).
-		//    We intentionally do NOT hard-require an assessment here, so a card an
-		//    admin/trainer built manually is served even before the user takes it.
-		card, cerr := s.trainerCardService.GetByCustomerID(ctx, userID)
 		if cerr != nil {
+			// If they are paid active but have no card/assessment at all
+			if errors.Is(cerr, repository.ErrNotFound) {
+				return nil, repository.ErrNotFound
+			}
 			return nil, fmt.Errorf("getting database trainer card: %w", cerr)
 		}
 		dbCard = card
+		
+		// If it's not published, they can't see it unless we are falling back to something else.
+		// But since they are paid active, they should just see "Not Created Yet" (404) if it's draft.
+		if dbCard.Status != "published" {
+			return nil, repository.ErrNotFound
+		}
 
 		// 3. Regeneration applies ONLY to auto-generated cards — a card carries the
 		//    AutoCreateDefaultCard marker in its notes. Manually edited cards
