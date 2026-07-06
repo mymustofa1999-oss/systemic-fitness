@@ -12,6 +12,7 @@ import {
   useTrainerCardTypes,
   useCustomerPrograms,
   useEquipments,
+  useCustomerSetup,
 } from "@/hooks/useNewFeatures";
 
 
@@ -417,6 +418,12 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
   const card = dbCard;
 
+  const { data: equipData } = useEquipments();
+  const equipments = (equipData?.data ?? []) as any[];
+
+  const { data: setupData } = useCustomerSetup(customerId as string);
+  const trainerName = setupData?.data?.staff?.trainer_name;
+
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<CardForm | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -812,11 +819,11 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
                 {card && card.status !== "published" && (
                   <button 
                     onClick={() => publishCard.mutate(customerId as string)}
-                    disabled={publishCard.isPending}
+                    disabled={publishCard.isPending || !trainerName}
                     className="px-3 py-1.5 text-xs font-medium rounded-md bg-green-600 hover:bg-green-500 text-white flex items-center gap-1.5 transition-colors disabled:opacity-50"
                   >
                     {publishCard.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
-                    Kirim ke Trainer
+                    Kirim ke Trainer {trainerName ? `(${trainerName})` : "(Belum ada Trainer)"}
                   </button>
                 )}
               </>
