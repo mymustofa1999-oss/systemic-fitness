@@ -778,33 +778,33 @@ export default function DashboardPage() {
           {[
             {
               id: "workout-1",
-              title: "Dumbbell Goblet Squat",
-              title_en: "Dumbbell Goblet Squat",
+              title: "Arm Rotation",
+              title_en: "Arm Rotation",
               thumbnail_url: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
-              video_url: "https://www.youtube.com/embed/dQw4w9WgXcQ", // using generic yt link
+              video_url: "https://www.youtube.com/embed/Gv0JzAjI4wE",
               doctor_name: "Set 1: 12 Reps",
               doctor_specialty: "Functional Strength",
-              description: "Fokus pada postur punggung lurus dan turun hingga pinggul sejajar dengan lutut."
+              description: "Fokus pada rentang gerak bahu yang penuh."
             },
             {
               id: "workout-2",
-              title: "Kettlebell Swing",
-              title_en: "Kettlebell Swing",
+              title: "Barbell Row",
+              title_en: "Barbell Row",
               thumbnail_url: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
-              video_url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+              video_url: "https://www.youtube.com/embed/dQPys_dgoGY",
               doctor_name: "Set 1: 15 Reps",
               doctor_specialty: "Metabolic Conditioning",
-              description: "Gunakan dorongan pinggul (hip hinge), bukan lengan, untuk mengayunkan beban."
+              description: "Tarik beban ke arah perut, jaga punggung tetap lurus."
             },
             {
               id: "workout-3",
-              title: "Plank with Shoulder Tap",
-              title_en: "Plank with Shoulder Tap",
+              title: "Bicep Curls",
+              title_en: "Bicep Curls",
               thumbnail_url: "https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=800&q=80",
-              video_url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+              video_url: "https://www.youtube.com/embed/SZKOhGoXcTI",
               doctor_name: "Set 1: 20 Reps",
               doctor_specialty: "Core Stability",
-              description: "Jaga panggul tetap stabil dan tidak bergoyang saat tangan menyentuh bahu silang."
+              description: "Fokus pada kontraksi otot bicep tanpa mengayunkan badan."
             }
           ].map((video: any) => {
             const displayTitle = lang === "en" && video.title_en ? video.title_en : video.title;
