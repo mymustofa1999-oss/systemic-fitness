@@ -30,11 +30,13 @@ func main() {
 	}
 	fmt.Printf("Training Card ID: %s, Status: %s\n", cardID, status)
 
-	var subTier, subStatus string
-	err = pool.QueryRow(ctx, "SELECT pp.tier, s.status FROM subscriptions s JOIN payment_plans pp ON pp.id = s.plan_id WHERE s.user_id = $1 AND s.status = 'active' ORDER BY s.created_at DESC LIMIT 1", customerID).Scan(&subTier, &subStatus)
-	if err != nil {
-		fmt.Println("No active subscription found:", err)
-	} else {
-		fmt.Printf("Subscription: %s (%s)\n", subTier, subStatus)
+	rows, _ := pool.Query(ctx, "SELECT level FROM trainer_card_templates")
+	defer rows.Close()
+	fmt.Print("Available template levels: ")
+	for rows.Next() {
+		var lvl string
+		rows.Scan(&lvl)
+		fmt.Printf("%s, ", lvl)
 	}
+	fmt.Println()
 }

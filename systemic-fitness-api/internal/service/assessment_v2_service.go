@@ -360,14 +360,18 @@ func (s *AssessmentV2Service) GetTrainingCard(ctx context.Context, userID string
 	//    card nor an assessment yet, it returns ErrNotFound (handler → 404).
 	card, cerr := s.trainerCardService.GetByCustomerID(ctx, userID)
 	
-	// If the user has a card and it's published, they should see it (e.g. trainer manually assigned it)
-	hasPublishedCard := cerr == nil && card != nil && card.Status == "published"
+	// We no longer check hasPublishedCard here. If they are unpaid, they always see preview.
 
 	var isPreview bool
-	if !isPaidActive && !hasPublishedCard {
+	if !isPaidActive {
 		isPreview = true
 		
-		if card != nil && card.Level != "" {
+		if card != nil && len(card.Sequences) > 0 {
+			// Tease 3 videos directly from their own personal card!
+			dbCard = card
+			truncateToNVideos(dbCard, 3)
+		} else if card != nil && card.Level != "" {
+			// Fallback to template if card is empty for some reason
 			tmpl, terr := s.trainerCardService.GetTemplateByLevel(ctx, card.Level)
 			if terr == nil {
 				dbCard = templateToTrainerCard(tmpl, userID)
