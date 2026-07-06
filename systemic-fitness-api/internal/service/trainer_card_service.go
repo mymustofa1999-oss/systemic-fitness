@@ -15,17 +15,46 @@ import (
 type TrainerCardService struct {
 	repo         *repository.TrainerCardRepository
 	templateRepo *repository.TrainerCardTemplateRepository
+	notifService *NotificationService
 	logger       *slog.Logger
 }
 
-func NewTrainerCardService(r *repository.TrainerCardRepository, tr *repository.TrainerCardTemplateRepository, logger *slog.Logger) *TrainerCardService {
-	return &TrainerCardService{repo: r, templateRepo: tr, logger: logger}
+func NewTrainerCardService(r *repository.TrainerCardRepository, tr *repository.TrainerCardTemplateRepository, ns *NotificationService, logger *slog.Logger) *TrainerCardService {
+	return &TrainerCardService{repo: r, templateRepo: tr, notifService: ns, logger: logger}
 }
 
 // ── Trainer Card Types ─────────────────────────────────────────
 
 func (s *TrainerCardService) ListTypes(ctx context.Context) ([]repository.TrainerCardType, error) {
 	return s.repo.ListTypes(ctx)
+}
+
+func (s *TrainerCardService) PublishCard(ctx context.Context, customerID string) error {
+	// 1. Publish in DB
+	err := s.repo.PublishCard(ctx, customerID)
+	if err != nil {
+		return err
+	}
+
+	// 2. Fetch trainer ID and customer name to send notification
+	trainerID, err := s.repo.GetTrainerIDForCustomer(ctx, customerID)
+	if err == nil && trainerID != "" && s.notifService != nil {
+		card, _ := s.repo.GetByCustomerID(ctx, customerID)
+		custName := "Client"
+		if card != nil && card.CustomerName != "" {
+			custName = card.CustomerName
+		}
+		
+		title := "Training Card Baru"
+		body := fmt.Sprintf("Training Card untuk %s telah disiapkan oleh Konsultan.", custName)
+		
+		_ = s.notifService.SendToUser(ctx, trainerID, title, body, "trainer_card_published", map[string]string{
+			"customer_id": customerID,
+		})
+	}
+	
+	s.logger.Info("trainer card published", "customer_id", customerID)
+	return nil
 }
 
 func (s *TrainerCardService) CreateType(ctx context.Context, t *repository.TrainerCardType) error {

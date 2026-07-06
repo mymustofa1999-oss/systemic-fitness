@@ -37,6 +37,7 @@ type TrainerCard struct {
 	CustomerID   string    `json:"customer_id"`
 	CustomerName string    `json:"customer_name,omitempty"`
 	Level        string    `json:"level"`
+	Status       string    `json:"status"`
 	Notes        *string   `json:"notes,omitempty"`
 	CreatedBy    *string   `json:"created_by,omitempty"`
 	CreatedAt    time.Time `json:"created_at"`
@@ -176,27 +177,31 @@ func (r *TrainerCardRepository) DeleteType(ctx context.Context, id string) error
 // ════════════════════════════════════════════════════════════════
 
 func (r *TrainerCardRepository) GetByCustomerID(ctx context.Context, customerID string) (*TrainerCard, error) {
-	card := &TrainerCard{}
-	err := r.db.QueryRow(ctx,
-		`SELECT c.id, c.customer_id, u.full_name, c.level, c.notes, c.created_by, c.created_at, c.updated_at
+	row := r.db.QueryRow(ctx,
+		`SELECT c.id, c.customer_id, u.full_name, c.level, c.status, c.notes, c.created_by, c.created_at, c.updated_at
 		 FROM trainer_cards c
-		 JOIN users u ON u.id = c.customer_id
-		 WHERE c.customer_id = $1`, customerID,
-	).Scan(
-		&card.ID, &card.CustomerID, &card.CustomerName, &card.Level, &card.Notes,
-		&card.CreatedBy, &card.CreatedAt, &card.UpdatedAt,
+		 LEFT JOIN users u ON c.customer_id = u.id
+		 WHERE c.customer_id = $1`,
+		customerID,
+	)
+
+	var card TrainerCard
+	err := row.Scan(
+		&card.ID, &card.CustomerID, &card.CustomerName, &card.Level, &card.Status,
+		&card.Notes, &card.CreatedBy, &card.CreatedAt, &card.UpdatedAt,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, ErrNotFound
 	}
 	if err != nil {
-		return nil, fmt.Errorf("get card: %w", err)
+		return nil, fmt.Errorf("get training card: %w", err)
 	}
 
-	if err := r.loadSequences(ctx, card); err != nil {
+	if err := r.loadSequences(ctx, &card); err != nil {
 		return nil, err
 	}
-	return card, nil
+
+	return &card, nil
 }
 
 func (r *TrainerCardRepository) loadSequences(ctx context.Context, card *TrainerCard) error {
@@ -603,3 +608,22 @@ func (r *TrainerCardRepository) GetMovementsByNames(ctx context.Context, names [
 	return items, rows.Err()
 }
 
+func (r *TrainerCardRepository) PublishCard(ctx context.Context, customerID string) error {
+	tag, err := r.db.Exec(ctx,
+		`UPDATE trainer_cards SET status = 'published', updated_at = NOW() WHERE customer_id = $1`,
+		customerID,
+	)
+	if err != nil {
+		return err
+	}
+	if tag.RowsAffected() == 0 {
+		return ErrNotFound
+	}
+	return nil
+}
+
+func (r *TrainerCardRepository) GetTrainerIDForCustomer(ctx context.Context, customerID string) (string, error) {
+	var trainerID string
+	err := r.db.QueryRow(ctx, `SELECT trainer_id FROM trainer_clients WHERE client_id = $1`, customerID).Scan(&trainerID)
+	return trainerID, err
+}

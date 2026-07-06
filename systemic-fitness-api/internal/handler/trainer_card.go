@@ -8,6 +8,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"github.com/fitcoach/api/internal/model"
+	"github.com/fitcoach/api/internal/middleware"
 	"github.com/fitcoach/api/internal/repository"
 	"github.com/fitcoach/api/internal/service"
 	"github.com/fitcoach/api/pkg/response"
@@ -19,6 +21,30 @@ type TrainerCardHandler struct {
 
 func NewTrainerCardHandler(cs *service.TrainerCardService) *TrainerCardHandler {
 	return &TrainerCardHandler{cardService: cs}
+}
+
+// ────────────────────────────────────────────────────────────────
+//  POST /api/v2/trainer-cards/{customer_id}/publish
+// ────────────────────────────────────────────────────────────────
+
+func (h *TrainerCardHandler) PublishCard(w http.ResponseWriter, r *http.Request) {
+	customerID := chi.URLParam(r, "id")
+	if customerID == "" {
+		response.BadRequest(w, "customer_id is required")
+		return
+	}
+
+	if err := h.cardService.PublishCard(r.Context(), customerID); err != nil {
+		slog.Error("PublishCard failed", "customer_id", customerID, "error", err)
+		if err.Error() == "not found" {
+			response.NotFound(w, "Trainer card not found")
+			return
+		}
+		response.InternalError(w, "Failed to publish training card")
+		return
+	}
+
+	response.SuccessMessage(w, "Training card published successfully")
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -141,7 +167,7 @@ func (h *TrainerCardHandler) DeleteType(w http.ResponseWriter, r *http.Request) 
 // ────────────────────────────────────────────────────────────────
 
 func (h *TrainerCardHandler) GetCard(w http.ResponseWriter, r *http.Request) {
-	customerID := chi.URLParam(r, "customerId")
+	customerID := chi.URLParam(r, "id")
 	card, err := h.cardService.GetByCustomerID(r.Context(), customerID)
 	if err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
@@ -152,6 +178,14 @@ func (h *TrainerCardHandler) GetCard(w http.ResponseWriter, r *http.Request) {
 		response.InternalError(w, "Failed to fetch training card")
 		return
 	}
+
+	// Hide draft cards from trainers
+	userRole := middleware.GetRole(r.Context())
+	if userRole == model.RoleTrainer && card.Status != "published" {
+		response.OK(w, nil)
+		return
+	}
+
 	response.OK(w, card)
 }
 
@@ -195,7 +229,7 @@ type upsertSequenceInput struct {
 }
 
 func (h *TrainerCardHandler) UpsertCard(w http.ResponseWriter, r *http.Request) {
-	customerID := chi.URLParam(r, "customerId")
+	customerID := chi.URLParam(r, "id")
 
 	var input struct {
 		Level     string                `json:"level"     validate:"required,min=1,max=10"`
@@ -304,7 +338,7 @@ func (h *TrainerCardHandler) UpsertCard(w http.ResponseWriter, r *http.Request) 
 // ────────────────────────────────────────────────────────────────
 
 func (h *TrainerCardHandler) DeleteCard(w http.ResponseWriter, r *http.Request) {
-	customerID := chi.URLParam(r, "customerId")
+	customerID := chi.URLParam(r, "id")
 	if err := h.cardService.DeleteCard(r.Context(), customerID); err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
 			response.NotFound(w, "Training card not found")

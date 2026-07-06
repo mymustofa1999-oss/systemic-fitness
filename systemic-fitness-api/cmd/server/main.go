@@ -158,7 +158,9 @@ func main() {
 	customerSetupService := service.NewCustomerSetupService(customerSetupRepo, logger)
 	dailyJournalService := service.NewDailyJournalService(dailyJournalRepo, logger)
 	trainerCardTemplateService := service.NewTrainerCardTemplateService(trainerCardTemplateRepo, logger)
-	trainerCardService := service.NewTrainerCardService(trainerCardRepo, trainerCardTemplateRepo, logger)
+	// notificationService is already initialized at line 146
+
+	trainerCardService := service.NewTrainerCardService(trainerCardRepo, trainerCardTemplateRepo, notificationService, logger)
 	paymentService := service.NewPaymentService(paymentRepo, trainerCardService, notificationService, logger)
 	menuService := service.NewMenuService(menuRepo, logger)
 	trainingScheduleService := service.NewTrainingScheduleService(trainingScheduleRepo, notificationService, logger)
@@ -737,6 +739,7 @@ func main() {
 					r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant))
 					r.Get("/", trainerCardHandler.GetCard)
 					r.Post("/", trainerCardHandler.UpsertCard)
+					r.Post("/publish", trainerCardHandler.PublishCard)
 					r.Delete("/", trainerCardHandler.DeleteCard)
 				})
 			})

@@ -48,6 +48,7 @@ INSERT INTO menu_role_privileges (menu_id, role, can_access)
 SELECT id, 'consultant'::user_role, true
 FROM menus
 WHERE code IN (
+  'clients',               -- added clients menu for consultant
   'sf_consultant',
   'sf_consultant_queue',
   'sf_consultant_clients',
@@ -59,7 +60,7 @@ ON CONFLICT (menu_id, role) DO NOTHING;
 INSERT INTO menu_role_privileges (menu_id, role, can_access)
 SELECT id, 'admin'::user_role, true
 FROM menus
-WHERE code IN ('sf_consultant', 'sf_consultant_queue', 'sf_consultant_clients')
+WHERE code IN ('clients', 'sf_consultant', 'sf_consultant_queue', 'sf_consultant_clients')
 ON CONFLICT (menu_id, role) DO NOTHING;
 
 -- Owner (overseer)
