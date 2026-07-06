@@ -315,7 +315,7 @@ func main() {
 
 			// ── Team (dedicated) ────────────────────────────
 			r.Route("/team", func(r chi.Router) {
-				r.Use(middleware.RequireRole(model.RoleAdmin))
+				r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleConsultant, model.RoleTrainer))
 				r.Get("/", userHandler.ListTeam)
 			})
 
