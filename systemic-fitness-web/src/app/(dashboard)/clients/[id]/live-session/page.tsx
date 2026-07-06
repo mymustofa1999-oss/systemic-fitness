@@ -246,7 +246,7 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
                 </button>
               ) : (
                 <button 
-                  onClick={() => setShowEndModal(true)}
+                  onClick={() => isTrainer ? handleFinish(0, "") : setShowEndModal(true)}
                   className="px-6 h-14 flex items-center justify-center gap-2 rounded-full bg-green-500 hover:bg-green-400 text-slate-900 font-bold transition-colors shadow-lg shadow-green-500/20"
                 >
                   Akhiri <CheckCircle2 className="w-5 h-5" />
