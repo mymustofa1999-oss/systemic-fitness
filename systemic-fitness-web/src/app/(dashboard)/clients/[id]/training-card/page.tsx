@@ -422,7 +422,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const equipments = (equipData?.data ?? []) as any[];
 
   const { data: setupData } = useCustomerSetup(customerId as string);
-  const trainerName = setupData?.data?.staff?.trainer_name;
+  const trainerName = (setupData?.data as any)?.staff?.trainer_name;
 
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<CardForm | null>(null);
