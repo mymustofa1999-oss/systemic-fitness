@@ -3,16 +3,19 @@ import { useSession } from "next-auth/react";
 export function useAuth() {
   const { data: session, status } = useSession();
 
+  const rawRole = session?.user?.role ?? "client";
+  const safeRole = rawRole.toLowerCase();
+
   return {
     user: session?.user ?? null,
-    role: session?.user?.role ?? "client",
+    role: rawRole,
     isLoading: status === "loading",
     isAuthenticated: status === "authenticated",
-    isOwner: session?.user?.role === "owner",
-    isAdmin: ["owner", "admin"].includes(session?.user?.role ?? ""),
-    isFinance: ["owner", "admin", "finance"].includes(session?.user?.role ?? ""),
-    isConsultant: session?.user?.role === "consultant",
-    isTrainer: session?.user?.role === "trainer",
-    isClient: session?.user?.role === "client",
+    isOwner: safeRole === "owner",
+    isAdmin: ["owner", "admin"].includes(safeRole),
+    isFinance: ["owner", "admin", "finance"].includes(safeRole),
+    isConsultant: safeRole === "consultant",
+    isTrainer: safeRole === "trainer",
+    isClient: safeRole === "client",
   };
 }

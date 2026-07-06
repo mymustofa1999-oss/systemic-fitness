@@ -244,11 +244,14 @@ function getClientCategoryAndLoads(
 
 export default function TrainingCardPage({ params }: { params: { id: string } }) {
   const customerId = params.id;
-  const { isTrainer, user: authUser } = useAuth();
+  const { isTrainer, isConsultant, isAdmin, isOwner, role } = useAuth();
   const { data: userData, isLoading: userLoading } = useUser(customerId);
   const subscriptionTier = (userData?.data as any)?.subscription?.tier;
   const isTier1 = !subscriptionTier || subscriptionTier === "sf_tier_1";
-  const canEdit = ["owner", "admin", "consultant", "trainer"].includes(authUser?.role ?? "");
+  
+  // Explicitly check role string to bypass any useAuth state issues
+  const currentRole = (role || "").toLowerCase();
+  const canEdit = isOwner || isAdmin || isConsultant || isTrainer || currentRole === "consultant";
   const { data: cardData, isLoading: cardLoading } = useTrainerCard(customerId);
   const { data: typesData } = useTrainerCardTypes();
   const { data: programsData, isLoading: isLoadingPrograms } = useCustomerPrograms(customerId);
@@ -863,11 +866,9 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       {!card && !editing && (
         <div className="border border-dashed border-slate-300 rounded-lg p-12 text-center">
           <p className="text-slate-400 text-sm mb-4">Belum ada Training Card untuk customer ini</p>
-          {canEdit && (
-            <button onClick={() => startEdit()} className="btn-primary">
-              <Plus className="h-4 w-4" /> Buat Training Card
-            </button>
-          )}
+          <button onClick={() => startEdit()} className="btn-primary">
+            <Plus className="h-4 w-4" /> Buat Training Card
+          </button>
         </div>
       )}
 
@@ -1179,40 +1180,18 @@ function SetBlock({
           <div>
             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Breathing</label>
             {editing ? (
-              <div className="flex gap-2">
-                <div className="flex-1">
-                  <span className="text-[10px] text-slate-400 block mb-0.5">Core</span>
-                  <select
-                    value={set.breathing_core || ""}
-                    onChange={(e) => onUpdateSet({ breathing_core: e.target.value })}
-                    className="w-full text-sm border border-slate-200 rounded-md px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy bg-white"
-                  >
-                    <option value="">Pilih...</option>
-                    <option value="Tarik Napas">Tarik Napas</option>
-                    <option value="Buang Napas">Buang Napas</option>
-                    <option value="Tahan Napas">Tahan Napas</option>
-                    <option value="Napas Normal">Napas Normal</option>
-                  </select>
-                </div>
-                <div className="flex-1">
-                  <span className="text-[10px] text-slate-400 block mb-0.5">Diafragma</span>
-                  <select
-                    value={set.breathing_diaphragm || ""}
-                    onChange={(e) => onUpdateSet({ breathing_diaphragm: e.target.value })}
-                    className="w-full text-sm border border-slate-200 rounded-md px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy bg-white"
-                  >
-                    <option value="">Pilih...</option>
-                    <option value="Tarik Napas">Tarik Napas</option>
-                    <option value="Buang Napas">Buang Napas</option>
-                    <option value="Tahan Napas">Tahan Napas</option>
-                    <option value="Napas Normal">Napas Normal</option>
-                  </select>
-                </div>
-              </div>
+              <select
+                value={set.breathing_core || ""}
+                onChange={(e) => onUpdateSet({ breathing_core: e.target.value })}
+                className="w-full text-sm border border-slate-200 rounded-md px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy bg-white"
+              >
+                <option value="">Pilih...</option>
+                <option value="Core">Core</option>
+                <option value="Diafragma">Diafragma</option>
+              </select>
             ) : (
-              <div className="text-sm space-y-0.5">
-                <div><span className="text-slate-400">Core:</span> <span className="font-medium text-slate-700">{set.breathing_core || "-"}</span></div>
-                <div><span className="text-slate-400">Diaf:</span> <span className="font-medium text-slate-700">{set.breathing_diaphragm || "-"}</span></div>
+              <div className="text-sm font-medium text-slate-800">
+                {set.breathing_core || "-"}
               </div>
             )}
           </div>
@@ -1376,39 +1355,22 @@ function SetBlock({
 
                   {/* Breathing khusus level 1 per item */}
                   {isLevel1 && (
-                    <div className="w-32 shrink-0 space-y-1">
+                    <div className="w-24 shrink-0 space-y-1">
+                      <label className="block text-[10px] text-slate-400 mb-1">Breathing</label>
                       {editing ? (
-                        <>
-                          <select
-                            value={item.breathing_core || ""}
-                            onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
-                            className="text-[10px] w-full border border-slate-200 rounded px-1.5 py-1 focus:outline-none bg-white"
-                          >
-                            <option value="">Core...</option>
-                            <option value="Tarik Napas">Tarik</option>
-                            <option value="Buang Napas">Buang</option>
-                            <option value="Tahan Napas">Tahan</option>
-                            <option value="Napas Normal">Normal</option>
-                          </select>
-                          <select
-                            value={item.breathing_diaphragm || ""}
-                            onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
-                            className="text-[10px] w-full border border-slate-200 rounded px-1.5 py-1 focus:outline-none bg-white"
-                          >
-                            <option value="">Diaf...</option>
-                            <option value="Tarik Napas">Tarik</option>
-                            <option value="Buang Napas">Buang</option>
-                            <option value="Tahan Napas">Tahan</option>
-                            <option value="Napas Normal">Normal</option>
-                          </select>
-                        </>
+                        <select
+                          value={item.breathing_core || ""}
+                          onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
+                          className="text-[10px] w-full border border-slate-200 rounded px-1.5 py-1 focus:outline-none bg-white"
+                        >
+                          <option value="">Pilih...</option>
+                          <option value="Core">Core</option>
+                          <option value="Diafragma">Diafragma</option>
+                        </select>
                       ) : (
-                        (item.breathing_core || item.breathing_diaphragm) && (
-                          <div className="text-[9px] text-slate-500 bg-slate-100 p-1 rounded">
-                            {item.breathing_core && <div>C: {item.breathing_core}</div>}
-                            {item.breathing_diaphragm && <div>D: {item.breathing_diaphragm}</div>}
-                          </div>
-                        )
+                        <div className="font-medium text-sm text-center">
+                          {item.breathing_core || "-"}
+                        </div>
                       )}
                     </div>
                   )}

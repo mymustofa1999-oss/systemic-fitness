@@ -822,6 +822,26 @@ function SetBlock({
               )}
             </div>
 
+            {/* Breathing */}
+            <div className="space-y-1.5 col-span-2 md:col-span-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Breathing</label>
+              {editing ? (
+                <select
+                  value={set.breathing_core || ""}
+                  onChange={(e) => onUpdateSet({ breathing_core: e.target.value })}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-sf-deepNavy/20 focus:border-sf-deepNavy transition-all"
+                >
+                  <option value="">Pilih...</option>
+                  <option value="Core">Core</option>
+                  <option value="Diafragma">Diafragma</option>
+                </select>
+              ) : (
+                <div className="text-sm font-medium text-slate-800 bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+                  {set.breathing_core || "-"}
+                </div>
+              )}
+            </div>
+
             {/* Duration */}
             <div className="space-y-1.5 col-span-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Durasi</label>
@@ -1035,11 +1055,11 @@ function SetBlock({
                       </div>
                     </div>
 
-                    {/* Level 1 Only: Breathing Core & Diaphragm */}
+                    {/* Level 1 Only: Breathing */}
                     {level === "1" && (
                       <div className="pt-2 border-t border-slate-200/60 flex flex-col md:flex-row gap-4">
                          <div className="flex-1 flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase w-8">Core</span>
+                            <span className="text-[10px] font-bold text-slate-400 uppercase w-20">Breathing</span>
                             {editing ? (
                               <select
                                 value={item.breathing_core || ""}
@@ -1047,31 +1067,11 @@ function SetBlock({
                                 className="flex-1 bg-white border border-slate-200 rounded px-2 py-1 text-xs text-slate-700 focus:outline-none"
                               >
                                 <option value="">Pilih...</option>
-                                <option value="Tarik Napas">Tarik Napas</option>
-                                <option value="Buang Napas">Buang Napas</option>
-                                <option value="Tahan Napas">Tahan Napas</option>
-                                <option value="Napas Normal">Napas Normal</option>
+                                <option value="Core">Core</option>
+                                <option value="Diafragma">Diafragma</option>
                               </select>
                             ) : (
                               <span className="text-xs font-medium text-slate-700">{item.breathing_core || "-"}</span>
-                            )}
-                         </div>
-                         <div className="flex-1 flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase w-8">Diaf</span>
-                            {editing ? (
-                              <select
-                                value={item.breathing_diaphragm || ""}
-                                onChange={(e) => onUpdateItem(ii, { breathing_diaphragm: e.target.value })}
-                                className="flex-1 bg-white border border-slate-200 rounded px-2 py-1 text-xs text-slate-700 focus:outline-none"
-                              >
-                                <option value="">Pilih...</option>
-                                <option value="Tarik Napas">Tarik Napas</option>
-                                <option value="Buang Napas">Buang Napas</option>
-                                <option value="Tahan Napas">Tahan Napas</option>
-                                <option value="Napas Normal">Napas Normal</option>
-                              </select>
-                            ) : (
-                              <span className="text-xs font-medium text-slate-700">{item.breathing_diaphragm || "-"}</span>
                             )}
                          </div>
                       </div>
