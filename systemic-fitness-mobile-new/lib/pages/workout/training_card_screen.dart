@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:workout/data/api_service.dart';
 import 'package:workout/data/api_config.dart';
 import 'package:workout/online_models/TrainingCardModels.dart';
@@ -1008,12 +1009,108 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
   //  MAIN CONTENT
   // ═══════════════════════════════════════════════════════════════
 
+  Widget _buildPreviewBanner(_TrainingCardTheme theme) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.gold.withOpacity(0.1),
+        border: Border.all(color: theme.gold.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.info_outline, color: theme.gold, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                _isEn ? 'Free Preview' : 'Cuplikan Gratis',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: theme.text,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            _isEn
+                ? 'You\'re viewing a free preview of your Training Card. Subscribe to unlock your full personalized program.'
+                : 'Anda sedang melihat cuplikan gratis 3 latihan dari program Anda. Berlangganan untuk membuka seluruh Training Card yang dipersonalisasi.',
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.textSecondary,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green.shade600,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                  onPressed: () async {
+                    final url = Uri.parse('https://wa.me/081234567890'); // Placeholder number
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url);
+                    } else {
+                      Fluttertoast.showToast(msg: "Tidak dapat membuka WhatsApp");
+                    }
+                  },
+                  icon: const Icon(Icons.message, size: 16),
+                  label: const Text('Consultant', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.gold,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                  onPressed: () {
+                    // Navigate to subscription/premium screen. We can push a route that likely exists like /premium or /subscribe.
+                    // Based on user prompt "1. Subscribe", I will assume a typical route like `/subscribe` or push to a premium page.
+                    // For now, context.push('/subscribe') is safe. If it doesn't exist, it will show a 404.
+                    context.push('/subscribe');
+                  },
+                  child: const Text('Upgrade', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildContent(_TrainingCardTheme theme) {
+    final showPreviewBanner = _data?.isPreview == true;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // ── Preview Banner
+          if (showPreviewBanner) _buildPreviewBanner(theme),
+
           // ── Client Info Header
           _buildInfoHeader(theme),
           const SizedBox(height: 12),

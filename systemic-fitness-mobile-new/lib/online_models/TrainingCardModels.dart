@@ -3,13 +3,15 @@ class TrainingCardResponse {
   String? notes;
   List<ProgramCategory>? fullProgram;
   List<ProgramCategory>? dailyReset;
+  bool? isPreview;
 
-  TrainingCardResponse({this.level, this.notes, this.fullProgram, this.dailyReset});
+  TrainingCardResponse({this.level, this.notes, this.fullProgram, this.dailyReset, this.isPreview});
 
   factory TrainingCardResponse.fromJson(Map<String, dynamic> json) {
     return TrainingCardResponse(
       level: json['level'],
       notes: json['notes'],
+      isPreview: json['is_preview'],
       fullProgram: json['full_program'] != null
           ? (json['full_program'] as List)
               .map((v) => ProgramCategory.fromJson(v))
