@@ -141,17 +141,17 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
         <div className="lg:col-span-8 space-y-6">
           
           {/* Detail Profil & Edit */}
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-            <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
-              <User className="h-4 w-4 text-sf-deepNavy" /> Detail Profil & Edit
+          <div>
+            <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
+              <User className="h-4 w-4 text-sf-deepNavy" /> Detail Profil
             </h2>
             <ClientInfoCard userId={params.id} user={user} profile={profile} age={age} />
           </div>
 
           {/* Program & Tim Penanganan */}
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
-               <Crown className="h-4 w-4 text-sf-warmGold" /> Program & Tim Penanganan
+          <div>
+             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
+               <Crown className="h-4 w-4 text-sf-warmGold" /> Program & Tim
              </h2>
              <div className="space-y-4">
                <StaffCard customerId={params.id} staff={setup?.staff} />
@@ -160,8 +160,8 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
           </div>
 
           {/* Medis & Biometrik */}
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <div>
+             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
                <Activity className="h-4 w-4 text-rose-500" /> Medis & Biometrik
              </h2>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -176,7 +176,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
         <div className="lg:col-span-4 space-y-6">
            <ClientSubscriptionSection clientId={params.id} clientName={user.full_name} />
            
-           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+           <div className="overflow-hidden">
               <SessionJournalTable customerId={params.id} />
            </div>
         </div>
@@ -234,7 +234,7 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
   const inp = "w-full border border-slate-200 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-sf-warmGold/40";
 
   return (
-    <div className="overflow-hidden border border-slate-100 rounded-xl">
+    <div className="bg-white overflow-hidden border border-slate-200 shadow-sm rounded-xl">
       <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Info Client</span>
         {!editing ? (
@@ -360,7 +360,7 @@ function StaffCard({ customerId, staff }: { customerId: string; staff: any }) {
   const val = "px-3 py-2.5";
 
   return (
-    <div className="overflow-hidden border border-slate-100 rounded-xl">
+    <div className="bg-white overflow-hidden border border-slate-200 shadow-sm rounded-xl">
       <table className="w-full text-sm">
         <tbody>
           {/* Consultant */}
@@ -498,7 +498,7 @@ function HRZoneCard({ customerId, data }: { customerId: string; data: any }) {
   ];
 
   return (
-    <div className="overflow-hidden border border-slate-100 rounded-xl">
+    <div className="bg-white overflow-hidden border border-slate-200 shadow-sm rounded-xl">
       <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">HR Zone</span>
         {!editing ? (
@@ -567,7 +567,7 @@ function MedicinesCard({ customerId, data }: { customerId: string; data: any[] }
   }
 
   return (
-    <div className="overflow-hidden border border-slate-100 rounded-xl h-full flex flex-col">
+    <div className="bg-white overflow-hidden border border-slate-200 shadow-sm rounded-xl h-full flex flex-col">
       <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Daftar Obat</span>
         <button onClick={() => setShowAdd(!showAdd)} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium flex items-center gap-1">
@@ -757,7 +757,7 @@ function ProgramsCard({ customerId, data }: { customerId: string; data: any[] })
   }
 
   return (
-    <div className="overflow-hidden border border-slate-100 rounded-xl">
+    <div className="bg-white overflow-hidden border border-slate-200 shadow-sm rounded-xl">
       <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Program</span>
         <button onClick={() => setShowAdd(!showAdd)} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium flex items-center gap-1">
