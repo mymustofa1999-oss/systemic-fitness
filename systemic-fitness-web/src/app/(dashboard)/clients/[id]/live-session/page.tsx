@@ -112,32 +112,35 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
     
     data.sequences.forEach((seq: any, sIdx: number) => {
       seq.sets?.forEach((set: any, setIdx: number) => {
-        // Find movement details
-        const movement = allMovements.find((m) => m.id === set.movement_id);
-        
-        let videoUrl = null;
-        if (movement) {
-          videoUrl = clientGender === "male" ? movement.video_url_male : movement.video_url_female;
-          // fallback if preferred gender video is missing
-          if (!videoUrl) videoUrl = movement.video_url_male || movement.video_url_female;
-        }
+        set.items?.forEach((item: any, itemIdx: number) => {
+          // Find movement details
+          const movement = allMovements.find((m) => m.id === item.movement_id);
+          
+          let videoUrl = null;
+          if (movement) {
+            videoUrl = clientGender === "male" ? movement.video_url_male : movement.video_url_female;
+            // fallback if preferred gender video is missing
+            if (!videoUrl) videoUrl = movement.video_url_male || movement.video_url_female;
+          }
 
-        items.push({
-          id: `${sIdx}-${setIdx}`,
-          sequenceName: seq.name || `Bagian ${sIdx + 1}`,
-          movementName: movement?.name || "Gerakan tidak diketahui",
-          videoUrl,
-          reps: set.parameter_reps || "-",
-          sets: set.parameter_sets || "-",
-          duration: set.parameter_duration || "-",
-          rest: set.parameter_rest || "-",
-          bpm: (set.bpm_lower && set.bpm_upper) ? `${set.bpm_lower}-${set.bpm_upper}` : "-",
-          beban: (set.beban_lower_value && set.beban_upper_value) ? `${set.beban_lower_value}-${set.beban_upper_value}` : "-",
-          isLevel1: !!set.breathing_core,
-          breathing_core: set.breathing_core,
-          breathing_diaphragm: set.breathing_diaphragm,
-          seqIndex: sIdx,
-          setIndex: setIdx
+          items.push({
+            id: `${sIdx}-${setIdx}-${itemIdx}`,
+            sequenceName: seq.name || `Bagian ${sIdx + 1}`,
+            movementName: movement?.name || item.movement_name || "Gerakan tidak diketahui",
+            videoUrl,
+            reps: item.reps || set.parameter_reps || "-",
+            sets: item.sets_count || set.parameter_sets || "-",
+            duration: set.duration || set.parameter_duration || "-",
+            rest: set.parameter_rest || "-",
+            bpm: set.bpm || ((set.bpm_lower && set.bpm_upper) ? `${set.bpm_lower}-${set.bpm_upper}` : "-"),
+            beban: item.extra_load || set.extra_load || ((set.beban_lower_value && set.beban_upper_value) ? `${set.beban_lower_value}-${set.beban_upper_value}` : "-"),
+            isLevel1: !!set.breathing_core,
+            breathing_core: set.breathing_core || "-",
+            breathing_diaphragm: set.breathing_diaphragm || "-",
+            seqIndex: sIdx,
+            setIndex: setIdx,
+            itemIndex: itemIdx
+          });
         });
       });
     });
