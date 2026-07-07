@@ -89,6 +89,17 @@ function EndSessionModal({ isOpen, onClose, onFinish, isTrainer }: { isOpen: boo
   );
 }
 
+function extractYouTubeId(url: string): string | null {
+  if (!url) return null;
+  const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+  if (shortMatch) return shortMatch[1];
+  const longMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+  if (longMatch) return longMatch[1];
+  const embedMatch = url.match(/embed\/([a-zA-Z0-9_-]{11})/);
+  if (embedMatch) return embedMatch[1];
+  return null;
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────
 export default function LiveSessionPage({ params }: { params: { id: string } }) {
   const customerId = params.id;
@@ -182,16 +193,27 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
         {/* VIDEO PLAYER AREA */}
         <div className="aspect-video bg-black relative flex items-center justify-center">
           {currentItem.videoUrl ? (
-            <video 
-              key={currentItem.videoUrl} 
-              src={currentItem.videoUrl} 
-              className="w-full h-full object-contain"
-              controls
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
+            extractYouTubeId(currentItem.videoUrl) ? (
+              <iframe
+                key={currentItem.videoUrl}
+                src={`https://www.youtube.com/embed/${extractYouTubeId(currentItem.videoUrl)}?autoplay=1&mute=1&loop=1&playlist=${extractYouTubeId(currentItem.videoUrl)}`}
+                title={currentItem.movementName}
+                className="w-full h-full object-contain"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <video 
+                key={currentItem.videoUrl} 
+                src={currentItem.videoUrl} 
+                className="w-full h-full object-contain"
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+            )
           ) : (
             <div className="flex flex-col items-center justify-center text-slate-400 space-y-3">
               <Video className="w-16 h-16 opacity-30" />
