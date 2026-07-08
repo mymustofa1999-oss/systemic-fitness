@@ -1465,11 +1465,9 @@ function MovementSelect({
 
   if (selectedPatterns && selectedPatterns.length > 0) {
     filtered = filtered.filter(m => {
-      const p = (m.pattern || "").toLowerCase();
+      const p = (m.pattern || "").trim().toLowerCase();
       if (!p) return false;
-      return selectedPatterns.some(sp => 
-        sp.toLowerCase().includes(p) || p.includes(sp.toLowerCase())
-      );
+      return selectedPatterns.some(sp => sp.trim().toLowerCase() === p);
     });
   }
   const customLabel = item.movement_name || "";
