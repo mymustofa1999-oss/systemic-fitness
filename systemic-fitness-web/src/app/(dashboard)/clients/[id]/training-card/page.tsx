@@ -455,9 +455,22 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     })), [types]);
 
   const movementOptions = useMemo(() =>
-    movements.map((m: any) => ({
+    movements
+      .filter((m: any) => {
+        // Find the active level (either from form during edit, or the default parsed level)
+        const currentLevelStr = form?.level || String(parsedMappedLevel);
+        const cardLevelMatch = currentLevelStr.match(/\d+/);
+        const cardLevelNum = cardLevelMatch ? parseInt(cardLevelMatch[0]) : 1;
+        
+        // If m.level exists, it must match. If it doesn't exist, we keep it to not break old data.
+        if (m.level != null && m.level !== cardLevelNum) {
+          return false;
+        }
+        return true;
+      })
+      .map((m: any) => ({
       value: m.id, label: m.name, sublabel: m.body_part, pattern: m.pattern,
-    })), [movements]);
+    })), [movements, form?.level, parsedMappedLevel]);
 
   // Build a map for quick lookup of movement name by id
   const movementMap = useMemo(() => {
@@ -1467,7 +1480,9 @@ function MovementSelect({
     filtered = filtered.filter(m => {
       const p = (m.pattern || "").trim().toLowerCase();
       if (!p) return false;
-      return selectedPatterns.some(sp => sp.trim().toLowerCase() === p);
+      return selectedPatterns.some(sp => 
+        sp.toLowerCase().includes(p) || p.includes(sp.toLowerCase())
+      );
     });
   }
   const customLabel = item.movement_name || "";

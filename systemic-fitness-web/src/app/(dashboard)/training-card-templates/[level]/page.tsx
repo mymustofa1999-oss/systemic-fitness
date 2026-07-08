@@ -173,9 +173,18 @@ export default function TemplateEditorPage({ params }: { params: { level: string
     })), [types]);
 
   const movementOptions = useMemo(() =>
-    movements.map((m: any) => ({
+    movements
+      .filter((m: any) => {
+        const cardLevelMatch = levelStr.match(/\d+/);
+        const cardLevelNum = cardLevelMatch ? parseInt(cardLevelMatch[0]) : 1;
+        if (m.level != null && m.level !== cardLevelNum) {
+          return false;
+        }
+        return true;
+      })
+      .map((m: any) => ({
       value: m.id, label: m.name, sublabel: m.body_part, pattern: m.pattern || "",
-    })), [movements]);
+    })), [movements, levelStr]);
 
   const movementMap = useMemo(() => {
     const map: Record<string, string> = {};
@@ -1111,7 +1120,9 @@ function MovementSelect({
     filtered = filtered.filter(m => {
       const p = (m.pattern || "").trim().toLowerCase();
       if (!p) return false;
-      return selectedPatterns.some(sp => sp.trim().toLowerCase() === p);
+      return selectedPatterns.some(sp => 
+        sp.toLowerCase().includes(p) || p.includes(sp.toLowerCase())
+      );
     });
   }
   const customLabel = item.movement_name || "";
