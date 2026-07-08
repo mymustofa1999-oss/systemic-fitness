@@ -9,6 +9,8 @@ export interface SearchableSelectOption {
   value: string;
   label: string;
   sublabel?: string;
+  section?: string;
+  extractedCategory?: string;
 }
 
 interface SearchableSelectProps {
@@ -100,34 +102,52 @@ export function SearchableSelect({
             </div>
           </div>
 
-          {/* Options list */}
-          <div className="max-h-52 overflow-y-auto">
+          {/* Options */}
+          <div className="max-h-[250px] overflow-y-auto py-1 custom-scrollbar">
             {filtered.length === 0 ? (
-              <div className="px-3 py-4 text-center text-xs text-slate-400">
+              <div className="px-3 py-2 text-sm text-slate-500 text-center">
                 Tidak ditemukan
               </div>
             ) : (
-              filtered.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => { onChange(option.value); setOpen(false); }}
-                  className={cn(
-                    "w-full px-3 py-2 text-left text-sm hover:bg-sf-iceBlue transition-colors flex items-center justify-between",
-                    option.value === value && "bg-sf-iceBlue text-sf-deepNavy font-medium"
-                  )}
-                >
-                  <div className="min-w-0">
-                    <span className="block truncate">{option.label}</span>
-                    {option.sublabel && (
-                      <span className="block text-xs text-slate-400 truncate">{option.sublabel}</span>
+              (() => {
+                // Group options by section
+                const grouped = filtered.reduce((acc, opt) => {
+                  const section = opt.section || "";
+                  if (!acc[section]) acc[section] = [];
+                  acc[section].push(opt);
+                  return acc;
+                }, {} as Record<string, SearchableSelectOption[]>);
+                
+                return Object.entries(grouped).map(([section, opts]) => (
+                  <div key={section}>
+                    {section && (
+                      <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50 sticky top-0">
+                        {section}
+                      </div>
                     )}
+                    {opts.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => {
+                          onChange(option.value);
+                          setOpen(false);
+                        }}
+                        className={cn(
+                          "w-full text-left px-3 py-2 text-sm hover:bg-slate-50 transition-colors flex flex-col",
+                          value === option.value && "bg-sf-warmGold/10 text-sf-deepNavy font-medium",
+                          !option.sublabel && "items-start justify-center h-[36px]" // Better alignment for single-line
+                        )}
+                      >
+                        <span className="truncate w-full">{option.label}</span>
+                        {option.sublabel && (
+                          <span className="text-[10px] text-slate-500 mt-0.5">{option.sublabel}</span>
+                        )}
+                      </button>
+                    ))}
                   </div>
-                  {option.value === value && (
-                    <span className="text-sf-deepNavy shrink-0 ml-2">✓</span>
-                  )}
-                </button>
-              ))
+                ));
+              })()
             )}
           </div>
         </Popover.Content>

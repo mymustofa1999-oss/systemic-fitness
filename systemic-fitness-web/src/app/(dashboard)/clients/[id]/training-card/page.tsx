@@ -457,20 +457,37 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const movementOptions = useMemo(() =>
     movements
       .filter((m: any) => {
+        // Extract category and level from name like "Glute Bridge (MC - Level 6)"
+        const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
+        const mLevel = nameMatch ? parseInt(nameMatch[2]) : null;
+        const effectiveLevel = mLevel !== null ? mLevel : m.level;
+
         // Find the active level (either from form during edit, or the default parsed level)
         const currentLevelStr = form?.level || String(parsedMappedLevel);
         const cardLevelMatch = currentLevelStr.match(/\d+/);
         const cardLevelNum = cardLevelMatch ? parseInt(cardLevelMatch[0]) : 1;
         
-        // If m.level exists, it must match. If it doesn't exist, we keep it to not break old data.
-        if (m.level != null && m.level !== cardLevelNum) {
+        // If effectiveLevel exists, it must match.
+        if (effectiveLevel != null && effectiveLevel !== cardLevelNum) {
           return false;
         }
         return true;
       })
-      .map((m: any) => ({
-      value: m.id, label: m.name, sublabel: m.body_part, pattern: m.pattern,
-    })), [movements, form?.level, parsedMappedLevel]);
+      .map((m: any) => {
+        const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
+        const mCategory = nameMatch ? nameMatch[1].toUpperCase() : "";
+        const mLevel = nameMatch ? parseInt(nameMatch[2]) : "";
+        const sectionName = nameMatch ? `${mCategory} - Level ${mLevel}` : (m.pattern ? "Pola: " + m.pattern : "Lainnya");
+
+        return {
+          value: m.id, 
+          label: m.name, 
+          sublabel: m.body_part, 
+          pattern: m.pattern, 
+          section: sectionName,
+          extractedCategory: mCategory
+        };
+      }), [movements, form?.level, parsedMappedLevel]);
 
   // Build a map for quick lookup of movement name by id
   const movementMap = useMemo(() => {
@@ -1463,7 +1480,7 @@ function SetBlock({
 function MovementSelect({
   options, movementMap, item, bodyPart, selectedPatterns, onUpdate
 }: {
-  options: { value: string; label: string; sublabel?: string; pattern?: string | null }[];
+  options: { value: string; label: string; sublabel?: string; pattern?: string | null; section?: string; extractedCategory?: string }[];
   movementMap: Record<string, string>;
   item: CardItem;
   bodyPart: string;
@@ -1478,11 +1495,17 @@ function MovementSelect({
 
   if (selectedPatterns && selectedPatterns.length > 0) {
     filtered = filtered.filter(m => {
-      const p = (m.pattern || "").trim().toLowerCase();
-      if (!p) return false;
-      return selectedPatterns.some(sp => 
-        sp.toLowerCase().includes(p) || p.includes(sp.toLowerCase())
-      );
+      const p = ((m as any).pattern || "").trim().toLowerCase();
+      const c = ((m as any).extractedCategory || "").trim().toLowerCase();
+      
+      return selectedPatterns.some(sp => {
+        const spLower = sp.toLowerCase();
+        // Exact or partial match on DB pattern
+        if (p && (spLower.includes(p) || p.includes(spLower))) return true;
+        // Fallback match on extracted category (e.g. "isolate cc" includes "cc")
+        if (c && spLower.includes(c)) return true;
+        return false;
+      });
     });
   }
   const customLabel = item.movement_name || "";
