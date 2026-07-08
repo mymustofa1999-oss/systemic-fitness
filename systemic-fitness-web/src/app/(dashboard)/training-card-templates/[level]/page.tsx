@@ -1127,11 +1127,7 @@ function MovementSelect({
   selectedPatterns: string[];
   onUpdate: (p: Partial<CardItem>) => void;
 }) {
-  let filtered = options.filter(m => {
-    const sub = (m.sublabel || "").toLowerCase();
-    const bp = (bodyPart || "").toLowerCase();
-    return sub === bp || sub === "whole body";
-  });
+  let filtered = [...options];
 
   if (selectedPatterns && selectedPatterns.length > 0) {
     filtered = filtered.filter(m => {
@@ -1140,11 +1136,17 @@ function MovementSelect({
       
       return selectedPatterns.some(sp => {
         const spLower = sp.toLowerCase();
-        // Exact or partial match on DB pattern
-        if (p && (spLower.includes(p) || p.includes(spLower))) return true;
-        // Fallback match on extracted category
-        if (c && spLower.includes(c)) return true;
-        return false;
+        
+        let match = false;
+        if (p) {
+          if (!spLower.includes(p) && !p.includes(spLower)) return false;
+          match = true;
+        }
+        if (c) {
+          if (!spLower.includes(c)) return false;
+          match = true;
+        }
+        return match;
       });
     });
   }
@@ -1159,15 +1161,17 @@ function MovementSelect({
       <SearchableSelect
         options={allOpts}
         value={item.movement_id || (customLabel ? "__custom" : "")}
-        onChange={(v) => {
-          if (v === "__custom" || v === "") {
+        onChange={(val) => {
+          if (val === "__custom" || val === "") {
             onUpdate({ movement_id: null });
           } else {
-            onUpdate({ movement_id: v, movement_name: movementMap[v] || "" });
+            const selectedOpt = allOpts.find(o => o.value === val);
+            const bp = selectedOpt?.sublabel || "upper";
+            onUpdate({ movement_id: val, movement_name: movementMap[val] || "", body_part: bp });
           }
         }}
         placeholder="Pilih gerakan..."
-        searchPlaceholder={`Cari ${bodyPart}...`}
+        searchPlaceholder="Cari gerakan..."
       />
       {!item.movement_id && (
         <input
