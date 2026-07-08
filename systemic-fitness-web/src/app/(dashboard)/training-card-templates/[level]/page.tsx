@@ -175,7 +175,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
   const movementOptions = useMemo(() =>
     movements
       .filter((m: any) => {
-        const cardLevelMatch = levelStr.match(/\d+/);
+        const cardLevelMatch = params.level.match(/\d+/);
         const cardLevelNum = cardLevelMatch ? parseInt(cardLevelMatch[0]) : 1;
         if (m.level != null && m.level !== cardLevelNum) {
           return false;
@@ -184,7 +184,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
       })
       .map((m: any) => ({
       value: m.id, label: m.name, sublabel: m.body_part, pattern: m.pattern || "",
-    })), [movements, levelStr]);
+    })), [movements, params.level]);
 
   const movementMap = useMemo(() => {
     const map: Record<string, string> = {};
