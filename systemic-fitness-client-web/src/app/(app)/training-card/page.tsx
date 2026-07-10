@@ -2,10 +2,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { apiGet } from "@/lib/api";
-import { Dumbbell, Info, Loader2, Lock, Music, Pause, Play, X, Clock } from "lucide-react";
+import { Dumbbell, Info, Loader2, Lock, Music, Pause, Play, X, Clock, Check } from "lucide-react";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useMySubscription } from "@/hooks/useSubscription";
-import { useLogWorkoutSession } from "@/hooks/useWorkout";
+import { useLogWorkoutSession, useWorkoutSessions } from "@/hooks/useWorkout";
 import Link from "next/link";
 import { toast } from "@/stores/toastStore";
 import { useRouter } from "next/navigation";
@@ -166,6 +166,7 @@ interface ProfileHeaderProps {
   assessment: any;
   session: "full" | "daily";
   lang: string;
+  sessions?: any[];
 }
 
 function ProfileHeader({
@@ -175,6 +176,7 @@ function ProfileHeader({
   assessment,
   session,
   lang,
+  sessions = [],
 }: ProfileHeaderProps) {
   const getAge = (dobString?: string) => {
     if (!dobString) return null;
@@ -225,6 +227,41 @@ function ProfileHeader({
     ? (CONDITION_LABELS[specificConditionSlug] || formatSlug(specificConditionSlug))
     : null;
 
+  const getWeekDaysDates = () => {
+    const now = new Date();
+    const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - dayOfWeek + 1);
+    startOfWeek.setHours(0, 0, 0, 0);
+    const dates = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(startOfWeek);
+      d.setDate(startOfWeek.getDate() + i);
+      dates.push(d);
+    }
+    return dates;
+  };
+
+  const currentWeekDates = useMemo(() => getWeekDaysDates(), []);
+
+  const trainedDays = useMemo(() => {
+    const trained = new Set<number>();
+    sessions.forEach(s => {
+      if (s.completed_at) {
+        const d = new Date(s.completed_at);
+        const idx = currentWeekDates.findIndex(cwd => 
+          cwd.getFullYear() === d.getFullYear() &&
+          cwd.getMonth() === d.getMonth() &&
+          cwd.getDate() === d.getDate()
+        );
+        if (idx !== -1) {
+          trained.add(idx);
+        }
+      }
+    });
+    return trained;
+  }, [sessions, currentWeekDates]);
+
   const dayLabels = lang === "en"
     ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     : ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
@@ -232,10 +269,10 @@ function ProfileHeader({
   const weekDays = [
     { label: dayLabels[0], type: "60", val: "60'" },
     { label: dayLabels[1], type: "rest", val: "" },
-    { label: dayLabels[2], type: "30", val: "30'" },
+    { label: dayLabels[2], type: "60", val: "60'" },
     { label: dayLabels[3], type: "rest", val: "" },
     { label: dayLabels[4], type: "60", val: "60'" },
-    { label: dayLabels[5], type: "30", val: "30'" },
+    { label: dayLabels[5], type: "rest", val: "" },
     { label: dayLabels[6], type: "rest", val: "" }
   ];
 
@@ -361,31 +398,27 @@ function ProfileHeader({
         >
           {weekDays.map((day, idx) => {
             const is60 = day.type === "60";
-            const is30 = day.type === "30";
             const isRest = day.type === "rest";
-
-            const isActive60 = is60 && session === "full";
-            const isActive30 = is30 && session === "daily";
-            const isActive = isActive60 || isActive30;
+            const hasTrained = trainedDays.has(idx);
 
             let borderStyle = "1px solid var(--tc-border)";
             let bgStyle = "transparent";
             let colorStyle = "var(--tc-text-muted)";
             let shadowStyle = "none";
 
-            if (isRest) {
+            if (hasTrained) {
+              borderStyle = "1px solid #10b981";
+              bgStyle = "#10b98115";
+              colorStyle = "#10b981";
+              shadowStyle = "0 0 0 2px var(--tc-bg), 0 0 0 4px #10b981";
+            } else if (is60) {
+              borderStyle = "1px solid var(--tc-gold-border)";
+              bgStyle = "transparent";
+              colorStyle = "var(--tc-gold-dim)";
+              shadowStyle = "none";
+            } else {
               borderStyle = "1px solid var(--tc-border)";
               bgStyle = "transparent";
-            } else if (is60) {
-              borderStyle = `1px solid ${isActive ? "var(--tc-gold)" : "var(--tc-gold-border)"}`;
-              bgStyle = isActive ? "var(--tc-gold-bg)" : "transparent";
-              colorStyle = isActive ? "var(--tc-gold)" : "var(--tc-gold-dim)";
-              shadowStyle = isActive ? "0 0 0 2px var(--tc-bg), 0 0 0 4px var(--tc-gold)" : "none";
-            } else if (is30) {
-              borderStyle = `1px solid ${isActive ? "#10b981" : "#10b98133"}`;
-              bgStyle = isActive ? "#10b98115" : "#10b98105";
-              colorStyle = "#10b981";
-              shadowStyle = isActive ? "0 0 0 2px var(--tc-bg), 0 0 0 4px var(--tc-gold)" : "none";
             }
 
             return (
@@ -405,7 +438,6 @@ function ProfileHeader({
                     border: borderStyle,
                     background: bgStyle,
                     color: colorStyle,
-                    boxShadow: shadowStyle,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
