@@ -158,16 +158,26 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, [status, router]);
 
   useEffect(() => {
-    if (status === "authenticated" && !isLayoutLoading && isFree && isProfileComplete) {
-      // Free clients may still open the Training Card (shows the shared free program).
-      const isAllowed = pathname.startsWith("/training-card") || (hasAssessment
-        ? (pathname.startsWith("/dashboard") || pathname.startsWith("/profile") || pathname.startsWith("/assessment/result"))
-        : (pathname.startsWith("/assessment") || pathname.startsWith("/profile")));
+    if (status === "authenticated" && !isLayoutLoading && isProfileComplete) {
+      let isAllowed = true;
+
+      if (!hasAssessment) {
+        // If no assessment, they cannot access training card or assessment results
+        if (pathname.startsWith("/training-card") || pathname.startsWith("/assessment/result")) {
+          isAllowed = false;
+        }
+      } else {
+        // If they already have an assessment, they shouldn't access the assessment taking pages
+        if (pathname === "/assessment" || pathname.startsWith("/assessment/phase")) {
+          isAllowed = false;
+        }
+      }
+
       if (!isAllowed) {
         router.replace(hasAssessment ? "/dashboard" : "/assessment");
       }
     }
-  }, [status, isLayoutLoading, isFree, hasAssessment, isProfileComplete, pathname, router]);
+  }, [status, isLayoutLoading, hasAssessment, isProfileComplete, pathname, router]);
 
   // Loading state
   if (status === "loading" || (status === "authenticated" && isLayoutLoading)) {
