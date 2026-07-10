@@ -1548,6 +1548,15 @@ function MovementSelect({
 }) {
   let filtered = [...options];
 
+  if (bodyPart) {
+    const bpLower = bodyPart.toLowerCase();
+    filtered = filtered.filter(m => {
+      const mSub = (m.sublabel || "").trim().toLowerCase();
+      // Tampilkan gerakan yang sesuai body_part atau yang body_part nya kosong (opsional)
+      return mSub === bpLower || mSub === "";
+    });
+  }
+
   if (selectedPatterns && selectedPatterns.length > 0) {
     filtered = filtered.filter(m => {
       const p = ((m as any).pattern || "").trim().toLowerCase();
