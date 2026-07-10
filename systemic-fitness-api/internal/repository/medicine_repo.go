@@ -28,20 +28,27 @@ type Medicine struct {
 	SideEffects  *string   `json:"side_effects,omitempty"`
 	DetailURL    *string   `json:"detail_url,omitempty"`
 	ImageURL     *string   `json:"image_url,omitempty"`
-	IsSystem     bool      `json:"is_system"`
-	CreatedBy    *string   `json:"created_by,omitempty"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	IsSystem             bool      `json:"is_system"`
+	CreatedBy            *string   `json:"created_by,omitempty"`
+	ActiveIngredient     *string   `json:"active_ingredient,omitempty"`
+	ExerciseImplications *string   `json:"exercise_implications,omitempty"`
+	ExerciseAdjustments  *string   `json:"exercise_adjustments,omitempty"`
+	FlagLevel            *string   `json:"flag_level,omitempty"`
+	CreatedAt            time.Time `json:"created_at"`
+	UpdatedAt            time.Time `json:"updated_at"`
 }
 
 const medicineCols = `id, name, category, main_function, side_effects, detail_url,
-	image_url, is_system, created_by, created_at, updated_at`
+	image_url, is_system, created_by, active_ingredient, exercise_implications,
+	exercise_adjustments, flag_level, created_at, updated_at`
 
 func scanMedicine(row pgx.Row) (*Medicine, error) {
 	m := &Medicine{}
 	err := row.Scan(
 		&m.ID, &m.Name, &m.Category, &m.MainFunction, &m.SideEffects,
-		&m.DetailURL, &m.ImageURL, &m.IsSystem, &m.CreatedBy, &m.CreatedAt, &m.UpdatedAt,
+		&m.DetailURL, &m.ImageURL, &m.IsSystem, &m.CreatedBy,
+		&m.ActiveIngredient, &m.ExerciseImplications, &m.ExerciseAdjustments, &m.FlagLevel,
+		&m.CreatedAt, &m.UpdatedAt,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, ErrNotFound
@@ -51,12 +58,13 @@ func scanMedicine(row pgx.Row) (*Medicine, error) {
 
 func (r *MedicineRepository) Create(ctx context.Context, m *Medicine) error {
 	query := `
-		INSERT INTO medicines (name, category, main_function, side_effects, detail_url, image_url, is_system, created_by)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		INSERT INTO medicines (name, category, main_function, side_effects, detail_url, image_url, is_system, created_by, active_ingredient, exercise_implications, exercise_adjustments, flag_level)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 		RETURNING id, created_at, updated_at`
 	return r.db.QueryRow(ctx, query,
 		m.Name, m.Category, m.MainFunction, m.SideEffects,
 		m.DetailURL, m.ImageURL, m.IsSystem, m.CreatedBy,
+		m.ActiveIngredient, m.ExerciseImplications, m.ExerciseAdjustments, m.FlagLevel,
 	).Scan(&m.ID, &m.CreatedAt, &m.UpdatedAt)
 }
 
@@ -68,12 +76,15 @@ func (r *MedicineRepository) Update(ctx context.Context, m *Medicine) error {
 	query := `
 		UPDATE medicines SET
 			name = $2, category = $3, main_function = $4,
-			side_effects = $5, detail_url = $6, image_url = $7
+			side_effects = $5, detail_url = $6, image_url = $7,
+			active_ingredient = $8, exercise_implications = $9,
+			exercise_adjustments = $10, flag_level = $11
 		WHERE id = $1
 		RETURNING updated_at`
 	err := r.db.QueryRow(ctx, query,
 		m.ID, m.Name, m.Category, m.MainFunction,
 		m.SideEffects, m.DetailURL, m.ImageURL,
+		m.ActiveIngredient, m.ExerciseImplications, m.ExerciseAdjustments, m.FlagLevel,
 	).Scan(&m.UpdatedAt)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return ErrNotFound
@@ -133,7 +144,9 @@ func (r *MedicineRepository) List(ctx context.Context, params model.PaginationPa
 		var m Medicine
 		if err := rows.Scan(
 			&m.ID, &m.Name, &m.Category, &m.MainFunction, &m.SideEffects,
-			&m.DetailURL, &m.ImageURL, &m.IsSystem, &m.CreatedBy, &m.CreatedAt, &m.UpdatedAt,
+			&m.DetailURL, &m.ImageURL, &m.IsSystem, &m.CreatedBy,
+			&m.ActiveIngredient, &m.ExerciseImplications, &m.ExerciseAdjustments, &m.FlagLevel,
+			&m.CreatedAt, &m.UpdatedAt,
 		); err != nil {
 			return nil, 0, err
 		}

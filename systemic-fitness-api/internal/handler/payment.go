@@ -135,6 +135,28 @@ func (h *PaymentHandler) UpdatePlan(w http.ResponseWriter, r *http.Request) {
 
 // ── Subscriptions ───────────────────────────────────────────────
 
+// PUT /api/payments/subscriptions/{id}/attachment
+func (h *PaymentHandler) UpdateSubscriptionAttachment(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		response.BadRequest(w, "Missing subscription ID")
+		return
+	}
+	var req struct {
+		AttachmentURL *string `json:"attachment_url"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		response.BadRequest(w, "Invalid payload")
+		return
+	}
+	if err := h.paymentService.UpdateSubscriptionAttachment(r.Context(), id, req.AttachmentURL); err != nil {
+		slog.Error("[Payment.UpdateSubscriptionAttachment] failed", "error", err)
+		response.InternalError(w, "Failed to update attachment")
+		return
+	}
+	response.SuccessMessage(w, "Attachment updated")
+}
+
 // GET /api/payments/subscriptions?status=active&plan_id=uuid&page=1&limit=20
 func (h *PaymentHandler) ListSubscriptions(w http.ResponseWriter, r *http.Request) {
 	params := paginationFromQuery(r)

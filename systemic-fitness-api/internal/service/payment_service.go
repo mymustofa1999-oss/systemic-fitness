@@ -89,6 +89,15 @@ func (s *PaymentService) ListSubscriptions(ctx context.Context, params model.Pag
 	return subs, model.NewPaginationMeta(params.Page, params.Limit, total), nil
 }
 
+func (s *PaymentService) UpdateSubscriptionAttachment(ctx context.Context, id string, attachmentURL *string) error {
+	if err := s.paymentRepo.UpdateSubscriptionAttachment(ctx, id, attachmentURL); err != nil {
+		s.logger.Error("update subscription attachment", "id", id, "error", err)
+		return err
+	}
+	s.logger.Info("subscription attachment updated", "id", id)
+	return nil
+}
+
 // ═══════════════════════════════════════════════════════════════
 //  Payment Records
 // ═══════════════════════════════════════════════════════════════

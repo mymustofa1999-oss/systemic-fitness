@@ -60,7 +60,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     profile.date_of_birth !== "" &&
     profile.gender !== "" &&
     profile.weight_kg > 0 &&
-    profile.height_cm > 0
+    profile.height_cm > 0 &&
+    profile.regional &&
+    profile.city &&
+    profile.regional !== "" &&
+    profile.city !== ""
   );
 
   const hasAssessment = !!assessmentRes?.data;
@@ -70,6 +74,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [gender, setGender] = useState("");
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
+  const [regional, setRegional] = useState("");
+  const [city, setCity] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [lang, setLang] = useState("id");
@@ -97,6 +103,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       weightPlaceholder: "Contoh: 70.5",
       height: "Tinggi Badan (cm)",
       heightPlaceholder: "Contoh: 170",
+      regional: "Regional",
+      regionalPlaceholder: "Contoh: Jabodetabek / Jawa Barat",
+      city: "Asal Kota",
+      cityPlaceholder: "Contoh: Jakarta Selatan",
       saving: "Menyimpan...",
       saveBtn: "Simpan & Lanjutkan",
       errorRequired: "Mohon lengkapi semua data.",
@@ -116,6 +126,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       weightPlaceholder: "Example: 70.5",
       height: "Height (cm)",
       heightPlaceholder: "Example: 170",
+      regional: "Regional",
+      regionalPlaceholder: "Example: Jabodetabek",
+      city: "City of Origin",
+      cityPlaceholder: "Example: South Jakarta",
       saving: "Saving...",
       saveBtn: "Save & Continue",
       errorRequired: "Please complete all fields.",
@@ -132,6 +146,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       if (profile.gender) setGender(profile.gender);
       if (profile.weight_kg) setWeight(profile.weight_kg.toString());
       if (profile.height_cm) setHeight(profile.height_cm.toString());
+      if (profile.regional) setRegional(profile.regional);
+      if (profile.city) setCity(profile.city);
     }
   }, [profile]);
 
@@ -175,7 +191,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (status === "authenticated" && !isLayoutLoading && !isProfileComplete) {
     const handleProfileSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!dob || !gender || !weight || !height) {
+      if (!dob || !gender || !weight || !height || !regional || !city) {
         setSubmitError(t.errorRequired);
         return;
       }
@@ -197,6 +213,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           gender: gender,
           weight_kg: weightNum,
           height_cm: heightNum,
+          regional: regional,
+          city: city,
         });
         refetchProfile();
       } catch (err: any) {
@@ -289,6 +307,34 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   placeholder={t.heightPlaceholder}
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
+                  className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                  {t.regional}
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder={t.regionalPlaceholder}
+                  value={regional}
+                  onChange={(e) => setRegional(e.target.value)}
+                  className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                  {t.city}
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder={t.cityPlaceholder}
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
                   className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
                 />
               </div>

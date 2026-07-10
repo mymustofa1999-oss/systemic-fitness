@@ -147,19 +147,25 @@ func (r *CustomerSetupRepository) UpsertHRZone(ctx context.Context, z *CustomerH
 // ═══════════════════════════════════════════════════════════════
 
 type CustomerMedicine struct {
-	ID           string    `json:"id"`
-	CustomerID   string    `json:"customer_id"`
-	MedicineID   string    `json:"medicine_id"`
-	MedicineName string    `json:"medicine_name,omitempty"`
-	Category     *string   `json:"category,omitempty"`
-	Notes        *string   `json:"notes,omitempty"`
-	IsActive     bool      `json:"is_active"`
-	CreatedAt    time.Time `json:"created_at"`
+	ID                   string    `json:"id"`
+	CustomerID           string    `json:"customer_id"`
+	MedicineID           string    `json:"medicine_id"`
+	MedicineName         string    `json:"medicine_name,omitempty"`
+	Category             *string   `json:"category,omitempty"`
+	ActiveIngredient     *string   `json:"active_ingredient,omitempty"`
+	ExerciseImplications *string   `json:"exercise_implications,omitempty"`
+	ExerciseAdjustments  *string   `json:"exercise_adjustments,omitempty"`
+	FlagLevel            *string   `json:"flag_level,omitempty"`
+	Notes                *string   `json:"notes,omitempty"`
+	IsActive             bool      `json:"is_active"`
+	CreatedAt            time.Time `json:"created_at"`
 }
 
 func (r *CustomerSetupRepository) ListCustomerMedicines(ctx context.Context, customerID string) ([]CustomerMedicine, error) {
 	query := `
-		SELECT cm.id, cm.customer_id, cm.medicine_id, m.name, m.category, cm.notes, cm.is_active, cm.created_at
+		SELECT cm.id, cm.customer_id, cm.medicine_id, m.name, m.category, 
+		       m.active_ingredient, m.exercise_implications, m.exercise_adjustments, m.flag_level,
+		       cm.notes, cm.is_active, cm.created_at
 		FROM customer_medicines cm
 		JOIN medicines m ON m.id = cm.medicine_id
 		WHERE cm.customer_id = $1
@@ -173,7 +179,11 @@ func (r *CustomerSetupRepository) ListCustomerMedicines(ctx context.Context, cus
 	items := make([]CustomerMedicine, 0)
 	for rows.Next() {
 		var cm CustomerMedicine
-		if err := rows.Scan(&cm.ID, &cm.CustomerID, &cm.MedicineID, &cm.MedicineName, &cm.Category, &cm.Notes, &cm.IsActive, &cm.CreatedAt); err != nil {
+		if err := rows.Scan(
+			&cm.ID, &cm.CustomerID, &cm.MedicineID, &cm.MedicineName, &cm.Category,
+			&cm.ActiveIngredient, &cm.ExerciseImplications, &cm.ExerciseAdjustments, &cm.FlagLevel,
+			&cm.Notes, &cm.IsActive, &cm.CreatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, cm)

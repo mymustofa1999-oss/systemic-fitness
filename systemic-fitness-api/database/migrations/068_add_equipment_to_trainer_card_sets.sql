@@ -1,0 +1,1 @@
+ALTER TABLE trainer_card_sets ADD COLUMN IF NOT EXISTS equipment VARCHAR(200);

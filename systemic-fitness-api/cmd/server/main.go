@@ -484,6 +484,7 @@ func main() {
 				r.Patch("/{id}/status", paymentHandler.UpdatePaymentStatus)
 				r.Get("/{id}/logs", paymentHandler.ListPaymentLogs)
 				r.Get("/subscriptions", paymentHandler.ListSubscriptions)
+				r.Put("/subscriptions/{id}/attachment", paymentHandler.UpdateSubscriptionAttachment)
 				r.Post("/subscriptions", paymentHandler.CreateManualSubscription)
 				r.Get("/reports", paymentHandler.FinancialReport)
 				r.Route("/plans", func(r chi.Router) {
@@ -758,6 +759,7 @@ func main() {
 			// ── Medicines (Daftar Obat) ─────────────────────
 			r.Route("/medicines", func(r chi.Router) {
 				r.Get("/", medicineHandler.List)
+				r.Get("/me", customerSetupHandler.GetMyMedicines) // Client's own medicines
 				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Post("/", medicineHandler.Create)
 				r.Route("/{id}", func(r chi.Router) {
 					r.Get("/", medicineHandler.GetByID)

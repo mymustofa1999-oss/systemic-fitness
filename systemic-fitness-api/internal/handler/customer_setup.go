@@ -9,6 +9,7 @@ import (
 
 	"github.com/fitcoach/api/internal/repository"
 	"github.com/fitcoach/api/internal/service"
+	"github.com/fitcoach/api/internal/middleware"
 	"github.com/fitcoach/api/pkg/response"
 )
 
@@ -178,6 +179,21 @@ func (h *CustomerSetupHandler) ListMedicines(w http.ResponseWriter, r *http.Requ
 	medicines, err := h.setupService.ListCustomerMedicines(r.Context(), customerID)
 	if err != nil {
 		slog.Error("[CustomerSetup.ListMedicines] failed", "customer_id", customerID, "error", err)
+		response.InternalError(w, "Failed to fetch customer medicines")
+		return
+	}
+	response.OK(w, medicines)
+}
+
+func (h *CustomerSetupHandler) GetMyMedicines(w http.ResponseWriter, r *http.Request) {
+	customerID := middleware.GetUserID(r.Context())
+	if customerID == "" {
+		response.Unauthorized(w, "Not authenticated")
+		return
+	}
+	medicines, err := h.setupService.ListCustomerMedicines(r.Context(), customerID)
+	if err != nil {
+		slog.Error("[CustomerSetup.GetMyMedicines] failed", "customer_id", customerID, "error", err)
 		response.InternalError(w, "Failed to fetch customer medicines")
 		return
 	}

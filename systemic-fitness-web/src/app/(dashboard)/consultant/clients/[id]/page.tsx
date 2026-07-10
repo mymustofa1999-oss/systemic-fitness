@@ -21,6 +21,9 @@ import {
   ExternalLink, Save, X, Lock, Globe,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MedicinesCard } from "@/components/shared/MedicinesCard";
+import { ClientSubscriptionSection } from "@/components/shared/ClientSubscriptionSection";
+import { useCustomerSetup } from "@/hooks/useNewFeatures";
 
 // SF Phase 7d — Consultant client detail.
 // Layout:
@@ -69,6 +72,7 @@ export default function ConsultantClientDetailPage({ params }: { params: { id: s
 
   const { data: userData, isLoading: userLoading } = useUser(params.id);
   const { data: assessmentData, isLoading: assessmentLoading } = useLatestAssessmentV2(params.id);
+  const { data: setupData } = useCustomerSetup(params.id);
   const { data: labData } = useLabConsultations({ user_id: params.id });
   const { data: notesData, isLoading: notesLoading } = useClinicalNotes({
     client_id: params.id,
@@ -77,6 +81,7 @@ export default function ConsultantClientDetailPage({ params }: { params: { id: s
   const detail = (userData?.data as any) ?? null;
   const user = detail?.user;
   const assessment = assessmentData?.data;
+  const setup = setupData?.data;
   const labs = (labData?.data ?? []) as any[];
   const notes = (notesData?.data ?? []) as ClinicalNote[];
 
@@ -124,11 +129,17 @@ export default function ConsultantClientDetailPage({ params }: { params: { id: s
 
       {/* ─── Asesmen v2 + Lab History ────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <AssessmentSummaryCard
-          isLoading={assessmentLoading}
-          assessment={assessment as any}
-        />
-        <LabHistoryCard labs={labs} />
+        <div className="space-y-4">
+          <AssessmentSummaryCard
+            isLoading={assessmentLoading}
+            assessment={assessment as any}
+          />
+          <MedicinesCard customerId={params.id} data={(setupData?.data as any)?.medicines ?? []} />
+        </div>
+        <div className="space-y-4">
+          <LabHistoryCard labs={labs} />
+          <ClientSubscriptionSection clientId={params.id} clientName={user.full_name} />
+        </div>
       </div>
 
       {/* ─── Clinical Notes ───────────────────────────────────── */}
@@ -187,20 +198,13 @@ function AssessmentSummaryCard({
         </Link>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
-        <Metric label="Rest" value={assessment.rest_score} />
-        <Metric label="Nutrition" value={assessment.nutrition_score} />
-        <Metric label="Movement" value={assessment.movement_score} />
-      </div>
-
-      <div className="rounded-lg bg-sf-iceBlue/40 p-3">
-        <div className="text-[10px] uppercase tracking-wider text-slate-500 font-dm-sans">
-          System Score
-        </div>
-        <div className="font-dm-mono text-2xl text-sf-deepNavy">
-          {assessment.system_score != null
-            ? Number(assessment.system_score).toFixed(1)
-            : "—"}
+      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+        <Metric label="System Score" value={assessment.system_score} />
+        <div className="text-center rounded-md bg-slate-50 py-2">
+          <div className="text-[10px] uppercase tracking-wider text-slate-500 font-dm-sans">Phase</div>
+          <div className="font-dm-mono text-sm font-semibold text-sf-charcoal">
+            {assessment.physical_status_level || "-"}
+          </div>
         </div>
       </div>
 

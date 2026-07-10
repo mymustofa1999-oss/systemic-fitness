@@ -234,8 +234,9 @@ func (r *UserRepository) UpsertProfile(ctx context.Context, p *model.UserProfile
 	query := `
 		INSERT INTO user_profiles (
 			user_id, date_of_birth, gender, height_cm, weight_kg,
-			fitness_goal, experience_level, medical_notes, emergency_contact
-		) VALUES ($1, $2::date, $3::gender_type, $4, $5, $6::fitness_goal, $7::experience_level, $8, $9)
+			fitness_goal, experience_level, medical_notes, emergency_contact,
+			regional, city
+		) VALUES ($1, $2::date, $3::gender_type, $4, $5, $6::fitness_goal, $7::experience_level, $8, $9, $10, $11)
 		ON CONFLICT (user_id) DO UPDATE SET
 			date_of_birth    = COALESCE(EXCLUDED.date_of_birth, user_profiles.date_of_birth),
 			gender           = COALESCE(EXCLUDED.gender, user_profiles.gender),
@@ -244,11 +245,14 @@ func (r *UserRepository) UpsertProfile(ctx context.Context, p *model.UserProfile
 			fitness_goal     = COALESCE(EXCLUDED.fitness_goal, user_profiles.fitness_goal),
 			experience_level = COALESCE(EXCLUDED.experience_level, user_profiles.experience_level),
 			medical_notes    = COALESCE(EXCLUDED.medical_notes, user_profiles.medical_notes),
-			emergency_contact = COALESCE(EXCLUDED.emergency_contact, user_profiles.emergency_contact)`
+			emergency_contact = COALESCE(EXCLUDED.emergency_contact, user_profiles.emergency_contact),
+			regional         = COALESCE(EXCLUDED.regional, user_profiles.regional),
+			city             = COALESCE(EXCLUDED.city, user_profiles.city)`
 
 	_, err := r.db.Exec(ctx, query,
 		p.UserID, p.DateOfBirth, p.Gender, p.HeightCm, p.WeightKg,
 		p.FitnessGoal, p.ExperienceLevel, p.MedicalNotes, p.EmergencyContact,
+		p.Regional, p.City,
 	)
 	return err
 }
@@ -258,11 +262,13 @@ func (r *UserRepository) GetProfile(ctx context.Context, userID string) (*model.
 	var dob *time.Time
 	err := r.db.QueryRow(ctx, `
 		SELECT user_id, date_of_birth, gender, height_cm, weight_kg,
-		       fitness_goal, experience_level, medical_notes, emergency_contact
+		       fitness_goal, experience_level, medical_notes, emergency_contact,
+		       regional, city
 		FROM user_profiles WHERE user_id = $1`, userID,
 	).Scan(
 		&p.UserID, &dob, &p.Gender, &p.HeightCm, &p.WeightKg,
 		&p.FitnessGoal, &p.ExperienceLevel, &p.MedicalNotes, &p.EmergencyContact,
+		&p.Regional, &p.City,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, nil // profile doesn't exist yet — that's ok

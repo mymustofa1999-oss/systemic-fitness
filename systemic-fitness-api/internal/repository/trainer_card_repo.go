@@ -67,6 +67,7 @@ type TrainerCardSet struct {
 	Duration           *string   `json:"duration,omitempty"`
 	EquipmentUpper     *string   `json:"equipment_upper,omitempty"`
 	EquipmentLower     *string   `json:"equipment_lower,omitempty"`
+	Equipment          *string   `json:"equipment,omitempty"`
 	TypeID             *string   `json:"type_id,omitempty"`
 	TypeName           *string   `json:"type_name,omitempty"`
 	BPM                *string   `json:"bpm,omitempty"`
@@ -244,7 +245,7 @@ func (r *TrainerCardRepository) loadSequences(ctx context.Context, card *Trainer
 func (r *TrainerCardRepository) loadSets(ctx context.Context, seq *TrainerCardSequence) error {
 	rows, err := r.db.Query(ctx,
 		`SELECT s.id, s.sequence_id, s.set_number, s.duration,
-		        s.equipment_upper, s.equipment_lower,
+		        s.equipment_upper, s.equipment_lower, s.equipment,
 		        s.type_id, t.name,
 		        s.bpm, s.extra_load, s.notes,
 		        s.sort_order, s.created_at, s.updated_at,
@@ -263,7 +264,7 @@ func (r *TrainerCardRepository) loadSets(ctx context.Context, seq *TrainerCardSe
 		var s TrainerCardSet
 		if err := rows.Scan(
 			&s.ID, &s.SequenceID, &s.SetNumber, &s.Duration,
-			&s.EquipmentUpper, &s.EquipmentLower,
+			&s.EquipmentUpper, &s.EquipmentLower, &s.Equipment,
 			&s.TypeID, &s.TypeName,
 			&s.BPM, &s.ExtraLoad, &s.Notes,
 			&s.SortOrder, &s.CreatedAt, &s.UpdatedAt,
@@ -377,13 +378,13 @@ func (r *TrainerCardRepository) UpsertCard(ctx context.Context, card *TrainerCar
 
 			err = tx.QueryRow(ctx,
 				`INSERT INTO trainer_card_sets
-				    (sequence_id, set_number, duration, equipment_upper, equipment_lower,
+				    (sequence_id, set_number, duration, equipment_upper, equipment_lower, equipment,
 				     type_id, bpm, extra_load, notes, sort_order,
 				     pattern, breathing_core, breathing_diaphragm)
-				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
 				 RETURNING id, created_at, updated_at`,
 				set.SequenceID, set.SetNumber, set.Duration,
-				set.EquipmentUpper, set.EquipmentLower,
+				set.EquipmentUpper, set.EquipmentLower, set.Equipment,
 				set.TypeID, set.BPM, set.ExtraLoad, set.Notes, set.SortOrder,
 				set.Pattern, set.BreathingCore, set.BreathingDiaphragm,
 			).Scan(&set.ID, &set.CreatedAt, &set.UpdatedAt)

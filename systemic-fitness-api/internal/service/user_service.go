@@ -138,6 +138,8 @@ type UpdateUserInput struct {
 	ExperienceLevel  *string  `json:"experience_level,omitempty" validate:"omitempty,oneof=beginner intermediate advanced"`
 	MedicalNotes     *string  `json:"medical_notes,omitempty"`
 	EmergencyContact *string  `json:"emergency_contact,omitempty" validate:"omitempty,max=100"`
+	Regional         *string  `json:"regional,omitempty"`
+	City             *string  `json:"city,omitempty"`
 }
 
 func (s *UserService) Update(
@@ -205,7 +207,8 @@ func (s *UserService) Update(
 	hasProfileUpdate := input.DateOfBirth != nil || input.Gender != nil ||
 		input.HeightCm != nil || input.WeightKg != nil ||
 		input.FitnessGoal != nil || input.ExperienceLevel != nil ||
-		input.MedicalNotes != nil || input.EmergencyContact != nil
+		input.MedicalNotes != nil || input.EmergencyContact != nil ||
+		input.Regional != nil || input.City != nil
 
 	if hasProfileUpdate {
 		profile := &model.UserProfile{
@@ -218,6 +221,8 @@ func (s *UserService) Update(
 			ExperienceLevel:  input.ExperienceLevel,
 			MedicalNotes:     input.MedicalNotes,
 			EmergencyContact: input.EmergencyContact,
+			Regional:         input.Regional,
+			City:             input.City,
 		}
 		if err := s.userRepo.UpsertProfile(ctx, profile); err != nil {
 			s.logger.Error("update: upsert profile", "user_id", targetID, "error", err)

@@ -22,14 +22,16 @@ import {
   useAssignStaff,
   useUpdateCustomerPriority,
 } from "@/hooks/useNewFeatures";
-import { useSubscriptionPlans, useCreateManualSubscription } from "@/hooks/useSubscription";
+import { useLatestAssessmentV2, type AssessmentV2 } from "@/hooks/useAssessmentV2";
+import { useSubscriptionPlans, useCreateManualSubscription, useUpdateSubscriptionAttachment } from "@/hooks/useSubscription";
 import { useAuth } from "@/hooks/useAuth";
 import { apiGet } from "@/lib/api";
+import axios from "axios";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { SearchableSelect } from "@/components/shared/SearchableSelect";
 import {
   ArrowLeft, Plus, Trash2, Save, Loader2, Check, X, ChevronDown, Info, Pill, ExternalLink, ClipboardCheck,
-  Crown, Star, Zap, Clock, CreditCard, FileText, User, Activity, Phone, ActivitySquare
+  Crown, Star, Zap, Clock, CreditCard, FileText, User, Activity, Phone, ActivitySquare, Upload, File
 } from "lucide-react";
 import { cn, formatCurrency, formatDate } from "@/lib/utils";
 
@@ -46,11 +48,13 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
   const { data, isLoading } = useUser(params.id);
   const { data: setupData, isLoading: setupLoading } = useCustomerSetup(params.id);
+  const { data: assessResp } = useLatestAssessmentV2(params.id);
 
   const detail = data?.data as any;
   const user = detail?.user;
   const profile = detail?.profile;
   const setup = setupData?.data as any;
+  const assessmentData = assessResp?.data as AssessmentV2 | undefined;
 
   // Calculate age from DOB
   const age = useMemo(() => {
@@ -115,7 +119,11 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                  <div className="p-2 rounded-lg bg-slate-100 text-sf-deepNavy group-hover:bg-sf-deepNavy/10 transition-colors"><Star className="h-5 w-5" /></div>
                  <div className="text-left">
                    <p className="text-sm font-bold text-slate-900">Hasil Asesmen v2</p>
-                   <p className="text-[10px] text-slate-500">Score, Chronobiology, Phase</p>
+                   <p className="text-[10px] text-slate-500">
+                     {assessmentData 
+                       ? `Score: ${assessmentData.system_score ? Number(assessmentData.system_score).toFixed(1) : "-"} | Phase ${assessmentData.physical_status_level || "-"}` 
+                       : "Score, Chronobiology, Phase"}
+                   </p>
                  </div>
                </div>
                <ChevronDown className="h-4 w-4 text-slate-300 -rotate-90 group-hover:text-sf-deepNavy transition-colors" />
@@ -207,12 +215,14 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
       height_cm: profile?.height_cm ?? "",
       weight_kg: profile?.weight_kg ?? "",
       medical_notes: profile?.medical_notes ?? "",
+      regional: profile?.regional ?? "",
+      city: profile?.city ?? "",
     };
   }
   const [form, setForm] = useState(initForm);
 
   // Re-sync form when props change (after save + refetch)
-  const propsKey = `${user.full_name}|${user.phone}|${profile?.date_of_birth}|${profile?.gender}|${profile?.height_cm}|${profile?.weight_kg}|${profile?.medical_notes}`;
+  const propsKey = `${user.full_name}|${user.phone}|${profile?.date_of_birth}|${profile?.gender}|${profile?.height_cm}|${profile?.weight_kg}|${profile?.medical_notes}|${profile?.regional}|${profile?.city}`;
   useEffect(() => {
     if (!editing) setForm(initForm());
   }, [propsKey]);
@@ -279,6 +289,12 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
             <td className={val}>{editing ? <input type="number" value={form.height_cm} onChange={(e) => setForm({ ...form, height_cm: e.target.value })} className={inp} placeholder="cm" /> : (profile?.height_cm ? `${profile.height_cm} cm` : "-")}</td>
             <td className={lbl}>Berat</td>
             <td className={val}>{editing ? <input type="number" value={form.weight_kg} onChange={(e) => setForm({ ...form, weight_kg: e.target.value })} className={inp} placeholder="kg" /> : (profile?.weight_kg ? `${profile.weight_kg} kg` : "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
+            <td className={lbl}>Regional</td>
+            <td className={val}>{editing ? <input type="text" value={form.regional} onChange={(e) => setForm({ ...form, regional: e.target.value })} className={inp} placeholder="Regional" /> : (profile?.regional || "-")}</td>
+            <td className={lbl}>Asal Kota</td>
+            <td className={val}>{editing ? <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={inp} placeholder="Asal Kota" /> : (profile?.city || "-")}</td>
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Telepon</td>
@@ -1412,9 +1428,11 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
   const [tab, setTab] = useState<"subscriptions" | "payments">("subscriptions");
   const [manualSubOpen, setManualSubOpen] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState("");
+  const [uploadingId, setUploadingId] = useState<string | null>(null);
 
   const { isFinance } = useAuth();
   const createManualSub = useCreateManualSubscription();
+  const updateAttachment = useUpdateSubscriptionAttachment();
 
   const { data: subsData, isLoading: subsLoading } = useQuery({
     queryKey: ["client-subscriptions", clientId],
@@ -1480,6 +1498,33 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
       setSelectedPlanId("");
     } catch (e) {
       // Error handled by toast in hook
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, subId: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert("File too large. Maximum size is 10MB");
+      return;
+    }
+
+    setUploadingId(subId);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await axios.post("/api/uploads", formData, {
+        baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080",
+      });
+      const url = res.data?.data?.url;
+      if (url) {
+        await updateAttachment.mutateAsync({ id: subId, attachment_url: url });
+      }
+    } catch (err: any) {
+      alert("Upload failed: " + err.message);
+    } finally {
+      setUploadingId(null);
+      e.target.value = ""; // Reset input
     }
   };
 
@@ -1634,6 +1679,7 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
                   <th className="text-left px-4 py-2.5 font-medium text-slate-500">Mulai</th>
                   <th className="text-left px-4 py-2.5 font-medium text-slate-500">Berakhir</th>
                   <th className="text-left px-4 py-2.5 font-medium text-slate-500">Metode</th>
+                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Hasil Lab</th>
                 </tr>
               </thead>
               <tbody>
@@ -1648,6 +1694,19 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
                     <td className="px-4 py-2.5 text-slate-600">{formatDate(s.started_at)}</td>
                     <td className="px-4 py-2.5 text-slate-600">{formatDate(s.expires_at)}</td>
                     <td className="px-4 py-2.5 text-slate-500">{s.payment_method || "-"}</td>
+                    <td className="px-4 py-2.5">
+                      {s.attachment_url ? (
+                        <a href={s.attachment_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs text-sf-systemBlue hover:underline bg-blue-50 px-2 py-1 rounded">
+                          <File className="h-3 w-3" /> Lihat File
+                        </a>
+                      ) : (
+                        <label className="cursor-pointer inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-sf-deepNavy bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded transition-colors">
+                          {uploadingId === s.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
+                          Upload Lab
+                          <input type="file" className="hidden" accept=".pdf,image/*" onChange={(e) => handleFileUpload(e, s.id)} disabled={uploadingId === s.id} />
+                        </label>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -11,10 +11,12 @@ import {
   useDeleteTrainerCard,
   useTrainerCardTypes,
   useCustomerPrograms,
+  useAssignStaff,
+  useUpdateCustomerPriority,
   useEquipments,
   useCustomerSetup,
 } from "@/hooks/useNewFeatures";
-
+import { MedicinesCard } from "@/components/shared/MedicinesCard";
 
 function buildSetsFromMenuItems(menuItems: any[]) {
   if (!menuItems || menuItems.length === 0) return [];
@@ -67,9 +69,9 @@ import { useLatestAssessmentV2 } from "@/hooks/useAssessmentV2";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { SearchableSelect } from "@/components/shared/SearchableSelect";
 import * as Popover from "@radix-ui/react-popover";
-import {
+import { 
   ArrowLeft, Plus, Trash2, Save, Loader2, Pencil, X,
-  ChevronDown, ChevronRight, Send,
+  ChevronDown, ChevronRight, Send, GripVertical, Info, Clock, Pill, AlertTriangle, Video
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -92,6 +94,7 @@ interface CardSet {
   duration?: string | null;
   equipment_upper?: string | null;
   equipment_lower?: string | null;
+  equipment?: string | null;
   type_id?: string | null;
   type_name?: string | null;
   bpm?: string | null;
@@ -244,6 +247,7 @@ function getClientCategoryAndLoads(
 // ─── Page ───────────────────────────────────────────────────────
 
 export default function TrainingCardPage({ params }: { params: { id: string } }) {
+  const [previewTarget, setPreviewTarget] = useState<{ movement: any; bpm: string } | null>(null);
   const customerId = params.id;
   const { isTrainer, isConsultant, isAdmin, isOwner, role } = useAuth();
   const { data: userData, isLoading: userLoading } = useUser(customerId);
@@ -259,6 +263,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const { data: movementsData } = useDLMovements({ limit: 500 });
   const { data: equipUpperData } = useEquipments({ category: "upper", limit: 100 });
   const { data: equipLowerData } = useEquipments({ category: "lower", limit: 100 });
+  const { data: equipGeneralData } = useEquipments({ category: "general", limit: 100 });
   const { data: latestAssessmentData, isLoading: isLoadingAssessment } = useLatestAssessmentV2(customerId);
   const physicalLevel = latestAssessmentData?.data?.physical_status_level;
   
@@ -307,6 +312,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const movements = (movementsData?.data ?? []) as any[];
   const equipUpper = (equipUpperData?.data ?? []) as any[];
   const equipLower = (equipLowerData?.data ?? []) as any[];
+  const equipGeneral = (equipGeneralData?.data ?? []) as any[];
 
   const isTier2 = (userData?.data as any)?.subscription?.tier === "sf_tier_2";
   const isTier3 = (userData?.data as any)?.subscription?.tier === "sf_tier_3";
@@ -454,6 +460,21 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       value: t.id, label: t.name, sublabel: t.description || "",
     })), [types]);
 
+  const menuGroupMap = useMemo(() => {
+    const map = new Map<string, string>();
+    const processItems = (items: any[]) => {
+      items.forEach(item => {
+        if (item.movement_id) {
+          map.set(item.movement_id, item.group_type || "Lainnya");
+        }
+      });
+    };
+    processItems((fcData?.data as any) || []);
+    processItems((ccData?.data as any) || []);
+    processItems((mcData?.data as any) || []);
+    return map;
+  }, [fcData, ccData, mcData]);
+
   const movementOptions = useMemo(() =>
     movements
       .filter((m: any) => {
@@ -477,7 +498,10 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
         const mCategory = nameMatch ? nameMatch[1].toUpperCase() : "";
         const mLevel = nameMatch ? parseInt(nameMatch[2]) : "";
-        const sectionName = nameMatch ? `${mCategory} - Level ${mLevel}` : (m.pattern ? "Pola: " + m.pattern : "Lainnya");
+        const mappedGroup = menuGroupMap.get(m.id);
+        const sectionName = mappedGroup 
+          ? mappedGroup 
+          : (nameMatch ? `${mCategory} - Level ${mLevel}` : (m.pattern ? "Pola: " + m.pattern : "Lainnya"));
 
         return {
           value: m.id, 
@@ -487,7 +511,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
           section: sectionName,
           extractedCategory: mCategory
         };
-      }), [movements, form?.level, parsedMappedLevel]);
+      }), [movements, form?.level, parsedMappedLevel, menuGroupMap]);
 
   // Build a map for quick lookup of movement name by id
   const movementMap = useMemo(() => {
@@ -506,6 +530,11 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     equipLower.filter((e: any) => e.is_active).map((e: any) => ({
       value: e.name, label: e.name,
     })), [equipLower]);
+
+  const equipGeneralOptions = useMemo(() =>
+    equipGeneral.filter((e: any) => e.is_active).map((e: any) => ({
+      value: e.name, label: e.name,
+    })), [equipGeneral]);
 
   // ── Form init ──────────────────────────────────────────────
   function startEdit(fcItemsParam?: any[], ccItemsParam?: any[], mcItemsParam?: any[]) {
@@ -915,6 +944,10 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             </tr>
           </tbody>
         </table>
+        {/* MEDICINES & IMPLICATIONS (Read-Only) */}
+        <div className="mt-6 mb-6">
+          <MedicinesCard customerId={params.id} data={(setupData?.data as any)?.medicines ?? []} readOnly={true} />
+        </div>
       </div>
 
       {/* ═══ NO DATA STATE ═════════════════════════════════════ */}
@@ -945,6 +978,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             types={types}
             equipUpperOptions={equipUpperOptions}
             equipLowerOptions={equipLowerOptions}
+            equipGeneralOptions={equipGeneralOptions}
             recs={recs}
             onUpdateSeq={(p) => updateSeq(si, p)}
             onAddSet={() => addSet(si)}
@@ -1003,7 +1037,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
 function SequenceTable({
   seq, si, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
-  equipUpperOptions, equipLowerOptions, recs,
+  equipUpperOptions, equipLowerOptions, equipGeneralOptions, recs,
   onUpdateSeq, onAddSet, onRemoveSet, onUpdateSet, onAddItem, onRemoveItem, onUpdateItem,
 }: {
   seq: CardSequence; si: number; level: string; isMetabolic: boolean; editing: boolean;
@@ -1013,6 +1047,7 @@ function SequenceTable({
   types: any[];
   equipUpperOptions: { value: string; label: string }[];
   equipLowerOptions: { value: string; label: string }[];
+  equipGeneralOptions: { value: string; label: string }[];
   recs: any;
   onUpdateSeq: (p: Partial<CardSequence>) => void;
   onAddSet: () => void;
@@ -1028,6 +1063,7 @@ function SequenceTable({
   // Resolve options based on Cardio / Metabolic / Functional
   let upperOptions = equipUpperOptions;
   let lowerOptions = equipLowerOptions;
+  let generalOptions = equipGeneralOptions;
   let recommendedUpper = "";
   let recommendedLower = "";
 
@@ -1046,6 +1082,7 @@ function SequenceTable({
       { value: "2 kg", label: "2 kg" },
       { value: "3 kg", label: "3 kg" },
     ];
+    generalOptions = equipGeneralOptions;
     recommendedUpper = recs.cardio.upper;
     recommendedLower = recs.cardio.lower;
   } else if (code === "metabolic") {
@@ -1111,6 +1148,7 @@ function SequenceTable({
               types={types}
               upperOptions={upperOptions}
               lowerOptions={lowerOptions}
+              generalOptions={generalOptions}
               recommendedUpper={recommendedUpper}
               recommendedLower={recommendedLower}
               onUpdateSet={(p) => onUpdateSet(seti, p)}
@@ -1145,8 +1183,8 @@ function SequenceTable({
 
 function SetBlock({
   set, seti, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
-  upperOptions, lowerOptions, recommendedUpper, recommendedLower,
-  onUpdateSet, onRemoveSet, onAddItem, onRemoveItem, onUpdateItem,
+  upperOptions, lowerOptions, generalOptions, recommendedUpper, recommendedLower,
+  onUpdateSet, onRemoveSet, onAddItem, onRemoveItem, onUpdateItem, onPreviewVideo,
 }: {
   set: CardSet; seti: number; level: string; isMetabolic: boolean; editing: boolean;
   typeOptions: { value: string; label: string; sublabel?: string }[];
@@ -1155,6 +1193,7 @@ function SetBlock({
   types: any[];
   upperOptions: { value: string; label: string }[];
   lowerOptions: { value: string; label: string }[];
+  generalOptions: { value: string; label: string }[];
   recommendedUpper: string;
   recommendedLower: string;
   onUpdateSet: (p: Partial<CardSet>) => void;
@@ -1162,6 +1201,7 @@ function SetBlock({
   onAddItem: (bodyPart: string) => void;
   onRemoveItem: (ii: number) => void;
   onUpdateItem: (ii: number, p: Partial<CardItem>) => void;
+  onPreviewVideo?: (m: any, bpm: string) => void;
 }) {
   const selectedPatterns = set.pattern ? set.pattern.split(",").map(p => p.trim()).filter(Boolean) : [];
   const isLevel1 = level === "1" || level === "1-499" || level === "1-799";
@@ -1302,6 +1342,16 @@ function SetBlock({
                       searchPlaceholder="Cari..."
                     />
                  </div>
+                 <div className="flex-1 min-w-0">
+                    <span className="text-[10px] text-slate-400 block mb-0.5">Alat (Opsional)</span>
+                    <SearchableSelect
+                      options={generalOptions}
+                      value={set.equipment || ""}
+                      onChange={(v) => onUpdateSet({ equipment: v })}
+                      placeholder="Pilih Alat..."
+                      searchPlaceholder="Cari..."
+                    />
+                 </div>
                </div>
              ) : (
                <div className="text-sm space-y-0.5">
@@ -1372,7 +1422,15 @@ function SetBlock({
                       onUpdate={(p) => onUpdateItem(ii, p)}
                     />
                   ) : (
-                    <div className="font-semibold text-slate-800 text-sm mt-1">{item.movement_name || "-"}</div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div className="font-semibold text-slate-800 text-sm">{item.movement_name || "-"}</div>
+                      <button onClick={() => {
+                        const m = item.movement_id ? movementMap[item.movement_id] : null;
+                        if (m && onPreviewVideo) onPreviewVideo(m, set.bpm || "");
+                      }} className="p-1 rounded bg-slate-100 text-violet-600 hover:bg-violet-100" title="Preview Video">
+                        <Video className="h-4 w-4" />
+                      </button>
+                    </div>
                   )}
                 </div>
 
@@ -1680,3 +1738,95 @@ const formatWeight = (w: string | null | undefined): string => {
   return w.replace(/(\d+)\.00/g, "$1").replace(/(\d+\.\d)0/g, "$1");
 };
 
+
+
+function extractYouTubeId(url: string) {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+}
+
+function VideoPreviewModal({ movement, bpm, onClose }: { movement: any; bpm?: string; onClose: () => void }) {
+  const maleId = extractYouTubeId(movement.video_url_male || "");
+  const femaleId = extractYouTubeId(movement.video_url_female || "");
+  const hasBoth = maleId && femaleId;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    let theBpm = bpm;
+    if (theBpm && theBpm.includes("-")) {
+      theBpm = theBpm.split("-")[0];
+    }
+    if (theBpm && theBpm !== "No BPM" && theBpm !== "0") {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+      const url = `${baseUrl}/uploads/bpm/${theBpm}.mp3`;
+      const audio = new Audio(url);
+      audio.loop = true;
+      audio.play().catch(e => console.error("Error playing BPM", e));
+      audioRef.current = audio;
+    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, [bpm]);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div
+        className={cn(
+          "relative bg-white rounded-2xl shadow-2xl mx-4 animate-slide-in overflow-hidden",
+          hasBoth ? "max-w-5xl w-full" : "max-w-2xl w-full"
+        )}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-lg bg-violet-100 flex items-center justify-center">
+              <Video className="h-4.5 w-4.5 text-violet-600" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">{movement.name}</h2>
+              {bpm && <div className="text-xs text-sf-warmGold font-bold mt-1">BPM: {bpm}</div>}
+            </div>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className={cn("p-6", hasBoth ? "grid grid-cols-2 gap-5" : "")}>
+          {maleId && (
+            <div>
+              <p className="text-sm font-semibold text-slate-700 mb-2">Male Version</p>
+              <div className="relative w-full rounded-xl overflow-hidden bg-slate-900 shadow-lg" style={{ paddingBottom: "56.25%" }}>
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src={`https://www.youtube.com/embed/${maleId}?autoplay=1&mute=0`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          )}
+          {femaleId && (
+            <div>
+              <p className="text-sm font-semibold text-slate-700 mb-2">Female Version</p>
+              <div className="relative w-full rounded-xl overflow-hidden bg-slate-900 shadow-lg" style={{ paddingBottom: "56.25%" }}>
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src={`https://www.youtube.com/embed/${femaleId}?autoplay=1&mute=0`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

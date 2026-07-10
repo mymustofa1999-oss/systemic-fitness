@@ -104,6 +104,8 @@ type UserProfile struct {
 	ExperienceLevel  *string  `json:"experience_level,omitempty"`
 	MedicalNotes     *string  `json:"medical_notes,omitempty"`
 	EmergencyContact *string  `json:"emergency_contact,omitempty"`
+	Regional         *string  `json:"regional,omitempty"`
+	City             *string  `json:"city,omitempty"`
 }
 
 // UserWithProfile combines the core user record with its extended profile.

@@ -9,6 +9,7 @@ import { useLogWorkoutSession } from "@/hooks/useWorkout";
 import Link from "next/link";
 import { toast } from "@/stores/toastStore";
 import { useRouter } from "next/navigation";
+import { MedicinesCard } from "@/components/shared/MedicinesCard";
 
 // ════════════════════════════════════════════════════════════════════
 //  Types — API Response
@@ -588,7 +589,8 @@ function ExerciseCard({
       audioRef.current.pause();
     }
 
-    const url = `https://api.systemicfitnesshealth.com/uploads/bpm/${bpm}.m4a`;
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+    const url = `${baseUrl}/uploads/bpm/${bpm}.mp3`;
     const audio = new Audio(url);
     audio.loop = true;
     audioRef.current = audio;
@@ -1811,6 +1813,13 @@ export default function TrainingCardPage() {
     enabled: true,
   });
 
+  // Fetch Medicines
+  const { data: medicinesRes } = useQuery({
+    queryKey: ["client-medicines"],
+    queryFn: () => apiGet<any[]>("/api/medicines/me"),
+    retry: false,
+  });
+
   const presetCard = useMemo(() => {
     if (!isOverriddenTier) return null;
     
@@ -2012,26 +2021,26 @@ export default function TrainingCardPage() {
   const workoutSessionOverlay = (
     <>
       {!sessionStarted && (
-        <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-black/75 backdrop-blur-md p-6 text-center animate-fade-in">
-          <div className="max-w-sm w-full bg-slate-900 border border-sf-warmGold/35 rounded-3xl p-8 shadow-2xl text-white space-y-6">
-            <div className="w-16 h-16 rounded-2xl bg-sf-warmGold/10 flex items-center justify-center mx-auto border border-sf-warmGold/30">
-              <Dumbbell size={32} className="text-sf-warmGold animate-pulse" />
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-xl font-bold font-dm-serif text-white">
-                {lang === "en" ? "Start Workout Session" : "Mulai Sesi Latihan"}
-              </h3>
-              <p className="text-xs text-white/70 leading-relaxed">
-                {lang === "en"
-                  ? "Click start to begin your workout session. An active timer will track your workout duration."
-                  : "Klik mulai untuk memulai sesi latihan Anda. Timer aktif akan mencatat durasi latihan Anda secara realtime."}
-              </p>
+        <div className="fixed bottom-20 left-0 right-0 z-40 px-4 pointer-events-none animate-slide-in-up">
+          <div className="max-w-lg mx-auto bg-slate-900/90 dark:bg-slate-900/95 backdrop-blur-md border border-sf-warmGold/30 rounded-2xl p-4 shadow-xl flex items-center justify-between gap-3 pointer-events-auto">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-sf-warmGold/10 flex items-center justify-center border border-sf-warmGold/20 shrink-0">
+                <Dumbbell size={20} className="text-sf-warmGold animate-pulse" />
+              </div>
+              <div className="text-left min-w-0">
+                <h3 className="text-white font-bold text-sm truncate">
+                  {lang === "en" ? "Ready to Workout?" : "Mulai Latihan?"}
+                </h3>
+                <p className="text-white/70 text-xs truncate">
+                  {lang === "en" ? "Start the timer now." : "Mulai timer sesi ini."}
+                </p>
+              </div>
             </div>
             <button
               onClick={startSession}
-              className="w-full bg-gradient-to-r from-sf-warmGold to-sf-warmGoldDark hover:from-sf-warmGoldDark hover:to-sf-warmGold text-white font-bold py-3.5 rounded-2xl text-sm transition-transform active:scale-95 duration-200 shadow-lg shadow-sf-warmGold/20 uppercase tracking-wider"
+              className="shrink-0 bg-gradient-to-r from-sf-warmGold to-sf-warmGoldDark hover:from-sf-warmGoldDark hover:to-sf-warmGold text-white font-bold py-2.5 px-5 rounded-xl text-xs transition-transform active:scale-95 duration-200 shadow-lg shadow-sf-warmGold/20 uppercase tracking-wider"
             >
-              {lang === "en" ? "Start Workout" : "Mulai Latihan"}
+              {lang === "en" ? "Start" : "Mulai"}
             </button>
           </div>
         </div>
@@ -2141,6 +2150,12 @@ export default function TrainingCardPage() {
           session={session}
           lang={lang}
         />
+
+        {medicinesRes?.data && medicinesRes.data.length > 0 && (
+          <div className="mb-4">
+            <MedicinesCard data={medicinesRes.data} />
+          </div>
+        )}
 
         {/* ── Session Toggle ──────────────────────────────── */}
         <SessionToggle session={session} setSession={setSession} lang={lang} />
@@ -2320,6 +2335,12 @@ export default function TrainingCardPage() {
         session={session}
         lang={lang}
       />
+
+      {medicinesRes?.data && medicinesRes.data.length > 0 && (
+        <div className="mb-4">
+          <MedicinesCard data={medicinesRes.data} />
+        </div>
+      )}
 
       {/* ── Sequence Tabs ───────────────────────────────────── */}
       <div

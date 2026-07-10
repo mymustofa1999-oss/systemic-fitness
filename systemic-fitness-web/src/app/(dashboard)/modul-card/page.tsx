@@ -56,21 +56,24 @@ export default function ModulCardPage() {
   const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", selectedLevel);
   const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", selectedLevel);
   const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", selectedLevel);
+  const { data: cdData, isLoading: isLoadingCD } = useDLMenuItems("cd", selectedLevel);
   
-  const isLoadingItems = isLoadingFC || isLoadingCC || isLoadingMC;
+  const isLoadingItems = isLoadingFC || isLoadingCC || isLoadingMC || isLoadingCD;
   
   const fcItems = Array.isArray(fcData?.data) ? fcData.data : [];
   const ccItems = Array.isArray(ccData?.data) ? ccData.data : [];
   const mcItems = Array.isArray(mcData?.data) ? mcData.data : [];
+  const cdItems = Array.isArray(cdData?.data) ? cdData.data : [];
 
   const allItems = [
     ...fcItems.map((i: any) => ({ ...i, sequence: "FC" })),
     ...ccItems.map((i: any) => ({ ...i, sequence: "CC" })),
-    ...mcItems.map((i: any) => ({ ...i, sequence: "MC" }))
+    ...mcItems.map((i: any) => ({ ...i, sequence: "MC" })),
+    ...cdItems.map((i: any) => ({ ...i, sequence: "CD" }))
   ];
 
   const groupedData: any[] = [];
-  const sequences = ["FC", "CC", "MC"];
+  const sequences = ["FC", "CC", "MC", "CD"];
   
   for (const seq of sequences) {
     const seqItems = allItems.filter(i => i.sequence === seq).sort((a,b) => a.sort_order - b.sort_order);

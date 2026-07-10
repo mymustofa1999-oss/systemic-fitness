@@ -1,6 +1,20 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiGet, apiPost } from "@/lib/api";
+import { apiGet, apiPost, apiPut } from "@/lib/api";
 import { toast } from "@/stores/toastStore";
+
+export function useUpdateSubscriptionAttachment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, attachment_url }: { id: string; attachment_url: string | null }) =>
+      apiPut(`/api/payments/subscriptions/${id}/attachment`, { attachment_url }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["client-subscriptions"] });
+      qc.invalidateQueries({ queryKey: ["my-subscription"] });
+      toast.success("Attachment berhasil diperbarui");
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+}
 
 // ─── Client Subscription Plans ─────────────────────────────────
 

@@ -605,6 +605,16 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
         debugPrint('Silent error fetching latest assessment: $e');
       }
 
+      // 4. Fetch customer medicines silently
+      try {
+        final medicinesResponse = await ApiService.getWithRetry('/api/medicines/me');
+        if (medicinesResponse['success'] == true && medicinesResponse['data'] != null) {
+          _medicines = List<dynamic>.from(medicinesResponse['data']);
+        }
+      } catch (e) {
+        debugPrint('Silent error fetching medicines: $e');
+      }
+
       // 5. Normal flow: fetch card from API
       final response = await ApiService.getWithRetry('/api/v2/assessments/training-card');
       
@@ -1115,9 +1125,13 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
           _buildInfoHeader(theme),
           const SizedBox(height: 12),
 
-          // ── Session Toggle
-          _buildSessionToggle(theme),
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
+        _buildSessionToggle(theme),
+        if (_medicines.isNotEmpty) ...[
+          _buildMedicinesCard(theme),
+          const SizedBox(height: 16),
+        ],
+        const SizedBox(height: 16),
 
           // ── Pillar Tabs
           _buildPillarTabs(theme),
@@ -1440,6 +1454,156 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
   }
 
   // ── Session Toggle ───────────────────────────────────────────────
+  Widget _buildMedicinesCard(_TrainingCardTheme theme) {
+    if (_medicines.isEmpty) return const SizedBox();
+
+    return Container(
+      margin: const EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 24),
+      decoration: BoxDecoration(
+        color: theme.card,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.border),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(theme.isDark ? 0.3 : 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: theme.isDark ? Colors.grey[900] : Colors.blueGrey[50],
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              border: Border(bottom: BorderSide(color: theme.border)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.medication_outlined, size: 20, color: Colors.teal),
+                    const SizedBox(width: 8),
+                    Text(
+                      'DAFTAR OBAT',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: theme.text,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.teal.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '${_medicines.length} Obat',
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.teal),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListView.separated(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _medicines.length,
+            separatorBuilder: (context, index) => Divider(height: 1, color: theme.border),
+            itemBuilder: (context, index) {
+              final med = _medicines[index];
+              final name = med['medicine_name'] ?? 'Unknown';
+              final flagLevel = (med['flag_level'] as String?)?.trim() ?? '';
+              final implications = med['exercise_implications'] as String? ?? '';
+              final isBadge = flagLevel.toUpperCase() == 'MERAH' || 
+                              flagLevel.toUpperCase() == 'KUNING' || 
+                              flagLevel.toUpperCase() == 'HIJAU';
+
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            name,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: theme.text),
+                          ),
+                        ),
+                        if (flagLevel.isNotEmpty && isBadge)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: flagLevel.toUpperCase() == 'MERAH' ? Colors.red.withOpacity(0.1) :
+                                     flagLevel.toUpperCase() == 'KUNING' ? Colors.orange.withOpacity(0.1) :
+                                     Colors.green.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              flagLevel.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: flagLevel.toUpperCase() == 'MERAH' ? Colors.red[700] :
+                                       flagLevel.toUpperCase() == 'KUNING' ? Colors.orange[800] :
+                                       Colors.green[700],
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    if (implications.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(text: 'Info: ', style: TextStyle(fontWeight: FontWeight.bold, color: theme.textSecondary)),
+                            TextSpan(text: implications, style: TextStyle(color: theme.textMuted)),
+                          ],
+                        ),
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                    ],
+                    if (flagLevel.isNotEmpty && !isBadge) ...[
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.05),
+                          border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              const TextSpan(text: 'Perhatian: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(text: flagLevel),
+                            ],
+                          ),
+                          style: TextStyle(fontSize: 13, color: Colors.orange[900]),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildSessionToggle(_TrainingCardTheme theme) {
     return Container(
       decoration: BoxDecoration(

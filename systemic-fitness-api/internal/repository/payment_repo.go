@@ -51,6 +51,7 @@ type Subscription struct {
 	ExpiresAt     time.Time  `json:"expires_at"`
 	CancelledAt   *time.Time `json:"cancelled_at,omitempty"`
 	PaymentMethod *string    `json:"payment_method,omitempty"`
+	AttachmentURL *string    `json:"attachment_url,omitempty"`
 	CreatedAt     time.Time  `json:"created_at"`
 	UpdatedAt     time.Time  `json:"updated_at"`
 }
@@ -185,7 +186,7 @@ func (r *PaymentRepository) ListSubscriptions(ctx context.Context, params model.
 	query := fmt.Sprintf(`
 		SELECT s.id, s.user_id, u.full_name, u.email, s.plan_id, pp.name,
 		       s.status, s.started_at, s.expires_at, s.cancelled_at,
-		       s.payment_method, s.created_at, s.updated_at
+		       s.payment_method, s.attachment_url, s.created_at, s.updated_at
 		FROM subscriptions s
 		JOIN users u ON u.id = s.user_id
 		JOIN payment_plans pp ON pp.id = s.plan_id
@@ -205,13 +206,18 @@ func (r *PaymentRepository) ListSubscriptions(ctx context.Context, params model.
 		if err := rows.Scan(
 			&s.ID, &s.UserID, &s.UserName, &s.UserEmail, &s.PlanID, &s.PlanName,
 			&s.Status, &s.StartedAt, &s.ExpiresAt, &s.CancelledAt,
-			&s.PaymentMethod, &s.CreatedAt, &s.UpdatedAt,
+			&s.PaymentMethod, &s.AttachmentURL, &s.CreatedAt, &s.UpdatedAt,
 		); err != nil {
 			return nil, 0, err
 		}
 		subs = append(subs, s)
 	}
 	return subs, total, rows.Err()
+}
+
+func (r *PaymentRepository) UpdateSubscriptionAttachment(ctx context.Context, id string, attachmentURL *string) error {
+	_, err := r.db.Exec(ctx, `UPDATE subscriptions SET attachment_url = $1, updated_at = NOW() WHERE id = $2`, attachmentURL, id)
+	return err
 }
 
 // ── Payment Records ─────────────────────────────────────────────
