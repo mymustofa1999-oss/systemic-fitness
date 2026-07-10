@@ -1221,9 +1221,9 @@ function SetBlock({
 
       {/* Set Properties Grid */}
       <div className="p-4 border-b border-slate-100">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
           {/* Pattern */}
-          <div>
+          <div className="md:col-span-6 lg:col-span-2">
             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Pattern</label>
             {editing ? (
               <Popover.Root>
@@ -1273,7 +1273,7 @@ function SetBlock({
           </div>
 
           {/* Breathing */}
-          <div>
+          <div className="md:col-span-6 lg:col-span-2">
             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Breathing</label>
             {editing ? (
               <select
@@ -1293,7 +1293,7 @@ function SetBlock({
           </div>
 
           {/* Duration & Load/BPM */}
-          <div>
+          <div className="md:col-span-6 lg:col-span-3">
             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Duration / {isMetabolic ? "Extra Load" : "BPM"}</label>
             {editing ? (
               <div className="flex gap-2">
@@ -1319,10 +1319,10 @@ function SetBlock({
           </div>
 
           {/* Equipment */}
-          <div>
+          <div className="md:col-span-12 lg:col-span-5">
              <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Equipment</label>
              {editing ? (
-               <div className="flex gap-2">
+               <div className="flex flex-col md:flex-row gap-3">
                  <div className="flex-1 min-w-0">
                     <span className="text-[10px] text-slate-400 block mb-0.5">Upper {recommendedUpper && `(${recommendedUpper})`}</span>
                     <SearchableSelect

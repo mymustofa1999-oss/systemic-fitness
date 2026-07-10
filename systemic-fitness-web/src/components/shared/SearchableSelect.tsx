@@ -86,7 +86,7 @@ export function SearchableSelect({
         <Popover.Content
           align="start"
           sideOffset={4}
-          className="z-50 w-[var(--radix-popover-trigger-width)] bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden animate-slide-in"
+          className="z-50 min-w-[var(--radix-popover-trigger-width)] w-[var(--radix-popover-trigger-width)] md:w-auto md:min-w-[260px] bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden animate-slide-in"
         >
           {/* Search input */}
           <div className="p-2 border-b border-slate-100">
