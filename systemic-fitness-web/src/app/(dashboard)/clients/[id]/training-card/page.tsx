@@ -1324,27 +1324,6 @@ function SetBlock({
              {editing ? (
                <div className="flex flex-col md:flex-row gap-3">
                  <div className="flex-1 min-w-0">
-                    <span className="text-[10px] text-slate-400 block mb-0.5">Upper {recommendedUpper && `(${recommendedUpper})`}</span>
-                    <SearchableSelect
-                      options={upperOptions}
-                      value={set.equipment_upper || ""}
-                      onChange={(v) => onUpdateSet({ equipment_upper: v })}
-                      placeholder="Upper..."
-                      searchPlaceholder="Cari..."
-                    />
-                 </div>
-                 <div className="flex-1 min-w-0">
-                    <span className="text-[10px] text-slate-400 block mb-0.5">Lower {recommendedLower && `(${recommendedLower})`}</span>
-                    <SearchableSelect
-                      options={lowerOptions}
-                      value={set.equipment_lower || ""}
-                      onChange={(v) => onUpdateSet({ equipment_lower: v })}
-                      placeholder="Lower..."
-                      searchPlaceholder="Cari..."
-                    />
-                 </div>
-                 <div className="flex-1 min-w-0">
-                    <span className="text-[10px] text-slate-400 block mb-0.5">Alat (Opsional)</span>
                     <SearchableSelect
                       options={generalOptions}
                       value={set.equipment || ""}
@@ -1355,9 +1334,8 @@ function SetBlock({
                  </div>
                </div>
              ) : (
-               <div className="text-sm space-y-0.5">
-                 <div><span className="text-slate-400">Upper:</span> <span className="font-semibold text-slate-600">{set.equipment_upper ? `💪 ${formatWeight(set.equipment_upper)}` : "-"}</span></div>
-                 <div><span className="text-slate-400">Lower:</span> <span className="font-semibold text-slate-600">{set.equipment_lower ? `🦵 ${formatWeight(set.equipment_lower)}` : "-"}</span></div>
+               <div className="text-sm space-y-0.5 mt-1">
+                 <div><span className="font-semibold text-slate-600">{set.equipment || "-"}</span></div>
                </div>
              )}
           </div>
