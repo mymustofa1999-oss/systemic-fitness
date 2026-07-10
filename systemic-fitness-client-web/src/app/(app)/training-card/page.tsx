@@ -9,7 +9,6 @@ import { useLogWorkoutSession } from "@/hooks/useWorkout";
 import Link from "next/link";
 import { toast } from "@/stores/toastStore";
 import { useRouter } from "next/navigation";
-import { MedicinesCard } from "@/components/shared/MedicinesCard";
 
 // ════════════════════════════════════════════════════════════════════
 //  Types — API Response
@@ -1813,13 +1812,6 @@ export default function TrainingCardPage() {
     enabled: true,
   });
 
-  // Fetch Medicines
-  const { data: medicinesRes } = useQuery({
-    queryKey: ["client-medicines"],
-    queryFn: () => apiGet<any[]>("/api/medicines/me"),
-    retry: false,
-  });
-
   const presetCard = useMemo(() => {
     if (!isOverriddenTier) return null;
     
@@ -2151,12 +2143,6 @@ export default function TrainingCardPage() {
           lang={lang}
         />
 
-        {medicinesRes?.data && medicinesRes.data.length > 0 && (
-          <div className="mb-4">
-            <MedicinesCard data={medicinesRes.data} />
-          </div>
-        )}
-
         {/* ── Session Toggle ──────────────────────────────── */}
         <SessionToggle session={session} setSession={setSession} lang={lang} />
 
@@ -2335,12 +2321,6 @@ export default function TrainingCardPage() {
         session={session}
         lang={lang}
       />
-
-      {medicinesRes?.data && medicinesRes.data.length > 0 && (
-        <div className="mb-4">
-          <MedicinesCard data={medicinesRes.data} />
-        </div>
-      )}
 
       {/* ── Sequence Tabs ───────────────────────────────────── */}
       <div
