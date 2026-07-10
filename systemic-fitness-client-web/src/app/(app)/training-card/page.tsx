@@ -2252,6 +2252,7 @@ export default function TrainingCardPage() {
             pillarColor={PILLAR_COLORS[activePillar.type] || "var(--tc-gold)"}
             pillarName={PILLAR_NAMES[activePillar.type] || activePillar.type}
             userTier={subscription?.tier || ""}
+            isLevel5or6={isLevel5or6}
             onMovementClick={handleMovementClick}
             tier3PlanName={tier3PlanName}
           />
