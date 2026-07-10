@@ -119,6 +119,7 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
 
   // State
   int _sessionIndex = 0; // 0 = Full Program, 1 = Daily Reset
+  Set<int> _trainedDays = {};
   String _activeTab = 'FC';
 
   // BPM Sync Playback State
@@ -537,6 +538,33 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
 
   Future<void> _fetchTrainingCard() async {
     try {
+      try {
+        final sessionsResponse = await ApiService.getWithRetry('/api/v2/workout-sessions?session_type=full&limit=50');
+        if (sessionsResponse['success'] == true && sessionsResponse['data'] != null) {
+          final sessionsList = List<dynamic>.from(sessionsResponse['data']);
+          DateTime now = DateTime.now();
+          int dayOfWeek = now.weekday; // 1=Mon, 7=Sun
+          DateTime startOfWeek = DateTime(now.year, now.month, now.day).subtract(Duration(days: dayOfWeek - 1));
+          List<DateTime> currentWeekDates = List.generate(7, (i) => startOfWeek.add(Duration(days: i)));
+          
+          Set<int> trained = {};
+          for (var s in sessionsList) {
+            if (s['completed_at'] != null) {
+              DateTime d = DateTime.parse(s['completed_at']).toLocal();
+              int idx = currentWeekDates.indexWhere((cwd) => cwd.year == d.year && cwd.month == d.month && cwd.day == d.day);
+              if (idx != -1) trained.add(idx);
+            }
+          }
+          if (mounted) {
+            setState(() {
+              _trainedDays = trained;
+            });
+          }
+        }
+      } catch (e) {
+        debugPrint('Silent error fetching workout sessions: $e');
+      }
+
       // 1. Fetch subscription details first
       try {
         final subResponse = await ApiService.getWithRetry(ApiConfig.subscriptionMe);
@@ -1225,26 +1253,26 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
     final weekDays = [
       {'label': 'Sen', 'type': '60', 'val': "60'"},
       {'label': 'Sel', 'type': 'rest', 'val': ''},
-      {'label': 'Rab', 'type': '30', 'val': "30'"},
+      {'label': 'Rab', 'type': '60', 'val': "60'"},
       {'label': 'Kam', 'type': 'rest', 'val': ''},
       {'label': 'Jum', 'type': '60', 'val': "60'"},
-      {'label': 'Sab', 'type': '30', 'val': "30'"},
+      {'label': 'Sab', 'type': 'rest', 'val': ''},
       {'label': 'Min', 'type': 'rest', 'val': ''}
     ];
 
-    Widget buildDayCircle(Map<String, String> day, bool isActive, bool is60, bool is30) {
+    Widget buildDayCircle(Map<String, String> day, bool hasTrained, bool is60) {
       Color borderColor = theme.border;
       Color bgColor = Colors.transparent;
       Color textColor = theme.textMuted;
 
-      if (is60) {
-        borderColor = isActive ? theme.gold : theme.goldBorder;
-        bgColor = isActive ? theme.goldBg : Colors.transparent;
-        textColor = isActive ? theme.gold : theme.goldDim;
-      } else if (is30) {
-        borderColor = isActive ? const Color(0xFF10B981) : const Color(0x3310B981);
-        bgColor = isActive ? const Color(0x1810B981) : const Color(0x0510B981);
+      if (hasTrained) {
+        borderColor = const Color(0xFF10B981);
+        bgColor = const Color(0x1810B981);
         textColor = const Color(0xFF10B981);
+      } else if (is60) {
+        borderColor = theme.goldBorder;
+        bgColor = Colors.transparent;
+        textColor = theme.goldDim;
       }
 
       Widget circle = Container(
@@ -1253,25 +1281,27 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: bgColor,
-          border: Border.all(color: borderColor, width: isActive ? 1.5 : 1.0),
+          border: Border.all(color: borderColor, width: hasTrained ? 1.5 : 1.0),
         ),
         alignment: Alignment.center,
-        child: Text(
-          day['val']!,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-            color: textColor,
-          ),
-        ),
+        child: hasTrained
+            ? Icon(Icons.check, size: 14, color: textColor)
+            : Text(
+                day['val']!,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
+              ),
       );
 
-      if (isActive) {
+      if (hasTrained) {
         circle = Container(
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: theme.gold, width: 2),
+            border: Border.all(color: const Color(0xFF10B981), width: 2),
           ),
           child: circle,
         );
@@ -1402,24 +1432,22 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
                   const SizedBox(height: 10),
                   Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: weekDays.map((day) {
+                    children: weekDays.asMap().entries.map((entry) {
+                      int idx = entry.key;
+                      Map<String, String> day = entry.value;
                       final is60 = day['type'] == '60';
-                      final is30 = day['type'] == '30';
-
-                      final isActive60 = is60 && _sessionIndex == 0;
-                      final isActive30 = is30 && _sessionIndex == 1;
-                      final isActive = isActive60 || isActive30;
+                      final hasTrained = _trainedDays.contains(idx);
 
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          buildDayCircle(day, isActive, is60, is30),
+                          buildDayCircle(day, hasTrained, is60),
                           const SizedBox(height: 6),
                           Text(
                             day['label']!,
                             style: TextStyle(
                               fontSize: 10,
-                              color: theme.textMuted,
+                              color: hasTrained ? const Color(0xFF10B981) : is60 ? theme.gold : theme.textMuted,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
