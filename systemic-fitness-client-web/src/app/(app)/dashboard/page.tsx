@@ -242,6 +242,23 @@ export default function DashboardPage() {
             ? "Light independent exercise program to improve stabilizing muscles, walking capacity, and standing stability safely."
             : "Program latihan mandiri ringan untuk meningkatkan kekuatan otot penopang tubuh, kapasitas jalan, serta stabilitas berdiri dengan aman.",
         };
+      case "level_4_5_health":
+        return {
+          title: lang === "en" ? "Level 4–5 / Health Package" : "Paket Level 4–5 / Health",
+          desc: lang === "en" ? "Active & Independent (Health Optimization)" : "Aktif & Mandiri (Optimasi Kesehatan)",
+          details: lang === "en"
+            ? "Medium-intensity structured program to improve overall health, reduce body fat, and optimize daily energy."
+            : "Program latihan terstruktur intensitas sedang untuk meningkatkan kesehatan menyeluruh, memangkas lemak tubuh, dan mengoptimalkan energi harian.",
+        };
+      case "level_6_perf":
+      case "level_6_health":
+        return {
+          title: lang === "en" ? "Level 6 Package" : "Paket Level 6",
+          desc: lang === "en" ? "Advanced Performance (Peak Conditioning)" : "Performa Lanjut (Kondisi Puncak)",
+          details: lang === "en"
+            ? "High-intensity structured program for athletes or highly active individuals to achieve peak performance."
+            : "Program latihan terstruktur intensitas tinggi untuk atlet atau individu sangat aktif guna mencapai performa puncak.",
+        };
       case "level_4_5_perf":
       default:
         return {
@@ -762,7 +779,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-bold text-text-primary flex items-center gap-2">
             <span className="text-sf-warmGold">🎁</span>
-            {lang === "en" ? "Free Workout Preview (Level 4-5)" : "Cuplikan Latihan Gratis (Level 4-5)"}
+            {lang === "en" ? `Free Workout Preview (${levelInfo.title.replace("Paket ", "").replace(" Package", "")})` : `Cuplikan Latihan Gratis (${levelInfo.title.replace("Paket ", "").replace(" Package", "")})`}
           </h2>
           <span className="text-[10px] text-sf-warmGold font-semibold bg-sf-warmGold/10 px-2 py-1 rounded-md">
             PREVIEW

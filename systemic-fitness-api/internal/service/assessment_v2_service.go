@@ -377,27 +377,31 @@ func (s *AssessmentV2Service) GetTrainingCard(ctx context.Context, userID string
 				dbCard = templateToTrainerCard(tmpl, userID)
 				truncateToNVideos(dbCard, 3)
 			}
+		} else {
+			// If they have no personal card (because they are unpaid), use their assessment level
+			if meta, err := s.trainerCardService.repo.GetActivationMetadata(ctx, userID); err == nil && meta != nil && meta.PhysicalStatusLevel != "" {
+				levelStr := resolveLevelFromStatus(meta.PhysicalStatusLevel)
+				tmpl, terr := s.trainerCardService.GetTemplateByLevel(ctx, levelStr)
+				if terr == nil && tmpl != nil {
+					dbCard = templateToTrainerCard(tmpl, userID)
+					truncateToNVideos(dbCard, 3)
+				}
+			}
 		}
 
 		if dbCard == nil {
-			tmpl4, terr4 := s.trainerCardService.GetTemplateByLevel(ctx, "4")
-			tmpl5, terr5 := s.trainerCardService.GetTemplateByLevel(ctx, "5")
+			tmplFree, terrFree := s.trainerCardService.GetTemplateByLevel(ctx, "free")
 			
 			dbCard = &repository.TrainerCard{
 				CustomerID: userID,
-				Level:      "4 & 5",
+				Level:      "free",
 				Sequences:  make([]repository.TrainerCardSequence, 0),
 			}
 
-			if terr4 == nil && tmpl4 != nil {
-				card4 := templateToTrainerCard(tmpl4, userID)
-				truncateToNVideos(card4, 3)
-				dbCard.Sequences = append(dbCard.Sequences, card4.Sequences...)
-			}
-			if terr5 == nil && tmpl5 != nil {
-				card5 := templateToTrainerCard(tmpl5, userID)
-				truncateToNVideos(card5, 3)
-				dbCard.Sequences = append(dbCard.Sequences, card5.Sequences...)
+			if terrFree == nil && tmplFree != nil {
+				cardFree := templateToTrainerCard(tmplFree, userID)
+				truncateToNVideos(cardFree, 3)
+				dbCard.Sequences = append(dbCard.Sequences, cardFree.Sequences...)
 			}
 
 			if len(dbCard.Sequences) == 0 {
