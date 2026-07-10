@@ -540,7 +540,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   function startEdit(fcItemsParam?: any[], ccItemsParam?: any[], mcItemsParam?: any[]) {
     if (card) {
       setForm({
-        level: card.level || "",
+        level: card.level || physicalLevel || "",
         notes: card.notes || "",
         sequences: (card.sequences || []).map((s: any, si: number) => ({
           program_category_id: s.program_category_id,
