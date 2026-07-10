@@ -1903,7 +1903,8 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
                                 },
                               ),
                               const SizedBox(height: 8),
-                              _buildBpmAudioPlayer(theme, pc),
+                              if (_isPerformanceLevel(_data?.level))
+                                _buildBpmAudioPlayer(theme, pc),
                             ],
                           ),
                         ),

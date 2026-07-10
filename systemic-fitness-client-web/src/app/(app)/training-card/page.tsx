@@ -502,6 +502,7 @@ interface ExerciseCardProps {
   pillarColor: string;
   pillarName: string;
   userTier: string;
+  isLevel5or6: boolean;
   onMovementClick: (mv: TrainingMovement, isLocked: boolean) => void;
   tier3PlanName?: string;
 }
@@ -531,12 +532,13 @@ function ExerciseCard({
   pillarColor,
   pillarName,
   userTier,
+  isLevel5or6,
   onMovementClick,
   tier3PlanName,
 }: ExerciseCardProps) {
   const [expandedMovementId, setExpandedMovementId] = useState<string | null>(null);
   const pc = pillarColor;
-  const hasBPM = set.bpm_range && set.bpm_range !== "—" && set.bpm_range !== "";
+  const hasBPM = isLevel5or6 && set.bpm_range && set.bpm_range !== "~" && set.bpm_range !== "";
 
   // BPM Player State
   const [selectedBpm, setSelectedBpm] = useState<string>("No BPM");
@@ -779,115 +781,113 @@ function ExerciseCard({
                   />
                 </div>
 
-                {/* ── BPM Metronome Player Box ── */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 12,
-                    padding: "8px 12px",
-                    background: "var(--tc-toggle-bg)",
-                    border: "1px solid var(--tc-border)",
-                    borderRadius: 10,
-                  }}
-                >
-                  <div style={{ color: isBpmPlaying ? pc : "var(--tc-text-muted)", display: "flex", alignItems: "center" }}>
-                    <Music size={18} className={isBpmPlaying ? "animate-pulse" : ""} />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div
-                      style={{
-                        fontSize: 8,
-                        fontWeight: 700,
-                        color: "var(--tc-text-muted)",
-                        letterSpacing: 0.8,
-                        textTransform: "uppercase",
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      BPM MUSIC PLAYER
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 600,
-                        color: "var(--tc-text)",
-                        lineHeight: 1.3,
-                        marginTop: 1,
-                      }}
-                    >
-                      {isBpmPlaying
-                        ? `Playing · ${selectedBpm} BPM`
-                        : selectedBpm === "No BPM"
-                        ? "Muted (No BPM)"
-                        : `Paused · ${selectedBpm} BPM`}
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <select
-                      value={selectedBpm}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setSelectedBpm(val);
-                        if (isBpmPlaying || playingMovementId) {
-                          playBpmAudio(val);
-                        }
-                      }}
-                      style={{
-                        background: "var(--tc-card)",
-                        border: "1px solid var(--tc-border)",
-                        borderRadius: 6,
-                        padding: "3px 20px 3px 8px",
-                        fontSize: 11,
-                        fontWeight: "bold",
-                        color: pc,
-                        cursor: "pointer",
-                        outline: "none",
-                        appearance: "none",
-                        WebkitAppearance: "none",
-                        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='${encodeURIComponent(pc)}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>")`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "right 4px center",
-                        backgroundSize: "12px",
-                      }}
-                    >
-                      <option value="No BPM" style={{ color: "var(--tc-text-secondary)" }}>
-                        No BPM
-                      </option>
-                      {["60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200"].map((val) => (
-                        <option key={val} value={val}>
-                          {val} BPM
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <button
-                    onClick={() => {
-                      if (selectedBpm === "No BPM") return;
-                      if (isBpmPlaying) {
-                        stopBpmAudio();
-                      } else {
-                        playBpmAudio(selectedBpm);
-                      }
-                    }}
-                    disabled={selectedBpm === "No BPM"}
+                {/* 🎵 BPM Metronome Player Box 🎵 */}
+                {isLevel5or6 && (
+                  <div
                     style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: "50%",
-                      background: selectedBpm === "No BPM" ? "var(--tc-chip-bg)" : `${pc}25`,
-                      border: `1px solid ${selectedBpm === "No BPM" ? "var(--tc-chip-border)" : `${pc}40`}`,
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
-                      color: selectedBpm === "No BPM" ? "var(--tc-text-muted)" : pc,
-                      cursor: selectedBpm === "No BPM" ? "default" : "pointer",
-                      padding: 0,
+                      gap: 12,
+                      borderRadius: 10,
+                      backgroundColor: `${pc}0A`,
+                      border: `1px solid ${pc}20`,
+                      padding: "8px 12px",
+                      marginTop: 8,
                     }}
                   >
-                    {isBpmPlaying ? <Pause size={14} /> : <Play size={14} fill={selectedBpm === "No BPM" ? "none" : "currentColor"} />}
-                  </button>
-                </div>
+                    <div style={{ color: isBpmPlaying ? pc : "var(--tc-text-muted)", display: "flex", alignItems: "center" }}>
+                      <Music size={18} className={isBpmPlaying ? "animate-pulse" : ""} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div
+                        style={{
+                          fontSize: 8,
+                          lineHeight: 1.2,
+                          color: "var(--tc-text-dim)",
+                          fontWeight: 700,
+                          letterSpacing: 0.5,
+                        }}
+                      >
+                        BPM MUSIC PLAYER
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 600,
+                          marginTop: 1,
+                          color: "var(--tc-text)",
+                        }}
+                      >
+                        {isBpmPlaying
+                          ? `Playing @ ${selectedBpm} BPM`
+                          : selectedBpm === "No BPM"
+                          ? "Muted (No BPM)"
+                          : `Paused @ ${selectedBpm} BPM`}
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <select
+                        value={selectedBpm}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setSelectedBpm(val);
+                          if (isBpmPlaying || playingMovementId) {
+                            playBpmAudio(val);
+                          }
+                        }}
+                        style={{
+                          background: "var(--tc-card)",
+                          border: "1px solid var(--tc-border)",
+                          borderRadius: 6,
+                          padding: "3px 20px 3px 8px",
+                          fontSize: 11,
+                          fontWeight: "bold",
+                          color: pc,
+                          appearance: "none",
+                          backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E")`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "right 6px center",
+                          backgroundSize: "12px",
+                        }}
+                      >
+                        <option value="No BPM" style={{ color: "var(--tc-text-secondary)" }}>
+                          No BPM
+                        </option>
+                        {["60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200"].map((val) => (
+                          <option key={val} value={val}>
+                            {val} BPM
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <button
+                      onClick={() => {
+                        if (selectedBpm === "No BPM") return;
+                        if (isBpmPlaying) {
+                          stopBpmAudio();
+                        } else {
+                          playBpmAudio(selectedBpm);
+                        }
+                      }}
+                      disabled={selectedBpm === "No BPM"}
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: "50%",
+                        background: selectedBpm === "No BPM" ? "var(--tc-chip-bg)" : `${pc}25`,
+                        border: `1px solid ${selectedBpm === "No BPM" ? "var(--tc-chip-border)" : `${pc}40`}`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: selectedBpm === "No BPM" ? "var(--tc-text-muted)" : pc,
+                        cursor: selectedBpm === "No BPM" ? "default" : "pointer",
+                        padding: 0,
+                      }}
+                    >
+                      {isBpmPlaying ? <Pause size={14} /> : <Play size={14} fill={selectedBpm === "No BPM" ? "none" : "currentColor"} />}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -983,10 +983,12 @@ function LegacyExerciseCard({
   set,
   catCode,
   catName,
+  isLevel5or6,
 }: {
   set: CardSet;
   catCode: string;
   catName: string;
+  isLevel5or6: boolean;
 }) {
   const pc = PILLAR_COLORS[catCode] || "var(--tc-gold)";
 
@@ -1047,7 +1049,7 @@ function LegacyExerciseCard({
             )}
           </div>
         </div>
-        {set.bpm && set.bpm !== "—" && (
+        {isLevel5or6 && set.bpm && set.bpm !== "~" && (
           <div style={{ textAlign: "right", flexShrink: 0 }}>
             <div style={{ fontSize: 8, color: "var(--tc-text-dim)", letterSpacing: 0.8 }}>BPM</div>
             <div
@@ -1125,8 +1127,8 @@ function LegacyExerciseCard({
         </div>
       )}
 
-      {/* ── BPM Target Block */}
-      {set.bpm && set.bpm !== "—" && (
+      {/* 🎵 BPM Target Block */}
+      {isLevel5or6 && set.bpm && set.bpm !== "~" && (
         <div
           style={{
             borderTop: `1px solid ${pc}20`,
@@ -2411,6 +2413,7 @@ export default function TrainingCardPage() {
                   set={set}
                   catCode={catCode}
                   catName={catName}
+                  isLevel5or6={isLevel5or6}
                 />
               );
             })}
