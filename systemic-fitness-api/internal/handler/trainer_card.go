@@ -210,6 +210,7 @@ type upsertSetInput struct {
 	Duration           *string              `json:"duration,omitempty"`
 	EquipmentUpper     *string              `json:"equipment_upper,omitempty"`
 	EquipmentLower     *string              `json:"equipment_lower,omitempty"`
+	Equipment          *string              `json:"equipment,omitempty"`
 	TypeID             *string              `json:"type_id,omitempty"`
 	BPM                *string              `json:"bpm,omitempty"`
 	ExtraLoad          *string              `json:"extra_load,omitempty"`
@@ -232,7 +233,7 @@ func (h *TrainerCardHandler) UpsertCard(w http.ResponseWriter, r *http.Request) 
 	customerID := chi.URLParam(r, "customerId")
 
 	var input struct {
-		Level     string                `json:"level"     validate:"required,min=1,max=10"`
+		Level     string                `json:"level"     validate:"required,min=1,max=30"`
 		Notes     *string               `json:"notes,omitempty"`
 		Sequences []upsertSequenceInput `json:"sequences" validate:"required,min=1,dive"`
 	}
@@ -276,6 +277,7 @@ func (h *TrainerCardHandler) UpsertCard(w http.ResponseWriter, r *http.Request) 
 				Duration:           setIn.Duration,
 				EquipmentUpper:     setIn.EquipmentUpper,
 				EquipmentLower:     setIn.EquipmentLower,
+				Equipment:          setIn.Equipment,
 				TypeID:             setIn.TypeID,
 				BPM:                setIn.BPM,
 				ExtraLoad:          setIn.ExtraLoad,

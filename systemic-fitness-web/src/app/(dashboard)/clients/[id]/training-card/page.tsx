@@ -263,7 +263,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const { data: movementsData } = useDLMovements({ limit: 500 });
   const { data: equipUpperData } = useEquipments({ category: "upper", limit: 100 });
   const { data: equipLowerData } = useEquipments({ category: "lower", limit: 100 });
-  const { data: equipGeneralData } = useEquipments({ category: "general", limit: 100 });
+  const { data: equipGeneralData } = useEquipments({ limit: 500 });
   const { data: latestAssessmentData, isLoading: isLoadingAssessment } = useLatestAssessmentV2(customerId);
   const physicalLevel = latestAssessmentData?.data?.physical_status_level;
   
@@ -654,6 +654,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
           duration: set.duration || null,
           equipment_upper: set.equipment_upper || null,
           equipment_lower: set.equipment_lower || null,
+          equipment: set.equipment || null,
           type_id: set.type_id || null,
           bpm: set.bpm || null,
           extra_load: set.extra_load || null,
@@ -944,9 +945,9 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             </tr>
           </tbody>
         </table>
-        {/* MEDICINES & IMPLICATIONS (Read-Only) */}
+        {/* MEDICINES & IMPLICATIONS */}
         <div className="mt-6 mb-6">
-          <MedicinesCard customerId={params.id} data={(setupData?.data as any)?.medicines ?? []} readOnly={true} />
+          <MedicinesCard customerId={params.id} data={(setupData?.data as any)?.medicines ?? []} />
         </div>
       </div>
 
