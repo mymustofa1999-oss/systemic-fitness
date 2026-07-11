@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
+import { toast } from "@/stores/toastStore";
 import Link from "next/link";
 import { useUser } from "@/hooks/useUsers";
 import { useAuth } from "@/hooks/useAuth";
@@ -1886,5 +1887,7 @@ function VideoPreviewModal({ movement, bpm, onClose }: { movement: any; bpm?: st
     </div>
   );
 }
+
+
 
 
