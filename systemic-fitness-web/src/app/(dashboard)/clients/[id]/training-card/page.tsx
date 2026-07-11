@@ -435,6 +435,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const trainerName = (setupData?.data as any)?.staff?.trainer_name;
 
   const [editing, setEditing] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, boolean>>({});
   const [form, setForm] = useState<CardForm | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -645,8 +646,52 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
   function cancelEdit() { setForm(null); setEditing(false); }
 
+  const validateForm = () => {
+    let isValid = true;
+    const errors: Record<string, boolean> = {};
+
+    if (!form?.level) {
+      errors['level'] = true;
+      isValid = false;
+    }
+
+    form?.sequences.forEach((seq, si) => {
+      if (!seq.program_category_id) {
+        errors[`seq_${si}_category`] = true;
+        isValid = false;
+      }
+      seq.sets.forEach((set, seti) => {
+        set.items.forEach((item, ii) => {
+          if (!item.movement_id && !item.movement_name?.trim()) {
+            errors[`item_${si}_${seti}_${ii}_movement`] = true;
+            isValid = false;
+          }
+          if (!item.body_part || !["upper", "lower", "core", "whole body"].includes(item.body_part.toLowerCase())) {
+            errors[`item_${si}_${seti}_${ii}_body_part`] = true;
+            isValid = false;
+          }
+          if (!item.reps) {
+            errors[`item_${si}_${seti}_${ii}_reps`] = true;
+            isValid = false;
+          }
+          if (!item.sets_count) {
+            errors[`item_${si}_${seti}_${ii}_sets_count`] = true;
+            isValid = false;
+          }
+        });
+      });
+    });
+
+    setFormErrors(errors);
+    if (!isValid) {
+      toast.error("Masih ada kolom wajib yang belum diisi (ditandai kotak merah)");
+    }
+    return isValid;
+  };
+
   async function handleSave() {
     if (!form) return;
+    if (!validateForm()) return;
     const payload = {
       customerId,
       level: form.level,
@@ -913,9 +958,9 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
                     <SearchableSelect
                       options={LEVELS}
                       value={form.level}
-                      onChange={(v) => setForm({ ...form, level: v })}
-                      placeholder="Pilih Level..."
-                      searchPlaceholder="Cari level..."
+                      onChange={(v) => { setForm({ ...form, level: v }); setFormErrors(prev => ({ ...prev, level: false })); }}
+                      placeholder="Pilih level..."
+                      className={formErrors['level'] ? "!border-red-500 bg-red-50" : ""}
                     />
                   </div>
                 ) : (
@@ -995,6 +1040,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             onAddItem={(seti, bp) => addItem(si, seti, bp)}
             onRemoveItem={(seti, ii) => removeItem(si, seti, ii)}
             onUpdateItem={(seti, ii, p) => updateItem(si, seti, ii, p)}
+            formErrors={formErrors}
           />
         );
       })}
@@ -1047,6 +1093,7 @@ function SequenceTable({
   seq, si, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
   equipUpperOptions, equipLowerOptions, equipGeneralOptions, recs,
   onUpdateSeq, onAddSet, onRemoveSet, onUpdateSet, onAddItem, onRemoveItem, onUpdateItem,
+  formErrors,
 }: {
   seq: CardSequence; si: number; level: string; isMetabolic: boolean; editing: boolean;
   typeOptions: { value: string; label: string; sublabel?: string }[];
@@ -1064,6 +1111,7 @@ function SequenceTable({
   onAddItem: (seti: number, bodyPart: string) => void;
   onRemoveItem: (seti: number, ii: number) => void;
   onUpdateItem: (seti: number, ii: number, p: Partial<CardItem>) => void;
+  formErrors: Record<string, boolean>;
 }) {
   const [expanded, setExpanded] = useState(true);
   const code = seq.program_category_code || "";
@@ -1146,6 +1194,7 @@ function SequenceTable({
             <SetBlock
               key={seti}
               set={set}
+              si={si}
               seti={seti}
               level={level}
               isMetabolic={isMetabolic}
@@ -1164,6 +1213,7 @@ function SequenceTable({
               onAddItem={(bp) => onAddItem(seti, bp)}
               onRemoveItem={(ii) => onRemoveItem(seti, ii)}
               onUpdateItem={(ii, p) => onUpdateItem(seti, ii, p)}
+              formErrors={formErrors}
             />
           ))}
 
@@ -1190,11 +1240,12 @@ function SequenceTable({
 // ═══════════════════════════════════════════════════════════════
 
 function SetBlock({
-  set, seti, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
+  set, si, seti, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
   upperOptions, lowerOptions, generalOptions, recommendedUpper, recommendedLower,
   onUpdateSet, onRemoveSet, onAddItem, onRemoveItem, onUpdateItem, onPreviewVideo,
+  formErrors,
 }: {
-  set: CardSet; seti: number; level: string; isMetabolic: boolean; editing: boolean;
+  set: CardSet; si: number; seti: number; level: string; isMetabolic: boolean; editing: boolean;
   typeOptions: { value: string; label: string; sublabel?: string }[];
   movementOptions: { value: string; label: string; sublabel?: string; pattern?: string | null }[];
   movementMap: Record<string, string>;
@@ -1210,6 +1261,7 @@ function SetBlock({
   onRemoveItem: (ii: number) => void;
   onUpdateItem: (ii: number, p: Partial<CardItem>) => void;
   onPreviewVideo?: (m: any, bpm: string) => void;
+  formErrors: Record<string, boolean>;
 }) {
   const selectedPatterns = set.pattern ? set.pattern.split(",").map(p => p.trim()).filter(Boolean) : [];
   const isLevel1 = level === "1" || level === "1-499" || level === "1-799";
@@ -1405,7 +1457,8 @@ function SetBlock({
                       item={item}
                       bodyPart={item.body_part}
                       selectedPatterns={selectedPatterns}
-                      onUpdate={(p) => onUpdateItem(ii, p)}
+                      onUpdate={(updates) => onUpdateItem(ii, updates)}
+                      hasError={formErrors[`item_${si}_${seti}_${ii}_movement`]}
                     />
                   ) : (
                     <div className="flex items-center gap-2 mt-1">
@@ -1430,7 +1483,7 @@ function SetBlock({
                         type="number" 
                         value={item.reps ?? ""} 
                         onChange={(e) => onUpdateItem(ii, { reps: e.target.value ? +e.target.value : null })} 
-                        className="w-full text-sm border border-slate-200 rounded px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy text-center" 
+                        className={`w-full text-sm border rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-sf-deepNavy text-center ${formErrors[\`item_${si}_${seti}_${ii}_reps\`] ? "border-red-500 bg-red-50 placeholder-red-300" : "border-slate-200"}`} 
                       />
                     ) : (
                       <div className="font-medium text-sm text-center">{item.reps ?? "-"}</div>
@@ -1445,7 +1498,7 @@ function SetBlock({
                         type="number" 
                         value={item.sets_count ?? ""} 
                         onChange={(e) => onUpdateItem(ii, { sets_count: e.target.value ? +e.target.value : null })} 
-                        className="w-full text-sm border border-slate-200 rounded px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy text-center" 
+                        className={`w-full text-sm border rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-sf-deepNavy text-center ${formErrors[`item_${si}_${seti}_${ii}_sets_count`] ? "border-red-500 bg-red-50 placeholder-red-300" : "border-slate-200"}`} 
                       />
                     ) : (
                       <div className="font-medium text-sm text-center">{item.sets_count ?? "-"}</div>
@@ -1530,6 +1583,7 @@ function MovementSelect({
   bodyPart: string;
   selectedPatterns: string[];
   onUpdate: (p: Partial<CardItem>) => void;
+  hasError?: boolean;
 }) {
   let filtered = [...options];
 
@@ -1585,12 +1639,13 @@ function MovementSelect({
         }}
         placeholder="Pilih gerakan..."
         searchPlaceholder="Cari gerakan..."
+        className={hasError ? "!border-red-500 bg-red-50" : ""}
       />
       {!item.movement_id && (
         <input
           value={item.movement_name || ""}
           onChange={(e) => onUpdate({ movement_name: e.target.value })}
-          className="mt-1.5 w-full border border-slate-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-sf-deepNavy bg-white"
+          className={`mt-1.5 w-full border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-sf-deepNavy bg-white ${hasError ? "border-red-500 bg-red-50" : "border-slate-200"}`}
           placeholder="Atau ketik manual..."
         />
       )}
