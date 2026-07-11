@@ -1,0 +1,2 @@
+ALTER TABLE trainer_cards ALTER COLUMN level TYPE VARCHAR(50);
+ALTER TABLE trainer_card_templates ALTER COLUMN level TYPE VARCHAR(50);
