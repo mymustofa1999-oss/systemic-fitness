@@ -714,17 +714,23 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
           breathing_diaphragm: set.breathing_diaphragm || null,
           notes: set.notes || null,
           sort_order: set.sort_order,
-          items: set.items.map((item) => ({
-            movement_id: item.movement_id || null,
-            movement_name: item.movement_name || null,
-            body_part: item.body_part,
-            equipment: item.equipment || null,
-            reps: item.reps || null,
-            sets_count: item.sets_count || 1,
-            breathing_core: item.breathing_core || null,
-            breathing_diaphragm: item.breathing_diaphragm || null,
-            sort_order: item.sort_order,
-          })),
+          items: set.items.map((item) => {
+            let validBodyPart = item.body_part;
+            if (!["upper", "lower", "core"].includes(validBodyPart?.toLowerCase())) {
+              validBodyPart = "core";
+            }
+            return {
+              movement_id: item.movement_id || null,
+              movement_name: item.movement_name || null,
+              body_part: validBodyPart,
+              equipment: item.equipment || null,
+              reps: item.reps || null,
+              sets_count: item.sets_count || 1,
+              breathing_core: item.breathing_core || null,
+              breathing_diaphragm: item.breathing_diaphragm || null,
+              sort_order: item.sort_order,
+            };
+          }),
         })),
       })),
     };
@@ -1880,3 +1886,4 @@ function VideoPreviewModal({ movement, bpm, onClose }: { movement: any; bpm?: st
     </div>
   );
 }
+
