@@ -735,7 +735,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         })),
       })),
     };
-    await upsertCard.mutateAsync(payload);
+    await upsertCard.mutateAsync({ customerId: customerId as string, data: payload });
     setEditing(false);
     setForm(null);
   }
