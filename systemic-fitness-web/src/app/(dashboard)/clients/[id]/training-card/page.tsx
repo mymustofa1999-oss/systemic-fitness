@@ -1489,7 +1489,7 @@ function SetBlock({
                         type="number" 
                         value={item.reps ?? ""} 
                         onChange={(e) => onUpdateItem(ii, { reps: e.target.value ? +e.target.value : null })} 
-                        className={`w-full text-sm border rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-sf-deepNavy text-center ${formErrors[\`item_${si}_${seti}_${ii}_reps\`] ? "border-red-500 bg-red-50 placeholder-red-300" : "border-slate-200"}`} 
+                        className={`w-full text-sm border rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-sf-deepNavy text-center ${formErrors[`item_${si}_${seti}_${ii}_reps`] ? "border-red-500 bg-red-50 placeholder-red-300" : "border-slate-200"}`} 
                       />
                     ) : (
                       <div className="font-medium text-sm text-center">{item.reps ?? "-"}</div>
@@ -1886,4 +1886,5 @@ function VideoPreviewModal({ movement, bpm, onClose }: { movement: any; bpm?: st
     </div>
   );
 }
+
 
