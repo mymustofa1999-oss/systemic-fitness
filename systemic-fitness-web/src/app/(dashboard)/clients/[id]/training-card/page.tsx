@@ -1582,7 +1582,7 @@ function SetBlock({
 // ═══════════════════════════════════════════════════════════════
 
 function MovementSelect({
-  options, movementMap, item, bodyPart, selectedPatterns, onUpdate
+  options, movementMap, item, bodyPart, selectedPatterns, onUpdate, hasError
 }: {
   options: { value: string; label: string; sublabel?: string; pattern?: string | null; section?: string; extractedCategory?: string }[];
   movementMap: Record<string, string>;
@@ -1887,6 +1887,7 @@ function VideoPreviewModal({ movement, bpm, onClose }: { movement: any; bpm?: st
     </div>
   );
 }
+
 
 
 
