@@ -629,23 +629,31 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
               sort_order: ii,
             })),
           })),
-        })) : customerPrograms
-          .filter((p: any) => p.is_active)
-          .map((p: any, i: number) => {
+        })) : (() => {
+          let baseCategories = customerPrograms.filter((p: any) => p.is_active);
+          if (baseCategories.length === 0) {
+            baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic"].includes(c.code?.toLowerCase()));
+          }
+          return baseCategories.map((p: any, i: number) => {
+            const code = (p.program_category_code || p.code || "").toLowerCase();
+            const categoryId = p.program_category_id || p.id;
+            const categoryName = p.program_category_name || p.name;
+
             let menuItems: any[] = [];
-            if (p.program_category_code === "functional") menuItems = fcItemsParam || (fcData as any)?.data || [];
-            if (p.program_category_code === "cardiorespiratory") menuItems = ccItemsParam || (ccData as any)?.data || [];
-            if (p.program_category_code === "metabolic") menuItems = mcItemsParam || (mcData as any)?.data || [];
+            if (code === "functional") menuItems = fcItemsParam || (fcData as any)?.data || [];
+            if (code === "cardiorespiratory") menuItems = ccItemsParam || (ccData as any)?.data || [];
+            if (code === "metabolic") menuItems = mcItemsParam || (mcData as any)?.data || [];
             
             return {
-              program_category_id: p.program_category_id,
-              program_category_name: p.program_category_name,
-              program_category_code: p.program_category_code,
+              program_category_id: categoryId,
+              program_category_name: categoryName,
+              program_category_code: code,
               duration: "",
               sort_order: i,
               sets: buildSetsFromMenuItems(menuItems),
             };
-          }),
+          });
+        })(),
       });
     }
     setEditing(true);
@@ -667,31 +675,11 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         errors[`seq_${si}_category`] = true;
         isValid = false;
       }
-      seq.sets.forEach((set, seti) => {
-        set.items.forEach((item, ii) => {
-          if (!item.movement_id && !item.movement_name?.trim()) {
-            errors[`item_${si}_${seti}_${ii}_movement`] = true;
-            isValid = false;
-          }
-          if (!item.body_part || !["upper", "lower", "core", "whole body"].includes(item.body_part.toLowerCase())) {
-            errors[`item_${si}_${seti}_${ii}_body_part`] = true;
-            isValid = false;
-          }
-          if (!item.reps) {
-            errors[`item_${si}_${seti}_${ii}_reps`] = true;
-            isValid = false;
-          }
-          if (!item.sets_count) {
-            errors[`item_${si}_${seti}_${ii}_sets_count`] = true;
-            isValid = false;
-          }
-        });
-      });
     });
 
     setFormErrors(errors);
     if (!isValid) {
-      toast.error("Masih ada kolom wajib yang belum diisi (ditandai kotak merah)");
+      toast.error("Level dan Kategori Program wajib diisi");
     }
     return isValid;
   };
@@ -822,18 +810,25 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
            apiGet(`/api/digital-library/categories/mc/menu`, { level: levelNum })
         ]);
 
-        const newSequences = customerPrograms
-          .filter((p: any) => p.is_active)
-          .map((p: any, i: number) => {
+        let baseCategories = customerPrograms.filter((p: any) => p.is_active);
+        if (baseCategories.length === 0) {
+          baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic"].includes(c.code?.toLowerCase()));
+        }
+
+        const newSequences = baseCategories.map((p: any, i: number) => {
+            const code = (p.program_category_code || p.code || "").toLowerCase();
+            const categoryId = p.program_category_id || p.id;
+            const categoryName = p.program_category_name || p.name;
+
             let menuItems: any[] = [];
-            if (p.program_category_code === "functional") menuItems = (fcRes as any)?.data || [];
-            if (p.program_category_code === "cardiorespiratory") menuItems = (ccRes as any)?.data || [];
-            if (p.program_category_code === "metabolic") menuItems = (mcRes as any)?.data || [];
+            if (code === "functional") menuItems = (fcRes as any)?.data || [];
+            if (code === "cardiorespiratory") menuItems = (ccRes as any)?.data || [];
+            if (code === "metabolic") menuItems = (mcRes as any)?.data || [];
             
             return {
-              program_category_id: p.program_category_id,
-              program_category_name: p.program_category_name,
-              program_category_code: p.program_category_code,
+              program_category_id: categoryId,
+              program_category_name: categoryName,
+              program_category_code: code,
               duration: "",
               sort_order: i,
               sets: buildSetsFromMenuItems(menuItems),
