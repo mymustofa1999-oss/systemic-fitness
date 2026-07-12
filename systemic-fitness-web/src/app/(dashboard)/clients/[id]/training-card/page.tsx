@@ -429,7 +429,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       notes: "",
       sequences: sequences,
     };
-  }, [isOverriddenTier, customerId, customerPrograms, profile]);
+  }, [isOverriddenTier, customerId, customerPrograms, profile, allCategories]);
 
   const card = dbCard;
 
