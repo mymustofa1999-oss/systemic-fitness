@@ -1704,27 +1704,8 @@ function MovementSelect({
     });
   }
 
-  if (selectedPatterns && selectedPatterns.length > 0) {
-    filtered = filtered.filter(m => {
-      const p = ((m as any).pattern || "").trim().toLowerCase();
-      const c = ((m as any).extractedCategory || "").trim().toLowerCase();
-      
-      return selectedPatterns.some(sp => {
-        const spLower = sp.toLowerCase();
-        
-        let match = false;
-        if (p) {
-          if (!spLower.includes(p) && !p.includes(spLower)) return false;
-          match = true;
-        }
-        if (c) {
-          if (!spLower.includes(c)) return false;
-          match = true;
-        }
-        return match;
-      });
-    });
-  }
+  // We remove the selectedPatterns filter to give consultants full flexibility
+  // to choose ANY movement regardless of the Set's pattern.
   const customLabel = item.movement_name || "";
   const allOpts = [
     ...(customLabel && !item.movement_id ? [{ value: "__custom", label: customLabel, sublabel: "custom" }] : []),
