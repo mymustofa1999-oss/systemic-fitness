@@ -12,6 +12,7 @@ import {
   useDeleteTrainerCard,
   useTrainerCardTypes,
   useCustomerPrograms,
+  useProgramCategories,
   useAssignStaff,
   useUpdateCustomerPriority,
   useEquipments,
@@ -262,6 +263,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const { data: cardData, isLoading: cardLoading } = useTrainerCard(customerId);
   const { data: typesData } = useTrainerCardTypes();
   const { data: programsData, isLoading: isLoadingPrograms } = useCustomerPrograms(customerId);
+  const { data: allCategoriesData } = useProgramCategories();
   const { data: movementsData } = useDLMovements({ limit: 500 });
   const { data: equipUpperData } = useEquipments({ category: "upper", limit: 100 });
   const { data: equipLowerData } = useEquipments({ category: "lower", limit: 100 });
@@ -311,6 +313,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   }, [profile?.gender, age, profile?.height_cm]);
   const types = (typesData?.data ?? []) as any[];
   const customerPrograms = (programsData?.data ?? []) as any[];
+  const allCategories = (allCategoriesData?.data ?? []) as any[];
   const movements = (movementsData?.data ?? []) as any[];
   const equipUpper = (equipUpperData?.data ?? []) as any[];
   const equipLower = (equipLowerData?.data ?? []) as any[];
@@ -335,9 +338,10 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
     const getCatInfo = (code: string) => {
       const p = customerPrograms.find((cp: any) => cp.program_category_code === code);
+      const fallbackCat = allCategories.find((cat: any) => cat.code === code);
       return {
-        id: p?.program_category_id || code,
-        name: p?.program_category_name || (code === "functional" ? "Functional Conditioning" : code === "cardiorespiratory" ? "Cardio Conditioning" : "Metabolic Conditioning"),
+        id: p?.program_category_id || fallbackCat?.id || code,
+        name: p?.program_category_name || fallbackCat?.name || (code === "functional" ? "Functional Conditioning" : code === "cardiorespiratory" ? "Cardio Conditioning" : "Metabolic Conditioning"),
         code: code,
       };
     };
@@ -452,13 +456,14 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       !editing &&
       canEdit &&
       !hasAutoStarted.current &&
+      allCategories.length > 0 &&
       // auto-start if there is a template, or preset, or at least active customer programs to map Modul Card to
       (templateCard || presetCard || customerPrograms.length > 0)
     ) {
       hasAutoStarted.current = true;
       startEdit(fcData?.data as any[], ccData?.data as any[], mcData?.data as any[]);
     }
-  }, [cardLoading, isLoadingTemplate, isLoadingMenu, isLoadingAssessment, isLoadingPrograms, card, editing, canEdit, templateCard, presetCard, customerPrograms, fcData, ccData, mcData]);
+  }, [cardLoading, isLoadingTemplate, isLoadingMenu, isLoadingAssessment, isLoadingPrograms, card, editing, canEdit, templateCard, presetCard, customerPrograms, allCategories, fcData, ccData, mcData]);
 
   // Build SearchableSelect options
   const typeOptions = useMemo(() =>
