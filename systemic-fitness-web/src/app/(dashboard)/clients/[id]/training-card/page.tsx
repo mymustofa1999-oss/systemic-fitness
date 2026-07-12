@@ -767,51 +767,88 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
     try {
       const res = await apiGet(`/api/training-card-templates/${newLevel}`);
-      if (res?.data) {
-        const tCard = res.data as any;
-        const newSequences = tCard.sequences.map((s: any, si: number) => ({
-          program_category_id: s.program_category_id,
-          program_category_name: s.program_category_name,
-          program_category_code: s.program_category_code,
-          duration: s.duration || "",
-          sort_order: si,
-          sets: (s.sets || []).map((set: any, seti: number) => ({
-            set_number: set.set_number,
-            duration: set.duration || "",
-            equipment_upper: set.equipment_upper || "",
-            equipment_lower: set.equipment_lower || "",
-            equipment: set.equipment || set.equipment_upper || "",
-            type_id: set.type_id || "",
-            type_name: set.type_name || "",
-            bpm: set.bpm || "",
-            extra_load: set.extra_load || "",
-            pattern: set.pattern || "",
-            breathing_core: set.breathing_core || "",
-            breathing_diaphragm: set.breathing_diaphragm || "",
-            notes: set.notes || "",
-            sort_order: seti,
-            items: (set.items || []).map((item: any, ii: number) => ({
-              movement_id: item.movement_id || null,
-              movement_name: item.movement_name || "",
-              body_part: item.body_part || "upper",
-              equipment: item.equipment || "",
-              reps: item.reps ?? null,
-              sets_count: item.sets_count ?? 1,
-              breathing_core: item.breathing_core || "",
-              breathing_diaphragm: item.breathing_diaphragm || "",
-              sort_order: ii,
-            })),
+      if (!res?.data) throw new Error("No template data");
+      
+      const tCard = res.data as any;
+      const newSequences = tCard.sequences.map((s: any, si: number) => ({
+        program_category_id: s.program_category_id,
+        program_category_name: s.program_category_name,
+        program_category_code: s.program_category_code,
+        duration: s.duration || "",
+        sort_order: si,
+        sets: (s.sets || []).map((set: any, seti: number) => ({
+          set_number: set.set_number,
+          duration: set.duration || "",
+          equipment_upper: set.equipment_upper || "",
+          equipment_lower: set.equipment_lower || "",
+          equipment: set.equipment || set.equipment_upper || "",
+          type_id: set.type_id || "",
+          type_name: set.type_name || "",
+          bpm: set.bpm || "",
+          extra_load: set.extra_load || "",
+          pattern: set.pattern || "",
+          breathing_core: set.breathing_core || "",
+          breathing_diaphragm: set.breathing_diaphragm || "",
+          notes: set.notes || "",
+          sort_order: seti,
+          items: (set.items || []).map((item: any, ii: number) => ({
+            movement_id: item.movement_id || null,
+            movement_name: item.movement_name || "",
+            body_part: item.body_part || "upper",
+            equipment: item.equipment || "",
+            reps: item.reps ?? null,
+            sets_count: item.sets_count ?? 1,
+            breathing_core: item.breathing_core || "",
+            breathing_diaphragm: item.breathing_diaphragm || "",
+            sort_order: ii,
           })),
-        }));
+        })),
+      }));
+
+      setForm(prev => {
+        if (!prev) return prev;
+        return { ...prev, sequences: newSequences };
+      });
+      toast.success("Template berhasil diterapkan.");
+    } catch (err) {
+      console.log("Template not found or error, falling back to Modul Card", err);
+      try {
+        const levelMatch = newLevel.match(/\d+/);
+        const levelNum = levelMatch ? parseInt(levelMatch[0]) : 1;
+        
+        const [fcRes, ccRes, mcRes] = await Promise.all([
+           apiGet(`/api/digital-library/categories/fc/menu`, { level: levelNum }),
+           apiGet(`/api/digital-library/categories/cc/menu`, { level: levelNum }),
+           apiGet(`/api/digital-library/categories/mc/menu`, { level: levelNum })
+        ]);
+
+        const newSequences = customerPrograms
+          .filter((p: any) => p.is_active)
+          .map((p: any, i: number) => {
+            let menuItems: any[] = [];
+            if (p.program_category_code === "functional") menuItems = (fcRes as any)?.data || [];
+            if (p.program_category_code === "cardiorespiratory") menuItems = (ccRes as any)?.data || [];
+            if (p.program_category_code === "metabolic") menuItems = (mcRes as any)?.data || [];
+            
+            return {
+              program_category_id: p.program_category_id,
+              program_category_name: p.program_category_name,
+              program_category_code: p.program_category_code,
+              duration: "",
+              sort_order: i,
+              sets: buildSetsFromMenuItems(menuItems),
+            };
+          });
 
         setForm(prev => {
           if (!prev) return prev;
           return { ...prev, sequences: newSequences };
         });
-        toast.success("Template berhasil diterapkan.");
+        toast.success("Gerakan otomatis dimuat dari Modul Card.");
+      } catch (err2) {
+        console.error("Gagal memuat Modul Card", err2);
+        toast.error("Gagal memuat gerakan otomatis.");
       }
-    } catch (err) {
-      console.log("Template not found or error", err);
     }
   }
 
