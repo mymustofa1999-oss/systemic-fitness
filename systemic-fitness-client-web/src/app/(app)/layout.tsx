@@ -39,6 +39,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     enabled: status === "authenticated",
   });
 
+  const { data: cardRes, isLoading: isCardLoading } = useQuery({
+    queryKey: ["client-training-card"],
+    queryFn: async () => {
+      try {
+        return await apiGet<any>("/api/v2/assessments/training-card");
+      } catch (err: any) {
+        return { success: true, data: null };
+      }
+    },
+    retry: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    enabled: status === "authenticated",
+  });
+
   // Profile completeness check for client role
   const { data: profileRes, isLoading: isProfileLoading, refetch: refetchProfile } = useQuery({
     queryKey: ["profile-me"],
@@ -68,7 +86,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   );
 
   const hasAssessment = !!assessmentRes?.data;
-  const isLayoutLoading = isSubLoading || isAssLoading || (status === "authenticated" && session?.user?.role === "client" && isProfileLoading);
+  const hasCard = !!cardRes?.data;
+  const isLayoutLoading = isSubLoading || isAssLoading || isCardLoading || (status === "authenticated" && session?.user?.role === "client" && isProfileLoading);
 
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
@@ -161,12 +180,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     if (status === "authenticated" && !isLayoutLoading && isProfileComplete) {
       let isAllowed = true;
 
-      if (!hasAssessment) {
-        // If no assessment, they cannot access training card or assessment results
+      if (!hasAssessment && !hasCard) {
+        // If no assessment AND no card, they cannot access training card or assessment results
         if (pathname.startsWith("/training-card") || pathname.startsWith("/assessment/result")) {
           isAllowed = false;
         }
-      } else {
+      } else if (hasAssessment) {
         // If they already have an assessment, they shouldn't access the assessment taking pages
         if (pathname === "/assessment" || pathname.startsWith("/assessment/phase")) {
           isAllowed = false;
@@ -177,7 +196,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         router.replace(hasAssessment ? "/dashboard" : "/assessment");
       }
     }
-  }, [status, isLayoutLoading, hasAssessment, isProfileComplete, pathname, router]);
+  }, [status, isLayoutLoading, hasAssessment, hasCard, isProfileComplete, pathname, router]);
 
   // Loading state
   if (status === "loading" || (status === "authenticated" && isLayoutLoading)) {

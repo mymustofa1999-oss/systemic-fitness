@@ -49,12 +49,30 @@ export function BottomNav() {
     gcTime: Infinity,
   });
 
+  const { data: cardRes } = useQuery({
+    queryKey: ["client-training-card"],
+    queryFn: async () => {
+      try {
+        return await apiGet<any>("/api/v2/assessments/training-card");
+      } catch (err: any) {
+        return { success: true, data: null };
+      }
+    },
+    retry: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
+
   const hasAssessment = !!assessmentRes?.data;
+  const hasCard = !!cardRes?.data;
 
   // Free (registered-but-unpaid) clients keep access to the Training Card — it
   // serves the shared "free" program template.
   const items = isFree
-    ? hasAssessment
+    ? (hasAssessment || hasCard)
       ? [
           { href: "/dashboard", label: "Home", icon: Home },
           { href: "/training-card", label: "Training Card", icon: ClipboardList },

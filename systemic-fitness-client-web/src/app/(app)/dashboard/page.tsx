@@ -188,6 +188,18 @@ export default function DashboardPage() {
     gcTime: Infinity,
   });
 
+  const { data: cardRes } = useQuery({
+    queryKey: ["client-training-card"],
+    queryFn: async () => {
+      try {
+        return await apiGet<any>("/api/v2/assessments/training-card");
+      } catch (err: any) {
+        return { success: true, data: null };
+      }
+    },
+    retry: false,
+  });
+
   const { data: newsRes } = useQuery({
     queryKey: ["health-news"],
     queryFn: () => apiGet<any>("/api/health-news"),
@@ -560,6 +572,26 @@ export default function DashboardPage() {
             </button>
           </div>
         </div>
+      ) : cardRes?.data ? (
+        <Link href="/training-card" className="block group">
+          <div className="rounded-2xl bg-sf-deepNavy dark:bg-sf-warmGold p-4 flex items-center gap-3 transition-colors duration-200">
+            <div className="w-10 h-10 rounded-xl bg-white/10 dark:bg-sf-deepNavy/20 flex items-center justify-center shrink-0">
+              <Dumbbell size={22} className="text-white dark:text-sf-deepNavy" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-white dark:text-sf-deepNavy">
+                Lanjutkan Program Anda
+              </p>
+              <p className="text-xs text-white/60 dark:text-sf-deepNavy/80 mt-0.5">
+                Akses Training Card Anda
+              </p>
+            </div>
+            <ChevronRight
+              size={20}
+              className="text-white/50 dark:text-sf-deepNavy/50 shrink-0 group-hover:translate-x-1 transition-transform"
+            />
+          </div>
+        </Link>
       ) : !latestAssessment ? (
         <Link href="/assessment" className="block group">
           <div className="rounded-2xl bg-sf-deepNavy dark:bg-sf-warmGold p-4 flex items-center gap-3 transition-colors duration-200">
