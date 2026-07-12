@@ -500,6 +500,11 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         const cardLevelMatch = currentLevelStr.match(/\d+/);
         const cardLevelNum = cardLevelMatch ? parseInt(cardLevelMatch[0]) : 1;
         
+        // Allow all core and whole body movements to be available regardless of level
+        if (m.body_part?.toLowerCase() === "core" || m.body_part?.toLowerCase() === "whole body") {
+          return true;
+        }
+
         // If effectiveLevel exists, it must match.
         if (effectiveLevel != null && effectiveLevel !== cardLevelNum) {
           return false;
