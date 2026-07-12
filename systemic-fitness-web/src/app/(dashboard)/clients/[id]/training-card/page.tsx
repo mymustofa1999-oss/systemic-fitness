@@ -497,18 +497,8 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
         // Find the active level (either from form during edit, or the default parsed level)
         const currentLevelStr = form?.level || String(parsedMappedLevel);
-        const cardLevelMatch = currentLevelStr.match(/\d+/);
-        const cardLevelNum = cardLevelMatch ? parseInt(cardLevelMatch[0]) : 1;
-        
-        // Allow all core and whole body movements to be available regardless of level
-        if (m.body_part?.toLowerCase() === "core" || m.body_part?.toLowerCase() === "whole body") {
-          return true;
-        }
-
-        // If effectiveLevel exists, it must match.
-        if (effectiveLevel != null && effectiveLevel !== cardLevelNum) {
-          return false;
-        }
+        // We remove the level restriction to allow the consultant to pick ANY movement
+        // across all levels. The dropdown is already filtered by bodyPart.
         return true;
       })
       .map((m: any) => {
