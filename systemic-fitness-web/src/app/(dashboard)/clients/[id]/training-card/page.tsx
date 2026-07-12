@@ -712,7 +712,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             return {
               movement_id: item.movement_id || null,
               movement_name: item.movement_name || null,
-              body_part: validBodyPart,
+              body_part: validBodyPart.toLowerCase(),
               equipment: item.equipment || null,
               reps: item.reps || null,
               sets_count: item.sets_count || 1,
