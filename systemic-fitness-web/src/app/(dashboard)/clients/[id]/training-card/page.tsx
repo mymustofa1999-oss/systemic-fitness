@@ -342,7 +342,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       const fallbackCat = allCategories.find((cat: any) => cat.code === code);
       return {
         id: p?.program_category_id || fallbackCat?.id || code,
-        name: p?.program_category_name || fallbackCat?.name || (code === "functional" ? "Functional Conditioning" : code === "cardiorespiratory" ? "Cardio Conditioning" : "Metabolic Conditioning"),
+        name: p?.program_category_name || fallbackCat?.name || (code === "functional" ? "Functional Conditioning" : code === "cardiorespiratory" ? "Cardio Conditioning" : code === "metabolic" ? "Metabolic Conditioning" : "Cool Down"),
         code: code,
       };
     };
@@ -627,7 +627,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         })) : (() => {
           let baseCategories = customerPrograms.filter((p: any) => p.is_active);
           if (baseCategories.length === 0) {
-            baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic"].includes(c.code?.toLowerCase()));
+            baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic", "cooldown"].includes(c.code?.toLowerCase()));
           }
           return baseCategories.map((p: any, i: number) => {
             const code = (p.program_category_code || p.code || "").toLowerCase();
@@ -812,7 +812,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
         let baseCategories = customerPrograms.filter((p: any) => p.is_active);
         if (baseCategories.length === 0) {
-          baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic"].includes(c.code?.toLowerCase()));
+          baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic", "cooldown"].includes(c.code?.toLowerCase()));
         }
 
         const newSequences = baseCategories.map((p: any, i: number) => {
@@ -1153,11 +1153,11 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         );
       })}
 
-      {/* Cool Down placeholder */}
+      {/* Additional Notes placeholder */}
       {sequences.length > 0 && (
         <div className="border border-slate-200 rounded-lg overflow-hidden">
           <div className="bg-slate-200 px-4 py-2 text-xs font-bold text-slate-600 tracking-wider">
-            COOL DOWN
+            CATATAN TAMBAHAN
           </div>
           {editing && form ? (
             <div className="px-4 py-3">
@@ -1165,7 +1165,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
                 value={form.notes}
                 onChange={(e) => setForm({ ...form, notes: e.target.value })}
                 className={cn(inpCell, "min-h-[50px]")}
-                placeholder="Catatan cool down atau notes tambahan..."
+                placeholder="Catatan tambahan untuk sesi ini..."
               />
             </div>
           ) : (
@@ -1270,7 +1270,8 @@ function SequenceTable({
   const seqBg =
     code === "functional" ? "bg-blue-600" :
     code === "cardiorespiratory" ? "bg-orange-500" :
-    code === "metabolic" ? "bg-purple-600" : "bg-slate-600";
+    code === "metabolic" ? "bg-purple-600" :
+    code === "cooldown" ? "bg-teal-500" : "bg-slate-600";
 
   return (
     <div className="border border-slate-200 rounded-lg overflow-hidden shadow-sm">
