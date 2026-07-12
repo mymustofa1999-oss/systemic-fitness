@@ -724,9 +724,14 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         })),
       })),
     };
-    await upsertCard.mutateAsync(payload);
-    setEditing(false);
-    setForm(null);
+    try {
+      await upsertCard.mutateAsync(payload);
+      setEditing(false);
+      setForm(null);
+    } catch (err: any) {
+      toast.error("Gagal save: " + JSON.stringify(err?.response?.data || err?.message || err));
+      console.error("Save error:", err);
+    }
   }
 
   async function handleDelete() {
