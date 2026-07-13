@@ -1624,11 +1624,11 @@ function SetBlock({
 
                   {/* Desktop Actions */}
                   {editing && (
-                    <div className="hidden md:flex flex-col gap-2 items-center justify-center p-2">
+                    <div className="hidden md:flex flex-row gap-2 items-center justify-center p-2">
                       <button onClick={() => {
                         const m = item.movement_id ? movementMap[item.movement_id] : null;
                         if (m && onPreviewVideo) onPreviewVideo(m, set.bpm || "");
-                      }} className="text-violet-500 hover:text-violet-700 transition-colors mb-2" title="Preview Video">
+                      }} className="text-violet-500 hover:text-violet-700 transition-colors p-2 bg-slate-50 rounded" title="Preview Video">
                         <Video className="h-4 w-4" />
                       </button>
                       <button onClick={() => onRemoveItem(ii)} className="text-red-400 hover:text-red-600 transition-colors" title="Hapus gerakan">
