@@ -1821,13 +1821,14 @@ function extractYouTubeId(url: string) {
 function VideoPreviewModal({ movement, bpm, gender, onClose }: { movement: any; bpm?: string; gender?: string; onClose: () => void }) {
   const rawMaleId = extractYouTubeId(movement.video_url_male || "");
   const rawFemaleId = extractYouTubeId(movement.video_url_female || "");
+  const normalizedGender = (gender || "").toLowerCase();
   
-  let maleId = gender === "Female" ? null : rawMaleId;
-  let femaleId = gender === "Male" ? null : rawFemaleId;
+  let maleId = normalizedGender === "female" ? null : rawMaleId;
+  let femaleId = normalizedGender === "male" ? null : rawFemaleId;
 
   // Fallbacks just in case the specific gender video is missing but the other exists
-  if (gender === "Male" && !maleId && rawFemaleId) femaleId = rawFemaleId;
-  if (gender === "Female" && !femaleId && rawMaleId) maleId = rawMaleId;
+  if (normalizedGender === "male" && !maleId && rawFemaleId) femaleId = rawFemaleId;
+  if (normalizedGender === "female" && !femaleId && rawMaleId) maleId = rawMaleId;
 
   const hasBoth = maleId && femaleId;
   const audioRef = useRef<HTMLAudioElement | null>(null);
