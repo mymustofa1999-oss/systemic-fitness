@@ -549,6 +549,23 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     return map;
   }, [fcData, ccData, mcData]);
 
+  const menuCategoryMap = useMemo(() => {
+    const map = new Map<string, string[]>();
+    const addCat = (items: any[], cat: string) => {
+      items.forEach(item => {
+        if (item.movement_id) {
+          const cats = map.get(item.movement_id) || [];
+          if (!cats.includes(cat)) cats.push(cat);
+          map.set(item.movement_id, cats);
+        }
+      });
+    };
+    addCat((fcData?.data as any) || [], "FC");
+    addCat((ccData?.data as any) || [], "CC");
+    addCat((mcData?.data as any) || [], "MC");
+    return map;
+  }, [fcData, ccData, mcData]);
+
   const movementOptions = useMemo(() =>
     movements
       .filter((m: any) => {
@@ -571,7 +588,8 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       .map((m: any) => {
         const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
         const altMatch = m.name.match(/\[L(\d+)\]/i);
-        const mCategory = nameMatch ? nameMatch[1].toUpperCase() : "";
+        const mappedCats = menuCategoryMap.get(m.id) || [];
+        const mCategory = nameMatch ? nameMatch[1].toUpperCase() : (mappedCats.length > 0 ? mappedCats[0] : "");
         
         let mLevelStr = "";
         if (nameMatch) mLevelStr = nameMatch[2];
@@ -1419,8 +1437,10 @@ function SetBlock({
                 <Popover.Portal>
                   <Popover.Content align="start" className="z-50 bg-white rounded-lg shadow-lg border border-slate-200 p-2 space-y-1 w-[200px]">
                     {[
-                      "Isolate",
-                      "Dynamic",
+                      "Isolate FC",
+                      "Dynamic FC",
+                      "Isolate CC",
+                      "Dynamic CC",
                       "Metabolic Basic",
                       "Metabolic Core",
                     ].map((p) => {
@@ -1709,6 +1729,26 @@ function MovementSelect({
 }) {
   let filtered = [...options];
 
+  // Filter by selected Patterns
+  if (selectedPatterns && selectedPatterns.length > 0) {
+    filtered = filtered.filter(m => {
+      const mPat = (m.pattern || "").trim().toLowerCase();
+      const mCat = (m.extractedCategory || "").trim().toLowerCase();
+      
+      return selectedPatterns.some(sp => {
+        const spLower = sp.toLowerCase();
+        if (spLower === "isolate fc") return mPat === "isolate" && mCat === "fc";
+        if (spLower === "dynamic fc") return mPat === "dynamic" && mCat === "fc";
+        if (spLower === "isolate cc") return mPat === "isolate" && mCat === "cc";
+        if (spLower === "dynamic cc") return mPat === "dynamic" && mCat === "cc";
+        if (spLower === "metabolic basic") return mPat.includes("basic") || mCat === "mc";
+        if (spLower === "metabolic core") return mPat.includes("core") || mCat === "mc";
+        return true;
+      });
+    });
+  }
+
+  // Filter by bodyPart
   if (bodyPart) {
     const bpLower = bodyPart.toLowerCase();
     filtered = filtered.filter(m => {
