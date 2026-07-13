@@ -212,12 +212,19 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
       medical_notes: profile?.medical_notes ?? "",
       regional: profile?.regional ?? "",
       city: profile?.city ?? "",
+      street_address: profile?.street_address ?? "",
+      additional_address: profile?.additional_address ?? "",
+      sub_district: profile?.sub_district ?? "",
+      district: profile?.district ?? "",
+      province: profile?.province ?? "",
+      postal_code: profile?.postal_code ?? "",
+      country: profile?.country ?? "Indonesia",
     };
   }
   const [form, setForm] = useState(initForm);
 
   // Re-sync form when props change (after save + refetch)
-  const propsKey = `${user.full_name}|${user.phone}|${profile?.date_of_birth}|${profile?.gender}|${profile?.height_cm}|${profile?.weight_kg}|${profile?.medical_notes}|${profile?.regional}|${profile?.city}`;
+  const propsKey = `${user.full_name}|${user.phone}|${profile?.date_of_birth}|${profile?.gender}|${profile?.height_cm}|${profile?.weight_kg}|${profile?.medical_notes}|${profile?.regional}|${profile?.city}|${profile?.street_address}|${profile?.additional_address}|${profile?.sub_district}|${profile?.district}|${profile?.province}|${profile?.postal_code}|${profile?.country}`;
   useEffect(() => {
     if (!editing) setForm(initForm());
   }, [propsKey]);
@@ -231,6 +238,15 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
       height_cm: form.height_cm ? Number(form.height_cm) : undefined,
       weight_kg: form.weight_kg ? Number(form.weight_kg) : undefined,
       medical_notes: form.medical_notes || undefined,
+      regional: form.regional || undefined,
+      city: form.city || undefined,
+      street_address: form.street_address || undefined,
+      additional_address: form.additional_address || undefined,
+      sub_district: form.sub_district || undefined,
+      district: form.district || undefined,
+      province: form.province || undefined,
+      postal_code: form.postal_code || undefined,
+      country: form.country || undefined,
     }}, { onSuccess: () => setEditing(false) });
   }
 
@@ -286,10 +302,34 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
             <td className={val}>{editing ? <input type="number" value={form.weight_kg} onChange={(e) => setForm({ ...form, weight_kg: e.target.value })} className={inp} placeholder="kg" /> : (profile?.weight_kg ? `${profile.weight_kg} kg` : "-")}</td>
           </tr>
           <tr className="border-b border-slate-100">
-            <td className={lbl}>Regional</td>
-            <td className={val}>{editing ? <input type="text" value={form.regional} onChange={(e) => setForm({ ...form, regional: e.target.value })} className={inp} placeholder="Regional" /> : (profile?.regional || "-")}</td>
+            <td className={lbl}>Alamat Jalan</td>
+            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.street_address} onChange={(e) => setForm({ ...form, street_address: e.target.value })} className={inp} placeholder="Alamat lengkap (nama jalan, rt/rw, nomor)" /> : (profile?.street_address || "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
+            <td className={lbl}>Detail Tambahan</td>
+            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.additional_address} onChange={(e) => setForm({ ...form, additional_address: e.target.value })} className={inp} placeholder="Apartemen, lantai, dsb" /> : (profile?.additional_address || "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
+            <td className={lbl}>Kelurahan</td>
+            <td className={val}>{editing ? <input type="text" value={form.sub_district} onChange={(e) => setForm({ ...form, sub_district: e.target.value })} className={inp} placeholder="Kelurahan" /> : (profile?.sub_district || "-")}</td>
+            <td className={lbl}>Kecamatan</td>
+            <td className={val}>{editing ? <input type="text" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} className={inp} placeholder="Kecamatan" /> : (profile?.district || "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
             <td className={lbl}>Asal Kota</td>
             <td className={val}>{editing ? <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={inp} placeholder="Asal Kota" /> : (profile?.city || "-")}</td>
+            <td className={lbl}>Provinsi</td>
+            <td className={val}>{editing ? <input type="text" value={form.province} onChange={(e) => setForm({ ...form, province: e.target.value })} className={inp} placeholder="Provinsi" /> : (profile?.province || "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
+            <td className={lbl}>Kode Pos</td>
+            <td className={val}>{editing ? <input type="text" value={form.postal_code} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} className={inp} placeholder="Kode Pos" /> : (profile?.postal_code || "-")}</td>
+            <td className={lbl}>Negara</td>
+            <td className={val}>{editing ? <input type="text" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className={inp} placeholder="Negara" /> : (profile?.country || "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
+            <td className={lbl}>Regional</td>
+            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.regional} onChange={(e) => setForm({ ...form, regional: e.target.value })} className={inp} placeholder="Regional" /> : (profile?.regional || "-")}</td>
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Telepon</td>

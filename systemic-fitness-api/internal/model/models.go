@@ -106,6 +106,13 @@ type UserProfile struct {
 	EmergencyContact *string  `json:"emergency_contact,omitempty"`
 	Regional         *string  `json:"regional,omitempty"`
 	City             *string  `json:"city,omitempty"`
+	StreetAddress    *string  `json:"street_address,omitempty"`
+	AdditionalAddress *string `json:"additional_address,omitempty"`
+	SubDistrict      *string  `json:"sub_district,omitempty"`
+	District         *string  `json:"district,omitempty"`
+	Province         *string  `json:"province,omitempty"`
+	PostalCode       *string  `json:"postal_code,omitempty"`
+	Country          *string  `json:"country,omitempty"`
 }
 
 // UserWithProfile combines the core user record with its extended profile.

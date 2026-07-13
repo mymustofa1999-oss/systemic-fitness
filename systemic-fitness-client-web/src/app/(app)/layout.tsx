@@ -82,7 +82,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     profile.regional &&
     profile.city &&
     profile.regional !== "" &&
-    profile.city !== ""
+    profile.city !== "" &&
+    profile.street_address &&
+    profile.sub_district &&
+    profile.district &&
+    profile.province &&
+    profile.postal_code &&
+    profile.country
   );
 
   const hasAssessment = !!assessmentRes?.data;
@@ -95,6 +101,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [height, setHeight] = useState("");
   const [regional, setRegional] = useState("");
   const [city, setCity] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [additionalAddress, setAdditionalAddress] = useState("");
+  const [subDistrict, setSubDistrict] = useState("");
+  const [district, setDistrict] = useState("");
+  const [province, setProvince] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [country, setCountry] = useState("Indonesia");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [lang, setLang] = useState("id");
@@ -126,6 +139,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       regionalPlaceholder: "Contoh: Jabodetabek / Jawa Barat",
       city: "Asal Kota",
       cityPlaceholder: "Contoh: Jakarta Selatan",
+      streetAddress: "Alamat Jalan",
+      streetAddressPlaceholder: "Contoh: Jl. Sudirman No. 1, RT 01/RW 02",
+      additionalAddress: "Detail Tambahan Alamat",
+      additionalAddressPlaceholder: "Contoh: Apartemen, Lantai, Unit",
+      optional: "opsional",
+      subDistrict: "Kelurahan/Desa",
+      subDistrictPlaceholder: "Contoh: Senayan",
+      district: "Kecamatan",
+      districtPlaceholder: "Contoh: Kebayoran Baru",
+      province: "Provinsi",
+      provincePlaceholder: "Contoh: DKI Jakarta",
+      postalCode: "Kode Pos",
+      postalCodePlaceholder: "Contoh: 12190",
+      country: "Negara",
+      countryPlaceholder: "Contoh: Indonesia",
       saving: "Menyimpan...",
       saveBtn: "Simpan & Lanjutkan",
       errorRequired: "Mohon lengkapi semua data.",
@@ -149,6 +177,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       regionalPlaceholder: "Example: Jabodetabek",
       city: "City of Origin",
       cityPlaceholder: "Example: South Jakarta",
+      streetAddress: "Street Address",
+      streetAddressPlaceholder: "Example: Jl. Sudirman No. 1",
+      additionalAddress: "Additional Address",
+      additionalAddressPlaceholder: "Example: Apartment, Floor, Unit",
+      optional: "optional",
+      subDistrict: "Sub-district / Village",
+      subDistrictPlaceholder: "Example: Senayan",
+      district: "District",
+      districtPlaceholder: "Example: Kebayoran Baru",
+      province: "Province",
+      provincePlaceholder: "Example: DKI Jakarta",
+      postalCode: "Postal Code",
+      postalCodePlaceholder: "Example: 12190",
+      country: "Country",
+      countryPlaceholder: "Example: Indonesia",
       saving: "Saving...",
       saveBtn: "Save & Continue",
       errorRequired: "Please complete all fields.",
@@ -167,6 +210,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       if (profile.height_cm) setHeight(profile.height_cm.toString());
       if (profile.regional) setRegional(profile.regional);
       if (profile.city) setCity(profile.city);
+      if (profile.street_address) setStreetAddress(profile.street_address);
+      if (profile.additional_address) setAdditionalAddress(profile.additional_address);
+      if (profile.sub_district) setSubDistrict(profile.sub_district);
+      if (profile.district) setDistrict(profile.district);
+      if (profile.province) setProvince(profile.province);
+      if (profile.postal_code) setPostalCode(profile.postal_code);
+      if (profile.country) setCountry(profile.country);
     }
   }, [profile]);
 
@@ -220,7 +270,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (status === "authenticated" && !isLayoutLoading && !isProfileComplete) {
     const handleProfileSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!dob || !gender || !weight || !height || !regional || !city) {
+      if (!dob || !gender || !weight || !height || !regional || !city || !streetAddress || !subDistrict || !district || !province || !postalCode || !country) {
         setSubmitError(t.errorRequired);
         return;
       }
@@ -244,6 +294,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           height_cm: heightNum,
           regional: regional,
           city: city,
+          street_address: streetAddress,
+          additional_address: additionalAddress,
+          sub_district: subDistrict,
+          district: district,
+          province: province,
+          postal_code: postalCode,
+          country: country,
         });
         refetchProfile();
       } catch (err: any) {
@@ -354,18 +411,123 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 />
               </div>
 
+              <div className="pt-2">
+                <div className="h-px bg-slate-200 dark:bg-slate-700 w-full mb-4"></div>
+                <h3 className="text-sm font-bold text-sf-deepNavy dark:text-white mb-4">Alamat Tempat Tinggal</h3>
+              </div>
+
               <div>
                 <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
-                  {t.city}
+                  {t.streetAddress}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder={t.cityPlaceholder}
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
+                  placeholder={t.streetAddressPlaceholder}
+                  value={streetAddress}
+                  onChange={(e) => setStreetAddress(e.target.value)}
                   className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                  {t.additionalAddress} <span className="text-slate-400 font-normal capitalize">({t.optional})</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder={t.additionalAddressPlaceholder}
+                  value={additionalAddress}
+                  onChange={(e) => setAdditionalAddress(e.target.value)}
+                  className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                    {t.subDistrict}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={t.subDistrictPlaceholder}
+                    value={subDistrict}
+                    onChange={(e) => setSubDistrict(e.target.value)}
+                    className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                    {t.district}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={t.districtPlaceholder}
+                    value={district}
+                    onChange={(e) => setDistrict(e.target.value)}
+                    className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                    {t.city}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={t.cityPlaceholder}
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                    {t.province}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={t.provincePlaceholder}
+                    value={province}
+                    onChange={(e) => setProvince(e.target.value)}
+                    className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                    {t.postalCode}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={t.postalCodePlaceholder}
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value)}
+                    className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                    {t.country}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={t.countryPlaceholder}
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                  />
+                </div>
               </div>
 
               <button

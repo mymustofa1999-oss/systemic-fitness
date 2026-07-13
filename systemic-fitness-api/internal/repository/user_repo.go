@@ -235,8 +235,9 @@ func (r *UserRepository) UpsertProfile(ctx context.Context, p *model.UserProfile
 		INSERT INTO user_profiles (
 			user_id, date_of_birth, gender, height_cm, weight_kg,
 			fitness_goal, experience_level, medical_notes, emergency_contact,
-			regional, city
-		) VALUES ($1, $2::date, $3::gender_type, $4, $5, $6::fitness_goal, $7::experience_level, $8, $9, $10, $11)
+			regional, city, street_address, additional_address, sub_district,
+			district, province, postal_code, country
+		) VALUES ($1, $2::date, $3::gender_type, $4, $5, $6::fitness_goal, $7::experience_level, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
 		ON CONFLICT (user_id) DO UPDATE SET
 			date_of_birth    = COALESCE(EXCLUDED.date_of_birth, user_profiles.date_of_birth),
 			gender           = COALESCE(EXCLUDED.gender, user_profiles.gender),
@@ -247,12 +248,20 @@ func (r *UserRepository) UpsertProfile(ctx context.Context, p *model.UserProfile
 			medical_notes    = COALESCE(EXCLUDED.medical_notes, user_profiles.medical_notes),
 			emergency_contact = COALESCE(EXCLUDED.emergency_contact, user_profiles.emergency_contact),
 			regional         = COALESCE(EXCLUDED.regional, user_profiles.regional),
-			city             = COALESCE(EXCLUDED.city, user_profiles.city)`
+			city             = COALESCE(EXCLUDED.city, user_profiles.city),
+			street_address   = COALESCE(EXCLUDED.street_address, user_profiles.street_address),
+			additional_address = COALESCE(EXCLUDED.additional_address, user_profiles.additional_address),
+			sub_district     = COALESCE(EXCLUDED.sub_district, user_profiles.sub_district),
+			district         = COALESCE(EXCLUDED.district, user_profiles.district),
+			province         = COALESCE(EXCLUDED.province, user_profiles.province),
+			postal_code      = COALESCE(EXCLUDED.postal_code, user_profiles.postal_code),
+			country          = COALESCE(EXCLUDED.country, user_profiles.country)`
 
 	_, err := r.db.Exec(ctx, query,
 		p.UserID, p.DateOfBirth, p.Gender, p.HeightCm, p.WeightKg,
 		p.FitnessGoal, p.ExperienceLevel, p.MedicalNotes, p.EmergencyContact,
-		p.Regional, p.City,
+		p.Regional, p.City, p.StreetAddress, p.AdditionalAddress, p.SubDistrict,
+		p.District, p.Province, p.PostalCode, p.Country,
 	)
 	return err
 }
@@ -263,12 +272,14 @@ func (r *UserRepository) GetProfile(ctx context.Context, userID string) (*model.
 	err := r.db.QueryRow(ctx, `
 		SELECT user_id, date_of_birth, gender, height_cm, weight_kg,
 		       fitness_goal, experience_level, medical_notes, emergency_contact,
-		       regional, city
+		       regional, city, street_address, additional_address, sub_district,
+		       district, province, postal_code, country
 		FROM user_profiles WHERE user_id = $1`, userID,
 	).Scan(
 		&p.UserID, &dob, &p.Gender, &p.HeightCm, &p.WeightKg,
 		&p.FitnessGoal, &p.ExperienceLevel, &p.MedicalNotes, &p.EmergencyContact,
-		&p.Regional, &p.City,
+		&p.Regional, &p.City, &p.StreetAddress, &p.AdditionalAddress, &p.SubDistrict,
+		&p.District, &p.Province, &p.PostalCode, &p.Country,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, nil // profile doesn't exist yet — that's ok
