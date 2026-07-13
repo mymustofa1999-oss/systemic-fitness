@@ -21,12 +21,37 @@ import {
 } from "@/hooks/useNewFeatures";
 import { MedicinesCard } from "@/components/shared/MedicinesCard";
 
-function buildSetsFromMenuItems(menuItems: any[], gender: string | undefined) {
+function calculateBPM(age: number | null, intensityCode: string) {
+  if (!age || !intensityCode) return "";
+  const maxHR = 220 - age;
+  let minPct = 0;
+  let maxPct = 0;
+  
+  const code = intensityCode.toLowerCase();
+  if (code === "functional") {
+    minPct = 0.50;
+    maxPct = 0.60;
+  } else if (code === "cardiorespiratory") {
+    minPct = 0.70;
+    maxPct = 0.85;
+  } else if (code === "metabolic") {
+    minPct = 0.85;
+    maxPct = 0.95;
+  } else {
+    return "";
+  }
+  
+  const minBPM = Math.round(maxHR * minPct);
+  const maxBPM = Math.round(maxHR * maxPct);
+  return `${minBPM}-${maxBPM} BPM`;
+}
+
+function buildSetsFromMenuItems(menuItems: any[], gender: string | undefined, seqCode: string, age: number | null, recs: any) {
   if (!menuItems || menuItems.length === 0) return [];
   
   const setsMap = new Map<string, any[]>();
   for (const item of menuItems) {
-    const setName = item.set_name || "Set 1";
+    const setName = item.set_name || "Uncategorized";
     if (!setsMap.has(setName)) setsMap.set(setName, []);
     setsMap.get(setName)!.push(item);
   }
@@ -34,42 +59,74 @@ function buildSetsFromMenuItems(menuItems: any[], gender: string | undefined) {
   const sets: any[] = [];
   let setNumber = 1;
   for (const [setName, items] of Array.from(setsMap.entries())) {
-    const parsedSetNum = parseInt(setName.replace(/\D/g, '')) || setNumber;
-    sets.push({
-      set_number: parsedSetNum,
-      duration: "",
-      equipment_upper: "",
-      equipment_lower: "",
-      equipment: "",
-      type_id: "",
-      type_name: "",
-      bpm: "",
-      extra_load: "",
-      pattern: "",
-      breathing_core: "",
-      breathing_diaphragm: "",
-      notes: "",
-      sort_order: setNumber - 1,
-      items: items.map((item, ii) => ({
-        movement_id: item.movement_id || null,
-        movement_name: (() => {
-          const nameStr = item.movement?.name || "";
-          const parts = nameStr.split(" | ");
-          if (parts.length > 1) {
-            return gender === "male" || gender === "men" ? parts[1] : parts[0];
-          }
-          return nameStr;
+    const patternsMap = new Map<string, any[]>();
+    for (const item of items) {
+      const typeName = item.group_type || "Isolate";
+      if (!patternsMap.has(typeName)) patternsMap.set(typeName, []);
+      patternsMap.get(typeName)!.push(item);
+    }
+    
+    for (const [patternName, patternItems] of Array.from(patternsMap.entries())) {
+      sets.push({
+        set_number: setNumber,
+        duration: "",
+        equipment_upper: (() => {
+          if (!seqCode || !recs) return "";
+          const code = seqCode.toLowerCase();
+          if (code === "cardiorespiratory" || code === "functional") return recs.cardio?.upper || "";
+          if (code === "metabolic") return recs.metabolic?.upper || "";
+          return "";
         })(),
-        body_part: item.movement?.body_part || "upper",
-        equipment: item.movement?.equipment || "",
-        reps: null,
-        sets_count: 1,
+        equipment_lower: (() => {
+          if (!seqCode || !recs) return "";
+          const code = seqCode.toLowerCase();
+          if (code === "cardiorespiratory" || code === "functional") return recs.cardio?.lower || "";
+          if (code === "metabolic") return recs.metabolic?.lower || "";
+          return "";
+        })(),
+        equipment: (() => {
+          if (!seqCode || !recs) return "";
+          const code = seqCode.toLowerCase();
+          if (code === "cardiorespiratory" || code === "functional") return recs.cardio?.upper || "";
+          if (code === "metabolic") return recs.metabolic?.upper || "";
+          return "";
+        })(),
+        type_id: "",
+        type_name: "",
+        bpm: calculateBPM(age, seqCode),
+        extra_load: "",
+        pattern: patternName,
         breathing_core: "",
         breathing_diaphragm: "",
-        sort_order: ii,
-      }))
-    });
-    setNumber++;
+        notes: setName,
+        sort_order: setNumber - 1,
+        items: patternItems.map((item, ii) => ({
+          movement_id: item.movement_id || null,
+          movement_name: (() => {
+            const nameStr = item.movement?.name || "";
+            const parts = nameStr.split(" | ");
+            if (parts.length > 1) {
+              return gender === "male" || gender === "men" ? parts[1] : parts[0];
+            }
+            return nameStr;
+          })(),
+          body_part: item.movement?.body_part || "upper",
+          equipment: item.movement?.equipment || "",
+          reps: (() => {
+            if (!seqCode) return null;
+            const code = seqCode.toLowerCase();
+            if (code === "functional" || code === "cardiorespiratory") return 20;
+            if (code === "metabolic") return 15;
+            return null;
+          })(),
+          sets_count: 1,
+          breathing_core: item.movement?.pattern || "",
+          breathing_diaphragm: "",
+          sort_order: ii,
+        })),
+      });
+      setNumber++;
+    }
   }
   return sets;
 }
@@ -489,20 +546,205 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     processItems((ccData?.data as any) || []);
     processItems((mcData?.data as any) || []);
     return map;
+const upsertCard = useUpsertTrainerCard();
+  const publishCard = usePublishTrainerCard();
+  const deleteCard = useDeleteTrainerCard();
+
+  const user = (userData?.data as any)?.user;
+  const profile = (userData?.data as any)?.profile;
+  const dbCard = cardData?.data as any;
+
+  // Calculate age from DOB
+  const age = useMemo(() => {
+    if (!profile?.date_of_birth) return null;
+    const dob = new Date(profile.date_of_birth);
+    const now = new Date();
+    let a = now.getFullYear() - dob.getFullYear();
+    if (now.getMonth() < dob.getMonth() || (now.getMonth() === dob.getMonth() && now.getDate() < dob.getDate())) a--;
+    return a;
+  }, [profile?.date_of_birth]);
+
+  const recs = useMemo(() => {
+    return getClientCategoryAndLoads(profile?.gender, age, profile?.height_cm);
+  }, [profile?.gender, age, profile?.height_cm]);
+  const types = (typesData?.data ?? []) as any[];
+  const customerPrograms = (programsData?.data ?? []) as any[];
+  const allCategories = (allCategoriesData?.data ?? []) as any[];
+  const movements = (movementsData?.data ?? []) as any[];
+  const equipUpper = (equipUpperData?.data ?? []) as any[];
+  const equipLower = (equipLowerData?.data ?? []) as any[];
+  const equipGeneral = (equipGeneralData?.data ?? []) as any[];
+
+  const isTier2 = (userData?.data as any)?.subscription?.tier === "sf_tier_2";
+  const isTier3 = (userData?.data as any)?.subscription?.tier === "sf_tier_3";
+  const isOverriddenTier = isTier2 || isTier3;
+
+  const presetCard = useMemo(() => {
+    if (!isOverriddenTier) return null;
+
+    const presetItems = TIER2_MOVEMENTS.map((mv, index) => ({
+      movement_id: mv.id,
+      movement_name: mv.title,
+      body_part: "upper",
+      equipment: "",
+      reps: 20,
+      sets_count: 1,
+      sort_order: index,
+    }));
+
+    const getCatInfo = (code: string) => {
+      const p = customerPrograms.find((cp: any) => cp.program_category_code === code);
+      const fallbackCat = allCategories.find((cat: any) => cat.code === code);
+      return {
+        id: p?.program_category_id || fallbackCat?.id || code,
+        name: p?.program_category_name || fallbackCat?.name || (code === "functional" ? "Functional Conditioning" : code === "cardiorespiratory" ? "Cardio Conditioning" : code === "metabolic" ? "Metabolic Conditioning" : "Cool Down"),
+        code: code,
+      };
+    };
+
+    const fnInfo = getCatInfo("functional");
+    const ccInfo = getCatInfo("cardiorespiratory");
+    const mcInfo = getCatInfo("metabolic");
+
+    const sequences = [
+      {
+        program_category_id: fnInfo.id,
+        program_category_name: fnInfo.name,
+        program_category_code: fnInfo.code,
+        duration: "10'",
+        sort_order: 0,
+        sets: [
+          {
+            set_number: 1,
+            duration: "3'",
+            equipment_upper: "Wrist 0.25 kg",
+            equipment_lower: "Ankle 0.5 kg",
+            equipment: "Wrist 0.25 kg",
+            type_id: "",
+            type_name: "",
+            bpm: "80",
+            extra_load: "",
+            notes: "Group AG",
+            sort_order: 0,
+            items: presetItems,
+          }
+        ]
+      },
+      {
+        program_category_id: ccInfo.id,
+        program_category_name: ccInfo.name,
+        program_category_code: ccInfo.code,
+        duration: "20'",
+        sort_order: 1,
+        sets: [
+          {
+            set_number: 1,
+            duration: "5'",
+            equipment_upper: "1.00 kg",
+            equipment_lower: "2.00 kg",
+            equipment: "1.00 kg",
+            type_id: "",
+            type_name: "",
+            bpm: "",
+            extra_load: "",
+            notes: "",
+            sort_order: 0,
+            items: presetItems,
+          }
+        ]
+      },
+      {
+        program_category_id: mcInfo.id,
+        program_category_name: mcInfo.name,
+        program_category_code: mcInfo.code,
+        duration: "30'",
+        sort_order: 2,
+        sets: [
+          {
+            set_number: 1,
+            duration: "5'",
+            equipment_upper: "3.00 kg",
+            equipment_lower: "3.00 kg",
+            equipment: "3.00 kg",
+            type_id: "",
+            type_name: "",
+            bpm: "",
+            extra_load: "",
+            notes: "",
+            sort_order: 0,
+            items: presetItems,
+          }
+        ]
+      }
+    ];
+
+    return {
+      id: "preset-card",
+      customer_id: customerId,
+      level: "1",
+      notes: "",
+      sequences: sequences,
+    };
+  }, [isOverriddenTier, customerId, customerPrograms, profile, allCategories]);
+
+  const card = dbCard;
+
+  const { data: equipData } = useEquipments();
+  const equipments = (equipData?.data ?? []) as any[];
+
+  const { data: setupData } = useCustomerSetup(customerId as string);
+  const trainerName = (setupData?.data as any)?.staff?.trainer_name;
+
+  const [editing, setEditing] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, boolean>>({});
+  const [form, setForm] = useState<CardForm | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const hasAutoStarted = useRef(false);
+  useEffect(() => {
+    if (
+      !cardLoading &&
+      !isLoadingTemplate &&
+      !isLoadingMenu &&
+      !isLoadingAssessment &&
+      !isLoadingPrograms &&
+      !card &&
+      !editing &&
+      canEdit &&
+      !hasAutoStarted.current &&
+      allCategories.length > 0 &&
+      // auto-start if there is a template, or preset, or at least active customer programs to map Modul Card to
+      (templateCard || presetCard || customerPrograms.length > 0)
+    ) {
+      hasAutoStarted.current = true;
+      startEdit(fcData?.data as any[], ccData?.data as any[], mcData?.data as any[], cdData?.data as any[]);
+    }
+  }, [cardLoading, isLoadingTemplate, isLoadingMenu, isLoadingAssessment, isLoadingPrograms, card, editing, canEdit, templateCard, presetCard, customerPrograms, allCategories, fcData, ccData, mcData, cdData]);
+
+  // Build SearchableSelect options
+  const typeOptions = useMemo(() =>
+    types.filter((t: any) => t.is_active).map((t: any) => ({
+      value: t.id, label: t.name, sublabel: t.description || "",
+    })), [types]);
+
+  const menuGroupMap = useMemo(() => {
+    const map = new Map<string, string>();
+    const processItems = (items: any[]) => {
+      items.forEach(item => {
+        if (item.movement_id) {
+          map.set(item.movement_id, item.group_type || "Lainnya");
+        }
+      });
+    };
+    processItems((fcData?.data as any) || []);
+    processItems((ccData?.data as any) || []);
+    processItems((mcData?.data as any) || []);
+    return map;
   }, [fcData, ccData, mcData]);
 
   const movementOptions = useMemo(() =>
     movements
       .filter((m: any) => {
-        // Extract category and level from name like "Glute Bridge (MC - Level 6)"
-        const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
-        const mLevel = nameMatch ? parseInt(nameMatch[2]) : null;
-        const effectiveLevel = mLevel !== null ? mLevel : m.level;
-
-        // Find the active level (either from form during edit, or the default parsed level)
-        const currentLevelStr = form?.level || String(parsedMappedLevel);
-        // We remove the level restriction to allow the consultant to pick ANY movement
-        // across all levels. The dropdown is already filtered by bodyPart.
         return true;
       })
       .map((m: any) => {
@@ -642,14 +884,14 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             if (code === "functional") menuItems = fcItemsParam || (fcData as any)?.data || [];
             if (code === "cardiorespiratory") menuItems = ccItemsParam || (ccData as any)?.data || [];
             if (code === "metabolic") menuItems = mcItemsParam || (mcData as any)?.data || [];
-            if (code === "cooldown") menuItems = (cdData as any)?.data || [];
+            if (code === "cooldown") menuItems = cdItemsParam || (cdData as any)?.data || [];
             return {
               program_category_id: categoryId,
               program_category_name: categoryName,
               program_category_code: code,
               duration: "",
               sort_order: i,
-              sets: buildSetsFromMenuItems(menuItems, profile?.gender),
+              sets: buildSetsFromMenuItems(menuItems, profile?.gender, code, age, recs),
             };
           });
         })(),
@@ -789,7 +1031,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
               program_category_code: code,
               duration: "",
               sort_order: i,
-              sets: buildSetsFromMenuItems(menuItems, profile?.gender),
+              sets: buildSetsFromMenuItems(menuItems, profile?.gender, code, age, recs),
             };
           });
 
@@ -1042,6 +1284,17 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
                   <div><strong>Gender:</strong> <span className="capitalize">{profile?.gender || "-"}</span></div>
                   <div><strong>Usia:</strong> {age !== null ? `${age} tahun` : "-"}</div>
                   <div><strong>Tinggi:</strong> {profile?.height_cm ? `${profile.height_cm} cm` : "-"}</div>
+                  {age !== null && (
+                    <div className="w-full mt-1.5 text-xs text-slate-600 bg-slate-100 px-3 py-2 rounded-md border border-slate-200">
+                      <div className="font-bold text-slate-700 mb-1">Rekomendasi Target BPM (Max HR: {220 - age}):</div>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1">
+                        <span><strong>Ringan (50-60%):</strong> {Math.round((220-age)*0.5)}-{Math.round((220-age)*0.6)}</span>
+                        <span><strong>Fat Burning (60-70%):</strong> {Math.round((220-age)*0.6)}-{Math.round((220-age)*0.7)}</span>
+                        <span><strong>Kardio (70-85%):</strong> {Math.round((220-age)*0.7)}-{Math.round((220-age)*0.85)}</span>
+                        <span><strong>Tinggi (85-95%):</strong> {Math.round((220-age)*0.85)}-{Math.round((220-age)*0.95)}</span>
+                      </div>
+                    </div>
+                  )}
                   {recs.categoryText && (
                     <div className="text-sf-deepNavy font-bold bg-sf-iceBlue px-2.5 py-1 rounded-md border border-sf-iceBlue">
                       Kategori Weight: {recs.categoryText}
@@ -1133,8 +1386,48 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         </div>
       )}
 
-      {/* ═══ CONDITIONING REFERENCE TABLE ═══════════════════════ */}
-      {(card || editing) && <ConditioningReferenceTable />}
+      {/* ═══ ACTIONS AT BOTTOM ═════════════════════════════════════ */}
+      <div className="flex justify-end gap-3 mt-6 mb-8 bg-white p-4 rounded-xl border border-slate-200 shadow-sm items-center">
+        {!canEdit ? (
+          <span className="px-4 py-2 text-sm font-medium bg-slate-100 text-slate-500 rounded-md border border-slate-200">
+            Mode lihat saja
+          </span>
+        ) : editing ? (
+          <>
+            <button onClick={cancelEdit} className="px-5 py-2.5 text-sm font-medium rounded-lg text-slate-600 bg-slate-100 hover:bg-slate-200 flex items-center gap-2 transition-colors">
+              <X className="h-4 w-4" /> Batal
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={upsertCard.isPending || !form?.level}
+              className="px-6 py-2.5 text-sm font-bold rounded-lg text-white bg-sf-deepNavy hover:bg-slate-800 disabled:opacity-50 flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
+            >
+              {upsertCard.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              Simpan Training Card
+            </button>
+          </>
+        ) : (
+          <>
+            {card && (
+              <button onClick={() => setDeleteOpen(true)} className="px-5 py-2.5 text-sm font-medium rounded-lg text-red-600 bg-red-50 border border-red-100 hover:bg-red-100 flex items-center gap-2 transition-colors mr-auto">
+                <Trash2 className="h-4 w-4" /> Hapus
+              </button>
+            )}
+            <button onClick={() => startEdit()} className="px-5 py-2.5 text-sm font-medium rounded-lg text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 shadow-sm flex items-center gap-2 transition-colors">
+              <Pencil className="h-4 w-4" /> Edit
+            </button>
+            {card && card.status !== "published" && (
+              <button 
+                onClick={() => publishCard.mutate(customerId as string)}
+                disabled={publishCard.isPending || !trainerName}
+                className="px-6 py-2.5 text-sm font-bold rounded-lg text-white bg-green-600 hover:bg-green-500 flex items-center gap-2 transition-all shadow-md hover:shadow-lg disabled:opacity-50"
+              >
+                <Send className="h-4 w-4" /> Kirim ke Trainer
+              </button>
+            )}
+          </>
+        )}
+      </div>
 
       <ConfirmDialog
         open={deleteOpen}
@@ -1155,659 +1448,148 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 // ═══════════════════════════════════════════════════════════════
 
 function SequenceTable({
-  seq, si, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
-  equipUpperOptions, equipLowerOptions, equipGeneralOptions, recs,
-  onUpdateSeq, onAddSet, onRemoveSet, onUpdateSet, onAddItem, onRemoveItem, onUpdateItem,
-  formErrors,
+  seq, editing, onUpdateItem, onRemoveItem
 }: {
-  seq: CardSequence; si: number; level: string; isMetabolic: boolean; editing: boolean;
-  typeOptions: { value: string; label: string; sublabel?: string }[];
-  movementOptions: { value: string; label: string; sublabel?: string; pattern?: string | null }[];
-  movementMap: Record<string, string>;
-  types: any[];
-  equipUpperOptions: { value: string; label: string }[];
-  equipLowerOptions: { value: string; label: string }[];
-  equipGeneralOptions: { value: string; label: string }[];
-  recs: any;
-  onUpdateSeq: (p: Partial<CardSequence>) => void;
-  onAddSet: () => void;
-  onRemoveSet: (seti: number) => void;
-  onUpdateSet: (seti: number, p: Partial<CardSet>) => void;
-  onAddItem: (seti: number, bodyPart: string) => void;
-  onRemoveItem: (seti: number, ii: number) => void;
+  seq: CardSequence; editing: boolean;
   onUpdateItem: (seti: number, ii: number, p: Partial<CardItem>) => void;
-  formErrors: Record<string, boolean>;
+  onRemoveItem: (seti: number, ii: number) => void;
 }) {
-  const [expanded, setExpanded] = useState(true);
   const code = seq.program_category_code || "";
-
-  // Resolve options based on Cardio / Metabolic / Functional
-  let upperOptions = equipUpperOptions;
-  let lowerOptions = equipLowerOptions;
-  let generalOptions = equipGeneralOptions;
-  let recommendedUpper = "";
-  let recommendedLower = "";
-
-  if (code === "cardiorespiratory") {
-    upperOptions = [
-      { value: "0.25 kg", label: "0.25 kg" },
-      { value: "0.5 kg", label: "0.5 kg" },
-      { value: "0.75 kg", label: "0.75 kg" },
-      { value: "1 kg", label: "1 kg" },
-      { value: "1.5 kg", label: "1.5 kg" },
-    ];
-    lowerOptions = [
-      { value: "0.75 kg", label: "0.75 kg" },
-      { value: "1 kg", label: "1 kg" },
-      { value: "1.5 kg", label: "1.5 kg" },
-      { value: "2 kg", label: "2 kg" },
-      { value: "3 kg", label: "3 kg" },
-    ];
-    generalOptions = equipGeneralOptions;
-    recommendedUpper = recs.cardio.upper;
-    recommendedLower = recs.cardio.lower;
-  } else if (code === "metabolic") {
-    upperOptions = [
-      { value: "1 kg", label: "1 kg" },
-      { value: "1.5 kg", label: "1.5 kg" },
-      { value: "2 kg", label: "2 kg" },
-      { value: "3 kg", label: "3 kg" },
-      { value: "4 kg", label: "4 kg" },
-    ];
-    lowerOptions = [
-      { value: "1.5 kg", label: "1.5 kg" },
-      { value: "2 kg", label: "2 kg" },
-      { value: "2.5 kg", label: "2.5 kg" },
-      { value: "3 kg", label: "3 kg" },
-      { value: "4 kg", label: "4 kg" },
-    ];
-    recommendedUpper = recs.metabolic.upper;
-    recommendedLower = recs.metabolic.lower;
-  }
   const seqBg =
     code === "functional" ? "bg-blue-600" :
     code === "cardiorespiratory" ? "bg-orange-500" :
     code === "metabolic" ? "bg-purple-600" :
     code === "cooldown" ? "bg-teal-500" : "bg-slate-600";
 
-  return (
-    <div className="border border-slate-200 rounded-lg overflow-hidden shadow-sm">
-      {/* Sequence header bar */}
-      <div className={cn("text-white px-4 py-2 flex items-center justify-between cursor-pointer select-none", seqBg)}
-           onClick={() => setExpanded(!expanded)}>
-        <div className="flex items-center gap-2">
-          {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-          <span className="font-bold text-sm tracking-wide uppercase">{seq.program_category_name || "Sequence"}</span>
-        </div>
-        <div className="flex items-center gap-3 text-xs">
-          {editing ? (
-            <input
-              value={seq.duration || ""}
-              onChange={(e) => onUpdateSeq({ duration: e.target.value })}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white/20 rounded-md px-2.5 py-1 text-xs text-white placeholder-white/50 w-28 focus:outline-none focus:bg-white/30"
-              placeholder="10-15 mins"
-            />
-          ) : (
-            seq.duration && <span className="bg-white/20 rounded-md px-2.5 py-1">{seq.duration}</span>
-          )}
-        </div>
-      </div>
-
-      {expanded && (
-        <div className="p-4 space-y-4 bg-slate-50/50">
-          {seq.sets.map((set, seti) => (
-            <SetBlock
-              key={seti}
-              set={set}
-              si={si}
-              seti={seti}
-              level={level}
-              isMetabolic={isMetabolic}
-              editing={editing}
-              typeOptions={typeOptions}
-              movementOptions={movementOptions}
-              movementMap={movementMap}
-              types={types}
-              upperOptions={upperOptions}
-              lowerOptions={lowerOptions}
-              generalOptions={generalOptions}
-              recommendedUpper={recommendedUpper}
-              recommendedLower={recommendedLower}
-              onUpdateSet={(p) => onUpdateSet(seti, p)}
-              onRemoveSet={() => onRemoveSet(seti)}
-              onAddItem={(bp) => onAddItem(seti, bp)}
-              onRemoveItem={(ii) => onRemoveItem(seti, ii)}
-              onUpdateItem={(ii, p) => onUpdateItem(seti, ii, p)}
-              formErrors={formErrors}
-            />
-          ))}
-
-          {seq.sets.length === 0 && !editing && (
-            <div className="text-center py-6 text-slate-400">
-              Tidak ada set
-            </div>
-          )}
-
-          {/* Add Set */}
-          {editing && (
-            <button onClick={onAddSet} className="w-full py-2.5 mt-2 rounded-lg border-2 border-dashed border-slate-300 text-slate-500 hover:text-sf-deepNavy hover:border-sf-deepNavy hover:bg-sf-deepNavy/5 font-medium flex items-center justify-center gap-2 transition-colors">
-              <Plus className="h-4 w-4" /> Tambah Set Baru
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  Set Block — renders rows for a set (rowspan on set columns)
-// ═══════════════════════════════════════════════════════════════
-
-function SetBlock({
-  set, si, seti, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
-  upperOptions, lowerOptions, generalOptions, recommendedUpper, recommendedLower,
-  onUpdateSet, onRemoveSet, onAddItem, onRemoveItem, onUpdateItem, onPreviewVideo,
-  formErrors,
-}: {
-  set: CardSet; si: number; seti: number; level: string; isMetabolic: boolean; editing: boolean;
-  typeOptions: { value: string; label: string; sublabel?: string }[];
-  movementOptions: { value: string; label: string; sublabel?: string; pattern?: string | null }[];
-  movementMap: Record<string, string>;
-  types: any[];
-  upperOptions: { value: string; label: string }[];
-  lowerOptions: { value: string; label: string }[];
-  generalOptions: { value: string; label: string }[];
-  recommendedUpper: string;
-  recommendedLower: string;
-  onUpdateSet: (p: Partial<CardSet>) => void;
-  onRemoveSet: () => void;
-  onAddItem: (bodyPart: string) => void;
-  onRemoveItem: (ii: number) => void;
-  onUpdateItem: (ii: number, p: Partial<CardItem>) => void;
-  onPreviewVideo?: (m: any, bpm: string) => void;
-  formErrors: Record<string, boolean>;
-}) {
-  const selectedPatterns = set.pattern ? set.pattern.split(",").map(p => p.trim()).filter(Boolean) : [];
-  const isLevel1 = level === "1" || level === "1-499" || level === "1-799";
-
-  return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden flex flex-col">
-      {/* Set Header */}
-      <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
-        <span className="font-bold text-slate-700">Set {set.set_number}</span>
-        {editing && (
-          <button onClick={onRemoveSet} className="text-red-500 hover:text-red-600 p-1 transition-colors" title="Hapus set">
-            <Trash2 className="h-4 w-4" />
-          </button>
-        )}
-      </div>
-
-      {/* Set Properties Grid */}
-      <div className="p-4 border-b border-slate-100">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-          {/* Pattern */}
-          <div className="md:col-span-6 lg:col-span-2">
-            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Pattern</label>
-            {editing ? (
-              <Popover.Root>
-                <Popover.Trigger asChild>
-                  <button type="button" className="text-left truncate bg-white border border-slate-200 rounded-md px-3 py-1.5 text-slate-700 w-full flex items-center justify-between hover:border-slate-300 transition-colors">
-                    <span className="truncate text-sm">{selectedPatterns.length > 0 ? selectedPatterns.join(", ") : "Pilih..."}</span>
-                    <ChevronDown className="h-4 w-4 text-slate-400 shrink-0 ml-1" />
-                  </button>
-                </Popover.Trigger>
-                <Popover.Portal>
-                  <Popover.Content align="start" className="z-50 bg-white rounded-lg shadow-lg border border-slate-200 p-2 space-y-1 w-[200px]">
-                    {[
-                      "Isolate FC",
-                      "Dynamic FC",
-                      "Isolate CC",
-                      "Dynamic CC",
-                      "Metabolic Basic",
-                      "Metabolic Core",
-                    ].map((p) => {
-                      const isChecked = selectedPatterns.includes(p);
-                      return (
-                        <label key={p} className="flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 rounded text-sm cursor-pointer select-none">
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => {
-                              let next;
-                              if (isChecked) {
-                                next = selectedPatterns.filter(x => x !== p);
-                              } else {
-                                next = [...selectedPatterns, p];
-                              }
-                              onUpdateSet({ pattern: next.join(",") });
-                            }}
-                            className="rounded border-slate-300 text-sf-deepNavy focus:ring-sf-warmGold/40 h-4 w-4"
-                          />
-                          <span>{p}</span>
-                        </label>
-                      );
-                    })}
-                  </Popover.Content>
-                </Popover.Portal>
-              </Popover.Root>
-            ) : (
-              <span className="text-sm font-medium text-slate-800">{set.pattern ? set.pattern.split(",").join(", ") : "-"}</span>
-            )}
-          </div>
-
-          {/* Breathing */}
-          <div className="md:col-span-6 lg:col-span-2">
-            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Breathing</label>
-            {editing ? (
-              <select
-                value={set.breathing_core || ""}
-                onChange={(e) => onUpdateSet({ breathing_core: e.target.value })}
-                className="w-full text-sm border border-slate-200 rounded-md px-2 py-1.5 focus:outline-none focus:border-sf-deepNavy bg-white"
-              >
-                <option value="">Pilih...</option>
-                <option value="Core">Core</option>
-                <option value="Diafragma">Diafragma</option>
-              </select>
-            ) : (
-              <div className="text-sm font-medium text-slate-800">
-                {set.breathing_core || "-"}
-              </div>
-            )}
-          </div>
-
-          {/* Duration & Load/BPM */}
-          <div className="md:col-span-6 lg:col-span-3">
-            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Duration / {isMetabolic ? "Extra Load" : "BPM"}</label>
-            {editing ? (
-              <div className="flex gap-2">
-                <input 
-                  value={set.duration || ""} 
-                  onChange={(e) => onUpdateSet({ duration: e.target.value })} 
-                  className="w-1/2 text-sm border border-slate-200 rounded-md px-3 py-1.5 focus:outline-none focus:border-sf-deepNavy" 
-                  placeholder="Durasi (3-5 min)" 
-                />
-                <input
-                  value={isMetabolic ? (set.extra_load || "") : (set.bpm || "")}
-                  onChange={(e) => isMetabolic ? onUpdateSet({ extra_load: e.target.value }) : onUpdateSet({ bpm: e.target.value })}
-                  className="w-1/2 text-sm border border-slate-200 rounded-md px-3 py-1.5 focus:outline-none focus:border-sf-deepNavy"
-                  placeholder={isMetabolic ? "Load" : "Zona 1-2"}
-                />
-              </div>
-            ) : (
-              <div className="text-sm space-y-0.5">
-                <div><span className="text-slate-400">Durasi:</span> <span className="font-medium text-slate-700">{set.duration || "-"}</span></div>
-                <div><span className="text-slate-400">{isMetabolic ? "Load:" : "BPM:"}</span> <span className="font-medium text-slate-700">{isMetabolic ? (set.extra_load || "-") : (set.bpm || "-")}</span></div>
-              </div>
-            )}
-          </div>
-
-          {/* Equipment */}
-          <div className="md:col-span-12 lg:col-span-5">
-             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Equipment</label>
-             {editing ? (
-               <div className="flex flex-col md:flex-row gap-3">
-                 <div className="flex-1 min-w-0">
-                    <SearchableSelect
-                      options={generalOptions}
-                      value={set.equipment || ""}
-                      onChange={(v) => onUpdateSet({ equipment: v })}
-                      placeholder="Pilih Alat..."
-                      searchPlaceholder="Cari..."
-                    />
-                 </div>
-               </div>
-             ) : (
-               <div className="text-sm space-y-0.5 mt-1">
-                 <div><span className="font-semibold text-slate-600">{set.equipment || "-"}</span></div>
-               </div>
-             )}
-          </div>
-
-          {/* Notes */}
-          <div className="md:col-span-2 lg:col-span-4 mt-2">
-            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Notes</label>
-            {editing ? (
-              <input
-                value={set.notes || ""}
-                onChange={(e) => onUpdateSet({ notes: e.target.value })}
-                className="w-full text-sm border border-slate-200 rounded-md px-3 py-2 focus:outline-none focus:border-sf-deepNavy"
-                placeholder="Tambahkan catatan khusus untuk set ini..."
-              />
-            ) : (
-              <span className="text-sm text-slate-600">{set.notes || "-"}</span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Movements / Items List */}
-      <div className="bg-slate-50 p-4">
-        <h4 className="text-[11px] font-bold text-slate-600 mb-3 uppercase tracking-widest flex items-center gap-2">
-          Gerakan (Movements)
-          <span className="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-[9px]">{set.items.length}</span>
-        </h4>
-        
-        {set.items.length === 0 ? (
-          <div className="text-sm text-slate-400 italic mb-4 bg-white p-4 rounded border border-dashed border-slate-300 text-center">
-            Belum ada gerakan
-          </div>
-        ) : (
-          <div className="space-y-3 mb-4">
-            {set.items.map((item, ii) => (
-              <div key={ii} className="flex flex-col md:flex-row gap-4 bg-white p-3 border border-slate-200 rounded-md shadow-sm relative">
-                
-                {/* Bagian Nama & Body Part */}
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className={cn(
-                      "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider",
-                      item.body_part === "upper" ? "bg-blue-100 text-blue-700" :
-                      item.body_part === "lower" ? "bg-green-100 text-green-700" :
-                      "bg-amber-100 text-amber-700"
-                    )}>
-                      {item.body_part}
-                    </span>
-                    {editing && (
-                      <button onClick={() => onRemoveItem(ii)} className="text-red-400 hover:text-red-600 transition-colors md:hidden">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    )}
-                  </div>
-                  
-                  {editing ? (
-                    <MovementSelect
-                      options={movementOptions}
-                      movementMap={movementMap}
-                      item={item}
-                      bodyPart={item.body_part}
-                      selectedPatterns={selectedPatterns}
-                      onUpdate={(updates) => onUpdateItem(ii, updates)}
-                      hasError={formErrors[`item_${si}_${seti}_${ii}_movement`]}
-                    />
-                  ) : (
-                    <div className="flex items-center gap-2 mt-1">
-                      <div className="font-semibold text-slate-800 text-sm">{item.movement_name || "-"}</div>
-                      <button onClick={() => {
-                        const m = item.movement_id ? movementMap[item.movement_id] : null;
-                        if (m && onPreviewVideo) onPreviewVideo(m, set.bpm || "");
-                      }} className="p-1 rounded bg-slate-100 text-violet-600 hover:bg-violet-100" title="Preview Video">
-                        <Video className="h-4 w-4" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Bagian Reps & Breathing Khusus (Jika Level 1) */}
-                <div className="flex items-end gap-3 md:w-auto w-full border-t border-slate-100 md:border-none pt-3 md:pt-0">
-                  {/* Reps */}
-                  <div className="w-20 shrink-0">
-                    <label className="block text-[10px] text-slate-400 mb-1">Reps</label>
-                    {editing ? (
-                      <input 
-                        type="number" 
-                        value={item.reps ?? ""} 
-                        onChange={(e) => onUpdateItem(ii, { reps: e.target.value ? +e.target.value : null })} 
-                        className={`w-full text-sm border rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-sf-deepNavy text-center ${formErrors[`item_${si}_${seti}_${ii}_reps`] ? "border-red-500 bg-red-50 placeholder-red-300" : "border-slate-200"}`} 
-                      />
-                    ) : (
-                      <div className="font-medium text-sm text-center">{item.reps ?? "-"}</div>
-                    )}
-                  </div>
-                  
-                  {/* Sets Count (Terkadang digunakan) */}
-                  <div className="w-16 shrink-0">
-                    <label className="block text-[10px] text-slate-400 mb-1">Set</label>
-                    {editing ? (
-                      <input 
-                        type="number" 
-                        value={item.sets_count ?? ""} 
-                        onChange={(e) => onUpdateItem(ii, { sets_count: e.target.value ? +e.target.value : null })} 
-                        className={`w-full text-sm border rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-sf-deepNavy text-center ${formErrors[`item_${si}_${seti}_${ii}_sets_count`] ? "border-red-500 bg-red-50 placeholder-red-300" : "border-slate-200"}`} 
-                      />
-                    ) : (
-                      <div className="font-medium text-sm text-center">{item.sets_count ?? "-"}</div>
-                    )}
-                  </div>
-
-                  {/* Breathing khusus level 1 per item */}
-                  {isLevel1 && (
-                    <div className="w-24 shrink-0 space-y-1">
-                      <label className="block text-[10px] text-slate-400 mb-1">Breathing</label>
-                      {editing ? (
-                        <select
-                          value={item.breathing_core || ""}
-                          onChange={(e) => onUpdateItem(ii, { breathing_core: e.target.value })}
-                          className="text-[10px] w-full border border-slate-200 rounded px-1.5 py-1 focus:outline-none bg-white"
-                        >
-                          <option value="">Pilih...</option>
-                          <option value="Core">Core</option>
-                          <option value="Diafragma">Diafragma</option>
-                        </select>
-                      ) : (
-                        <div className="font-medium text-sm text-center">
-                          {item.breathing_core || "-"}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Desktop Delete button */}
-                  {editing && (
-                    <button onClick={() => onRemoveItem(ii)} className="hidden md:flex text-red-400 hover:text-red-600 transition-colors p-2 mb-0.5" title="Hapus gerakan">
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  )}
-                </div>
-
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Add Movement Buttons */}
-        {editing && (
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => onAddItem("upper")}
-              className="px-4 py-2 text-xs rounded border border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
-            >
-              <Plus className="h-3.5 w-3.5" /> Tambah Upper
-            </button>
-            <button
-              onClick={() => onAddItem("lower")}
-              className="px-4 py-2 text-xs rounded border border-green-200 text-green-700 bg-green-50 hover:bg-green-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
-            >
-              <Plus className="h-3.5 w-3.5" /> Tambah Lower
-            </button>
-            {isMetabolic && (
-              <button
-                onClick={() => onAddItem("core")}
-                className="px-4 py-2 text-xs rounded border border-amber-200 text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
-              >
-                <Plus className="h-3.5 w-3.5" /> Tambah Core
-              </button>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  MovementSelect — SearchableSelect for picking a movement
-// ═══════════════════════════════════════════════════════════════
-
-function MovementSelect({
-  options, movementMap, item, bodyPart, selectedPatterns, onUpdate, hasError
-}: {
-  options: { value: string; label: string; sublabel?: string; pattern?: string | null; section?: string; extractedCategory?: string }[];
-  movementMap: Record<string, string>;
-  item: CardItem;
-  bodyPart: string;
-  selectedPatterns: string[];
-  onUpdate: (p: Partial<CardItem>) => void;
-  hasError?: boolean;
-}) {
-  let filtered = [...options];
-
-  if (bodyPart) {
-    const bpLower = bodyPart.toLowerCase();
-    filtered = filtered.filter(m => {
-      const mSub = (m.sublabel || "").trim().toLowerCase();
-      // Tampilkan gerakan yang sesuai body_part atau yang body_part nya kosong (opsional)
-      return mSub === bpLower || mSub === "";
+  // Flatten items for the table
+  const flatItems: any[] = [];
+  seq.sets.forEach((set, seti) => {
+    if (!set.items || set.items.length === 0) return;
+    
+    // Group by section (breathing_core holds the SECTION temporary mapped in buildSetsFromMenuItems)
+    const patternsMap = new Map<string, any[]>();
+    set.items.forEach((item, ii) => {
+      const sectionName = item.breathing_core || "-";
+      if (!patternsMap.has(sectionName)) patternsMap.set(sectionName, []);
+      patternsMap.get(sectionName)!.push({ item, ii });
     });
-  }
 
-  // We remove the selectedPatterns filter to give consultants full flexibility
-  // to choose ANY movement regardless of the Set's pattern.
-  const customLabel = item.movement_name || "";
-  const allOpts = [
-    ...(customLabel && !item.movement_id ? [{ value: "__custom", label: customLabel, sublabel: "custom" }] : []),
-    ...filtered,
-  ];
+    let isFirstInSet = true;
+    for (const [sectionName, secItems] of Array.from(patternsMap.entries())) {
+      let isFirstInSection = true;
+      for (const {item, ii} of secItems) {
+        flatItems.push({
+          set, seti,
+          item, ii,
+          sectionName,
+          setRowSpan: isFirstInSet ? set.items.length : 0,
+          sectionRowSpan: isFirstInSection ? secItems.length : 0,
+          isFirstInSet,
+          isFirstInSection
+        });
+        isFirstInSet = false;
+        isFirstInSection = false;
+      }
+    }
+  });
 
   return (
-    <div className="min-w-[140px]">
-      <SearchableSelect
-        options={allOpts}
-        value={item.movement_id || (customLabel ? "__custom" : "")}
-        onChange={(v) => {
-          if (v === "__custom" || v === "") {
-            onUpdate({ movement_id: null });
-          } else {
-            const selectedOpt = allOpts.find(o => o.value === v);
-            const bp = selectedOpt?.sublabel || "upper";
-            onUpdate({ movement_id: v, movement_name: movementMap[v] || "", body_part: bp });
-          }
-        }}
-        placeholder="Pilih gerakan..."
-        searchPlaceholder="Cari gerakan..."
-        className={hasError ? "!border-red-500 bg-red-50" : ""}
-      />
-      {!item.movement_id && (
-        <input
-          value={item.movement_name || ""}
-          onChange={(e) => onUpdate({ movement_name: e.target.value })}
-          className={`mt-1.5 w-full border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-sf-deepNavy bg-white ${hasError ? "border-red-500 bg-red-50" : "border-slate-200"}`}
-          placeholder="Atau ketik manual..."
-        />
-      )}
+    <div className="border border-slate-200 rounded-lg overflow-hidden shadow-sm mb-6">
+      <div className={cn("text-white px-4 py-2 flex items-center justify-between select-none", seqBg)}>
+        <div className="font-bold text-sm tracking-wide uppercase">{seq.program_category_name || "Sequence"}</div>
+      </div>
+      
+      <div className="p-0 overflow-x-auto bg-white">
+        <table className="w-full text-sm text-left border-collapse">
+          <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
+            <tr>
+              <th className="px-4 py-3 font-semibold border-r border-slate-200 w-32 text-center uppercase text-xs">Set / Track</th>
+              <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center uppercase text-xs">Type</th>
+              <th className="px-4 py-3 font-semibold border-r border-slate-200 w-28 text-center uppercase text-xs">Section</th>
+              <th className="px-4 py-3 font-semibold border-r border-slate-200 uppercase text-xs">Movement</th>
+              <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center uppercase text-xs">Reps</th>
+              <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center uppercase text-xs">Sets</th>
+              {editing && <th className="px-4 py-3 font-semibold w-12 text-center"></th>}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200">
+            {flatItems.length === 0 ? (
+              <tr>
+                <td colSpan={editing ? 7 : 6} className="px-4 py-6 text-center text-slate-400">Tidak ada gerakan</td>
+              </tr>
+            ) : (
+              flatItems.map((row, idx) => (
+                <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                  {row.isFirstInSet && (
+                    <td rowSpan={row.setRowSpan} className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top font-bold bg-slate-50/30">
+                      {row.set.notes || (`Set ${row.set.set_number}`)}
+                    </td>
+                  )}
+                  {row.isFirstInSet && (
+                    <td rowSpan={row.setRowSpan} className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top">
+                      {row.set.pattern || "-"}
+                    </td>
+                  )}
+                  {row.isFirstInSection && (
+                    <td rowSpan={row.sectionRowSpan} className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top">
+                      {row.sectionName}
+                    </td>
+                  )}
+                  
+                  <td className="px-4 py-3 border-r border-slate-200">
+                    <span className="font-medium text-slate-900">{row.item?.movement_name || "-"}</span>
+                  </td>
+                  
+                  <td className="px-4 py-2 border-r border-slate-200 text-center align-top">
+                    {editing ? (
+                      <input
+                        type="number"
+                        value={row.item?.reps ?? ""}
+                        onChange={(e) => onUpdateItem(row.seti, row.ii, { reps: e.target.value ? parseInt(e.target.value) : null })}
+                        className="w-16 px-2 py-1.5 text-center border border-slate-200 rounded-md focus:border-sf-deepNavy focus:ring-1 focus:ring-sf-deepNavy outline-none transition-all"
+                        placeholder="-"
+                      />
+                    ) : (
+                      <span className="font-semibold text-slate-700">{row.item?.reps || "-"}</span>
+                    )}
+                  </td>
+                  
+                  <td className="px-4 py-2 border-r border-slate-200 text-center align-top">
+                    {editing ? (
+                      <input
+                        type="number"
+                        value={row.item?.sets_count ?? 1}
+                        onChange={(e) => onUpdateItem(row.seti, row.ii, { sets_count: e.target.value ? parseInt(e.target.value) : 1 })}
+                        className="w-16 px-2 py-1.5 text-center border border-slate-200 rounded-md focus:border-sf-deepNavy focus:ring-1 focus:ring-sf-deepNavy outline-none transition-all"
+                        placeholder="1"
+                      />
+                    ) : (
+                      <span className="font-semibold text-slate-700">{row.item?.sets_count || 1}</span>
+                    )}
+                  </td>
+                  
+                  {editing && (
+                    <td className="px-4 py-3 text-center align-top">
+                      {row.item && (
+                        <button
+                          onClick={() => onRemoveItem(row.seti, row.ii)}
+                          className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                          title="Hapus gerakan"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
+                    </td>
+                  )}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
-
-// ═══════════════════════════════════════════════════════════════
-//  Conditioning Reference Table — static guideline at bottom
-// ═══════════════════════════════════════════════════════════════
-
-function ConditioningReferenceTable() {
-  const thBase = "px-3 py-2 text-xs font-bold text-slate-600 border border-slate-300 text-center uppercase tracking-wider bg-slate-100";
-  const tdBase = "px-3 py-1.5 text-xs border border-slate-200 text-center";
-
-  return (
-    <div className="space-y-4">
-      <div className="bg-slate-800 text-white px-4 py-2.5 text-xs font-bold rounded-t-lg tracking-widest uppercase">
-        ACUAN BEBAN / LOAD/WEIGHT REFERENCE
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* WOMAN COLUMN */}
-        <div className="border border-slate-300 rounded-lg overflow-hidden shadow-sm bg-white">
-          <table className="w-full text-xs border-collapse">
-            <thead>
-              <tr className="bg-pink-600 text-white">
-                <th className="px-3 py-2 text-sm font-bold text-center uppercase tracking-widest" colSpan={3}>WOMAN</th>
-              </tr>
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-3 py-2 text-xs font-bold text-slate-600 text-center uppercase tracking-wider" colSpan={3}>Cardio Conditioning</th>
-              </tr>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className={cn(thBase, "text-left border-r border-slate-200")}>Kategori</th>
-                <th className={cn(thBase, "border-r border-slate-200")}>Upper Body</th>
-                <th className={thBase}>Lower Body</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Teenager - 20 tahun</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>0.25 kg</td>
-                <td className={tdBase}>0.75 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Wanita tinggi 155 - 175 cm</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>0.5 kg</td>
-                <td className={tdBase}>1 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Wanita tinggi &gt; 175</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>0.75 kg</td>
-                <td className={tdBase}>1.5 kg</td>
-              </tr>
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-3 py-2 text-xs font-bold text-slate-600 text-center uppercase tracking-wider" colSpan={3}>Metabolic Conditioning</th>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Teenager - 20 tahun</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>1 kg</td>
-                <td className={tdBase}>1.5 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Dewasa tinggi 155 - 175 cm</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>1.5 kg</td>
-                <td className={tdBase}>2 kg</td>
-              </tr>
-              <tr>
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Wanita tinggi &gt; 175</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>2 kg</td>
-                <td className={tdBase}>2.5 kg</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* MAN COLUMN */}
-        <div className="border border-slate-300 rounded-lg overflow-hidden shadow-sm bg-white">
-          <table className="w-full text-xs border-collapse">
-            <thead>
-              <tr className="bg-blue-600 text-white">
-                <th className="px-3 py-2 text-sm font-bold text-center uppercase tracking-widest" colSpan={3}>MAN</th>
-              </tr>
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-3 py-2 text-xs font-bold text-slate-600 text-center uppercase tracking-wider" colSpan={3}>Cardio Conditioning</th>
-              </tr>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className={cn(thBase, "text-left border-r border-slate-200")}>Kategori</th>
-                <th className={cn(thBase, "border-r border-slate-200")}>Upper Body</th>
-                <th className={thBase}>Lower Body</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Teenager - 20 tahun</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>0.5 kg</td>
-                <td className={tdBase}>1.5 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Dewasa tinggi 160 - 185 cm</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>1 kg</td>
-                <td className={tdBase}>2 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Pria tinggi &gt; 185</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>1.5 kg</td>
-                <td className={tdBase}>3 kg</td>
-              </tr>
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-3 py-2 text-xs font-bold text-slate-600 text-center uppercase tracking-wider" colSpan={3}>Metabolic Conditioning</th>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Teenager - 20 tahun</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>2 kg</td>
-                <td className={tdBase}>2 kg</td>
-              </tr>
               <tr className="border-b border-slate-200">
                 <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Dewasa tinggi 160 - 185 cm</td>
                 <td className={cn(tdBase, "border-r border-slate-200")}>3 kg</td>
