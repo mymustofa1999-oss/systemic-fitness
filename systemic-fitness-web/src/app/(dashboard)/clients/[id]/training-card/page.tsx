@@ -1202,7 +1202,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 function SequenceTable({
   seq, si, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
   equipUpperOptions, equipLowerOptions, equipGeneralOptions, recs,
-  onUpdateSeq, onAddSet, onRemoveSet, onUpdateSet, onAddItem, onRemoveItem, onUpdateItem,
+  onUpdateSeq, onAddSet, onRemoveSet, onUpdateSet, onAddItem, onRemoveItem, onUpdateItem, onPreviewVideo,
   formErrors,
 }: {
   seq: CardSequence; si: number; level: string; isMetabolic: boolean; editing: boolean;
@@ -1221,6 +1221,7 @@ function SequenceTable({
   onAddItem: (seti: number, bodyPart: string) => void;
   onRemoveItem: (seti: number, ii: number) => void;
   onUpdateItem: (seti: number, ii: number, p: Partial<CardItem>) => void;
+  onPreviewVideo?: (m: any, bpm: string) => void;
   formErrors: Record<string, boolean>;
 }) {
   const [expanded, setExpanded] = useState(true);
@@ -1359,7 +1360,7 @@ function SetBlock({
   set: CardSet; si: number; seti: number; level: string; isMetabolic: boolean; editing: boolean;
   typeOptions: { value: string; label: string; sublabel?: string }[];
   movementOptions: { value: string; label: string; sublabel?: string; pattern?: string | null }[];
-  movementMap: Record<string, string>;
+  movementMap: Record<string, any>;
   types: any[];
   upperOptions: { value: string; label: string }[];
   lowerOptions: { value: string; label: string }[];
@@ -1724,7 +1725,8 @@ function MovementSelect({
           if (v === "__custom" || v === "") {
             onUpdate({ movement_id: null });
           } else {
-            const bp = getBodyPartFromOptions(v) || bodyPart || "upper";
+            const selectedOpt = allOpts.find(o => o.value === v);
+            const bp = selectedOpt?.sublabel || bodyPart || "upper";
             onUpdate({ movement_id: v, movement_name: movementMap[v]?.name || "", body_part: bp });
           }
         }}
