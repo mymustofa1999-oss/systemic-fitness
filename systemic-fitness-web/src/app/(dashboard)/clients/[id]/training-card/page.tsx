@@ -1188,6 +1188,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         <VideoPreviewModal 
           movement={previewTarget.movement} 
           bpm={previewTarget.bpm} 
+          gender={profile?.gender}
           onClose={() => setPreviewTarget(null)} 
         />
       )}
@@ -1767,9 +1768,17 @@ function extractYouTubeId(url: string) {
   return (match && match[2].length === 11) ? match[2] : null;
 }
 
-function VideoPreviewModal({ movement, bpm, onClose }: { movement: any; bpm?: string; onClose: () => void }) {
-  const maleId = extractYouTubeId(movement.video_url_male || "");
-  const femaleId = extractYouTubeId(movement.video_url_female || "");
+function VideoPreviewModal({ movement, bpm, gender, onClose }: { movement: any; bpm?: string; gender?: string; onClose: () => void }) {
+  const rawMaleId = extractYouTubeId(movement.video_url_male || "");
+  const rawFemaleId = extractYouTubeId(movement.video_url_female || "");
+  
+  let maleId = gender === "Female" ? null : rawMaleId;
+  let femaleId = gender === "Male" ? null : rawFemaleId;
+
+  // Fallbacks just in case the specific gender video is missing but the other exists
+  if (gender === "Male" && !maleId && rawFemaleId) femaleId = rawFemaleId;
+  if (gender === "Female" && !femaleId && rawMaleId) maleId = rawMaleId;
+
   const hasBoth = maleId && femaleId;
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
