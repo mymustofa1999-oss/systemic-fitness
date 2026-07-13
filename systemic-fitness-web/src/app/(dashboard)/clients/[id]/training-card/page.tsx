@@ -52,7 +52,14 @@ function buildSetsFromMenuItems(menuItems: any[]) {
       sort_order: setNumber - 1,
       items: items.map((item, ii) => ({
         movement_id: item.movement_id || null,
-        movement_name: item.movement?.name || "",
+        movement_name: (() => {
+          const nameStr = item.movement?.name || "";
+          const parts = nameStr.split(" | ");
+          if (parts.length > 1) {
+            return gender === "male" || gender === "men" ? parts[1] : parts[0];
+          }
+          return nameStr;
+        })(),
         body_part: item.movement?.body_part || "upper",
         equipment: item.movement?.equipment || "",
         reps: null,

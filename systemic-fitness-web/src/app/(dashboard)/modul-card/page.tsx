@@ -265,7 +265,7 @@ export default function ModulCardPage() {
                     )}
                     <td className="px-4 py-3 border-r border-slate-200">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                        <span className="font-medium text-slate-900">{row.movement?.name ? row.movement.name.split(" | ")[0] : ""}</span>
                         {row.movement?.video_url_female && (
                           <a href={row.movement.video_url_female} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
                             <Video className="w-4 h-4" />
@@ -275,7 +275,7 @@ export default function ModulCardPage() {
                     </td>
                     <td className="px-4 py-3 border-r border-slate-200">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium text-slate-900">{row.movement?.name}</span>
+                        <span className="font-medium text-slate-900">{row.movement?.name ? (row.movement.name.split(" | ").length > 1 ? row.movement.name.split(" | ")[1] : row.movement.name.split(" | ")[0]) : ""}</span>
                         {row.movement?.video_url_male && (
                           <a href={row.movement.video_url_male} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
                             <Video className="w-4 h-4" />
