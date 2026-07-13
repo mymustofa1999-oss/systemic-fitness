@@ -1339,6 +1339,7 @@ function SequenceTable({
               seti={seti}
               level={level}
               isMetabolic={isMetabolic}
+              categoryCode={seq.program_category_code}
               editing={editing}
               typeOptions={typeOptions}
               movementOptions={movementOptions}
@@ -1382,12 +1383,12 @@ function SequenceTable({
 // ═══════════════════════════════════════════════════════════════
 
 function SetBlock({
-  set, si, seti, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
+  set, si, seti, level, isMetabolic, categoryCode, editing, typeOptions, movementOptions, movementMap, types,
   upperOptions, lowerOptions, generalOptions, recommendedUpper, recommendedLower,
   onUpdateSet, onRemoveSet, onAddItem, onRemoveItem, onUpdateItem, onPreviewVideo,
   formErrors,
 }: {
-  set: CardSet; si: number; seti: number; level: string; isMetabolic: boolean; editing: boolean;
+  set: CardSet; si: number; seti: number; level: string; isMetabolic: boolean; categoryCode?: string; editing: boolean;
   typeOptions: { value: string; label: string; sublabel?: string }[];
   movementOptions: { value: string; label: string; sublabel?: string; pattern?: string | null }[];
   movementMap: Record<string, any>;
@@ -1437,10 +1438,8 @@ function SetBlock({
                 <Popover.Portal>
                   <Popover.Content align="start" className="z-50 bg-white rounded-lg shadow-lg border border-slate-200 p-2 space-y-1 w-[200px]">
                     {[
-                      "Isolate FC",
-                      "Dynamic FC",
-                      "Isolate CC",
-                      "Dynamic CC",
+                      "Isolate",
+                      "Dynamic",
                       "Metabolic Basic",
                       "Metabolic Core",
                     ].map((p) => {
@@ -1589,9 +1588,10 @@ function SetBlock({
                       options={movementOptions}
                       movementMap={movementMap}
                       item={item}
-                      bodyPart={item.body_part}
+                      bodyPart={item.body_part || ""}
                       selectedPatterns={selectedPatterns}
-                      onUpdate={(updates) => onUpdateItem(ii, updates)}
+                      categoryCode={categoryCode}
+                      onUpdate={(p) => onUpdateItem(ii, p)}
                       hasError={formErrors[`item_${si}_${seti}_${ii}_movement`]}
                     />
                   ) : (
@@ -1717,13 +1717,14 @@ function SetBlock({
 // ═══════════════════════════════════════════════════════════════
 
 function MovementSelect({
-  options, movementMap, item, bodyPart, selectedPatterns, onUpdate, hasError
+  options, movementMap, item, bodyPart, selectedPatterns, categoryCode, onUpdate, hasError
 }: {
   options: { value: string; label: string; sublabel?: string; pattern?: string | null; section?: string; extractedCategory?: string }[];
   movementMap: Record<string, any>;
   item: CardItem;
   bodyPart: string;
   selectedPatterns: string[];
+  categoryCode?: string;
   onUpdate: (p: Partial<CardItem>) => void;
   hasError?: boolean;
 }) {
@@ -1734,15 +1735,18 @@ function MovementSelect({
     filtered = filtered.filter(m => {
       const mPat = (m.pattern || "").trim().toLowerCase();
       const mCat = (m.extractedCategory || "").trim().toLowerCase();
+      const currentCat = (categoryCode || "").trim().toLowerCase();
       
       return selectedPatterns.some(sp => {
         const spLower = sp.toLowerCase();
-        if (spLower === "isolate fc") return mPat === "isolate" && mCat === "fc";
-        if (spLower === "dynamic fc") return mPat === "dynamic" && mCat === "fc";
-        if (spLower === "isolate cc") return mPat === "isolate" && mCat === "cc";
-        if (spLower === "dynamic cc") return mPat === "dynamic" && mCat === "cc";
+        
+        // If the pattern is just "Isolate" or "Dynamic", enforce the current sequence category (FC, CC, etc)
+        if (spLower === "isolate") return mPat === "isolate" && (!currentCat || mCat === currentCat);
+        if (spLower === "dynamic") return mPat === "dynamic" && (!currentCat || mCat === currentCat);
+        
         if (spLower === "metabolic basic") return mPat.includes("basic") || mCat === "mc";
         if (spLower === "metabolic core") return mPat.includes("core") || mCat === "mc";
+        
         return true;
       });
     });
