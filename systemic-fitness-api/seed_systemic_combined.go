@@ -127,7 +127,7 @@ func main() {
 				if femaleName == "" { femaleName = fL }
 				maleName = mU
 				if maleName == "" { maleName = mL }
-				bodyPart = inferBodyPart(currentType) // e.g. "upper" or "lower"
+				bodyPart = inferBodyPart(currentSection) // e.g. "upper" or "lower"
 			}
 
 			movementName := femaleName
@@ -273,6 +273,8 @@ func main() {
 				}
 			}
 			if movementName == "" { continue }
+
+			movementName = fmt.Sprintf("%s [L%d]", movementName, levelNum)
 
 			var catID string
 			conn.QueryRow(ctx, "SELECT id FROM dl_categories WHERE code = $1", catCode).Scan(&catID)
