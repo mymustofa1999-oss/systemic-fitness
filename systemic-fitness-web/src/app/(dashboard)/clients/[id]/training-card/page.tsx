@@ -1674,8 +1674,16 @@ function MovementSelect({
     });
   }
 
-  // We remove the selectedPatterns filter to give consultants full flexibility
-  // to choose ANY movement regardless of the Set's pattern.
+  // Pastikan item.movement_id yang terpilih ada di allOpts meskipun terfilter!
+  if (item.movement_id && !filtered.some(o => o.value === item.movement_id)) {
+    const selectedInOptions = options.find(o => o.value === item.movement_id);
+    if (selectedInOptions) {
+      filtered.push(selectedInOptions);
+    } else if (item.movement_name) {
+      filtered.push({ value: item.movement_id, label: item.movement_name, sublabel: item.body_part });
+    }
+  }
+
   const customLabel = item.movement_name || "";
   const allOpts = [
     ...(customLabel && !item.movement_id ? [{ value: "__custom", label: customLabel, sublabel: "custom" }] : []),
