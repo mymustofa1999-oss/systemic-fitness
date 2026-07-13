@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2, Loader2, Video, Search, ChevronRight } from "lucide-react";
+import { Plus, Trash2, Loader2, Video, Search, ChevronRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   useDLLevels,
@@ -42,6 +42,20 @@ const LEVEL_THEMES: Record<number, { headerBg: string; accent: string }> = {
   4: { headerBg: "bg-violet-600",  accent: "bg-violet-50" },
   5: { headerBg: "bg-rose-600",    accent: "bg-rose-50" },
 };
+
+function getYouTubeEmbedUrl(url: string) {
+  if (!url) return '';
+  let videoId = '';
+  if (url.includes('youtu.be/')) {
+    videoId = url.split('youtu.be/')[1]?.split('?')[0];
+  } else if (url.includes('youtube.com/watch')) {
+    const params = new URLSearchParams(url.split('?')[1]);
+    videoId = params.get('v') || '';
+  } else if (url.includes('youtube.com/shorts/')) {
+    videoId = url.split('youtube.com/shorts/')[1]?.split('?')[0];
+  }
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+}
 
 export default function ModulCardPage() {
   // force recompile
@@ -140,6 +154,7 @@ export default function ModulCardPage() {
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
+  const [videoModalUrl, setVideoModalUrl] = useState<string | null>(null);
 
   const theme = LEVEL_THEMES[selectedLevel] || { headerBg: "bg-slate-600", accent: "bg-slate-50" };
 
@@ -269,9 +284,9 @@ export default function ModulCardPage() {
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-medium text-slate-900">{row.movement?.name ? row.movement.name.split(" | ")[0] : ""}</span>
                         {row.movement?.video_url_female && (
-                          <a href={row.movement.video_url_female} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                          <button onClick={() => setVideoModalUrl(row.movement.video_url_female)} className="text-blue-500 hover:text-blue-700 focus:outline-none">
                             <Video className="w-4 h-4" />
-                          </a>
+                          </button>
                         )}
                       </div>
                     </td>
@@ -279,9 +294,9 @@ export default function ModulCardPage() {
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-medium text-slate-900">{row.movement?.name ? (row.movement.name.split(" | ").length > 1 ? row.movement.name.split(" | ")[1] : row.movement.name.split(" | ")[0]) : ""}</span>
                         {row.movement?.video_url_male && (
-                          <a href={row.movement.video_url_male} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-700">
+                          <button onClick={() => setVideoModalUrl(row.movement.video_url_male)} className="text-blue-500 hover:text-blue-700 focus:outline-none">
                             <Video className="w-4 h-4" />
-                          </a>
+                          </button>
                         )}
                       </div>
                     </td>
@@ -323,7 +338,7 @@ export default function ModulCardPage() {
           if (itemToDelete) {
             await deleteMutation.mutateAsync({
               level_id: itemToDelete.level_id,
-              movement_id: itemToDelete.movement_id,
+              movement_id: itemToDelete.movement_id
             });
             setItemToDelete(null);
           }
@@ -332,6 +347,31 @@ export default function ModulCardPage() {
         description={`Apakah Anda yakin ingin menghapus "${itemToDelete?.movement?.name}"?`}
         confirmLabel={deleteMutation.isPending ? "Menghapus..." : "Hapus"}
       />
+
+      {/* Video Modal */}
+      {videoModalUrl && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={() => setVideoModalUrl(null)}>
+          <div className="relative bg-black rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-700" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-3 bg-slate-900 border-b border-slate-800">
+              <h3 className="font-medium text-slate-200 text-sm">Video Preview</h3>
+              <button 
+                onClick={() => setVideoModalUrl(null)}
+                className="p-1 hover:bg-slate-800 rounded-full transition-colors text-slate-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="w-full aspect-video bg-black">
+              <iframe
+                src={getYouTubeEmbedUrl(videoModalUrl)}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
