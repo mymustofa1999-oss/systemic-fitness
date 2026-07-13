@@ -21,12 +21,37 @@ import {
 } from "@/hooks/useNewFeatures";
 import { MedicinesCard } from "@/components/shared/MedicinesCard";
 
-function buildSetsFromMenuItems(menuItems: any[], gender: string | undefined) {
+function calculateBPM(age: number | null, intensityCode: string) {
+  if (!age || !intensityCode) return "";
+  const maxHR = 220 - age;
+  let minPct = 0;
+  let maxPct = 0;
+  
+  const code = intensityCode.toLowerCase();
+  if (code === "functional") {
+    minPct = 0.50;
+    maxPct = 0.60;
+  } else if (code === "cardiorespiratory") {
+    minPct = 0.70;
+    maxPct = 0.85;
+  } else if (code === "metabolic") {
+    minPct = 0.85;
+    maxPct = 0.95;
+  } else {
+    return "";
+  }
+  
+  const minBPM = Math.round(maxHR * minPct);
+  const maxBPM = Math.round(maxHR * maxPct);
+  return `${minBPM}-${maxBPM} BPM`;
+}
+
+function buildSetsFromMenuItems(menuItems: any[], gender: string | undefined, seqCode: string, age: number | null, recs: any) {
   if (!menuItems || menuItems.length === 0) return [];
   
   const setsMap = new Map<string, any[]>();
   for (const item of menuItems) {
-    const setName = item.set_name || "Set 1";
+    const setName = item.set_name || "Uncategorized";
     if (!setsMap.has(setName)) setsMap.set(setName, []);
     setsMap.get(setName)!.push(item);
   }
@@ -34,42 +59,74 @@ function buildSetsFromMenuItems(menuItems: any[], gender: string | undefined) {
   const sets: any[] = [];
   let setNumber = 1;
   for (const [setName, items] of Array.from(setsMap.entries())) {
-    const parsedSetNum = parseInt(setName.replace(/\D/g, '')) || setNumber;
-    sets.push({
-      set_number: parsedSetNum,
-      duration: "",
-      equipment_upper: "",
-      equipment_lower: "",
-      equipment: "",
-      type_id: "",
-      type_name: "",
-      bpm: "",
-      extra_load: "",
-      pattern: "",
-      breathing_core: "",
-      breathing_diaphragm: "",
-      notes: "",
-      sort_order: setNumber - 1,
-      items: items.map((item, ii) => ({
-        movement_id: item.movement_id || null,
-        movement_name: (() => {
-          const nameStr = item.movement?.name || "";
-          const parts = nameStr.split(" | ");
-          if (parts.length > 1) {
-            return gender === "male" || gender === "men" ? parts[1] : parts[0];
-          }
-          return nameStr;
+    const patternsMap = new Map<string, any[]>();
+    for (const item of items) {
+      const typeName = item.group_type || "Isolate";
+      if (!patternsMap.has(typeName)) patternsMap.set(typeName, []);
+      patternsMap.get(typeName)!.push(item);
+    }
+    
+    for (const [patternName, patternItems] of Array.from(patternsMap.entries())) {
+      sets.push({
+        set_number: setNumber,
+        duration: "",
+        equipment_upper: (() => {
+          if (!seqCode || !recs) return "";
+          const code = seqCode.toLowerCase();
+          if (code === "cardiorespiratory" || code === "functional") return recs.cardio?.upper || "";
+          if (code === "metabolic") return recs.metabolic?.upper || "";
+          return "";
         })(),
-        body_part: item.movement?.body_part || "upper",
-        equipment: item.movement?.equipment || "",
-        reps: null,
-        sets_count: 1,
+        equipment_lower: (() => {
+          if (!seqCode || !recs) return "";
+          const code = seqCode.toLowerCase();
+          if (code === "cardiorespiratory" || code === "functional") return recs.cardio?.lower || "";
+          if (code === "metabolic") return recs.metabolic?.lower || "";
+          return "";
+        })(),
+        equipment: (() => {
+          if (!seqCode || !recs) return "";
+          const code = seqCode.toLowerCase();
+          if (code === "cardiorespiratory" || code === "functional") return recs.cardio?.upper || "";
+          if (code === "metabolic") return recs.metabolic?.upper || "";
+          return "";
+        })(),
+        type_id: "",
+        type_name: "",
+        bpm: calculateBPM(age, seqCode),
+        extra_load: "",
+        pattern: patternName,
         breathing_core: "",
         breathing_diaphragm: "",
-        sort_order: ii,
-      }))
-    });
-    setNumber++;
+        notes: setName,
+        sort_order: setNumber - 1,
+        items: patternItems.map((item, ii) => ({
+          movement_id: item.movement_id || null,
+          movement_name: (() => {
+            const nameStr = item.movement?.name || "";
+            const parts = nameStr.split(" | ");
+            if (parts.length > 1) {
+              return gender === "male" || gender === "men" ? parts[1] : parts[0];
+            }
+            return nameStr;
+          })(),
+          body_part: item.movement?.body_part || "upper",
+          equipment: item.movement?.equipment || "",
+          reps: (() => {
+            if (!seqCode) return null;
+            const code = seqCode.toLowerCase();
+            if (code === "functional" || code === "cardiorespiratory") return 20;
+            if (code === "metabolic") return 15;
+            return null;
+          })(),
+          sets_count: 1,
+          breathing_core: item.movement?.pattern || "",
+          breathing_diaphragm: "",
+          sort_order: ii,
+        })),
+      });
+      setNumber++;
+    }
   }
   return sets;
 }
@@ -501,8 +558,8 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
         // Find the active level (either from form during edit, or the default parsed level)
         const currentLevelStr = form?.level || String(parsedMappedLevel);
-        // We remove the level restriction to allow the consultant to pick ANY movement
-        // across all levels. The dropdown is already filtered by bodyPart.
+        // We only allow movements that match the selected level or don't have a level
+        if (effectiveLevel !== null && effectiveLevel !== parseInt(currentLevelStr)) return false;
         return true;
       })
       .map((m: any) => {
@@ -642,14 +699,14 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             if (code === "functional") menuItems = fcItemsParam || (fcData as any)?.data || [];
             if (code === "cardiorespiratory") menuItems = ccItemsParam || (ccData as any)?.data || [];
             if (code === "metabolic") menuItems = mcItemsParam || (mcData as any)?.data || [];
-            if (code === "cooldown") menuItems = (cdData as any)?.data || [];
+            if (code === "cooldown") menuItems = cdItemsParam || (cdData as any)?.data || [];
             return {
               program_category_id: categoryId,
               program_category_name: categoryName,
               program_category_code: code,
               duration: "",
               sort_order: i,
-              sets: buildSetsFromMenuItems(menuItems, profile?.gender),
+              sets: buildSetsFromMenuItems(menuItems, profile?.gender, code, age, recs),
             };
           });
         })(),
@@ -789,7 +846,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
               program_category_code: code,
               duration: "",
               sort_order: i,
-              sets: buildSetsFromMenuItems(menuItems, profile?.gender),
+              sets: buildSetsFromMenuItems(menuItems, profile?.gender, code, age, recs),
             };
           });
 
@@ -1134,7 +1191,6 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       )}
 
       {/* ═══ CONDITIONING REFERENCE TABLE ═══════════════════════ */}
-      {(card || editing) && <ConditioningReferenceTable />}
 
       <ConfirmDialog
         open={deleteOpen}
@@ -1696,136 +1752,6 @@ function MovementSelect({
           placeholder="Atau ketik manual..."
         />
       )}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  Conditioning Reference Table — static guideline at bottom
-// ═══════════════════════════════════════════════════════════════
-
-function ConditioningReferenceTable() {
-  const thBase = "px-3 py-2 text-xs font-bold text-slate-600 border border-slate-300 text-center uppercase tracking-wider bg-slate-100";
-  const tdBase = "px-3 py-1.5 text-xs border border-slate-200 text-center";
-
-  return (
-    <div className="space-y-4">
-      <div className="bg-slate-800 text-white px-4 py-2.5 text-xs font-bold rounded-t-lg tracking-widest uppercase">
-        ACUAN BEBAN / LOAD/WEIGHT REFERENCE
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* WOMAN COLUMN */}
-        <div className="border border-slate-300 rounded-lg overflow-hidden shadow-sm bg-white">
-          <table className="w-full text-xs border-collapse">
-            <thead>
-              <tr className="bg-pink-600 text-white">
-                <th className="px-3 py-2 text-sm font-bold text-center uppercase tracking-widest" colSpan={3}>WOMAN</th>
-              </tr>
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-3 py-2 text-xs font-bold text-slate-600 text-center uppercase tracking-wider" colSpan={3}>Cardio Conditioning</th>
-              </tr>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className={cn(thBase, "text-left border-r border-slate-200")}>Kategori</th>
-                <th className={cn(thBase, "border-r border-slate-200")}>Upper Body</th>
-                <th className={thBase}>Lower Body</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Teenager - 20 tahun</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>0.25 kg</td>
-                <td className={tdBase}>0.75 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Wanita tinggi 155 - 175 cm</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>0.5 kg</td>
-                <td className={tdBase}>1 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Wanita tinggi &gt; 175</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>0.75 kg</td>
-                <td className={tdBase}>1.5 kg</td>
-              </tr>
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-3 py-2 text-xs font-bold text-slate-600 text-center uppercase tracking-wider" colSpan={3}>Metabolic Conditioning</th>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Teenager - 20 tahun</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>1 kg</td>
-                <td className={tdBase}>1.5 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Dewasa tinggi 155 - 175 cm</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>1.5 kg</td>
-                <td className={tdBase}>2 kg</td>
-              </tr>
-              <tr>
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Wanita tinggi &gt; 175</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>2 kg</td>
-                <td className={tdBase}>2.5 kg</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* MAN COLUMN */}
-        <div className="border border-slate-300 rounded-lg overflow-hidden shadow-sm bg-white">
-          <table className="w-full text-xs border-collapse">
-            <thead>
-              <tr className="bg-blue-600 text-white">
-                <th className="px-3 py-2 text-sm font-bold text-center uppercase tracking-widest" colSpan={3}>MAN</th>
-              </tr>
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-3 py-2 text-xs font-bold text-slate-600 text-center uppercase tracking-wider" colSpan={3}>Cardio Conditioning</th>
-              </tr>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className={cn(thBase, "text-left border-r border-slate-200")}>Kategori</th>
-                <th className={cn(thBase, "border-r border-slate-200")}>Upper Body</th>
-                <th className={thBase}>Lower Body</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Teenager - 20 tahun</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>0.5 kg</td>
-                <td className={tdBase}>1.5 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Dewasa tinggi 160 - 185 cm</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>1 kg</td>
-                <td className={tdBase}>2 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Pria tinggi &gt; 185</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>1.5 kg</td>
-                <td className={tdBase}>3 kg</td>
-              </tr>
-              <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="px-3 py-2 text-xs font-bold text-slate-600 text-center uppercase tracking-wider" colSpan={3}>Metabolic Conditioning</th>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Teenager - 20 tahun</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>2 kg</td>
-                <td className={tdBase}>2 kg</td>
-              </tr>
-              <tr className="border-b border-slate-200">
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Dewasa tinggi 160 - 185 cm</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>3 kg</td>
-                <td className={tdBase}>3 kg</td>
-              </tr>
-              <tr>
-                <td className={cn(tdBase, "text-left font-medium border-r border-slate-200")}>Pria tinggi &gt; 185</td>
-                <td className={cn(tdBase, "border-r border-slate-200")}>4 kg</td>
-                <td className={tdBase}>4 kg</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-2 text-xs text-slate-700">
-        <div><strong>Breathing Pattern :</strong> Core, Diafragma</div>
-        <div><strong>Tempo :</strong> BPM List / rekomendasi (bisa metronome atau musik bpm)</div>
-      </div>
     </div>
   );
 }
