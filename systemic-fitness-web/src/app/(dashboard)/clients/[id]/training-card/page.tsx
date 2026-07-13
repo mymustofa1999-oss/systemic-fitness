@@ -136,6 +136,7 @@ import { useDLMovements, useDLMenuItems } from "@/hooks/useDigitalLibrary";
 import { useLatestAssessmentV2 } from "@/hooks/useAssessmentV2";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { SearchableSelect } from "@/components/shared/SearchableSelect";
+import { MultiSearchableSelect } from "@/components/shared/MultiSearchableSelect";
 import * as Popover from "@radix-ui/react-popover";
 import { 
   ArrowLeft, Plus, Trash2, Save, Loader2, Pencil, X,
@@ -688,7 +689,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         })) : (() => {
           let baseCategories = customerPrograms.filter((p: any) => p.is_active);
           if (baseCategories.length === 0) {
-            baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic", "cooldown"].includes(c.code?.toLowerCase()));
+            baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic", "cooldown", "cd"].includes(c.code?.toLowerCase()));
           }
           return baseCategories.map((p: any, i: number) => {
             const code = (p.program_category_code || p.code || "").toLowerCase();
@@ -699,7 +700,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             if (code === "functional") menuItems = fcItemsParam || (fcData as any)?.data || [];
             if (code === "cardiorespiratory") menuItems = ccItemsParam || (ccData as any)?.data || [];
             if (code === "metabolic") menuItems = mcItemsParam || (mcData as any)?.data || [];
-            if (code === "cooldown") menuItems = cdItemsParam || (cdData as any)?.data || [];
+            if (code === "cooldown" || code === "cd") menuItems = cdItemsParam || (cdData as any)?.data || [];
             return {
               program_category_id: categoryId,
               program_category_name: categoryName,
@@ -826,7 +827,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
         let baseCategories = customerPrograms.filter((p: any) => p.is_active);
         if (baseCategories.length === 0) {
-          baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic", "cooldown"].includes(c.code?.toLowerCase()));
+          baseCategories = allCategories.filter((c: any) => ["functional", "cardiorespiratory", "metabolic", "cooldown", "cd"].includes(c.code?.toLowerCase()));
         }
 
         const newSequences = baseCategories.map((p: any, i: number) => {
@@ -838,7 +839,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             if (code === "functional") menuItems = (fcRes as any)?.data || [];
             if (code === "cardiorespiratory") menuItems = (ccRes as any)?.data || [];
             if (code === "metabolic") menuItems = (mcRes as any)?.data || [];
-            if (code === "cooldown") menuItems = (cdRes as any)?.data || [];
+            if (code === "cooldown" || code === "cd") menuItems = (cdRes as any)?.data || [];
             
             return {
               program_category_id: categoryId,
@@ -1167,28 +1168,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         );
       })}
 
-      {/* Additional Notes placeholder */}
-      {sequences.length > 0 && (
-        <div className="border border-slate-200 rounded-lg overflow-hidden">
-          <div className="bg-slate-200 px-4 py-2 text-xs font-bold text-slate-600 tracking-wider">
-            CATATAN TAMBAHAN
-          </div>
-          {editing && form ? (
-            <div className="px-4 py-3">
-              <textarea
-                value={form.notes}
-                onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                className={cn(inpCell, "min-h-[50px]")}
-                placeholder="Catatan tambahan untuk sesi ini..."
-              />
-            </div>
-          ) : (
-            displayData?.notes && (
-              <div className="px-4 py-3 text-sm text-slate-600">{displayData.notes}</div>
-            )
-          )}
-        </div>
-      )}
+      {/* Additional Notes removed per request */}
 
       {/* ═══ CONDITIONING REFERENCE TABLE ═══════════════════════ */}
 
@@ -1475,26 +1455,17 @@ function SetBlock({
 
           {/* Duration & Load/BPM */}
           <div className="md:col-span-6 lg:col-span-3">
-            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Duration / {isMetabolic ? "Extra Load" : "BPM"}</label>
+            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">{isMetabolic ? "Extra Load" : "BPM"}</label>
             {editing ? (
-              <div className="flex gap-2">
-                <input 
-                  value={set.duration || ""} 
-                  onChange={(e) => onUpdateSet({ duration: e.target.value })} 
-                  className="w-1/2 text-sm border border-slate-200 rounded-md px-3 py-1.5 focus:outline-none focus:border-sf-deepNavy" 
-                  placeholder="Durasi (3-5 min)" 
-                />
-                <input
-                  value={isMetabolic ? (set.extra_load || "") : (set.bpm || "")}
-                  onChange={(e) => isMetabolic ? onUpdateSet({ extra_load: e.target.value }) : onUpdateSet({ bpm: e.target.value })}
-                  className="w-1/2 text-sm border border-slate-200 rounded-md px-3 py-1.5 focus:outline-none focus:border-sf-deepNavy"
-                  placeholder={isMetabolic ? "Load" : "Zona 1-2"}
-                />
-              </div>
+              <input
+                value={isMetabolic ? (set.extra_load || "") : (set.bpm || "")}
+                onChange={(e) => isMetabolic ? onUpdateSet({ extra_load: e.target.value }) : onUpdateSet({ bpm: e.target.value })}
+                className="w-full text-sm border border-slate-200 rounded-md px-3 py-1.5 focus:outline-none focus:border-sf-deepNavy"
+                placeholder={isMetabolic ? "Load" : "Zona 1-2"}
+              />
             ) : (
-              <div className="text-sm space-y-0.5">
-                <div><span className="text-slate-400">Durasi:</span> <span className="font-medium text-slate-700">{set.duration || "-"}</span></div>
-                <div><span className="text-slate-400">{isMetabolic ? "Load:" : "BPM:"}</span> <span className="font-medium text-slate-700">{isMetabolic ? (set.extra_load || "-") : (set.bpm || "-")}</span></div>
+              <div className="text-sm space-y-0.5 mt-2">
+                <div><span className="font-medium text-slate-700">{isMetabolic ? (set.extra_load || "-") : (set.bpm || "-")}</span></div>
               </div>
             )}
           </div>
@@ -1505,7 +1476,7 @@ function SetBlock({
              {editing ? (
                <div className="flex flex-col md:flex-row gap-3">
                  <div className="flex-1 min-w-0">
-                    <SearchableSelect
+                    <MultiSearchableSelect
                       options={generalOptions}
                       value={set.equipment || ""}
                       onChange={(v) => onUpdateSet({ equipment: v })}
@@ -1519,21 +1490,6 @@ function SetBlock({
                  <div><span className="font-semibold text-slate-600">{set.equipment || "-"}</span></div>
                </div>
              )}
-          </div>
-
-          {/* Notes */}
-          <div className="md:col-span-2 lg:col-span-4 mt-2">
-            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Notes</label>
-            {editing ? (
-              <input
-                value={set.notes || ""}
-                onChange={(e) => onUpdateSet({ notes: e.target.value })}
-                className="w-full text-sm border border-slate-200 rounded-md px-3 py-2 focus:outline-none focus:border-sf-deepNavy"
-                placeholder="Tambahkan catatan khusus untuk set ini..."
-              />
-            ) : (
-              <span className="text-sm text-slate-600">{set.notes || "-"}</span>
-            )}
           </div>
         </div>
       </div>
