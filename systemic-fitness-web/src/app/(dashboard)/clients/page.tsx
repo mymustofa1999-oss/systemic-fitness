@@ -197,14 +197,6 @@ export default function ClientsPage() {
                   </span>
                 )}
 
-                {/* Training Card Button */}
-                <Link
-                  href={`/clients/${client.id}/training-card`}
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white hover:bg-slate-700 transition-colors shrink-0"
-                >
-                  <ClipboardCheck className="h-3.5 w-3.5" />
-                  Training Card
-                </Link>
 
                 {/* Status Badge */}
                 <div className="flex flex-col gap-1 items-end shrink-0">
