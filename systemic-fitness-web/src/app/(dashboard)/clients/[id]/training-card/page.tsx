@@ -1325,6 +1325,7 @@ function SequenceTable({
               onAddItem={(bp) => onAddItem(seti, bp)}
               onRemoveItem={(ii) => onRemoveItem(seti, ii)}
               onUpdateItem={(ii, p) => onUpdateItem(seti, ii, p)}
+              onPreviewVideo={onPreviewVideo}
               formErrors={formErrors}
             />
           ))}
@@ -1407,10 +1408,8 @@ function SetBlock({
                 <Popover.Portal>
                   <Popover.Content align="start" className="z-50 bg-white rounded-lg shadow-lg border border-slate-200 p-2 space-y-1 w-[200px]">
                     {[
-                      "Isolate FC",
-                      "Dynamic FC",
-                      "Isolate CC",
-                      "Dynamic CC",
+                      "Isolate",
+                      "Dynamic",
                       "Metabolic Basic",
                       "Metabolic Core",
                     ].map((p) => {
