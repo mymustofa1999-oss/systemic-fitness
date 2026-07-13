@@ -21,7 +21,7 @@ import {
 } from "@/hooks/useNewFeatures";
 import { MedicinesCard } from "@/components/shared/MedicinesCard";
 
-function buildSetsFromMenuItems(menuItems: any[]) {
+function buildSetsFromMenuItems(menuItems: any[], gender: string | undefined) {
   if (!menuItems || menuItems.length === 0) return [];
   
   const setsMap = new Map<string, any[]>();
@@ -652,7 +652,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
               program_category_code: code,
               duration: "",
               sort_order: i,
-              sets: buildSetsFromMenuItems(menuItems),
+              sets: buildSetsFromMenuItems(menuItems, profile?.gender),
             };
           });
         })(),
@@ -838,7 +838,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
               program_category_code: code,
               duration: "",
               sort_order: i,
-              sets: buildSetsFromMenuItems(menuItems),
+              sets: buildSetsFromMenuItems(menuItems, profile?.gender),
             };
           });
 
