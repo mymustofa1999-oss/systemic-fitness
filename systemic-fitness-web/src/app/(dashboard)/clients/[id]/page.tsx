@@ -156,14 +156,13 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             <ClientInfoCard userId={params.id} user={user} profile={profile} age={age} />
           </div>
 
-          {/* Program & Tim Penanganan */}
+          {/* Tim Penanganan */}
           <div>
              <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
-               <Crown className="h-4 w-4 text-sf-warmGold" /> Program & Tim
+               <Crown className="h-4 w-4 text-sf-warmGold" /> Tim Penanganan
              </h2>
              <div className="space-y-4">
                <StaffCard customerId={params.id} staff={setup?.staff} />
-               <ProgramsCard customerId={params.id} data={setup?.programs ?? []} />
              </div>
           </div>
 
@@ -183,10 +182,6 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
         {/* RIGHT COLUMN (30%) */}
         <div className="lg:col-span-4 space-y-6">
            <ClientSubscriptionSection clientId={params.id} clientName={user.full_name} />
-           
-           <div className="overflow-hidden">
-              <SessionJournalTable customerId={params.id} />
-           </div>
         </div>
 
       </div>

@@ -1509,31 +1509,53 @@ function SetBlock({
             )}
           </div>
 
-          {/* Equipment */}
-          <div className="md:col-span-12 lg:col-span-5">
-             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Equipment</label>
+          {/* Equipment Upper */}
+          <div className="md:col-span-6 lg:col-span-3">
+             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Equipment Upper</label>
              {editing ? (
-               <div className="flex flex-col gap-2">
-                 <div className="flex-1 min-w-0">
-                    <MultiSearchableSelect
-                      options={generalOptions}
-                      value={set.equipment || ""}
-                      onChange={(v) => onUpdateSet({ equipment: v })}
-                      placeholder="Pilih Alat..."
-                      searchPlaceholder="Cari..."
-                    />
-                 </div>
-                 <div className="text-[10px] text-slate-500 bg-slate-50 p-2 rounded border border-slate-100 flex gap-4">
-                   <div><span className="font-semibold text-slate-600">Upper:</span> {recommendedUpper || "-"}</div>
-                   <div><span className="font-semibold text-slate-600">Lower:</span> {recommendedLower || "-"}</div>
+               <div className="flex flex-col gap-1">
+                 <MultiSearchableSelect
+                   options={upperOptions}
+                   value={set.equipment_upper || ""}
+                   onChange={(v) => onUpdateSet({ equipment_upper: v })}
+                   placeholder="Upper..."
+                   searchPlaceholder="Cari..."
+                 />
+                 <div className="text-[10px] text-violet-600 bg-violet-50 px-2 py-1 rounded font-medium flex items-center gap-1.5">
+                   <Info className="h-3 w-3" /> Acuan Beban: {recommendedUpper || "-"}
                  </div>
                </div>
              ) : (
                <div className="text-sm space-y-1 mt-1">
-                 <div><span className="font-semibold text-slate-600">{set.equipment || "-"}</span></div>
-                 <div className="text-[10px] text-slate-400 flex gap-3">
-                   <span>Upper: {recommendedUpper || "-"}</span>
-                   <span>Lower: {recommendedLower || "-"}</span>
+                 <div><span className="font-semibold text-slate-600">{set.equipment_upper || "-"}</span></div>
+                 <div className="text-[10px] text-slate-400">
+                   Acuan: {recommendedUpper || "-"}
+                 </div>
+               </div>
+             )}
+          </div>
+
+          {/* Equipment Lower */}
+          <div className="md:col-span-6 lg:col-span-2">
+             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Equipment Lower</label>
+             {editing ? (
+               <div className="flex flex-col gap-1">
+                 <MultiSearchableSelect
+                   options={lowerOptions}
+                   value={set.equipment_lower || ""}
+                   onChange={(v) => onUpdateSet({ equipment_lower: v })}
+                   placeholder="Lower..."
+                   searchPlaceholder="Cari..."
+                 />
+                 <div className="text-[10px] text-violet-600 bg-violet-50 px-2 py-1 rounded font-medium flex items-center gap-1.5">
+                   <Info className="h-3 w-3" /> Acuan Beban: {recommendedLower || "-"}
+                 </div>
+               </div>
+             ) : (
+               <div className="text-sm space-y-1 mt-1">
+                 <div><span className="font-semibold text-slate-600">{set.equipment_lower || "-"}</span></div>
+                 <div className="text-[10px] text-slate-400">
+                   Acuan: {recommendedLower || "-"}
                  </div>
                </div>
              )}

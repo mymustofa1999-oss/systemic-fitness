@@ -1,0 +1,12 @@
+
+--- systemic-fitness-api/internal/handler/trainer_card.go
++++ systemic-fitness-api/internal/handler/trainer_card.go
+@@ -330,6 +330,7 @@
+ 	}
+ 
+ 	if err := h.cardService.UpsertCard(r.Context(), card); err != nil {
++		_ = os.WriteFile("C:\\Users\\ITBDG\\Documents\\SystemicFitness-Handover\\CLEAN\\save_error.txt", []byte(err.Error()), 0644)
+ 		slog.Error("[TrainingCard.UpsertCard] failed", "customer_id", customerID, "error", err)
+ 		response.InternalError(w, "Failed to save training card")
+ 		return
+
