@@ -135,15 +135,11 @@ interface CardForm {
 
 const LEVELS = [
   { value: "1", label: "Level 1" },
-  { value: "1-499", label: "Level 1 (499)" },
-  { value: "1-799", label: "Level 1 (799)" },
-  { value: "5-6", label: "Level group (5-6)" },
-  { value: "level_0_1", label: "Level 0-1" },
-  { value: "level_2_3", label: "Level 2-3" },
-  { value: "level_4_5_perf", label: "Level 4-5 / Performance" },
-  { value: "level_4_5_health", label: "Level 4-5 / Health" },
-  { value: "level_6_perf", label: "Level 6 / Performance" },
-  { value: "level_6_health", label: "Level 6 / Health" },
+  { value: "2", label: "Level 2" },
+  { value: "3", label: "Level 3" },
+  { value: "4", label: "Level 4" },
+  { value: "5", label: "Level 5" },
+  { value: "6", label: "Level 6" },
 ];
 
 const getLevelLabel = (val: string) => {
@@ -293,7 +289,8 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", parsedMappedLevel);
   const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", parsedMappedLevel);
   const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", parsedMappedLevel);
-  const isLoadingMenu = isLoadingFC || isLoadingCC || isLoadingMC;
+  const { data: cdData, isLoading: isLoadingCD } = useDLMenuItems("cd", parsedMappedLevel);
+  const isLoadingMenu = isLoadingFC || isLoadingCC || isLoadingMC || isLoadingCD;
 
   const { data: templateData, isLoading: isLoadingTemplate } = useTemplate(mappedLevel);
   const templateCard = templateData?.data as any;
@@ -469,9 +466,9 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       (templateCard || presetCard || customerPrograms.length > 0)
     ) {
       hasAutoStarted.current = true;
-      startEdit(fcData?.data as any[], ccData?.data as any[], mcData?.data as any[]);
+      startEdit(fcData?.data as any[], ccData?.data as any[], mcData?.data as any[], cdData?.data as any[]);
     }
-  }, [cardLoading, isLoadingTemplate, isLoadingMenu, isLoadingAssessment, isLoadingPrograms, card, editing, canEdit, templateCard, presetCard, customerPrograms, allCategories, fcData, ccData, mcData]);
+  }, [cardLoading, isLoadingTemplate, isLoadingMenu, isLoadingAssessment, isLoadingPrograms, card, editing, canEdit, templateCard, presetCard, customerPrograms, allCategories, fcData, ccData, mcData, cdData]);
 
   // Build SearchableSelect options
   const typeOptions = useMemo(() =>
@@ -551,7 +548,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     })), [equipGeneral]);
 
   // ── Form init ──────────────────────────────────────────────
-  function startEdit(fcItemsParam?: any[], ccItemsParam?: any[], mcItemsParam?: any[]) {
+  function startEdit(fcItemsParam?: any[], ccItemsParam?: any[], mcItemsParam?: any[], cdItemsParam?: any[]) {
     if (card) {
       setForm({
         level: card.level || physicalLevel || "",
@@ -645,7 +642,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             if (code === "functional") menuItems = fcItemsParam || (fcData as any)?.data || [];
             if (code === "cardiorespiratory") menuItems = ccItemsParam || (ccData as any)?.data || [];
             if (code === "metabolic") menuItems = mcItemsParam || (mcData as any)?.data || [];
-            
+            if (code === "cooldown") menuItems = (cdData as any)?.data || [];
             return {
               program_category_id: categoryId,
               program_category_name: categoryName,
@@ -760,61 +757,14 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       return;
     }
 
-    try {
-      const res = await apiGet(`/api/training-card-templates/${newLevel}`);
-      if (!res?.data) throw new Error("No template data");
-      
-      const tCard = res.data as any;
-      const newSequences = tCard.sequences.map((s: any, si: number) => ({
-        program_category_id: s.program_category_id,
-        program_category_name: s.program_category_name,
-        program_category_code: s.program_category_code,
-        duration: s.duration || "",
-        sort_order: si,
-        sets: (s.sets || []).map((set: any, seti: number) => ({
-          set_number: set.set_number,
-          duration: set.duration || "",
-          equipment_upper: set.equipment_upper || "",
-          equipment_lower: set.equipment_lower || "",
-          equipment: set.equipment || set.equipment_upper || "",
-          type_id: set.type_id || "",
-          type_name: set.type_name || "",
-          bpm: set.bpm || "",
-          extra_load: set.extra_load || "",
-          pattern: set.pattern || "",
-          breathing_core: set.breathing_core || "",
-          breathing_diaphragm: set.breathing_diaphragm || "",
-          notes: set.notes || "",
-          sort_order: seti,
-          items: (set.items || []).map((item: any, ii: number) => ({
-            movement_id: item.movement_id || null,
-            movement_name: item.movement_name || "",
-            body_part: item.body_part || "upper",
-            equipment: item.equipment || "",
-            reps: item.reps ?? null,
-            sets_count: item.sets_count ?? 1,
-            breathing_core: item.breathing_core || "",
-            breathing_diaphragm: item.breathing_diaphragm || "",
-            sort_order: ii,
-          })),
-        })),
-      }));
-
-      setForm(prev => {
-        if (!prev) return prev;
-        return { ...prev, sequences: newSequences };
-      });
-      toast.success("Template berhasil diterapkan.");
-    } catch (err) {
-      console.log("Template not found or error, falling back to Modul Card", err);
       try {
-        const levelMatch = newLevel.match(/\d+/);
-        const levelNum = levelMatch ? parseInt(levelMatch[0]) : 1;
+        const levelNum = parseInt(newLevel) || 1;
         
-        const [fcRes, ccRes, mcRes] = await Promise.all([
+        const [fcRes, ccRes, mcRes, cdRes] = await Promise.all([
            apiGet(`/api/digital-library/categories/fc/menu`, { level: levelNum }),
            apiGet(`/api/digital-library/categories/cc/menu`, { level: levelNum }),
-           apiGet(`/api/digital-library/categories/mc/menu`, { level: levelNum })
+           apiGet(`/api/digital-library/categories/mc/menu`, { level: levelNum }),
+           apiGet(`/api/digital-library/categories/cd/menu`, { level: levelNum })
         ]);
 
         let baseCategories = customerPrograms.filter((p: any) => p.is_active);
@@ -831,6 +781,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             if (code === "functional") menuItems = (fcRes as any)?.data || [];
             if (code === "cardiorespiratory") menuItems = (ccRes as any)?.data || [];
             if (code === "metabolic") menuItems = (mcRes as any)?.data || [];
+            if (code === "cooldown") menuItems = (cdRes as any)?.data || [];
             
             return {
               program_category_id: categoryId,
@@ -851,7 +802,6 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         console.error("Gagal memuat Modul Card", err2);
         toast.error("Gagal memuat gerakan otomatis.");
       }
-    }
   }
 
   function updateSeq(si: number, patch: Partial<CardSequence>) {

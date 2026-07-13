@@ -147,6 +147,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
   const { data: fcMenuItemsData } = useDLMenuItems("fc", dlLevel);
   const { data: ccMenuItemsData } = useDLMenuItems("cc", dlLevel);
   const { data: mcMenuItemsData } = useDLMenuItems("mc", dlLevel);
+  const { data: cdMenuItemsData } = useDLMenuItems("cd", dlLevel);
 
   // Movement-access packages, sourced live from the payment plans (prices shown).
   const { data: plansData } = useSubscriptionPlans();
@@ -175,7 +176,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
   const movementOptions = useMemo(() =>
     movements
       .filter((m: any) => {
-        const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
+        const nameMatch = m.name.match(/\((FC|CC|MC|CD)\s*-\s*Level\s*(\d+)\)/i);
         const mLevel = nameMatch ? parseInt(nameMatch[2]) : null;
         const effectiveLevel = mLevel !== null ? mLevel : m.level;
 
@@ -188,7 +189,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
         return true;
       })
       .map((m: any) => {
-        const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
+        const nameMatch = m.name.match(/\((FC|CC|MC|CD)\s*-\s*Level\s*(\d+)\)/i);
         const mCategory = nameMatch ? nameMatch[1].toUpperCase() : "";
         const mLevel = nameMatch ? parseInt(nameMatch[2]) : "";
         const sectionName = nameMatch ? `${mCategory} - Level ${mLevel}` : (m.pattern ? "Pola: " + m.pattern : "Lainnya");
@@ -221,13 +222,14 @@ export default function TemplateEditorPage({ params }: { params: { level: string
 
   // Map digital library menu items into sequential card sets (max 3 sets)
   const autoPopulatedSequences = useMemo(() => {
-    if (!categoriesData || !fcMenuItemsData || !ccMenuItemsData || !mcMenuItemsData) return [];
+    if (!categoriesData || !fcMenuItemsData || !ccMenuItemsData || !mcMenuItemsData || !cdMenuItemsData) return [];
 
     const getItemsForCategory = (code: string) => {
       const c = code.toLowerCase();
       if (c === "functional" || c === "fc") return fcMenuItemsData?.data || [];
       if (c === "cardiorespiratory" || c === "cc") return ccMenuItemsData?.data || [];
       if (c === "metabolic" || c === "mc") return mcMenuItemsData?.data || [];
+      if (c === "cooldown" || c === "cool down" || c === "cd") return cdMenuItemsData?.data || [];
       return [];
     };
 
