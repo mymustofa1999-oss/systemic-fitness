@@ -92,9 +92,10 @@ export default function ModulCardPage() {
     for (const [setName, setItems] of Array.from(setsMap.entries())) {
       const patternsMap = new Map<string, any[]>();
       for (const item of setItems) {
-        const patternName = item.movement?.pattern || "Isolate";
-        if (!patternsMap.has(patternName)) patternsMap.set(patternName, []);
-        patternsMap.get(patternName)!.push(item);
+        // Excel TYPE column is stored in item.group_type
+        const typeName = item.group_type || "Isolate";
+        if (!patternsMap.has(typeName)) patternsMap.set(typeName, []);
+        patternsMap.get(typeName)!.push(item);
       }
 
       let isFirstSetRow = true;
@@ -103,7 +104,8 @@ export default function ModulCardPage() {
       for (const [patternName, patternItems] of Array.from(patternsMap.entries())) {
         const sectionsMap = new Map<string, any[]>();
         for (const item of patternItems) {
-          const sectionName = item.group_type || "Mixed";
+          // Excel SECTION column is stored in item.movement?.pattern
+          const sectionName = item.movement?.pattern || "-";
           if (!sectionsMap.has(sectionName)) sectionsMap.set(sectionName, []);
           sectionsMap.get(sectionName)!.push(item);
         }
