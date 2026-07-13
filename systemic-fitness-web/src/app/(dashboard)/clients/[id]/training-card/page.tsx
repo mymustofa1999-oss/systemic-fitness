@@ -552,9 +552,14 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const movementOptions = useMemo(() =>
     movements
       .filter((m: any) => {
-        // Extract category and level from name like "Glute Bridge (MC - Level 6)"
+        // Extract category and level from name like "Glute Bridge (MC - Level 6)" or "Open V [L3]"
         const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
-        const mLevel = nameMatch ? parseInt(nameMatch[2]) : null;
+        const altMatch = m.name.match(/\[L(\d+)\]/i);
+        
+        let mLevel = null;
+        if (nameMatch) mLevel = parseInt(nameMatch[2]);
+        else if (altMatch) mLevel = parseInt(altMatch[1]);
+
         const effectiveLevel = mLevel !== null ? mLevel : m.level;
 
         // Find the active level (either from form during edit, or the default parsed level)
@@ -565,12 +570,17 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       })
       .map((m: any) => {
         const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
+        const altMatch = m.name.match(/\[L(\d+)\]/i);
         const mCategory = nameMatch ? nameMatch[1].toUpperCase() : "";
-        const mLevel = nameMatch ? parseInt(nameMatch[2]) : "";
+        
+        let mLevelStr = "";
+        if (nameMatch) mLevelStr = nameMatch[2];
+        else if (altMatch) mLevelStr = altMatch[1];
+
         const mappedGroup = menuGroupMap.get(m.id);
         const sectionName = mappedGroup 
           ? mappedGroup 
-          : (nameMatch ? `${mCategory} - Level ${mLevel}` : (m.pattern ? "Pola: " + m.pattern : "Lainnya"));
+          : (mLevelStr ? (mCategory ? `${mCategory} - Level ${mLevelStr}` : `Level ${mLevelStr}`) : (m.pattern ? "Pola: " + m.pattern : "Lainnya"));
 
         return {
           value: m.id, 
