@@ -1484,7 +1484,7 @@ function SetBlock({
           <div className="md:col-span-12 lg:col-span-5">
              <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Equipment</label>
              {editing ? (
-               <div className="flex flex-col md:flex-row gap-3">
+               <div className="flex flex-col gap-2">
                  <div className="flex-1 min-w-0">
                     <MultiSearchableSelect
                       options={generalOptions}
@@ -1494,10 +1494,18 @@ function SetBlock({
                       searchPlaceholder="Cari..."
                     />
                  </div>
+                 <div className="text-[10px] text-slate-500 bg-slate-50 p-2 rounded border border-slate-100 flex gap-4">
+                   <div><span className="font-semibold text-slate-600">Upper:</span> {recommendedUpper || "-"}</div>
+                   <div><span className="font-semibold text-slate-600">Lower:</span> {recommendedLower || "-"}</div>
+                 </div>
                </div>
              ) : (
-               <div className="text-sm space-y-0.5 mt-1">
+               <div className="text-sm space-y-1 mt-1">
                  <div><span className="font-semibold text-slate-600">{set.equipment || "-"}</span></div>
+                 <div className="text-[10px] text-slate-400 flex gap-3">
+                   <span>Upper: {recommendedUpper || "-"}</span>
+                   <span>Lower: {recommendedLower || "-"}</span>
+                 </div>
                </div>
              )}
           </div>
