@@ -584,8 +584,8 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
   // Build a map for quick lookup of movement name by id
   const movementMap = useMemo(() => {
-    const map: Record<string, string> = {};
-    movements.forEach((m: any) => { map[m.id] = m.name; });
+    const map: Record<string, any> = {};
+    movements.forEach((m: any) => { map[m.id] = m; });
     return map;
   }, [movements]);
 
@@ -1163,6 +1163,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             onAddItem={(seti, bp) => addItem(si, seti, bp)}
             onRemoveItem={(seti, ii) => removeItem(si, seti, ii)}
             onUpdateItem={(seti, ii, p) => updateItem(si, seti, ii, p)}
+            onPreviewVideo={(m, bpm) => setPreviewTarget({ movement: m, bpm })}
             formErrors={formErrors}
           />
         );
@@ -1182,6 +1183,14 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         variant="danger"
         loading={deleteCard.isPending}
       />
+
+      {previewTarget && (
+        <VideoPreviewModal 
+          movement={previewTarget.movement} 
+          bpm={previewTarget.bpm} 
+          onClose={() => setPreviewTarget(null)} 
+        />
+      )}
     </div>
   );
 }
@@ -1522,9 +1531,17 @@ function SetBlock({
                       {item.body_part}
                     </span>
                     {editing && (
-                      <button onClick={() => onRemoveItem(ii)} className="text-red-400 hover:text-red-600 transition-colors md:hidden">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                      <div className="flex gap-2 items-center md:hidden">
+                        <button onClick={() => {
+                          const m = item.movement_id ? movementMap[item.movement_id] : null;
+                          if (m && onPreviewVideo) onPreviewVideo(m, set.bpm || "");
+                        }} className="text-violet-500 hover:text-violet-700 transition-colors" title="Preview Video">
+                          <Video className="h-4 w-4" />
+                        </button>
+                        <button onClick={() => onRemoveItem(ii)} className="text-red-400 hover:text-red-600 transition-colors">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
                     )}
                   </div>
                   
@@ -1605,11 +1622,19 @@ function SetBlock({
                     </div>
                   )}
 
-                  {/* Desktop Delete button */}
+                  {/* Desktop Actions */}
                   {editing && (
-                    <button onClick={() => onRemoveItem(ii)} className="hidden md:flex text-red-400 hover:text-red-600 transition-colors p-2 mb-0.5" title="Hapus gerakan">
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                    <div className="hidden md:flex flex-col gap-2 items-center justify-center p-2">
+                      <button onClick={() => {
+                        const m = item.movement_id ? movementMap[item.movement_id] : null;
+                        if (m && onPreviewVideo) onPreviewVideo(m, set.bpm || "");
+                      }} className="text-violet-500 hover:text-violet-700 transition-colors mb-2" title="Preview Video">
+                        <Video className="h-4 w-4" />
+                      </button>
+                      <button onClick={() => onRemoveItem(ii)} className="text-red-400 hover:text-red-600 transition-colors" title="Hapus gerakan">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   )}
                 </div>
 
@@ -1656,7 +1681,7 @@ function MovementSelect({
   options, movementMap, item, bodyPart, selectedPatterns, onUpdate, hasError
 }: {
   options: { value: string; label: string; sublabel?: string; pattern?: string | null; section?: string; extractedCategory?: string }[];
-  movementMap: Record<string, string>;
+  movementMap: Record<string, any>;
   item: CardItem;
   bodyPart: string;
   selectedPatterns: string[];
@@ -1699,9 +1724,8 @@ function MovementSelect({
           if (v === "__custom" || v === "") {
             onUpdate({ movement_id: null });
           } else {
-            const selectedOpt = allOpts.find(o => o.value === v);
-            const bp = selectedOpt?.sublabel || "upper";
-            onUpdate({ movement_id: v, movement_name: movementMap[v] || "", body_part: bp });
+            const bp = getBodyPartFromOptions(v) || bodyPart || "upper";
+            onUpdate({ movement_id: v, movement_name: movementMap[v]?.name || "", body_part: bp });
           }
         }}
         placeholder="Pilih gerakan..."
