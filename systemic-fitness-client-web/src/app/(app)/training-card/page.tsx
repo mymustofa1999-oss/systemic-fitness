@@ -600,7 +600,7 @@ function ExerciseCard({
 }: ExerciseCardProps) {
   const [expandedMovementId, setExpandedMovementId] = useState<string | null>(null);
   const pc = pillarColor;
-  const hasBPM = isLevel5or6 && set.bpm_range && set.bpm_range !== "~" && set.bpm_range !== "";
+  const hasBPM = set.bpm_range && set.bpm_range !== "~" && set.bpm_range !== "";
 
   // BPM Player State
   const [selectedBpm, setSelectedBpm] = useState<string>("No BPM");
@@ -844,7 +844,7 @@ function ExerciseCard({
                 </div>
 
                 {/* 🎵 BPM Metronome Player Box 🎵 */}
-                {isLevel5or6 && (
+                {hasBPM && (
                   <div
                     style={{
                       display: "flex",
@@ -1111,7 +1111,7 @@ function LegacyExerciseCard({
             )}
           </div>
         </div>
-        {isLevel5or6 && set.bpm && set.bpm !== "~" && (
+        {set.bpm && set.bpm !== "~" && (
           <div style={{ textAlign: "right", flexShrink: 0 }}>
             <div style={{ fontSize: 8, color: "var(--tc-text-dim)", letterSpacing: 0.8 }}>BPM</div>
             <div
@@ -1190,7 +1190,7 @@ function LegacyExerciseCard({
       )}
 
       {/* 🎵 BPM Target Block */}
-      {isLevel5or6 && set.bpm && set.bpm !== "~" && (
+      {set.bpm && set.bpm !== "~" && (
         <div
           style={{
             borderTop: `1px solid ${pc}20`,
