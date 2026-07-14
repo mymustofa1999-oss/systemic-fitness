@@ -632,13 +632,13 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
         return {
           value: m.id, 
-          label: m.name, 
+          label: formatMovementName(m.name, profile?.gender), 
           sublabel: m.body_part, 
           pattern: m.pattern, 
           section: sectionName,
           extractedCategory: mCategory
         };
-      }), [movements, form?.level, parsedMappedLevel, menuGroupMap]);
+      }), [movements, form?.level, parsedMappedLevel, menuGroupMap, profile?.gender]);
 
   // Build a map for quick lookup of movement name by id
   const movementMap = useMemo(() => {
@@ -1155,7 +1155,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
               <td className="bg-slate-100 px-4 py-2.5 font-bold text-xs text-slate-600 w-20 border-r border-slate-200">DATA CLIENT</td>
               <td className="px-4 py-2.5 text-xs text-slate-700 font-medium" colSpan={7}>
                 <div className="flex flex-wrap gap-x-6 gap-y-1.5 items-center">
-                  <div><strong>Gender:</strong> <span className="capitalize">{profile?.gender || "-"}</span></div>
+                  {/* Gender is intentionally hidden based on user request */}
                   <div><strong>Usia:</strong> {age !== null ? `${age} tahun` : "-"}</div>
                   <div><strong>Tinggi:</strong> {profile?.height_cm ? `${profile.height_cm} cm` : "-"}</div>
                   {recs.categoryText && (
@@ -1645,6 +1645,7 @@ function SetBlock({
                       categoryCode={categoryCode}
                       onUpdate={(p) => onUpdateItem(ii, p)}
                       hasError={formErrors[`item_${si}_${seti}_${ii}_movement`]}
+                      gender={profile?.gender}
                     />
                   ) : (
                     <div className="flex items-center gap-2 mt-1">
@@ -1769,7 +1770,7 @@ function SetBlock({
 // ═══════════════════════════════════════════════════════════════
 
 function MovementSelect({
-  options, movementMap, item, bodyPart, selectedPatterns, categoryCode, onUpdate, hasError
+  options, movementMap, item, bodyPart, selectedPatterns, categoryCode, onUpdate, hasError, gender
 }: {
   options: { value: string; label: string; sublabel?: string; pattern?: string | null; section?: string; extractedCategory?: string }[];
   movementMap: Record<string, any>;
@@ -1779,6 +1780,7 @@ function MovementSelect({
   categoryCode?: string;
   onUpdate: (p: Partial<CardItem>) => void;
   hasError?: boolean;
+  gender?: string;
 }) {
   let filtered = [...options];
 
@@ -1820,11 +1822,11 @@ function MovementSelect({
     if (selectedInOptions) {
       filtered.push(selectedInOptions);
     } else if (item.movement_name) {
-      filtered.push({ value: item.movement_id, label: item.movement_name, sublabel: item.body_part });
+      filtered.push({ value: item.movement_id, label: formatMovementName(item.movement_name, gender), sublabel: item.body_part });
     }
   }
 
-  const customLabel = item.movement_name || "";
+  const customLabel = item.movement_name ? formatMovementName(item.movement_name, gender) : "";
   const allOpts = [
     ...(customLabel && !item.movement_id ? [{ value: "__custom", label: customLabel, sublabel: "custom" }] : []),
     ...filtered,
