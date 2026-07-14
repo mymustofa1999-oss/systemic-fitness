@@ -401,9 +401,13 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     return a;
   }, [profile?.date_of_birth]);
 
+  const assessmentPayload = latestAssessmentData?.data?.phase_a_payload;
+  const assessmentGender = assessmentPayload?.gender === "women" ? "female" : assessmentPayload?.gender === "men" ? "male" : undefined;
+  const effectiveGender = profile?.gender || assessmentGender;
+
   const recs = useMemo(() => {
-    return getClientCategoryAndLoads(profile?.gender, age, profile?.height_cm);
-  }, [profile?.gender, age, profile?.height_cm]);
+    return getClientCategoryAndLoads(effectiveGender, age, profile?.height_cm);
+  }, [effectiveGender, age, profile?.height_cm]);
   const types = (typesData?.data ?? []) as any[];
   const customerPrograms = (programsData?.data ?? []) as any[];
   const allCategories = (allCategoriesData?.data ?? []) as any[];
@@ -632,13 +636,13 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
 
         return {
           value: m.id, 
-          label: formatMovementName(m.name, profile?.gender), 
+          label: formatMovementName(m.name, effectiveGender), 
           sublabel: m.body_part, 
           pattern: m.pattern, 
           section: sectionName,
           extractedCategory: mCategory
         };
-      }), [movements, form?.level, parsedMappedLevel, menuGroupMap, profile?.gender]);
+      }), [movements, form?.level, parsedMappedLevel, menuGroupMap, effectiveGender]);
 
   // Build a map for quick lookup of movement name by id
   const movementMap = useMemo(() => {
@@ -1156,6 +1160,11 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
               <td className="px-4 py-2.5 text-xs text-slate-700 font-medium" colSpan={7}>
                 <div className="flex flex-wrap gap-x-6 gap-y-1.5 items-center">
                   {/* Gender is intentionally hidden based on user request */}
+                  {effectiveGender && !profile?.gender && (
+                    <div className="text-xs text-amber-600 bg-amber-50 px-2 rounded-md font-medium">
+                      Gender dari Assessment: {effectiveGender}
+                    </div>
+                  )}
                   <div><strong>Usia:</strong> {age !== null ? `${age} tahun` : "-"}</div>
                   <div><strong>Tinggi:</strong> {profile?.height_cm ? `${profile.height_cm} cm` : "-"}</div>
                   {recs.categoryText && (
@@ -1213,7 +1222,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             equipUpperOptions={equipUpperOptions}
             equipLowerOptions={equipLowerOptions}
             equipGeneralOptions={equipGeneralOptions}
-            gender={profile?.gender}
+            gender={effectiveGender}
             recs={recs}
             onUpdateSeq={(p) => updateSeq(si, p)}
             onAddSet={() => addSet(si)}
@@ -1247,7 +1256,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         <VideoPreviewModal 
           movement={previewTarget.movement} 
           bpm={previewTarget.bpm} 
-          gender={profile?.gender}
+          gender={effectiveGender}
           onClose={() => setPreviewTarget(null)} 
         />
       )}
