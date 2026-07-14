@@ -603,21 +603,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const movementOptions = useMemo(() =>
     movements
       .filter((m: any) => {
-        // Extract category and level from name like "Glute Bridge (MC - Level 6)" or "Open V [L3]"
-        const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
-        const altMatch = m.name.match(/\[L(\d+)\]/i);
-        
-        let mLevel = null;
-        if (nameMatch) mLevel = parseInt(nameMatch[2]);
-        else if (altMatch) mLevel = parseInt(altMatch[1]);
-
-        const effectiveLevel = mLevel !== null ? mLevel : m.level;
-
-        // Find the active level (either from form during edit, or the default parsed level)
-        const currentLevelStr = form?.level || String(parsedMappedLevel);
-        // We only allow movements that match the selected level or don't have a level
-        if (effectiveLevel !== null && effectiveLevel !== parseInt(currentLevelStr)) return false;
-        return true;
+        return true; // Remove strict level filtering so consultants can choose any movement
       })
       .map((m: any) => {
         const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
@@ -1807,9 +1793,9 @@ function MovementSelect({
       return selectedPatterns.some(sp => {
         const spLower = sp.toLowerCase();
         
-        // If the pattern is just "Isolate" or "Dynamic", enforce the current sequence category (FC, CC, etc)
-        if (spLower === "isolate") return mPat === "isolate" && (!currentCat || mCat === currentCat);
-        if (spLower === "dynamic") return mPat === "dynamic" && (!currentCat || mCat === currentCat);
+        // If the pattern is just "Isolate" or "Dynamic", enforce the current sequence category (FC, CC, etc) but allow if no category is assigned
+        if (spLower === "isolate") return mPat === "isolate" && (!currentCat || !mCat || mCat === currentCat);
+        if (spLower === "dynamic") return mPat === "dynamic" && (!currentCat || !mCat || mCat === currentCat);
         
         if (spLower === "metabolic basic") return mPat.includes("basic") || mCat === "mc";
         if (spLower === "metabolic core") return mPat.includes("core") || mCat === "mc";
