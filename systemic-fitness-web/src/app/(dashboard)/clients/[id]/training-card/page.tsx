@@ -309,6 +309,36 @@ function getClientCategoryAndLoads(
   return defaultResult;
 }
 
+export function formatMovementName(rawName: string, gender: string | undefined): string {
+  if (!rawName) return "-";
+  if (!rawName.includes(" | ")) return rawName;
+
+  const normalizedGender = (gender || "").toLowerCase();
+  
+  // Extract level suffix if present
+  let levelSuffix = "";
+  let baseName = rawName;
+  const levelMatch = rawName.match(/(\s*\[L\d+\])$/i);
+  if (levelMatch) {
+    levelSuffix = levelMatch[1];
+    baseName = rawName.replace(/(\s*\[L\d+\])$/i, "");
+  }
+
+  const parts = baseName.split(" | ");
+  if (parts.length === 2) {
+    const femaleName = parts[0].trim();
+    const maleName = parts[1].trim();
+
+    if (normalizedGender === "female" || normalizedGender === "wanita" || normalizedGender === "women") {
+      return femaleName + levelSuffix;
+    } else if (normalizedGender === "male" || normalizedGender === "pria" || normalizedGender === "men") {
+      return maleName + levelSuffix;
+    }
+  }
+
+  return rawName;
+}
+
 // ─── Page ───────────────────────────────────────────────────────
 
 export default function TrainingCardPage({ params }: { params: { id: string } }) {
@@ -1618,7 +1648,7 @@ function SetBlock({
                     />
                   ) : (
                     <div className="flex items-center gap-2 mt-1">
-                      <div className="font-semibold text-slate-800 text-sm">{item.movement_name || "-"}</div>
+                      <div className="font-semibold text-slate-800 text-sm">{formatMovementName(item.movement_name || "-", profile?.gender)}</div>
                       <button onClick={() => {
                         const m = item.movement_id ? movementMap[item.movement_id] : null;
                         if (m && onPreviewVideo) onPreviewVideo(m, set.bpm || "");
@@ -1849,12 +1879,15 @@ function VideoPreviewModal({ movement, bpm, gender, onClose }: { movement: any; 
   const rawFemaleId = extractYouTubeId(movement.video_url_female || "");
   const normalizedGender = (gender || "").toLowerCase();
   
-  let maleId = normalizedGender === "female" ? null : rawMaleId;
-  let femaleId = normalizedGender === "male" ? null : rawFemaleId;
+  const isFemale = normalizedGender === "female" || normalizedGender === "wanita" || normalizedGender === "women";
+  const isMale = normalizedGender === "male" || normalizedGender === "pria" || normalizedGender === "men";
+
+  let maleId = isFemale ? null : rawMaleId;
+  let femaleId = isMale ? null : rawFemaleId;
 
   // Fallbacks just in case the specific gender video is missing but the other exists
-  if (normalizedGender === "male" && !maleId && rawFemaleId) femaleId = rawFemaleId;
-  if (normalizedGender === "female" && !femaleId && rawMaleId) maleId = rawMaleId;
+  if (isMale && !maleId && rawFemaleId) femaleId = rawFemaleId;
+  if (isFemale && !femaleId && rawMaleId) maleId = rawMaleId;
 
   const hasBoth = maleId && femaleId;
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -1895,7 +1928,7 @@ function VideoPreviewModal({ movement, bpm, gender, onClose }: { movement: any; 
               <Video className="h-4.5 w-4.5 text-violet-600" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">{movement.name}</h2>
+              <h2 className="text-lg font-semibold text-slate-900">{formatMovementName(movement.name, gender)}</h2>
               {bpm && <div className="text-xs text-sf-warmGold font-bold mt-1">BPM: {bpm}</div>}
             </div>
           </div>

@@ -159,6 +159,36 @@ function formatSlug(slug: string) {
     .join(" ");
 }
 
+export function formatMovementName(rawName: string, gender: string | undefined): string {
+  if (!rawName) return "-";
+  if (!rawName.includes(" | ")) return rawName;
+
+  const normalizedGender = (gender || "").toLowerCase();
+  
+  // Extract level suffix if present
+  let levelSuffix = "";
+  let baseName = rawName;
+  const levelMatch = rawName.match(/(\s*\[L\d+\])$/i);
+  if (levelMatch) {
+    levelSuffix = levelMatch[1];
+    baseName = rawName.replace(/(\s*\[L\d+\])$/i, "");
+  }
+
+  const parts = baseName.split(" | ");
+  if (parts.length === 2) {
+    const femaleName = parts[0].trim();
+    const maleName = parts[1].trim();
+
+    if (normalizedGender === "female" || normalizedGender === "wanita" || normalizedGender === "women") {
+      return femaleName + levelSuffix;
+    } else if (normalizedGender === "male" || normalizedGender === "pria" || normalizedGender === "men") {
+      return maleName + levelSuffix;
+    }
+  }
+
+  return rawName;
+}
+
 interface ProfileHeaderProps {
   user: any;
   profile: any;
@@ -1126,7 +1156,7 @@ function LegacyExerciseCard({
             {i + 1}
           </div>
           <span style={{ flex: 1, fontSize: 13, color: "var(--tc-text)" }}>
-            {item.movement_name || "Exercise"}
+            {formatMovementName(item.movement_name || "Exercise", profile?.gender)}
           </span>
           {item.body_part && (
             <span
@@ -1860,7 +1890,7 @@ export default function TrainingCardPage() {
     const movements = TIER2_MOVEMENTS.map((mv, index) => ({
       id: mv.id,
       sequence: index + 1,
-      title: mv.title,
+      title: formatMovementName(mv.title, userGender),
       video_url: getMovementVideo(mv),
       movement_tag: mv.movement_tag,
     }));
@@ -1974,7 +2004,7 @@ export default function TrainingCardPage() {
       return;
     }
     if (mv.video_url) {
-      setSelectedVideo({ title: mv.title, url: mv.video_url });
+      setSelectedVideo({ title: formatMovementName(mv.title, profileRes?.data?.profile?.gender), url: mv.video_url });
     }
   };
 
