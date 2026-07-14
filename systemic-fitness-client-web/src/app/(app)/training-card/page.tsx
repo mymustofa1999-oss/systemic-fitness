@@ -652,8 +652,7 @@ function ExerciseCard({
       audioRef.current.pause();
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-    const url = `${baseUrl}/uploads/bpm/${bpm}.mp3`;
+    const url = `/bpm/${bpm}.mp3`;
     const audio = new Audio(url);
     audio.loop = true;
     audioRef.current = audio;
