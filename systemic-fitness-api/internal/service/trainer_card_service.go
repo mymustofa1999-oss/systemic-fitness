@@ -159,8 +159,9 @@ func (s *TrainerCardService) AutoCreateDefaultCard(ctx context.Context, customer
 		return fmt.Errorf("getting activation metadata: %w", err)
 	}
 
-	// Only proceed if user has active subscription and has completed their v2 assessment
-	if !meta.HasActiveSub || meta.PhysicalStatusLevel == "" {
+	// Proceed as long as the user has a completed v2 assessment (PhysicalStatusLevel is not empty).
+	// We no longer block based on !meta.HasActiveSub so Trainers/Consultants can prepare the card before the client pays.
+	if meta.PhysicalStatusLevel == "" {
 		return nil
 	}
 
