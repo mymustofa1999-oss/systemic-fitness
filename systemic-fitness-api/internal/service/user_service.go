@@ -140,6 +140,13 @@ type UpdateUserInput struct {
 	EmergencyContact *string  `json:"emergency_contact,omitempty" validate:"omitempty,max=100"`
 	Regional         *string  `json:"regional,omitempty"`
 	City             *string  `json:"city,omitempty"`
+	StreetAddress    *string  `json:"street_address,omitempty"`
+	AdditionalAddress *string `json:"additional_address,omitempty"`
+	SubDistrict      *string  `json:"sub_district,omitempty"`
+	District         *string  `json:"district,omitempty"`
+	Province         *string  `json:"province,omitempty"`
+	PostalCode       *string  `json:"postal_code,omitempty"`
+	Country          *string  `json:"country,omitempty"`
 }
 
 func (s *UserService) Update(
@@ -208,7 +215,11 @@ func (s *UserService) Update(
 		input.HeightCm != nil || input.WeightKg != nil ||
 		input.FitnessGoal != nil || input.ExperienceLevel != nil ||
 		input.MedicalNotes != nil || input.EmergencyContact != nil ||
-		input.Regional != nil || input.City != nil
+		input.Regional != nil || input.City != nil ||
+		input.StreetAddress != nil || input.AdditionalAddress != nil ||
+		input.SubDistrict != nil || input.District != nil ||
+		input.Province != nil || input.PostalCode != nil ||
+		input.Country != nil
 
 	if hasProfileUpdate {
 		profile := &model.UserProfile{
@@ -223,6 +234,13 @@ func (s *UserService) Update(
 			EmergencyContact: input.EmergencyContact,
 			Regional:         input.Regional,
 			City:             input.City,
+			StreetAddress:    input.StreetAddress,
+			AdditionalAddress: input.AdditionalAddress,
+			SubDistrict:      input.SubDistrict,
+			District:         input.District,
+			Province:         input.Province,
+			PostalCode:       input.PostalCode,
+			Country:          input.Country,
 		}
 		if err := s.userRepo.UpsertProfile(ctx, profile); err != nil {
 			s.logger.Error("update: upsert profile", "user_id", targetID, "error", err)
