@@ -159,7 +159,7 @@ function formatSlug(slug: string) {
     .join(" ");
 }
 
-export function formatMovementName(rawName: string, gender: string | undefined): string {
+function formatMovementName(rawName: string, gender: string | undefined): string {
   if (!rawName) return "-";
   if (!rawName.includes(" | ")) return rawName;
 
