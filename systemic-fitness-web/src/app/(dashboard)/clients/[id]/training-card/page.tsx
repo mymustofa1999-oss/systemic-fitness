@@ -309,7 +309,7 @@ function getClientCategoryAndLoads(
   return defaultResult;
 }
 
-export function formatMovementName(rawName: string, gender: string | undefined): string {
+function formatMovementName(rawName: string, gender: string | undefined): string {
   if (!rawName) return "-";
   if (!rawName.includes(" | ")) return rawName;
 
@@ -1213,6 +1213,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             equipUpperOptions={equipUpperOptions}
             equipLowerOptions={equipLowerOptions}
             equipGeneralOptions={equipGeneralOptions}
+            gender={profile?.gender}
             recs={recs}
             onUpdateSeq={(p) => updateSeq(si, p)}
             onAddSet={() => addSet(si)}
@@ -1262,7 +1263,7 @@ function SequenceTable({
   seq, si, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
   equipUpperOptions, equipLowerOptions, equipGeneralOptions, recs,
   onUpdateSeq, onAddSet, onRemoveSet, onUpdateSet, onAddItem, onRemoveItem, onUpdateItem, onPreviewVideo,
-  formErrors,
+  formErrors, gender,
 }: {
   seq: CardSequence; si: number; level: string; isMetabolic: boolean; editing: boolean;
   typeOptions: { value: string; label: string; sublabel?: string }[];
@@ -1272,6 +1273,7 @@ function SequenceTable({
   equipUpperOptions: { value: string; label: string }[];
   equipLowerOptions: { value: string; label: string }[];
   equipGeneralOptions: { value: string; label: string }[];
+  gender?: string;
   recs: any;
   onUpdateSeq: (p: Partial<CardSequence>) => void;
   onAddSet: () => void;
@@ -1387,6 +1389,7 @@ function SequenceTable({
               onUpdateItem={(ii, p) => onUpdateItem(seti, ii, p)}
               onPreviewVideo={onPreviewVideo}
               formErrors={formErrors}
+              gender={gender}
             />
           ))}
 
@@ -1416,7 +1419,7 @@ function SetBlock({
   set, si, seti, level, isMetabolic, categoryCode, editing, typeOptions, movementOptions, movementMap, types,
   upperOptions, lowerOptions, generalOptions, recommendedUpper, recommendedLower,
   onUpdateSet, onRemoveSet, onAddItem, onRemoveItem, onUpdateItem, onPreviewVideo,
-  formErrors,
+  formErrors, gender,
 }: {
   set: CardSet; si: number; seti: number; level: string; isMetabolic: boolean; categoryCode?: string; editing: boolean;
   typeOptions: { value: string; label: string; sublabel?: string }[];
@@ -1428,6 +1431,7 @@ function SetBlock({
   generalOptions: { value: string; label: string }[];
   recommendedUpper: string;
   recommendedLower: string;
+  gender?: string;
   onUpdateSet: (p: Partial<CardSet>) => void;
   onRemoveSet: () => void;
   onAddItem: (bodyPart: string) => void;
@@ -1645,11 +1649,11 @@ function SetBlock({
                       categoryCode={categoryCode}
                       onUpdate={(p) => onUpdateItem(ii, p)}
                       hasError={formErrors[`item_${si}_${seti}_${ii}_movement`]}
-                      gender={profile?.gender}
+                      gender={gender}
                     />
                   ) : (
                     <div className="flex items-center gap-2 mt-1">
-                      <div className="font-semibold text-slate-800 text-sm">{formatMovementName(item.movement_name || "-", profile?.gender)}</div>
+                      <div className="font-semibold text-slate-800 text-sm">{formatMovementName(item.movement_name || "-", gender)}</div>
                       <button onClick={() => {
                         const m = item.movement_id ? movementMap[item.movement_id] : null;
                         if (m && onPreviewVideo) onPreviewVideo(m, set.bpm || "");
