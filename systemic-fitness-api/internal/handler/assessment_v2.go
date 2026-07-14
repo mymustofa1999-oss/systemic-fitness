@@ -47,7 +47,8 @@ func (h *AssessmentV2Handler) Submit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	a, err := h.service.Submit(r.Context(), userID, &in)
+	callerRole := middleware.GetRole(r.Context())
+	a, err := h.service.Submit(r.Context(), userID, &in, callerRole)
 	if err != nil {
 		slog.Error("[AssessmentV2.Submit] failed", "user_id", userID, "error", err)
 		response.InternalError(w, "Failed to submit assessment")
@@ -74,7 +75,8 @@ func (h *AssessmentV2Handler) SubmitForUser(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	a, err := h.service.Submit(r.Context(), userID, &in)
+	callerRole := middleware.GetRole(r.Context())
+	a, err := h.service.Submit(r.Context(), userID, &in, callerRole)
 	if err != nil {
 		slog.Error("[AssessmentV2.SubmitForUser] failed", "user_id", userID, "error", err)
 		response.InternalError(w, "Failed to submit assessment")
