@@ -52,7 +52,7 @@ function getPageNumbers(current: number, total: number): (number | "...")[] {
 
 export function DataTable<T extends Record<string, any>>({
   columns, data, loading, page = 1, pageSize = 20, totalPages = 1, total = 0,
-  onPageChange, onSort, sortBy, sortOrder, onRowClick, emptyMessage = "No data found",
+  onPageChange, onSort, sortBy, onRowClick, emptyMessage = "No data found",
 }: DataTableProps<T>) {
   if (loading) return <TableSkeleton columns={columns.length} />;
 
