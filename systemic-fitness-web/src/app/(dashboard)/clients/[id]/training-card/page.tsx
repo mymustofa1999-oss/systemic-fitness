@@ -1816,7 +1816,7 @@ function MovementSelect({
     filtered = filtered.filter(m => {
       const mSub = (m.sublabel || "").trim().toLowerCase();
       // Tampilkan gerakan yang sesuai body_part atau yang body_part nya kosong (opsional)
-      return mSub === bpLower || mSub === "";
+      return mSub.includes(bpLower) || mSub === "";
     });
   }
 
