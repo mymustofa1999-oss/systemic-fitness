@@ -1375,11 +1375,14 @@ function SecureYoutubePlayer({ url, title, className, style, onPlayStateChanged 
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const doc = document as any;
+      setIsFullscreen(!!(doc.fullscreenElement || doc.webkitFullscreenElement));
     };
     document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
     };
   }, []);
 
@@ -1400,7 +1403,7 @@ function SecureYoutubePlayer({ url, title, className, style, onPlayStateChanged 
 
   const embedUrl = useMemo(() => {
     if (!videoId) return "";
-    return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0`;
+    return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=1`;
   }, [videoId]);
 
   const sendPlayerCommand = (func: string, args: any = "") => {
@@ -1438,11 +1441,21 @@ function SecureYoutubePlayer({ url, title, className, style, onPlayStateChanged 
   const toggleFullscreen = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!containerRef.current) return;
-    if (!document.fullscreenElement) {
-      containerRef.current.requestFullscreen?.()
-        .catch((err) => console.error("Error enabling fullscreen:", err));
+    const elem = containerRef.current as any;
+    const doc = document as any;
+
+    if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch((err: any) => console.error(err));
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
     } else {
-      document.exitFullscreen?.();
+      if (doc.exitFullscreen) {
+        doc.exitFullscreen();
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen();
+      }
     }
   };
 
@@ -1468,7 +1481,8 @@ function SecureYoutubePlayer({ url, title, className, style, onPlayStateChanged 
         src={embedUrl}
         title={title}
         style={{ width: "100%", height: "100%", border: "none" }}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        allowFullScreen
         sandbox="allow-scripts allow-same-origin allow-presentation"
       />
       
