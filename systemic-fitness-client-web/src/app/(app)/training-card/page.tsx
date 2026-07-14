@@ -1046,11 +1046,13 @@ function LegacyExerciseCard({
   catCode,
   catName,
   isLevel5or6,
+  profile,
 }: {
   set: CardSet;
   catCode: string;
   catName: string;
   isLevel5or6: boolean;
+  profile?: any;
 }) {
   const pc = PILLAR_COLORS[catCode] || "var(--tc-gold)";
 
@@ -2491,6 +2493,7 @@ export default function TrainingCardPage() {
                   catCode={catCode}
                   catName={catName}
                   isLevel5or6={isLevel5or6}
+                  profile={profileRes?.data?.profile}
                 />
               );
             })}
