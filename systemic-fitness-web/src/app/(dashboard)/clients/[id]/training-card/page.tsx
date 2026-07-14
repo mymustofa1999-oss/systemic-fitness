@@ -401,7 +401,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     return a;
   }, [profile?.date_of_birth]);
 
-  const assessmentPayload = latestAssessmentData?.data?.phase_a_payload;
+  const assessmentPayload = latestAssessmentData?.data?.phase_a;
   const assessmentGender = assessmentPayload?.gender === "women" ? "female" : assessmentPayload?.gender === "men" ? "male" : undefined;
   const effectiveGender = profile?.gender || assessmentGender;
 
