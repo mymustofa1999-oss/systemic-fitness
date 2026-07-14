@@ -671,7 +671,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   function startEdit(fcItemsParam?: any[], ccItemsParam?: any[], mcItemsParam?: any[], cdItemsParam?: any[]) {
     if (card) {
       setForm({
-        level: card.level || physicalLevel || "",
+        level: card.level ? String(parseInt(card.level.match(/\d+/)?.[0] || "") || parsedMappedLevel) : String(parsedMappedLevel),
         notes: card.notes || "",
         sequences: (card.sequences || []).map((s: any, si: number) => ({
           program_category_id: s.program_category_id,
@@ -713,7 +713,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
       const defaultCard = templateCard || presetCard;
 
       setForm({
-        level: defaultLevel,
+        level: String(parsedMappedLevel),
         notes: defaultCard?.notes || "",
         sequences: defaultCard ? defaultCard.sequences.map((s: any, si: number) => ({
           program_category_id: s.program_category_id,
