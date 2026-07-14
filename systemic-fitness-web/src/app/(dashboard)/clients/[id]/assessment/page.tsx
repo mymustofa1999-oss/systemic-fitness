@@ -33,17 +33,17 @@ export default function TrainerAssessmentFormPage() {
     morning_readiness: 3,
     wake_frequency: 1,
     pre_sleep_habit: 3,
-    bedtime_bucket: 22,
-    wake_time_bucket: 6,
-    activity_profile: "office_worker",
-    dinner_time: 19,
+    bedtime_bucket: 1,
+    wake_time_bucket: 1,
+    activity_profile: "executive",
+    dinner_time: 1,
   });
 
   const [phaseC, setPhaseC] = useState({
     meal_pattern: 3,
     food_dominance: 1,
-    hydration: 8,
-    nutrition_goal: "maintain",
+    hydration: 4,
+    nutrition_goal: "weight",
   });
 
   function handleSubmit(e: React.FormEvent) {
@@ -160,7 +160,7 @@ export default function TrainerAssessmentFormPage() {
             <div>
               <label className="label">Aktivitas</label>
               <select className="input" value={phaseB.activity_profile} onChange={e => setPhaseB({...phaseB, activity_profile: e.target.value})}>
-                <option value="office_worker">Pekerja Kantoran</option>
+                <option value="executive">Pekerja Kantoran</option>
                 <option value="shift_worker">Pekerja Shift</option>
                 <option value="traveller">Sering Bepergian</option>
               </select>
@@ -184,8 +184,8 @@ export default function TrainerAssessmentFormPage() {
               <input type="number" min="1" max="3" className="input" value={phaseC.food_dominance} onChange={e => setPhaseC({...phaseC, food_dominance: parseInt(e.target.value)})} />
             </div>
             <div>
-              <label className="label">Gelas Air Per Hari</label>
-              <input type="number" min="0" max="20" className="input" value={phaseC.hydration} onChange={e => setPhaseC({...phaseC, hydration: parseInt(e.target.value)})} />
+              <label className="label">Gelas Air Per Hari (1-4)</label>
+              <input type="number" min="1" max="4" className="input" value={phaseC.hydration} onChange={e => setPhaseC({...phaseC, hydration: parseInt(e.target.value)})} />
             </div>
           </div>
         </div>
