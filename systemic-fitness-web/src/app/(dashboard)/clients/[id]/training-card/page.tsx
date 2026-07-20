@@ -1741,6 +1741,7 @@ function SetBlock({
               className="px-4 py-2 text-xs rounded border border-green-200 text-green-700 bg-green-50 hover:bg-green-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
             >
               <Plus className="h-3.5 w-3.5" /> Tambah Lower
+            </button>
             <button
               onClick={() => onAddItem("core")}
               className="px-4 py-2 text-xs rounded border border-amber-200 text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
