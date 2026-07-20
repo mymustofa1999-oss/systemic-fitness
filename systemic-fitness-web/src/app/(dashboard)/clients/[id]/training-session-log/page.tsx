@@ -45,21 +45,21 @@ export default function TrainingSessionLogPage() {
   const [rows, setRows] = useState<TrainingSessionLog[]>([]);
 
   useEffect(() => {
-    if (logsData && Array.isArray(logsData)) {
-      if (logsData.length > 0) {
-        setRows(logsData);
-      } else {
-        // Initialize empty rows
-        const emptyRows: TrainingSessionLog[] = Array.from({ length: DEFAULT_ROWS }).map((_, i) => ({
-          period_name: periodName,
-          session_number: i + 1,
-          date: "",
-          took_medicine: false,
-        }));
-        setRows(emptyRows);
-      }
+    if (logsLoading) return; // Don't do anything while loading
+
+    if (logsData && Array.isArray(logsData) && logsData.length > 0) {
+      setRows(logsData);
+    } else {
+      // Initialize empty rows (fallback if logsData is null/undefined/empty)
+      const emptyRows: TrainingSessionLog[] = Array.from({ length: DEFAULT_ROWS }).map((_, i) => ({
+        period_name: periodName,
+        session_number: i + 1,
+        date: "",
+        took_medicine: false,
+      }));
+      setRows(emptyRows);
     }
-  }, [logsData, periodName]);
+  }, [logsData, logsLoading, periodName]);
 
   const handleRowChange = (index: number, field: keyof TrainingSessionLog, value: any) => {
     const newRows = [...rows];

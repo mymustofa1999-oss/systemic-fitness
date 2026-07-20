@@ -24,7 +24,7 @@ export function useTrainingSessionLogs(userId: string, periodName: string) {
     queryKey: ["training_sessions", userId, periodName],
     queryFn: async () => {
       if (!userId || !periodName) return null;
-      const res = await apiGet(`/users/${userId}/training-sessions?period=${encodeURIComponent(periodName)}`);
+      const res = await apiGet(`/api/users/${userId}/training-sessions?period=${encodeURIComponent(periodName)}`);
       return res.data;
     },
     enabled: !!userId && !!periodName,
@@ -40,7 +40,7 @@ export function useUpsertTrainingSessionLogs() {
         period_name: periodName,
         logs: logs,
       };
-      const res = await apiPost(`/users/${userId}/training-sessions`, payload);
+      const res = await apiPost(`/api/users/${userId}/training-sessions`, payload);
       return res;
     },
     onSuccess: (_, variables) => {
