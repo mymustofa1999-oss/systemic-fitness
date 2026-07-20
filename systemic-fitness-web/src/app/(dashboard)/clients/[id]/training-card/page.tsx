@@ -1779,7 +1779,11 @@ function MovementSelect({
     filtered = filtered.filter(m => {
       const mPat = (m.pattern || "").trim().toLowerCase();
       const mCat = (m.extractedCategory || "").trim().toLowerCase();
-      const currentCat = (categoryCode || "").trim().toLowerCase();
+      let currentCat = (categoryCode || "").trim().toLowerCase();
+      if (currentCat === "functional") currentCat = "fc";
+      if (currentCat === "cardiorespiratory") currentCat = "cc";
+      if (currentCat === "metabolic") currentCat = "mc";
+      if (currentCat === "cooldown") currentCat = "cd";
       
       return selectedPatterns.some(sp => {
         const spLower = sp.toLowerCase();
