@@ -122,95 +122,98 @@ export default function TrainingSessionLogPage() {
         </div>
       </div>
 
-      {/* Info Card (PDF Table Layout) */}
-      <div className="overflow-x-auto w-full mb-6 text-[11px] text-slate-800 bg-white">
-        <table className="w-full border-collapse border border-black">
+      {/* Info Card (PDF Table Layout - Modernized) */}
+      <div className="overflow-x-auto w-full mb-6 bg-white rounded-xl shadow-sm border border-slate-200">
+        <table className="w-full border-collapse text-xs text-slate-700">
           <tbody>
-            <tr>
-              <td className="border border-black font-bold p-1 px-2 w-[10%]">Nama</td>
-              <td colSpan={2} className="border border-black p-1 px-2 font-semibold w-[20%]">{user?.full_name}</td>
-              <td rowSpan={8} className="border border-black text-center w-8 align-middle">
-                <span className="inline-block whitespace-nowrap" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-                  Daftar<br/>Obat
+            <tr className="border-b border-slate-200">
+              <td className="border-r border-slate-200 font-bold p-2.5 px-4 w-[12%] text-slate-600">Nama</td>
+              <td colSpan={2} className="border-r border-slate-200 p-2.5 px-4 font-semibold w-[22%] text-slate-900">{user?.full_name}</td>
+              <td rowSpan={8} className="border-r border-slate-200 text-center w-12 align-middle bg-slate-50">
+                <span className="inline-block whitespace-nowrap font-semibold text-slate-500 uppercase tracking-widest text-[10px]" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                  Daftar Obat
                 </span>
               </td>
-              <td rowSpan={8} className="border border-black p-1 px-2 align-top w-[15%] leading-relaxed">
+              <td rowSpan={8} className="border-r border-slate-200 p-2.5 px-4 align-top w-[18%] leading-loose">
                 {((medsData as any)?.data || []).length > 0 ? (
                   ((medsData as any)?.data || []).map((m: any) => (
-                    <div key={m.id}>{m.medicine_name}</div>
+                    <div key={m.id} className="flex items-center gap-1.5 mb-1.5">
+                      <div className="h-1.5 w-1.5 rounded-full bg-slate-300"></div>
+                      <span className="font-medium text-slate-700">{m.medicine_name}</span>
+                    </div>
                   ))
-                ) : null}
+                ) : <span className="text-slate-400 italic">Tidak ada</span>}
               </td>
-              <td className="border border-black font-bold p-1 px-2 w-[10%] bg-slate-100">Consultant</td>
-              <td className="border border-black p-1 px-2 w-[15%] bg-slate-100">{staff?.consultant_name || "-"}</td>
-              <td className="border border-black font-bold p-1 px-2 w-[8%] bg-slate-100">Trainer</td>
-              <td className="border border-black p-1 px-2 w-[15%] bg-slate-100">{staff?.trainer_name || "-"}</td>
+              <td className="border-r border-slate-200 font-bold p-2.5 px-4 w-[12%] bg-slate-50/80 text-slate-600">Consultant</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 w-[15%] text-slate-800">{staff?.consultant_name || "-"}</td>
+              <td className="border-r border-slate-200 font-bold p-2.5 px-4 w-[10%] bg-slate-50/80 text-slate-600">Trainer</td>
+              <td className="p-2.5 px-4 w-[15%] text-slate-800">{staff?.trainer_name || "-"}</td>
             </tr>
-            <tr>
-              <td className="border border-black font-bold p-1 px-2">Tanggal Lahir</td>
-              <td className="border border-black p-1 px-2">{dobDayMonth}</td>
-              <td className="border border-black p-1 px-2 text-center">{dobYear}</td>
-              <td rowSpan={2} className="border border-black p-1 px-2 font-bold text-center bg-gray-300/50">Prioritas</td>
-              <td colSpan={3} rowSpan={2} className="border border-black p-1 px-2 bg-rose-200/60 text-center font-bold text-sm">
+            <tr className="border-b border-slate-200">
+              <td className="border-r border-slate-200 font-bold p-2.5 px-4 text-slate-600">Tanggal Lahir</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-slate-800">{dobDayMonth}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center text-slate-800">{dobYear}</td>
+              <td rowSpan={2} className="border-r border-slate-200 p-2.5 px-4 font-bold text-center bg-slate-50 text-slate-600 align-middle">Prioritas</td>
+              <td colSpan={3} rowSpan={2} className="p-2.5 px-4 bg-rose-50 text-center font-bold text-sm text-rose-700 align-middle">
                 {activeProgram}
               </td>
             </tr>
-            <tr>
-              <td className="border border-black font-bold p-1 px-2">Usia</td>
-              <td className="border border-black p-1 px-2 font-semibold" colSpan={2}>{age}</td>
+            <tr className="border-b border-slate-200">
+              <td className="border-r border-slate-200 font-bold p-2.5 px-4 text-slate-600">Usia</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 font-semibold text-slate-800" colSpan={2}>{age}</td>
             </tr>
 
             {/* Max HR */}
-            <tr>
-              <td rowSpan={5} className="border border-black font-bold p-1 px-2 text-center align-middle">HR Zone</td>
-              <td className="border border-black p-1 px-2 font-bold bg-red-400">Max HR</td>
-              <td className="border border-black p-1 px-2 text-center bg-red-400">{hrZones[0].value || "-"}</td>
-              <td className="border border-black p-1 px-2 text-center bg-red-400/80">{hrZones[0].value ? Math.round(hrZones[0].value / 4) : "-"}</td>
-              <td colSpan={4} className="border border-black p-1 px-2 font-bold text-center bg-gray-300/50">Program</td>
+            <tr className="border-b border-slate-200">
+              <td rowSpan={5} className="border-r border-slate-200 font-bold p-2.5 px-4 text-center align-middle text-slate-600 bg-slate-50/50">HR Zone</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-rose-100/50 text-rose-800">Max HR</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-100/50 font-semibold text-rose-900">{hrZones[0].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-200/40 font-semibold text-rose-900">{hrZones[0].value ? Math.round(hrZones[0].value / 4) : "-"}</td>
+              <td colSpan={4} className="p-2.5 px-4 font-bold text-center bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px]">Program</td>
             </tr>
 
             {/* Zona 5 */}
-            <tr>
-              <td className="border border-black p-1 px-2 font-bold bg-orange-300">Zona 5</td>
-              <td className="border border-black p-1 px-2 text-center bg-orange-300">{hrZones[1].value || "-"}</td>
-              <td className="border border-black p-1 px-2 text-center bg-orange-300/80">{hrZones[1].value ? Math.round(hrZones[1].value / 4) : "-"}</td>
-              <td className="border border-black p-1 px-2 text-center bg-green-200/70 w-8">
-                <input type="checkbox" checked readOnly className="w-3.5 h-3.5 accent-green-600 rounded-sm" />
+            <tr className="border-b border-slate-200">
+              <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-amber-100/50 text-amber-800">Zona 5</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-100/50 font-semibold text-amber-900">{hrZones[1].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-200/40 font-semibold text-amber-900">{hrZones[1].value ? Math.round(hrZones[1].value / 4) : "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-50/50 w-12">
+                <input type="checkbox" checked readOnly className="w-4 h-4 accent-emerald-500 rounded-sm" />
               </td>
-              <td className="border border-black p-1 px-2 font-semibold bg-green-200/70">Functional Conditioning</td>
-              <td colSpan={2} className="border border-black p-1 px-2 text-center bg-green-200/70">BPM 90-120</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 font-semibold text-emerald-800 bg-emerald-50/50">Functional Conditioning</td>
+              <td colSpan={2} className="p-2.5 px-4 text-center text-emerald-700 bg-emerald-50/50">BPM 90-120</td>
             </tr>
 
             {/* Zona 3 */}
-            <tr>
-              <td className="border border-black p-1 px-2 font-bold bg-green-300">Zona 3</td>
-              <td className="border border-black p-1 px-2 text-center bg-green-300">{hrZones[2].value || "-"}</td>
-              <td className="border border-black p-1 px-2 text-center bg-green-300/80">{hrZones[2].value ? Math.round(hrZones[2].value / 4) : "-"}</td>
-              <td className="border border-black p-1 px-2 text-center bg-yellow-200/70 w-8">
-                <input type="checkbox" checked readOnly className="w-3.5 h-3.5 accent-yellow-600 rounded-sm" />
+            <tr className="border-b border-slate-200">
+              <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-emerald-100/50 text-emerald-800">Zona 3</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-100/50 font-semibold text-emerald-900">{hrZones[2].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-200/40 font-semibold text-emerald-900">{hrZones[2].value ? Math.round(hrZones[2].value / 4) : "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-50/50 w-12">
+                <input type="checkbox" checked readOnly className="w-4 h-4 accent-amber-500 rounded-sm" />
               </td>
-              <td className="border border-black p-1 px-2 font-semibold bg-yellow-200/70">Cardiorespiratory Conditioning</td>
-              <td colSpan={2} className="border border-black p-1 px-2 text-center bg-yellow-200/70">BPM 80 - 100 | Weight: 0.5 - 1 kg</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 font-semibold text-amber-800 bg-amber-50/50">Cardiorespiratory Conditioning</td>
+              <td colSpan={2} className="p-2.5 px-4 text-center text-amber-700 bg-amber-50/50">BPM 80 - 100 | Weight: 0.5 - 1 kg</td>
             </tr>
 
             {/* Zona 2 */}
-            <tr>
-              <td className="border border-black p-1 px-2 font-bold bg-blue-300">Zona 2</td>
-              <td className="border border-black p-1 px-2 text-center bg-blue-300">{hrZones[3].value || "-"}</td>
-              <td className="border border-black p-1 px-2 text-center bg-blue-300/80">{hrZones[3].value ? Math.round(hrZones[3].value / 4) : "-"}</td>
-              <td className="border border-black p-1 px-2 text-center bg-orange-200/70 w-8">
-                <input type="checkbox" checked readOnly className="w-3.5 h-3.5 accent-orange-600 rounded-sm" />
+            <tr className="border-b border-slate-200">
+              <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-sky-100/50 text-sky-800">Zona 2</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-sky-100/50 font-semibold text-sky-900">{hrZones[3].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-sky-200/40 font-semibold text-sky-900">{hrZones[3].value ? Math.round(hrZones[3].value / 4) : "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-orange-50/50 w-12">
+                <input type="checkbox" checked readOnly className="w-4 h-4 accent-orange-500 rounded-sm" />
               </td>
-              <td className="border border-black p-1 px-2 font-semibold bg-orange-200/70">Metabolic Conditioning</td>
-              <td colSpan={2} className="border border-black p-1 px-2 text-center bg-orange-200/70">Weight: 1.5 - 2.5 kg | No Resistance</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 font-semibold text-orange-800 bg-orange-50/50">Metabolic Conditioning</td>
+              <td colSpan={2} className="p-2.5 px-4 text-center text-orange-700 bg-orange-50/50">Weight: 1.5 - 2.5 kg | No Resistance</td>
             </tr>
 
             {/* Zona 1 */}
             <tr>
-              <td className="border border-black p-1 px-2 font-bold bg-sky-300">Zona 1</td>
-              <td className="border border-black p-1 px-2 text-center bg-sky-300">{hrZones[4].value || "-"}</td>
-              <td className="border border-black p-1 px-2 text-center bg-sky-300/80">{hrZones[4].value ? Math.round(hrZones[4].value / 4) : "-"}</td>
-              <td colSpan={4} className="border border-black"></td>
+              <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-indigo-50/70 text-indigo-800">Zona 1</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-indigo-50/70 font-semibold text-indigo-900">{hrZones[4].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-indigo-100/40 font-semibold text-indigo-900">{hrZones[4].value ? Math.round(hrZones[4].value / 4) : "-"}</td>
+              <td colSpan={4}></td>
             </tr>
           </tbody>
         </table>
