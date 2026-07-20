@@ -433,7 +433,7 @@ func (s *AssessmentV2Service) GetTrainingCard(ctx context.Context, userID string
 						break
 					}
 					// Only require 8 items for Functional Conditioning sequences
-					if seq.ProgramCategoryCode != nil && strings.ToLower(*seq.ProgramCategoryCode) == "functional" {
+					if strings.ToLower(seq.ProgramCategoryCode) == "functional" {
 						for _, set := range seq.Sets {
 							if len(set.Items) < 8 {
 								needsRegen = true

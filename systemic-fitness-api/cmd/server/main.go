@@ -233,6 +233,11 @@ func main() {
 	workoutSessionHandler := handler.NewWorkoutSessionHandler(workoutSessionService)
 	workoutReminderHandler := handler.NewWorkoutReminderHandler(workoutReminderService)
 
+	// Training Session Logs (Manual Input Form)
+	trainingSessionRepo := repository.NewTrainingSessionRepo(db)
+	trainingSessionService := service.NewTrainingSessionService(trainingSessionRepo)
+	trainingSessionHandler := handler.NewTrainingSessionHandler(trainingSessionService)
+
 	// Adapter for paid-subscription middleware (avoids middleware → service import cycle).
 	subscriptionInfoFn := func(ctx context.Context, userID string) (middleware.SubscriptionInfo, error) {
 		res, err := clientSubService.GetMySubscription(ctx, userID)
@@ -303,6 +308,10 @@ func main() {
 					r.With(middleware.RequireRole(model.RoleAdmin)).Delete("/", userHandler.Delete)
 					r.With(middleware.RequireSelfOrRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant)).Get("/stats", userHandler.Stats)
 					r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/assessments", assessmentHandler.ListByUser)
+					
+					// Training Session Logs
+					r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/training-sessions", trainingSessionHandler.GetLogs)
+					r.With(middleware.RequireMinRole(model.RoleTrainer)).Post("/training-sessions", trainingSessionHandler.UpsertLogs)
 				})
 			})
 
