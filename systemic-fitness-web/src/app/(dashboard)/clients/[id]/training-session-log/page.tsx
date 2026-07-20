@@ -42,6 +42,13 @@ export default function TrainingSessionLogPage() {
     { label: "Zona 1", value: (userData?.data as any)?.hr_zone_1_lower },
   ];
 
+  const dob = user?.date_of_birth ? new Date(user.date_of_birth) : null;
+  const age = dob ? Math.floor((new Date().getTime() - dob.getTime()) / 31557600000) : "-";
+  const formattedDob = dob ? new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(dob) : "-";
+  const dobParts = formattedDob !== "-" ? formattedDob.split(" ") : ["-", "", ""];
+  const dobDayMonth = dobParts[0] + " " + dobParts[1];
+  const dobYear = dobParts[2];
+
   const [rows, setRows] = useState<TrainingSessionLog[]>([]);
 
   useEffect(() => {
@@ -115,37 +122,98 @@ export default function TrainingSessionLogPage() {
         </div>
       </div>
 
-      {/* Info Card (Read-only Header) */}
-      <div className="card p-6 border border-slate-200 shadow-sm rounded-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 bg-slate-50/50">
-        <div>
-          <p className="text-xs font-bold text-slate-400 uppercase mb-1">Daftar Obat</p>
-          <div className="flex flex-col gap-1">
-            {((medsData as any)?.data || []).length > 0 ? (
-              ((medsData as any)?.data || []).map((m: any) => (
-                <div key={m.id} className="text-sm font-medium text-slate-800 flex items-center gap-1.5">
-                  <Pill className="h-3 w-3 text-sf-deepNavy" /> {m.medicine_name}
-                </div>
-              ))
-            ) : (
-              <span className="text-sm text-slate-500">Tidak ada obat</span>
-            )}
-          </div>
-        </div>
-        <div>
-          <p className="text-xs font-bold text-slate-400 uppercase mb-1">Tim Penanganan</p>
-          <p className="text-sm text-slate-800"><span className="text-slate-500">Consultant:</span> {staff?.consultant_name || "-"}</p>
-          <p className="text-sm text-slate-800"><span className="text-slate-500">Trainer:</span> {staff?.trainer_name || "-"}</p>
-        </div>
-        <div>
-          <p className="text-xs font-bold text-slate-400 uppercase mb-1">Program</p>
-          <p className="text-sm font-medium text-slate-800">{activeProgram}</p>
-        </div>
-        <div>
-          <p className="text-xs font-bold text-slate-400 uppercase mb-1">HR Zone (Max / Zone 2)</p>
-          <p className="text-sm font-medium text-slate-800">
-            {hrZones.find(z => z.label === "Max HR")?.value || "-"} / {hrZones.find(z => z.label === "Zona 2")?.value || "-"}
-          </p>
-        </div>
+      {/* Info Card (PDF Table Layout) */}
+      <div className="overflow-x-auto w-full mb-6 text-[11px] text-slate-800 bg-white">
+        <table className="w-full border-collapse border border-black">
+          <tbody>
+            <tr>
+              <td className="border border-black font-bold p-1 px-2 w-[10%]">Nama</td>
+              <td colSpan={2} className="border border-black p-1 px-2 font-semibold w-[20%]">{user?.full_name}</td>
+              <td rowSpan={8} className="border border-black text-center w-8 align-middle">
+                <span className="inline-block whitespace-nowrap" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                  Daftar<br/>Obat
+                </span>
+              </td>
+              <td rowSpan={8} className="border border-black p-1 px-2 align-top w-[15%] leading-relaxed">
+                {((medsData as any)?.data || []).length > 0 ? (
+                  ((medsData as any)?.data || []).map((m: any) => (
+                    <div key={m.id}>{m.medicine_name}</div>
+                  ))
+                ) : null}
+              </td>
+              <td className="border border-black font-bold p-1 px-2 w-[10%] bg-slate-100">Consultant</td>
+              <td className="border border-black p-1 px-2 w-[15%] bg-slate-100">{staff?.consultant_name || "-"}</td>
+              <td className="border border-black font-bold p-1 px-2 w-[8%] bg-slate-100">Trainer</td>
+              <td className="border border-black p-1 px-2 w-[15%] bg-slate-100">{staff?.trainer_name || "-"}</td>
+            </tr>
+            <tr>
+              <td className="border border-black font-bold p-1 px-2">Tanggal Lahir</td>
+              <td className="border border-black p-1 px-2">{dobDayMonth}</td>
+              <td className="border border-black p-1 px-2 text-center">{dobYear}</td>
+              <td rowSpan={2} className="border border-black p-1 px-2 font-bold text-center bg-gray-300/50">Prioritas</td>
+              <td colSpan={3} rowSpan={2} className="border border-black p-1 px-2 bg-rose-200/60 text-center font-bold text-sm">
+                {activeProgram}
+              </td>
+            </tr>
+            <tr>
+              <td className="border border-black font-bold p-1 px-2">Usia</td>
+              <td className="border border-black p-1 px-2 font-semibold" colSpan={2}>{age}</td>
+            </tr>
+
+            {/* Max HR */}
+            <tr>
+              <td rowSpan={5} className="border border-black font-bold p-1 px-2 text-center align-middle">HR Zone</td>
+              <td className="border border-black p-1 px-2 font-bold bg-red-400">Max HR</td>
+              <td className="border border-black p-1 px-2 text-center bg-red-400">{hrZones[0].value || "-"}</td>
+              <td className="border border-black p-1 px-2 text-center bg-red-400/80">{hrZones[0].value ? Math.round(hrZones[0].value / 4) : "-"}</td>
+              <td colSpan={4} className="border border-black p-1 px-2 font-bold text-center bg-gray-300/50">Program</td>
+            </tr>
+
+            {/* Zona 5 */}
+            <tr>
+              <td className="border border-black p-1 px-2 font-bold bg-orange-300">Zona 5</td>
+              <td className="border border-black p-1 px-2 text-center bg-orange-300">{hrZones[1].value || "-"}</td>
+              <td className="border border-black p-1 px-2 text-center bg-orange-300/80">{hrZones[1].value ? Math.round(hrZones[1].value / 4) : "-"}</td>
+              <td className="border border-black p-1 px-2 text-center bg-green-200/70 w-8">
+                <input type="checkbox" checked readOnly className="w-3.5 h-3.5 accent-green-600 rounded-sm" />
+              </td>
+              <td className="border border-black p-1 px-2 font-semibold bg-green-200/70">Functional Conditioning</td>
+              <td colSpan={2} className="border border-black p-1 px-2 text-center bg-green-200/70">BPM 90-120</td>
+            </tr>
+
+            {/* Zona 3 */}
+            <tr>
+              <td className="border border-black p-1 px-2 font-bold bg-green-300">Zona 3</td>
+              <td className="border border-black p-1 px-2 text-center bg-green-300">{hrZones[2].value || "-"}</td>
+              <td className="border border-black p-1 px-2 text-center bg-green-300/80">{hrZones[2].value ? Math.round(hrZones[2].value / 4) : "-"}</td>
+              <td className="border border-black p-1 px-2 text-center bg-yellow-200/70 w-8">
+                <input type="checkbox" checked readOnly className="w-3.5 h-3.5 accent-yellow-600 rounded-sm" />
+              </td>
+              <td className="border border-black p-1 px-2 font-semibold bg-yellow-200/70">Cardiorespiratory Conditioning</td>
+              <td colSpan={2} className="border border-black p-1 px-2 text-center bg-yellow-200/70">BPM 80 - 100 | Weight: 0.5 - 1 kg</td>
+            </tr>
+
+            {/* Zona 2 */}
+            <tr>
+              <td className="border border-black p-1 px-2 font-bold bg-blue-300">Zona 2</td>
+              <td className="border border-black p-1 px-2 text-center bg-blue-300">{hrZones[3].value || "-"}</td>
+              <td className="border border-black p-1 px-2 text-center bg-blue-300/80">{hrZones[3].value ? Math.round(hrZones[3].value / 4) : "-"}</td>
+              <td className="border border-black p-1 px-2 text-center bg-orange-200/70 w-8">
+                <input type="checkbox" checked readOnly className="w-3.5 h-3.5 accent-orange-600 rounded-sm" />
+              </td>
+              <td className="border border-black p-1 px-2 font-semibold bg-orange-200/70">Metabolic Conditioning</td>
+              <td colSpan={2} className="border border-black p-1 px-2 text-center bg-orange-200/70">Weight: 1.5 - 2.5 kg | No Resistance</td>
+            </tr>
+
+            {/* Zona 1 */}
+            <tr>
+              <td className="border border-black p-1 px-2 font-bold bg-sky-300">Zona 1</td>
+              <td className="border border-black p-1 px-2 text-center bg-sky-300">{hrZones[4].value || "-"}</td>
+              <td className="border border-black p-1 px-2 text-center bg-sky-300/80">{hrZones[4].value ? Math.round(hrZones[4].value / 4) : "-"}</td>
+              <td colSpan={4} className="border border-black"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       {/* Main Table */}
