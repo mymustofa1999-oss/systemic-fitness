@@ -139,6 +139,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
   const { data: movementsData } = useDLMovements({ limit: 2000 });
   const { data: equipUpperData } = useEquipments({ category: "upper", limit: 100 });
   const { data: equipLowerData } = useEquipments({ category: "lower", limit: 100 });
+  const { data: equipGeneralData } = useEquipments({ category: "general", limit: 100 });
 
   const levelNum = parseInt(level, 10);
   // The "free" level is non-numeric; fall back to undefined so the Digital
@@ -162,6 +163,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
   const movements = (movementsData?.data ?? []) as any[];
   const equipUpper = (equipUpperData?.data ?? []) as any[];
   const equipLower = (equipLowerData?.data ?? []) as any[];
+  const equipGeneral = (equipGeneralData?.data ?? []) as any[];
 
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<TemplateForm | null>(null);
@@ -219,6 +221,11 @@ export default function TemplateEditorPage({ params }: { params: { level: string
     equipLower.filter((e: any) => e.is_active).map((e: any) => ({
       value: e.name, label: e.name,
     })), [equipLower]);
+
+  const equipGeneralOptions = useMemo(() =>
+    equipGeneral.filter((e: any) => e.is_active).map((e: any) => ({
+      value: e.name, label: e.name,
+    })), [equipGeneral]);
 
   // Map digital library menu items into sequential card sets (max 3 sets)
   const autoPopulatedSequences = useMemo(() => {
@@ -616,6 +623,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
             tierPackages={tierPackages}
             equipUpperOptions={equipUpperOptions}
             equipLowerOptions={equipLowerOptions}
+            equipGeneralOptions={equipGeneralOptions}
             onUpdateSeq={(p) => updateSeq(si, p)}
             onAddSet={() => addSet(si)}
             onRemoveSet={(seti) => removeSet(si, seti)}
@@ -632,7 +640,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
 
 function SequenceTable({
   seq, si, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
-  tierPackages, equipUpperOptions, equipLowerOptions,
+  tierPackages, equipUpperOptions, equipLowerOptions, equipGeneralOptions,
   onUpdateSeq, onAddSet, onRemoveSet, onUpdateSet, onAddItem, onRemoveItem, onUpdateItem,
 }: {
   seq: CardSequence; si: number; level: string; isMetabolic: boolean; editing: boolean;
@@ -643,6 +651,7 @@ function SequenceTable({
   tierPackages: TierPackage[];
   equipUpperOptions: { value: string; label: string }[];
   equipLowerOptions: { value: string; label: string }[];
+  equipGeneralOptions: { value: string; label: string }[];
   onUpdateSeq: (p: Partial<CardSequence>) => void;
   onAddSet: () => void;
   onRemoveSet: (seti: number) => void;
@@ -655,8 +664,8 @@ function SequenceTable({
   const code = seq.program_category_code || "";
 
   // Resolve options based on Cardio / Metabolic / Functional
-  let upperOptions = equipUpperOptions;
-  let lowerOptions = equipLowerOptions;
+  let upperOptions = [...equipUpperOptions, ...equipGeneralOptions];
+  let lowerOptions = [...equipLowerOptions, ...equipGeneralOptions];
 
   if (code === "cardiorespiratory" || code === "CC") {
     upperOptions = [

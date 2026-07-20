@@ -1284,8 +1284,8 @@ function SequenceTable({
   const code = seq.program_category_code || "";
 
   // Resolve options based on Cardio / Metabolic / Functional
-  let upperOptions = equipUpperOptions;
-  let lowerOptions = equipLowerOptions;
+  let upperOptions = [...equipUpperOptions, ...equipGeneralOptions];
+  let lowerOptions = [...equipLowerOptions, ...equipGeneralOptions];
   let generalOptions = equipGeneralOptions;
   let recommendedUpper = "";
   let recommendedLower = "";
