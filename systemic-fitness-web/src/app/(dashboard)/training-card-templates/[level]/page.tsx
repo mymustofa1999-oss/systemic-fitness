@@ -136,7 +136,7 @@ export default function TemplateEditorPage({ params }: { params: { level: string
   const { data: templateResponse, isLoading: templateLoading } = useTemplate(level);
   const { data: typesData } = useTrainerCardTypes();
   const { data: categoriesData } = useProgramCategories({ limit: 100 });
-  const { data: movementsData } = useDLMovements({ limit: 1000 });
+  const { data: movementsData } = useDLMovements({ limit: 2000 });
   const { data: equipUpperData } = useEquipments({ category: "upper", limit: 100 });
   const { data: equipLowerData } = useEquipments({ category: "lower", limit: 100 });
 
@@ -1130,6 +1130,18 @@ function MovementSelect({
   onUpdate: (p: Partial<CardItem>) => void;
 }) {
   let filtered = [...options];
+
+  // Filter by bodyPart
+  if (bodyPart) {
+    const bpLower = bodyPart.toLowerCase();
+    const bpFiltered = filtered.filter(m => {
+      const mSub = (m.sublabel || "").trim().toLowerCase();
+      return mSub.includes(bpLower) || mSub === "";
+    });
+    if (bpFiltered.length > 0) {
+      filtered = bpFiltered;
+    }
+  }
 
   if (selectedPatterns && selectedPatterns.length > 0) {
     filtered = filtered.filter(m => {

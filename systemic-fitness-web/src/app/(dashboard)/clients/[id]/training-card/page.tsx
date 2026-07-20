@@ -356,7 +356,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const { data: typesData } = useTrainerCardTypes();
   const { data: programsData, isLoading: isLoadingPrograms } = useCustomerPrograms(customerId);
   const { data: allCategoriesData } = useProgramCategories();
-  const { data: movementsData } = useDLMovements({ limit: 500 });
+  const { data: movementsData } = useDLMovements({ limit: 2000 });
   const { data: equipUpperData } = useEquipments({ category: "upper", limit: 100 });
   const { data: equipLowerData } = useEquipments({ category: "lower", limit: 100 });
   const { data: equipGeneralData } = useEquipments({ limit: 500 });
@@ -1748,15 +1748,12 @@ function SetBlock({
               className="px-4 py-2 text-xs rounded border border-green-200 text-green-700 bg-green-50 hover:bg-green-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
             >
               <Plus className="h-3.5 w-3.5" /> Tambah Lower
+            <button
+              onClick={() => onAddItem("core")}
+              className="px-4 py-2 text-xs rounded border border-amber-200 text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
+            >
+              <Plus className="h-3.5 w-3.5" /> Tambah Core
             </button>
-            {isMetabolic && (
-              <button
-                onClick={() => onAddItem("core")}
-                className="px-4 py-2 text-xs rounded border border-amber-200 text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors flex items-center gap-1.5 font-medium shadow-sm"
-              >
-                <Plus className="h-3.5 w-3.5" /> Tambah Core
-              </button>
-            )}
           </div>
         )}
       </div>
@@ -1808,11 +1805,15 @@ function MovementSelect({
   // Filter by bodyPart
   if (bodyPart) {
     const bpLower = bodyPart.toLowerCase();
-    filtered = filtered.filter(m => {
+    const bpFiltered = filtered.filter(m => {
       const mSub = (m.sublabel || "").trim().toLowerCase();
       // Tampilkan gerakan yang sesuai body_part atau yang body_part nya kosong (opsional)
       return mSub.includes(bpLower) || mSub === "";
     });
+    // Jika tidak ada gerakan yang cocok dengan body part, jangan filter agar user tidak stuck
+    if (bpFiltered.length > 0) {
+      filtered = bpFiltered;
+    }
   }
 
   // Pastikan item.movement_id yang terpilih ada di allOpts meskipun terfilter!
