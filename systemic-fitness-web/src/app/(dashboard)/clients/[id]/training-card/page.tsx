@@ -1610,15 +1610,8 @@ function SetBlock({
                 
                 {/* Bagian Nama & Body Part */}
                 <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className={cn(
-                      "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider",
-                      item.body_part === "upper" ? "bg-blue-100 text-blue-700" :
-                      item.body_part === "lower" ? "bg-green-100 text-green-700" :
-                      "bg-amber-100 text-amber-700"
-                    )}>
-                      {item.body_part}
-                    </span>
+                  <div className="flex items-center justify-end mb-1.5">
+                    {/* Removed body part badge as requested */}
                     {editing && (
                       <div className="flex gap-2 items-center md:hidden">
                         <button onClick={() => {

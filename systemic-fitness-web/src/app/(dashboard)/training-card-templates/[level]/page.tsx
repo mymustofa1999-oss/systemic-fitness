@@ -985,17 +985,7 @@ function SetBlock({
               items.map((item, ii) => (
                 <div key={ii} className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col md:flex-row gap-4 relative group hover:border-slate-300 transition-colors">
                   
-                  {/* Bagian Tubuh Badge */}
-                  <div className="shrink-0 pt-1">
-                    <span className={cn(
-                      "inline-block px-2 py-1 text-[10px] font-bold rounded uppercase tracking-wider",
-                      item.body_part === "upper" ? "bg-blue-100 text-blue-700" :
-                      item.body_part === "lower" ? "bg-green-100 text-green-700" :
-                      "bg-amber-100 text-amber-700"
-                    )}>
-                      {item.body_part}
-                    </span>
-                  </div>
+                  {/* Bagian Tubuh Badge removed as requested */}
 
                   <div className="flex-1 space-y-3">
                     {/* Gerakan */}
