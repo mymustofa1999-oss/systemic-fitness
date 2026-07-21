@@ -1143,7 +1143,7 @@ function MovementSelect({
   }
 
   if (selectedPatterns && selectedPatterns.length > 0) {
-    filtered = filtered.filter(m => {
+    const patFiltered = filtered.filter(m => {
       const p = (m.pattern || "").trim().toLowerCase();
       const c = (m.extractedCategory || "").trim().toLowerCase();
       
@@ -1162,6 +1162,9 @@ function MovementSelect({
         return match;
       });
     });
+    if (patFiltered.length > 0) {
+      filtered = patFiltered;
+    }
   }
   const customLabel = item.movement_name || "";
   const allOpts = [

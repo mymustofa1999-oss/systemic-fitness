@@ -1776,7 +1776,7 @@ function MovementSelect({
 
   // Filter by selected Patterns
   if (selectedPatterns && selectedPatterns.length > 0) {
-    filtered = filtered.filter(m => {
+    const patFiltered = filtered.filter(m => {
       const mPat = (m.pattern || "").trim().toLowerCase();
       const mCat = (m.extractedCategory || "").trim().toLowerCase();
       let currentCat = (categoryCode || "").trim().toLowerCase();
@@ -1798,6 +1798,11 @@ function MovementSelect({
         return true;
       });
     });
+    
+    // Fallback: Jika filter pattern membuat opsi jadi kosong, tampilkan semua agar user tidak stuck
+    if (patFiltered.length > 0) {
+      filtered = patFiltered;
+    }
   }
 
   // Filter by bodyPart
