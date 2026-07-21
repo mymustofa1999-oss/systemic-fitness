@@ -5,8 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Loader2, Save, Activity, CalendarDays, Pill, Utensils, HeartPulse, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@/hooks/useUsers";
-import { useCustomerMedicines, useCustomerPrograms, useCustomerSetup } from "@/hooks/useNewFeatures";
+import { useCustomerMedicines, useCustomerPrograms, useCustomerSetup, useTeam } from "@/hooks/useNewFeatures";
 import { useTrainingSessionLogs, useUpsertTrainingSessionLogs, TrainingSessionLog } from "@/hooks/useTrainingSessionLogs";
+import { useQuery } from "@tanstack/react-query";
+import { apiGet } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { HRZoneCard, MedicinesCard } from "@/components/shared/MedicalBiometricCards";
 
@@ -34,23 +36,37 @@ export default function TrainingSessionLogPage() {
   const { data: setupData } = useCustomerSetup(userId);
   const setup = setupData?.data as any;
 
-  const user = (userData?.data as any)?.user;
-  const staff = (userData?.data as any)?.staff;
-  const activeProgram = (progsData?.data as any[])?.find(p => p.status === "active")?.program_category_name || "N/A";
-  const hrZones = [
-    { label: "Max HR", value: (userData?.data as any)?.hr_max },
-    { label: "Zona 5", value: (userData?.data as any)?.hr_zone_5_lower },
-    { label: "Zona 3", value: (userData?.data as any)?.hr_zone_3_lower },
-    { label: "Zona 2", value: (userData?.data as any)?.hr_zone_2_lower },
-    { label: "Zona 1", value: (userData?.data as any)?.hr_zone_1_lower },
-  ];
+  const { data: teamData } = useTeam({ limit: 100 });
+  const teamMembers = (teamData?.data as any[]) || [];
 
-  const dob = user?.date_of_birth ? new Date(user.date_of_birth) : null;
+  const { data: profileData } = useQuery({ 
+    queryKey: ["users", userId, "profile"], 
+    queryFn: () => apiGet(`/api/users/${userId}/profile`) 
+  });
+  const profile = (profileData as any)?.data;
+
+  const user = (userData?.data as any)?.user;
+  const staff = setup?.staff;
+  const consultantName = teamMembers.find(t => t.id === staff?.consultant_id)?.full_name || "-";
+  const trainerName = teamMembers.find(t => t.id === staff?.trainer_id)?.full_name || "-";
+
+  const activeProgram = (progsData?.data as any[])?.find(p => p.status === "active")?.program_category_name || "N/A";
+  
+  const dob = profile?.date_of_birth ? new Date(profile.date_of_birth) : null;
   const age = dob ? Math.floor((new Date().getTime() - dob.getTime()) / 31557600000) : "-";
   const formattedDob = dob ? new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(dob) : "-";
   const dobParts = formattedDob !== "-" ? formattedDob.split(" ") : ["-", "", ""];
   const dobDayMonth = dobParts[0] + " " + dobParts[1];
   const dobYear = dobParts[2];
+
+  const maxHrCalc = age !== "-" ? 220 - (age as number) : null;
+  const hrZones = [
+    { label: "Max HR", value: setup?.hr_zone?.max_hr_upper || maxHrCalc },
+    { label: "Zona 5", value: setup?.hr_zone?.zone5_lower || (maxHrCalc ? Math.round(0.9 * maxHrCalc) : null) },
+    { label: "Zona 3", value: setup?.hr_zone?.zone3_lower || (maxHrCalc ? Math.round(0.7 * maxHrCalc) : null) },
+    { label: "Zona 2", value: setup?.hr_zone?.zone2_lower || (maxHrCalc ? Math.round(0.6 * maxHrCalc) : null) },
+    { label: "Zona 1", value: setup?.hr_zone?.zone1_lower || (maxHrCalc ? Math.round(0.5 * maxHrCalc) : null) },
+  ];
 
   const [rows, setRows] = useState<TrainingSessionLog[]>([]);
 
@@ -148,9 +164,9 @@ export default function TrainingSessionLogPage() {
                 ) : <span className="text-slate-400 italic">Tidak ada</span>}
               </td>
               <td className="border-r border-slate-200 font-bold p-2.5 px-4 w-[12%] bg-slate-50/80 text-slate-600">Consultant</td>
-              <td className="border-r border-slate-200 p-2.5 px-4 w-[15%] text-slate-800">{staff?.consultant_name || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 w-[15%] text-slate-800">{consultantName}</td>
               <td className="border-r border-slate-200 font-bold p-2.5 px-4 w-[10%] bg-slate-50/80 text-slate-600">Trainer</td>
-              <td className="p-2.5 px-4 w-[15%] text-slate-800">{staff?.trainer_name || "-"}</td>
+              <td className="p-2.5 px-4 w-[15%] text-slate-800">{trainerName}</td>
             </tr>
             <tr className="border-b border-slate-200">
               <td className="border-r border-slate-200 font-bold p-2.5 px-4 text-slate-600">Tanggal Lahir</td>
