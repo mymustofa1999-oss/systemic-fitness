@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Loader2, Save, Activity, CalendarDays, Pill, Utensils, HeartPulse, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@/hooks/useUsers";
-import { useCustomerMedicines, useCustomerPrograms, useCustomerSetup, useTeam } from "@/hooks/useNewFeatures";
+import { useCustomerMedicines, useCustomerPrograms, useCustomerSetup, useTeam, useUpsertHRZone } from "@/hooks/useNewFeatures";
 import { useTrainingSessionLogs, useUpsertTrainingSessionLogs, TrainingSessionLog } from "@/hooks/useTrainingSessionLogs";
 import { useQuery } from "@tanstack/react-query";
 import { apiGet } from "@/lib/api";
@@ -52,7 +52,8 @@ export default function TrainingSessionLogPage() {
 
   const activeProgram = (progsData?.data as any[])?.find(p => p.status === "active")?.program_category_name || "N/A";
   
-  const dob = profile?.date_of_birth ? new Date(profile.date_of_birth) : null;
+  const dobStr = profile?.date_of_birth || user?.date_of_birth;
+  const dob = dobStr ? new Date(dobStr) : null;
   const age = dob ? Math.floor((new Date().getTime() - dob.getTime()) / 31557600000) : "-";
   const formattedDob = dob ? new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(dob) : "-";
   const dobParts = formattedDob !== "-" ? formattedDob.split(" ") : ["-", "", ""];
@@ -60,12 +61,46 @@ export default function TrainingSessionLogPage() {
   const dobYear = dobParts[2];
 
   const maxHrCalc = age !== "-" ? 220 - (age as number) : null;
+  
+  const [editingHR, setEditingHR] = useState(false);
+  const [hrForm, setHrForm] = useState(() => ({
+    max_hr_upper: setup?.hr_zone?.max_hr_upper ?? (maxHrCalc || ""),
+    zone5_lower: setup?.hr_zone?.zone5_lower ?? (maxHrCalc ? Math.round(0.9 * maxHrCalc) : ""),
+    zone3_lower: setup?.hr_zone?.zone3_lower ?? (maxHrCalc ? Math.round(0.7 * maxHrCalc) : ""),
+    zone2_lower: setup?.hr_zone?.zone2_lower ?? (maxHrCalc ? Math.round(0.6 * maxHrCalc) : ""),
+    zone1_lower: setup?.hr_zone?.zone1_lower ?? (maxHrCalc ? Math.round(0.5 * maxHrCalc) : ""),
+  }));
+
+  useEffect(() => {
+    if (!editingHR) {
+      setHrForm({
+        max_hr_upper: setup?.hr_zone?.max_hr_upper ?? (maxHrCalc || ""),
+        zone5_lower: setup?.hr_zone?.zone5_lower ?? (maxHrCalc ? Math.round(0.9 * maxHrCalc) : ""),
+        zone3_lower: setup?.hr_zone?.zone3_lower ?? (maxHrCalc ? Math.round(0.7 * maxHrCalc) : ""),
+        zone2_lower: setup?.hr_zone?.zone2_lower ?? (maxHrCalc ? Math.round(0.6 * maxHrCalc) : ""),
+        zone1_lower: setup?.hr_zone?.zone1_lower ?? (maxHrCalc ? Math.round(0.5 * maxHrCalc) : ""),
+      });
+    }
+  }, [setup?.hr_zone, maxHrCalc, editingHR]);
+
+  const upsertHR = useUpsertHRZone();
+  function handleSaveHR() {
+    upsertHR.mutate({
+      customerId: userId,
+      max_hr_upper: hrForm.max_hr_upper === "" ? null : Number(hrForm.max_hr_upper),
+      zone5_lower: hrForm.zone5_lower === "" ? null : Number(hrForm.zone5_lower),
+      zone3_lower: hrForm.zone3_lower === "" ? null : Number(hrForm.zone3_lower),
+      zone2_lower: hrForm.zone2_lower === "" ? null : Number(hrForm.zone2_lower),
+      zone1_lower: hrForm.zone1_lower === "" ? null : Number(hrForm.zone1_lower),
+    }, { onSuccess: () => setEditingHR(false) });
+  }
+
   const hrZones = [
-    { label: "Max HR", value: setup?.hr_zone?.max_hr_upper || maxHrCalc },
-    { label: "Zona 5", value: setup?.hr_zone?.zone5_lower || (maxHrCalc ? Math.round(0.9 * maxHrCalc) : null) },
-    { label: "Zona 3", value: setup?.hr_zone?.zone3_lower || (maxHrCalc ? Math.round(0.7 * maxHrCalc) : null) },
-    { label: "Zona 2", value: setup?.hr_zone?.zone2_lower || (maxHrCalc ? Math.round(0.6 * maxHrCalc) : null) },
-    { label: "Zona 1", value: setup?.hr_zone?.zone1_lower || (maxHrCalc ? Math.round(0.5 * maxHrCalc) : null) },
+    { label: "Max HR", key: "max_hr_upper", value: hrForm.max_hr_upper || "-" },
+    { label: "Zona 5", key: "zone5_lower", value: hrForm.zone5_lower || "-" },
+    { label: "Zona 3", key: "zone3_lower", value: hrForm.zone3_lower || "-" },
+    { label: "Zona 2", key: "zone2_lower", value: hrForm.zone2_lower || "-" },
+    { label: "Zona 1", key: "zone1_lower", value: hrForm.zone1_lower || "-" },
   ];
 
   const [rows, setRows] = useState<TrainingSessionLog[]>([]);
@@ -186,7 +221,9 @@ export default function TrainingSessionLogPage() {
             <tr className="border-b border-slate-200">
               <td rowSpan={5} className="border-r border-slate-200 font-bold p-2.5 px-4 text-center align-middle text-slate-600 bg-slate-50/50">HR Zone</td>
               <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-rose-100/50 text-rose-800">Max HR</td>
-              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-100/50 font-semibold text-rose-900">{hrZones[0].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-100/50 font-semibold text-rose-900">
+                {editingHR ? <input type="number" value={hrForm.max_hr_upper} onChange={e => setHrForm({...hrForm, max_hr_upper: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[0].value)}
+              </td>
               <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-200/40 font-semibold text-rose-900">{hrZones[0].value ? Math.round(hrZones[0].value / 4) : "-"}</td>
               <td colSpan={4} className="p-2.5 px-4 font-bold text-center bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px]">Program</td>
             </tr>
@@ -194,7 +231,9 @@ export default function TrainingSessionLogPage() {
             {/* Zona 5 */}
             <tr className="border-b border-slate-200">
               <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-amber-100/50 text-amber-800">Zona 5</td>
-              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-100/50 font-semibold text-amber-900">{hrZones[1].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-100/50 font-semibold text-amber-900">
+                {editingHR ? <input type="number" value={hrForm.zone5_lower} onChange={e => setHrForm({...hrForm, zone5_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[1].value)}
+              </td>
               <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-200/40 font-semibold text-amber-900">{hrZones[1].value ? Math.round(hrZones[1].value / 4) : "-"}</td>
               <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-50/50 w-12">
                 <input type="checkbox" checked readOnly className="w-4 h-4 accent-emerald-500 rounded-sm" />
@@ -206,7 +245,9 @@ export default function TrainingSessionLogPage() {
             {/* Zona 3 */}
             <tr className="border-b border-slate-200">
               <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-emerald-100/50 text-emerald-800">Zona 3</td>
-              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-100/50 font-semibold text-emerald-900">{hrZones[2].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-100/50 font-semibold text-emerald-900">
+                {editingHR ? <input type="number" value={hrForm.zone3_lower} onChange={e => setHrForm({...hrForm, zone3_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[2].value)}
+              </td>
               <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-200/40 font-semibold text-emerald-900">{hrZones[2].value ? Math.round(hrZones[2].value / 4) : "-"}</td>
               <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-50/50 w-12">
                 <input type="checkbox" checked readOnly className="w-4 h-4 accent-amber-500 rounded-sm" />
@@ -218,7 +259,9 @@ export default function TrainingSessionLogPage() {
             {/* Zona 2 */}
             <tr className="border-b border-slate-200">
               <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-sky-100/50 text-sky-800">Zona 2</td>
-              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-sky-100/50 font-semibold text-sky-900">{hrZones[3].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-sky-100/50 font-semibold text-sky-900">
+                {editingHR ? <input type="number" value={hrForm.zone2_lower} onChange={e => setHrForm({...hrForm, zone2_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[3].value)}
+              </td>
               <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-sky-200/40 font-semibold text-sky-900">{hrZones[3].value ? Math.round(hrZones[3].value / 4) : "-"}</td>
               <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-orange-50/50 w-12">
                 <input type="checkbox" checked readOnly className="w-4 h-4 accent-orange-500 rounded-sm" />
@@ -230,7 +273,9 @@ export default function TrainingSessionLogPage() {
             {/* Zona 1 */}
             <tr>
               <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-indigo-50/70 text-indigo-800">Zona 1</td>
-              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-indigo-50/70 font-semibold text-indigo-900">{hrZones[4].value || "-"}</td>
+              <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-indigo-50/70 font-semibold text-indigo-900">
+                {editingHR ? <input type="number" value={hrForm.zone1_lower} onChange={e => setHrForm({...hrForm, zone1_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[4].value)}
+              </td>
               <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-indigo-100/40 font-semibold text-indigo-900">{hrZones[4].value ? Math.round(hrZones[4].value / 4) : "-"}</td>
               <td colSpan={4}></td>
             </tr>
@@ -241,10 +286,10 @@ export default function TrainingSessionLogPage() {
       {/* Medis & Biometrik */}
       <div className="mb-6">
          <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
-           <Activity className="h-4 w-4 text-rose-500" /> Medis & Biometrik
+           <Pill className="h-4 w-4 text-emerald-500" /> Kelola Daftar Obat
          </h2>
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <HRZoneCard customerId={userId} data={setup?.hr_zone} />
+         <div className="grid grid-cols-1 gap-4">
+            
             <MedicinesCard customerId={userId} data={setup?.medicines ?? []} />
          </div>
       </div>
