@@ -165,18 +165,6 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                <StaffCard customerId={params.id} staff={setup?.staff} />
              </div>
           </div>
-
-          {/* Medis & Biometrik */}
-          <div>
-             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
-               <Activity className="h-4 w-4 text-rose-500" /> Medis & Biometrik
-             </h2>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <HRZoneCard customerId={params.id} data={setup?.hr_zone} />
-                <MedicinesCard customerId={params.id} data={setup?.medicines ?? []} />
-             </div>
-          </div>
-
         </div>
 
         {/* RIGHT COLUMN (30%) */}

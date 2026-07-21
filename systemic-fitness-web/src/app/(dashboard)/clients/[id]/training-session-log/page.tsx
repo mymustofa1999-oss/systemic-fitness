@@ -5,9 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Loader2, Save, Activity, CalendarDays, Pill, Utensils, HeartPulse, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@/hooks/useUsers";
-import { useCustomerMedicines, useCustomerPrograms } from "@/hooks/useNewFeatures";
+import { useCustomerMedicines, useCustomerPrograms, useCustomerSetup } from "@/hooks/useNewFeatures";
 import { useTrainingSessionLogs, useUpsertTrainingSessionLogs, TrainingSessionLog } from "@/hooks/useTrainingSessionLogs";
 import { cn } from "@/lib/utils";
+import { HRZoneCard, MedicinesCard } from "@/components/shared/MedicalBiometricCards";
 
 const MONTHS = [
   "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -30,6 +31,8 @@ export default function TrainingSessionLogPage() {
   
   const { data: logsData, isLoading: logsLoading } = useTrainingSessionLogs(userId, periodName);
   const upsertLogs = useUpsertTrainingSessionLogs();
+  const { data: setupData } = useCustomerSetup(userId);
+  const setup = setupData?.data as any;
 
   const user = (userData?.data as any)?.user;
   const staff = (userData?.data as any)?.staff;
@@ -217,6 +220,17 @@ export default function TrainingSessionLogPage() {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      {/* Medis & Biometrik */}
+      <div className="mb-6">
+         <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
+           <Activity className="h-4 w-4 text-rose-500" /> Medis & Biometrik
+         </h2>
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <HRZoneCard customerId={userId} data={setup?.hr_zone} />
+            <MedicinesCard customerId={userId} data={setup?.medicines ?? []} />
+         </div>
       </div>
 
       {/* Main Table */}
