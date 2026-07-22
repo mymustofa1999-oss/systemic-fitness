@@ -219,7 +219,21 @@ export default function TrainingSessionLogPage() {
 
             {/* Max HR */}
             <tr className="border-b border-slate-200">
-              <td rowSpan={5} className="border-r border-slate-200 font-bold p-2.5 px-4 text-center align-middle text-slate-600 bg-slate-50/50">HR Zone</td>
+              <td rowSpan={5} className="border-r border-slate-200 font-bold p-2.5 px-2 text-center align-middle text-slate-600 bg-slate-50/50">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <span>HR Zone</span>
+                  {!editingHR ? (
+                    <button onClick={() => setEditingHR(true)} className="text-[10px] text-sf-deepNavy font-medium hover:underline bg-white px-2 py-0.5 rounded shadow-sm border border-slate-200">Edit</button>
+                  ) : (
+                    <div className="flex flex-col gap-1 w-full mt-1">
+                      <button onClick={handleSaveHR} disabled={upsertHR.isPending} className="text-[10px] bg-sf-deepNavy text-white px-1 py-1 rounded shadow-sm flex items-center justify-center">
+                        {upsertHR.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : "Simpan"}
+                      </button>
+                      <button onClick={() => setEditingHR(false)} className="text-[10px] bg-white text-slate-600 px-1 py-1 rounded shadow-sm border border-slate-200">Batal</button>
+                    </div>
+                  )}
+                </div>
+              </td>
               <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-rose-100/50 text-rose-800">Max HR</td>
               <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-100/50 font-semibold text-rose-900">
                 {editingHR ? <input type="number" value={hrForm.max_hr_upper} onChange={e => setHrForm({...hrForm, max_hr_upper: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[0].value)}
