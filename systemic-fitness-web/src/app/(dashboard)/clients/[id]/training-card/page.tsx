@@ -1281,7 +1281,7 @@ function SequenceTable({
   seq, si, level, isMetabolic, editing, typeOptions, movementOptions, movementMap, types,
   equipUpperOptions, equipLowerOptions, equipGeneralOptions, recs,
   onUpdateSeq, onAddSet, onRemoveSet, onUpdateSet, onAddItem, onRemoveItem, onUpdateItem, onPreviewVideo,
-  formErrors, gender,
+  formErrors, gender, age,
 }: {
   seq: CardSequence; si: number; level: string; isMetabolic: boolean; editing: boolean;
   typeOptions: { value: string; label: string; sublabel?: string }[];
