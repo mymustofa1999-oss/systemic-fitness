@@ -233,18 +233,18 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
             
             {/* Quick Stats */}
-            <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-              <div>
-                <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Sets / Reps</p>
-                <p className="text-xl font-bold">{currentItem.sets} <span className="text-slate-500 font-normal mx-1">x</span> {currentItem.reps}</p>
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-4 min-w-0">
+              <div className="min-w-0 max-w-[150px] md:max-w-[200px]">
+                <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Sequence</p>
+                <p className="text-xl font-bold truncate" title={currentItem.sequenceName}>{currentItem.sequenceName}</p>
               </div>
-              <div>
+              <div className="shrink-0">
                 <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Duration</p>
                 <p className="text-xl font-bold text-sf-warmGold">{currentItem.duration}</p>
               </div>
-              <div>
-                <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Rest</p>
-                <p className="text-xl font-bold">{currentItem.rest}</p>
+              <div className="min-w-0 max-w-[150px] md:max-w-[250px]">
+                <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Equip/Beban</p>
+                <p className="text-xl font-bold truncate" title={currentItem.beban}>{currentItem.beban}</p>
               </div>
             </div>
 
@@ -281,28 +281,27 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
           </div>
 
           {/* Details Table */}
-          <div className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-700/50">
-            <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-700/50">
-              <div className="p-4">
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Beban (Kg)</p>
-                <p className="font-medium text-slate-200">{currentItem.beban}</p>
+          <div className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-700/50 mt-2">
+            <div className="grid grid-cols-3 divide-x divide-slate-700/50">
+              <div className="p-3 md:p-4">
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Sets / Reps</p>
+                <p className="font-medium text-slate-200">{currentItem.sets} <span className="text-slate-500 font-normal mx-1">x</span> {currentItem.reps}</p>
               </div>
-              <div className="p-4">
+              <div className="p-3 md:p-4">
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Breathing Pattern</p>
+                <p className="font-medium text-slate-200 text-sm md:text-base capitalize">
+                  {currentItem.breathing_core && currentItem.breathing_core !== "-" ? `Core: ${currentItem.breathing_core}` : ""}
+                  {currentItem.breathing_core && currentItem.breathing_core !== "-" && currentItem.breathing_diaphragm && currentItem.breathing_diaphragm !== "-" ? " | " : ""}
+                  {currentItem.breathing_diaphragm && currentItem.breathing_diaphragm !== "-" ? `Dia: ${currentItem.breathing_diaphragm}` : ""}
+                  {(!currentItem.breathing_core || currentItem.breathing_core === "-") && (!currentItem.breathing_diaphragm || currentItem.breathing_diaphragm === "-") ? "-" : ""}
+                </p>
+              </div>
+              <div className="p-3 md:p-4 min-w-0 flex flex-col justify-center">
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">BPM Zone</p>
-                <p className="font-medium text-slate-200">{currentItem.bpm}</p>
+                <div className="w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
+                  <p className="font-medium text-slate-200">{currentItem.bpm}</p>
+                </div>
               </div>
-              {currentItem.isLevel1 && (
-                <>
-                  <div className="p-4">
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Breathing Core</p>
-                    <p className="font-medium text-slate-200 capitalize">{currentItem.breathing_core || "-"}</p>
-                  </div>
-                  <div className="p-4">
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Breathing Diaphragm</p>
-                    <p className="font-medium text-slate-200 capitalize">{currentItem.breathing_diaphragm || "-"}</p>
-                  </div>
-                </>
-              )}
             </div>
           </div>
 
