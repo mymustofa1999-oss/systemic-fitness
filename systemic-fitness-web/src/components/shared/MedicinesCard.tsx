@@ -88,7 +88,6 @@ export function MedicinesCard({ customerId, data, readOnly }: { customerId: stri
                     )}
                   </div>
                   
-                  {/* Category / Implications mapping robustly */}
                   {fullMed?.exercise_implications && (
                     <p className="text-[11px] text-slate-500 leading-tight">
                       <span className="font-semibold text-slate-600">Info:</span> {fullMed.exercise_implications}
@@ -100,7 +99,14 @@ export function MedicinesCard({ customerId, data, readOnly }: { customerId: stri
                       fullMed.flag_level.trim().toUpperCase() === "HIJAU") && (
                     <div className="bg-amber-50/50 border border-amber-100 rounded p-1.5 mt-0.5">
                       <p className="text-[11px] text-amber-800 leading-tight">
-                        <span className="font-semibold">Perhatian:</span> {fullMed.flag_level}
+                        <span className="font-semibold">Implikasi Latihan:</span> {fullMed.flag_level}
+                      </p>
+                    </div>
+                  )}
+                  {fullMed?.exercise_adjustments && (
+                    <div className="bg-blue-50/50 border border-blue-100 rounded p-1.5 mt-1">
+                      <p className="text-[11px] text-blue-800 leading-tight">
+                        <span className="font-semibold">Penyesuaian Latihan:</span> {fullMed.exercise_adjustments}
                       </p>
                     </div>
                   )}

@@ -20,6 +20,7 @@ import {
   useCustomerSetup,
 } from "@/hooks/useNewFeatures";
 import { MedicinesCard } from "@/components/shared/MedicinesCard";
+import { HRZoneTable } from "@/components/shared/HRZoneTable";
 
 function calculateBPM(age: number | null, intensityCode: string) {
   if (!age || !intensityCode) return "";
@@ -1198,6 +1199,23 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         {/* MEDICINES & IMPLICATIONS */}
         <div className="mt-6 mb-6">
           <MedicinesCard customerId={params.id} data={(setupData?.data as any)?.medicines ?? []} />
+        </div>
+
+        {/* HR ZONES REFERENCE */}
+        <div className="mb-6">
+          {(() => {
+            const setup = setupData?.data as any;
+            const maxHrCalc = age !== null ? 220 - (age as number) : null;
+            const hrZones = [
+              { label: "Max HR", key: "max_hr_upper", value: setup?.hr_zone?.max_hr_upper ?? (maxHrCalc || "-") },
+              { label: "Zona 5", key: "zone5_lower", value: setup?.hr_zone?.zone5_lower ?? (maxHrCalc ? Math.round(0.9 * maxHrCalc) : "-") },
+              { label: "Zona 4", key: "zone4_lower", value: setup?.hr_zone?.zone4_lower ?? (maxHrCalc ? Math.round(0.8 * maxHrCalc) : "-") },
+              { label: "Zona 3", key: "zone3_lower", value: setup?.hr_zone?.zone3_lower ?? (maxHrCalc ? Math.round(0.7 * maxHrCalc) : "-") },
+              { label: "Zona 2", key: "zone2_lower", value: setup?.hr_zone?.zone2_lower ?? (maxHrCalc ? Math.round(0.6 * maxHrCalc) : "-") },
+              { label: "Zona 1", key: "zone1_lower", value: setup?.hr_zone?.zone1_lower ?? (maxHrCalc ? Math.round(0.5 * maxHrCalc) : "-") },
+            ];
+            return <HRZoneTable hrZones={hrZones} />;
+          })()}
         </div>
       </div>
 
