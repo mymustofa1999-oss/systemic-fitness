@@ -67,6 +67,7 @@ export default function TrainingSessionLogPage() {
   const [hrForm, setHrForm] = useState(() => ({
     max_hr_upper: setup?.hr_zone?.max_hr_upper ?? (maxHrCalc || ""),
     zone5_lower: setup?.hr_zone?.zone5_lower ?? (maxHrCalc ? Math.round(0.9 * maxHrCalc) : ""),
+    zone4_lower: setup?.hr_zone?.zone4_lower ?? (maxHrCalc ? Math.round(0.8 * maxHrCalc) : ""),
     zone3_lower: setup?.hr_zone?.zone3_lower ?? (maxHrCalc ? Math.round(0.7 * maxHrCalc) : ""),
     zone2_lower: setup?.hr_zone?.zone2_lower ?? (maxHrCalc ? Math.round(0.6 * maxHrCalc) : ""),
     zone1_lower: setup?.hr_zone?.zone1_lower ?? (maxHrCalc ? Math.round(0.5 * maxHrCalc) : ""),
@@ -77,6 +78,7 @@ export default function TrainingSessionLogPage() {
       setHrForm({
         max_hr_upper: setup?.hr_zone?.max_hr_upper ?? (maxHrCalc || ""),
         zone5_lower: setup?.hr_zone?.zone5_lower ?? (maxHrCalc ? Math.round(0.9 * maxHrCalc) : ""),
+        zone4_lower: setup?.hr_zone?.zone4_lower ?? (maxHrCalc ? Math.round(0.8 * maxHrCalc) : ""),
         zone3_lower: setup?.hr_zone?.zone3_lower ?? (maxHrCalc ? Math.round(0.7 * maxHrCalc) : ""),
         zone2_lower: setup?.hr_zone?.zone2_lower ?? (maxHrCalc ? Math.round(0.6 * maxHrCalc) : ""),
         zone1_lower: setup?.hr_zone?.zone1_lower ?? (maxHrCalc ? Math.round(0.5 * maxHrCalc) : ""),
@@ -90,6 +92,7 @@ export default function TrainingSessionLogPage() {
       customerId: userId,
       max_hr_upper: hrForm.max_hr_upper === "" ? null : Number(hrForm.max_hr_upper),
       zone5_lower: hrForm.zone5_lower === "" ? null : Number(hrForm.zone5_lower),
+      zone4_lower: hrForm.zone4_lower === "" ? null : Number(hrForm.zone4_lower),
       zone3_lower: hrForm.zone3_lower === "" ? null : Number(hrForm.zone3_lower),
       zone2_lower: hrForm.zone2_lower === "" ? null : Number(hrForm.zone2_lower),
       zone1_lower: hrForm.zone1_lower === "" ? null : Number(hrForm.zone1_lower),
@@ -99,6 +102,7 @@ export default function TrainingSessionLogPage() {
   const hrZones = [
     { label: "Max HR", key: "max_hr_upper", value: hrForm.max_hr_upper || "-" },
     { label: "Zona 5", key: "zone5_lower", value: hrForm.zone5_lower || "-" },
+    { label: "Zona 4", key: "zone4_lower", value: hrForm.zone4_lower || "-" },
     { label: "Zona 3", key: "zone3_lower", value: hrForm.zone3_lower || "-" },
     { label: "Zona 2", key: "zone2_lower", value: hrForm.zone2_lower || "-" },
     { label: "Zona 1", key: "zone1_lower", value: hrForm.zone1_lower || "-" },
