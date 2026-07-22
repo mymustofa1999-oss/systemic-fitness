@@ -603,7 +603,26 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const movementOptions = useMemo(() =>
     movements
       .filter((m: any) => {
-        return true; // Remove strict level filtering so consultants can choose any movement
+        const currentLevel = form?.level ? parseInt(form.level) : parsedMappedLevel;
+        if (!currentLevel) return true;
+
+        const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
+        const altMatch = m.name.match(/\[L(\d+)\]/i);
+
+        let mLevel = -1;
+        if (nameMatch) {
+            mLevel = parseInt(nameMatch[2]);
+        } else if (altMatch) {
+            mLevel = parseInt(altMatch[1]);
+        }
+
+        // Jika gerakan punya spesifik level, pastikan cocok dengan level Training Card
+        if (mLevel !== -1) {
+            return mLevel === currentLevel;
+        }
+
+        // Jika gerakan tidak ada tag level, anggap general dan bisa dipakai di level berapapun
+        return true;
       })
       .map((m: any) => {
         const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
