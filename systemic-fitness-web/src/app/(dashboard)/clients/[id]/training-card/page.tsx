@@ -1829,8 +1829,8 @@ function MovementSelect({
     const bpLower = bodyPart.toLowerCase();
     const bpFiltered = filtered.filter(m => {
       const mSub = (m.sublabel || "").trim().toLowerCase();
-      // Tampilkan gerakan yang sesuai body_part atau yang body_part nya kosong (opsional)
-      return mSub.includes(bpLower) || mSub === "";
+      // Tampilkan gerakan yang sesuai body_part, atau yang body_part nya kosong (opsional), atau 'whole body'
+      return mSub.includes(bpLower) || mSub === "" || mSub.includes("whole body");
     });
     // Jika tidak ada gerakan yang cocok dengan body part, jangan filter agar user tidak stuck
     if (bpFiltered.length > 0) {
