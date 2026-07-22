@@ -40,13 +40,11 @@ export default function TrainingSessionLogPage() {
   const { data: teamData } = useTeam({ limit: 100 });
   const teamMembers = (teamData?.data as any[]) || [];
 
-  const { data: profileData } = useQuery({ 
-    queryKey: ["users", userId, "profile"], 
-    queryFn: () => apiGet(`/api/users/${userId}/profile`) 
-  });
-  const profile = (profileData as any)?.data;
 
-  const user = (userData?.data as any)?.user;
+
+  const detail = userData?.data as any;
+  const user = detail?.user;
+  const profile = detail?.profile;
   const staff = setup?.staff;
   const consultantName = teamMembers.find(t => t.id === staff?.consultant_id)?.full_name || "-";
   const trainerName = teamMembers.find(t => t.id === staff?.trainer_id)?.full_name || "-";
