@@ -166,6 +166,19 @@ func (s *UserService) Update(
 		return nil, fmt.Errorf("fetching user: %w", err)
 	}
 
+	// Trainer visibility check: can only see/update assigned clients or self
+	if callerRole == model.RoleTrainer && callerID != targetID {
+		isTrainer, err := s.userRepo.IsTrainerOfClient(ctx, callerID, targetID)
+		if err != nil {
+			s.logger.Error("update user: check trainer assignment", "caller_id", callerID, "target_id", targetID, "error", err)
+			return nil, fmt.Errorf("checking trainer assignment: %w", err)
+		}
+		if !isTrainer {
+			s.logger.Warn("update user: access denied", "caller_id", callerID, "target_id", targetID)
+			return nil, fmt.Errorf("you do not have access to update this user")
+		}
+	}
+
 	// 2. Permission checks for role changes
 	if input.Role != nil && *input.Role != user.Role {
 		// Only owner can assign owner role
