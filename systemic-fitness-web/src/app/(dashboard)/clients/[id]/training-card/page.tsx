@@ -1807,9 +1807,9 @@ function MovementSelect({
       return selectedPatterns.some(sp => {
         const spLower = sp.toLowerCase();
         
-        // Allow any Isolate or Dynamic movement regardless of category for maximum flexibility
-        if (spLower === "isolate") return mPat === "isolate";
-        if (spLower === "dynamic") return mPat === "dynamic";
+        // If the pattern is just "Isolate" or "Dynamic", enforce the current sequence category (FC, CC, etc) but allow if no category is assigned
+        if (spLower === "isolate") return mPat === "isolate" && (!currentCat || !mCat || mCat === currentCat);
+        if (spLower === "dynamic") return mPat === "dynamic" && (!currentCat || !mCat || mCat === currentCat);
         
         if (spLower === "metabolic basic") return mPat.includes("basic") || mCat === "mc";
         if (spLower === "metabolic core") return mPat.includes("core") || mCat === "mc";
