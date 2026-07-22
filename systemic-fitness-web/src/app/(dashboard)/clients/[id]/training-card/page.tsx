@@ -43,7 +43,10 @@ function calculateBPM(age: number | null, intensityCode: string) {
   
   const minBPM = Math.round(maxHR * minPct);
   const maxBPM = Math.round(maxHR * maxPct);
-  return `${minBPM}-${maxBPM} BPM`;
+  
+  const roundedMin = Math.round(minBPM / 10) * 10;
+  const roundedMax = Math.round(maxBPM / 10) * 10;
+  return `${roundedMin}-${roundedMax} BPM`;
 }
 
 function buildSetsFromMenuItems(menuItems: any[], gender: string | undefined, seqCode: string, age: number | null, recs: any) {
@@ -1229,6 +1232,7 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
             equipGeneralOptions={equipGeneralOptions}
             gender={effectiveGender}
             recs={recs}
+            age={age}
             onUpdateSeq={(p) => updateSeq(si, p)}
             onAddSet={() => addSet(si)}
             onRemoveSet={(seti) => removeSet(si, seti)}
@@ -1289,6 +1293,7 @@ function SequenceTable({
   equipGeneralOptions: { value: string; label: string }[];
   gender?: string;
   recs: any;
+  age: number | null;
   onUpdateSeq: (p: Partial<CardSequence>) => void;
   onAddSet: () => void;
   onRemoveSet: (seti: number) => void;
@@ -1404,6 +1409,7 @@ function SequenceTable({
               onPreviewVideo={onPreviewVideo}
               formErrors={formErrors}
               gender={gender}
+              age={age}
             />
           ))}
 
@@ -1433,7 +1439,7 @@ function SetBlock({
   set, si, seti, level, isMetabolic, categoryCode, editing, typeOptions, movementOptions, movementMap, types,
   upperOptions, lowerOptions, generalOptions, recommendedUpper, recommendedLower,
   onUpdateSet, onRemoveSet, onAddItem, onRemoveItem, onUpdateItem, onPreviewVideo,
-  formErrors, gender,
+  formErrors, gender, age,
 }: {
   set: CardSet; si: number; seti: number; level: string; isMetabolic: boolean; categoryCode?: string; editing: boolean;
   typeOptions: { value: string; label: string; sublabel?: string }[];
@@ -1446,6 +1452,7 @@ function SetBlock({
   recommendedUpper: string;
   recommendedLower: string;
   gender?: string;
+  age: number | null;
   onUpdateSet: (p: Partial<CardSet>) => void;
   onRemoveSet: () => void;
   onAddItem: (bodyPart: string) => void;
@@ -1544,15 +1551,27 @@ function SetBlock({
           <div className="md:col-span-6 lg:col-span-3">
             <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">{isMetabolic ? "Extra Load" : "BPM"}</label>
             {editing ? (
-              <input
-                value={isMetabolic ? (set.extra_load || "") : (set.bpm || "")}
-                onChange={(e) => isMetabolic ? onUpdateSet({ extra_load: e.target.value }) : onUpdateSet({ bpm: e.target.value })}
-                className="w-full text-sm border border-slate-200 rounded-md px-3 py-1.5 focus:outline-none focus:border-sf-deepNavy"
-                placeholder={isMetabolic ? "Load" : "Zona 1-2"}
-              />
+              <div className="flex flex-col gap-1">
+                <input
+                  value={isMetabolic ? (set.extra_load || "") : (set.bpm || "")}
+                  onChange={(e) => isMetabolic ? onUpdateSet({ extra_load: e.target.value }) : onUpdateSet({ bpm: e.target.value })}
+                  className="w-full text-sm border border-slate-200 rounded-md px-3 py-1.5 focus:outline-none focus:border-sf-deepNavy"
+                  placeholder={isMetabolic ? "Load" : "Zona 1-2"}
+                />
+                {!isMetabolic && (
+                  <div className="text-[10px] text-violet-600 bg-violet-50 px-2 py-1 rounded font-medium flex items-center gap-1.5">
+                    <Info className="h-3 w-3" /> Acuan BPM: {calculateBPM(age, categoryCode || "") || "-"}
+                  </div>
+                )}
+              </div>
             ) : (
-              <div className="text-sm space-y-0.5 mt-2">
+              <div className="text-sm space-y-1 mt-1">
                 <div><span className="font-medium text-slate-700">{isMetabolic ? (set.extra_load || "-") : (set.bpm || "-")}</span></div>
+                {!isMetabolic && (
+                  <div className="text-[10px] text-slate-400">
+                    Acuan: {calculateBPM(age, categoryCode || "") || "-"}
+                  </div>
+                )}
               </div>
             )}
           </div>
