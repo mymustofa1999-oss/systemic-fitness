@@ -356,32 +356,38 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
             </div>
           </div>
 
-          {/* Queue Panel */}
-          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 flex-1">
-            <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-widest mb-5 flex items-center gap-2">
+          <div className="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 flex-1 flex flex-col h-full max-h-[500px]">
+            <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-widest mb-5 flex items-center gap-2 shrink-0">
               <ListOrdered className="h-5 w-5 text-sf-deepNavy" /> Antrean Selanjutnya
             </h3>
             
             {playlist.length - currentIndex - 1 > 0 ? (
-              <div className="space-y-3">
-                {playlist.slice(currentIndex + 1, currentIndex + 5).map((item, i) => (
-                  <div key={item.id} className="flex items-center gap-4 p-4 bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100 rounded-2xl group cursor-default">
-                    <div className="w-10 h-10 bg-white shadow-sm border border-slate-200 rounded-xl flex items-center justify-center shrink-0 font-bold text-slate-400 text-sm group-hover:text-sf-deepNavy transition-colors">
-                      {currentIndex + 2 + i}
+              <div className="flex-1 overflow-y-auto pr-2 space-y-1 custom-scrollbar">
+                {playlist.slice(currentIndex + 1).map((item, i) => (
+                  <div key={item.id} className="flex items-start gap-3 p-2 bg-transparent hover:bg-slate-50 transition-colors rounded-xl group cursor-pointer border border-transparent hover:border-slate-100" onClick={() => setCurrentIndex(currentIndex + 1 + i)}>
+                    {/* Thumbnail */}
+                    <div className="relative w-32 shrink-0 aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-sm flex items-center justify-center border border-slate-200/60 group-hover:shadow-md transition-all">
+                      {(() => {
+                        const ytId = extractYouTubeId(item.videoUrl || "");
+                        if (ytId) {
+                          return <img src={`https://img.youtube.com/vi/${ytId}/mqdefault.jpg`} alt="" className="w-full h-full object-cover" />;
+                        }
+                        return <Video className="w-6 h-6 text-slate-300" />;
+                      })()}
+                      <div className="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur-sm">
+                        #{currentIndex + 2 + i}
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[10px] text-sf-warmGold font-bold uppercase tracking-widest mb-0.5">{item.sequenceName}</p>
-                      <p className="text-sm font-bold text-slate-700 truncate">{formatMovementName(item.movementName, (userData?.data as any)?.profile?.gender)}</p>
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0 pt-0.5">
+                      <h4 className="text-sm font-bold text-slate-800 line-clamp-2 leading-tight group-hover:text-sf-deepNavy transition-colors">
+                        {formatMovementName(item.movementName, (userData?.data as any)?.profile?.gender)}
+                      </h4>
+                      <p className="text-[10px] text-sf-warmGold font-bold uppercase tracking-widest mt-1.5">{item.sequenceName}</p>
                     </div>
                   </div>
                 ))}
-                {playlist.length - currentIndex - 5 > 0 && (
-                  <div className="text-center py-4 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                      + {playlist.length - currentIndex - 5} gerakan lainnya
-                    </p>
-                  </div>
-                )}
               </div>
             ) : (
               <div className="h-40 flex flex-col items-center justify-center text-slate-400 space-y-3 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
