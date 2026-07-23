@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUsers";
 import { useTrainerCard } from "@/hooks/useNewFeatures";
 import { useDLMovements } from "@/hooks/useDigitalLibrary";
-import { ArrowLeft, SkipForward, SkipBack, CheckCircle2, ChevronRight, Video, X } from "lucide-react";
+import { ArrowLeft, SkipForward, SkipBack, CheckCircle2, ChevronRight, Video, X, Activity, ListOrdered } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/stores/toastStore";
 import { useAuth } from "@/hooks/useAuth";
@@ -178,157 +178,187 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-20">
+    <div className="max-w-7xl mx-auto space-y-6 pb-20 px-4 xl:px-0">
       <div className="flex items-center justify-between">
-        <Link href={`/clients/${customerId}/training-card`} className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
+        <Link href={`/clients/${customerId}/training-card`} className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors bg-white px-4 py-2 rounded-full shadow-sm border border-slate-200 font-medium">
           <ArrowLeft className="h-4 w-4" /> Batal / Kembali
         </Link>
-        <span className="px-3 py-1 bg-green-100 text-green-700 font-bold text-xs uppercase tracking-wider rounded-full flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> Live Session
+        <span className="px-4 py-2 bg-green-100 text-green-700 font-bold text-xs uppercase tracking-wider rounded-full flex items-center gap-2 shadow-sm border border-green-200">
+          <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" /> Live Session
         </span>
       </div>
 
-      <div className="bg-sf-deepNavy rounded-2xl overflow-hidden shadow-xl ring-1 ring-slate-900/10">
+      <div className="grid lg:grid-cols-12 gap-8">
         
-        {/* VIDEO PLAYER AREA */}
-        <div className="aspect-video bg-black relative flex items-center justify-center">
-          {currentItem.videoUrl ? (
-            extractYouTubeId(currentItem.videoUrl) ? (
-              <iframe
-                key={currentItem.videoUrl}
-                src={`https://www.youtube.com/embed/${extractYouTubeId(currentItem.videoUrl)}?autoplay=1&mute=1&loop=1&playlist=${extractYouTubeId(currentItem.videoUrl)}`}
-                title={currentItem.movementName}
-                className="w-full h-full object-contain"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            ) : (
-              <video 
-                key={currentItem.videoUrl} 
-                src={currentItem.videoUrl} 
-                className="w-full h-full object-contain"
-                controls
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-            )
-          ) : (
-            <div className="flex flex-col items-center justify-center text-slate-400 space-y-3">
-              <Video className="w-16 h-16 opacity-30" />
-              <p>Video tidak tersedia untuk gerakan ini</p>
-            </div>
-          )}
+        {/* LEFT COLUMN: Video & Controls */}
+        <div className="lg:col-span-8 space-y-6 flex flex-col">
           
-          {/* Top overlay sequence name */}
-          <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
-            <p className="text-sf-warmGold text-xs font-bold uppercase tracking-wider">{currentItem.sequenceName}</p>
-            <h2 className="text-white text-xl md:text-2xl font-bold truncate">{currentItem.movementName}</h2>
+          {/* Header Title Out of Video */}
+          <div className="bg-sf-deepNavy text-white p-6 md:p-8 rounded-3xl shadow-xl ring-1 ring-slate-900/10">
+            <p className="text-sf-warmGold text-sm font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-sf-warmGold" /> {currentItem.sequenceName}
+            </p>
+            <h2 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">{currentItem.movementName}</h2>
           </div>
+
+          {/* Video Player */}
+          <div className="bg-black rounded-3xl overflow-hidden shadow-2xl ring-1 ring-slate-900/10 aspect-video relative flex items-center justify-center group w-full">
+            {currentItem.videoUrl ? (
+              extractYouTubeId(currentItem.videoUrl) ? (
+                <iframe
+                  key={currentItem.videoUrl}
+                  src={`https://www.youtube.com/embed/${extractYouTubeId(currentItem.videoUrl)}?autoplay=1&mute=1&loop=1&playlist=${extractYouTubeId(currentItem.videoUrl)}`}
+                  title={currentItem.movementName}
+                  className="w-full h-full object-contain"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video 
+                  key={currentItem.videoUrl} 
+                  src={currentItem.videoUrl} 
+                  className="w-full h-full object-contain"
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              )
+            ) : (
+              <div className="flex flex-col items-center justify-center text-slate-500 space-y-4">
+                <div className="w-20 h-20 rounded-full bg-slate-900 flex items-center justify-center">
+                  <Video className="w-10 h-10 opacity-50" />
+                </div>
+                <p className="font-medium text-lg">Video tidak tersedia</p>
+              </div>
+            )}
+          </div>
+
+          {/* Large Navigation Controls */}
+          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 flex items-center justify-between mt-auto">
+            <button 
+              disabled={isFirst}
+              onClick={() => setCurrentIndex(prev => prev - 1)}
+              className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-slate-700"
+            >
+              <SkipBack className="w-6 h-6 md:w-8 md:h-8" />
+            </button>
+            
+            <div className="text-xl md:text-2xl font-bold text-slate-400 tabular-nums tracking-widest">
+              <span className="text-sf-deepNavy">{currentIndex + 1}</span> <span className="mx-2 opacity-50">/</span> {playlist.length}
+            </div>
+
+            {!isLast ? (
+              <button 
+                onClick={() => setCurrentIndex(prev => prev + 1)}
+                className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center rounded-full bg-sf-warmGold hover:bg-yellow-500 text-slate-900 transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-sf-warmGold/30"
+              >
+                <SkipForward className="w-8 h-8 md:w-10 md:h-10 ml-1.5" />
+              </button>
+            ) : (
+              <button 
+                onClick={() => isTrainer ? handleFinish(0, "") : setShowEndModal(true)}
+                className="px-8 md:px-10 h-20 md:h-24 flex items-center justify-center gap-3 rounded-full bg-green-500 hover:bg-green-400 text-white font-extrabold text-xl md:text-2xl transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-green-500/30 tracking-wide"
+              >
+                Selesai <CheckCircle2 className="w-7 h-7 md:w-8 md:h-8" />
+              </button>
+            )}
+          </div>
+
         </div>
 
-        {/* CONTROLS & INFO AREA */}
-        <div className="p-5 md:p-8 bg-slate-900 text-white">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        {/* RIGHT COLUMN: Details & Queue */}
+        <div className="lg:col-span-4 space-y-6 flex flex-col">
+          
+          {/* Workout Parameters Panel */}
+          <div className="bg-sf-deepNavy rounded-3xl p-6 md:p-8 shadow-xl ring-1 ring-slate-900/10 relative overflow-hidden">
+            {/* Background accent */}
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-sf-warmGold/10 rounded-full blur-3xl pointer-events-none" />
             
-            {/* Quick Stats */}
-            <div className="flex flex-wrap items-center gap-x-8 gap-y-4 min-w-0">
-              <div className="min-w-0 max-w-[150px] md:max-w-[200px]">
-                <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Sequence</p>
-                <p className="text-xl font-bold truncate" title={currentItem.sequenceName}>{currentItem.sequenceName}</p>
-              </div>
-              <div className="shrink-0">
-                <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Duration</p>
-                <p className="text-xl font-bold text-sf-warmGold">{currentItem.duration}</p>
-              </div>
-              <div className="min-w-0 max-w-[150px] md:max-w-[250px]">
-                <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Equip/Beban</p>
-                <p className="text-xl font-bold truncate" title={currentItem.beban}>{currentItem.beban}</p>
-              </div>
-            </div>
-
-            {/* Navigation Controls */}
-            <div className="flex items-center gap-3 shrink-0">
-              <button 
-                disabled={isFirst}
-                onClick={() => setCurrentIndex(prev => prev - 1)}
-                className="w-12 h-12 flex items-center justify-center rounded-full bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <SkipBack className="w-5 h-5" />
-              </button>
+            <h3 className="text-white font-extrabold text-xl mb-6 flex items-center gap-2.5">
+              <Activity className="h-6 w-6 text-sf-warmGold" /> Parameter Latihan
+            </h3>
+            
+            <div className="space-y-4 relative z-10">
               
-              <div className="text-sm font-bold text-slate-400 px-4 tabular-nums">
-                {currentIndex + 1} / {playlist.length}
+              {/* Sets / Reps */}
+              <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
+                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Sets / Reps</p>
+                <p className="text-3xl font-extrabold text-white">{currentItem.sets} <span className="text-slate-500 font-normal mx-2">x</span> {currentItem.reps}</p>
+              </div>
+              
+              {/* Duration & Rest */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
+                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Duration</p>
+                  <p className="text-xl font-bold text-sf-warmGold">{currentItem.duration}</p>
+                </div>
+                <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
+                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Rest</p>
+                  <p className="text-xl font-bold text-white">{currentItem.rest}</p>
+                </div>
               </div>
 
-              {!isLast ? (
-                <button 
-                  onClick={() => setCurrentIndex(prev => prev + 1)}
-                  className="w-14 h-14 flex items-center justify-center rounded-full bg-sf-warmGold hover:bg-yellow-500 text-slate-900 transition-colors shadow-lg shadow-sf-warmGold/20"
-                >
-                  <SkipForward className="w-6 h-6 ml-1" />
-                </button>
-              ) : (
-                <button 
-                  onClick={() => isTrainer ? handleFinish(0, "") : setShowEndModal(true)}
-                  className="px-6 h-14 flex items-center justify-center gap-2 rounded-full bg-green-500 hover:bg-green-400 text-slate-900 font-bold transition-colors shadow-lg shadow-green-500/20"
-                >
-                  Akhiri <CheckCircle2 className="w-5 h-5" />
-                </button>
-              )}
-            </div>
-          </div>
+              {/* Equip / Beban */}
+              <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
+                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Equip / Beban</p>
+                <p className="text-xl font-bold text-white truncate" title={currentItem.beban}>{currentItem.beban}</p>
+              </div>
 
-          {/* Details Table */}
-          <div className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-700/50 mt-2">
-            <div className="grid grid-cols-3 divide-x divide-slate-700/50">
-              <div className="p-3 md:p-4">
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Sets / Reps</p>
-                <p className="font-medium text-slate-200">{currentItem.sets} <span className="text-slate-500 font-normal mx-1">x</span> {currentItem.reps}</p>
-              </div>
-              <div className="p-3 md:p-4">
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Breathing Pattern</p>
-                <p className="font-medium text-slate-200 text-sm md:text-base capitalize">
-                  {currentItem.breathing_core && currentItem.breathing_core !== "-" ? `Core: ${currentItem.breathing_core}` : ""}
-                  {currentItem.breathing_core && currentItem.breathing_core !== "-" && currentItem.breathing_diaphragm && currentItem.breathing_diaphragm !== "-" ? " | " : ""}
-                  {currentItem.breathing_diaphragm && currentItem.breathing_diaphragm !== "-" ? `Dia: ${currentItem.breathing_diaphragm}` : ""}
-                  {(!currentItem.breathing_core || currentItem.breathing_core === "-") && (!currentItem.breathing_diaphragm || currentItem.breathing_diaphragm === "-") ? "-" : ""}
-                </p>
-              </div>
-              <div className="p-3 md:p-4 min-w-0 flex flex-col justify-center">
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">BPM Zone</p>
-                <div className="w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
-                  <p className="font-medium text-slate-200">{currentItem.bpm}</p>
+              {/* Breathing & BPM */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
+                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Breathing</p>
+                  <p className="text-sm font-bold text-slate-200 capitalize leading-relaxed">
+                    {currentItem.breathing_core && currentItem.breathing_core !== "-" ? <span className="block"><span className="text-slate-500">C:</span> {currentItem.breathing_core}</span> : null}
+                    {currentItem.breathing_diaphragm && currentItem.breathing_diaphragm !== "-" ? <span className="block"><span className="text-slate-500">D:</span> {currentItem.breathing_diaphragm}</span> : null}
+                    {(!currentItem.breathing_core || currentItem.breathing_core === "-") && (!currentItem.breathing_diaphragm || currentItem.breathing_diaphragm === "-") ? "-" : null}
+                  </p>
+                </div>
+                <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800 flex flex-col justify-center">
+                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">BPM Zone</p>
+                  <p className="text-lg font-bold text-white leading-tight">{currentItem.bpm}</p>
                 </div>
               </div>
             </div>
           </div>
 
-        </div>
-      </div>
+          {/* Queue Panel */}
+          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 flex-1">
+            <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-widest mb-5 flex items-center gap-2">
+              <ListOrdered className="h-5 w-5 text-sf-deepNavy" /> Antrean Selanjutnya
+            </h3>
+            
+            {playlist.length - currentIndex - 1 > 0 ? (
+              <div className="space-y-3">
+                {playlist.slice(currentIndex + 1, currentIndex + 5).map((item, i) => (
+                  <div key={item.id} className="flex items-center gap-4 p-4 bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100 rounded-2xl group cursor-default">
+                    <div className="w-10 h-10 bg-white shadow-sm border border-slate-200 rounded-xl flex items-center justify-center shrink-0 font-bold text-slate-400 text-sm group-hover:text-sf-deepNavy transition-colors">
+                      {currentIndex + 2 + i}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] text-sf-warmGold font-bold uppercase tracking-widest mb-0.5">{item.sequenceName}</p>
+                      <p className="text-sm font-bold text-slate-700 truncate">{item.movementName}</p>
+                    </div>
+                  </div>
+                ))}
+                {playlist.length - currentIndex - 5 > 0 && (
+                  <div className="text-center py-4 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                      + {playlist.length - currentIndex - 5} gerakan lainnya
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="h-40 flex flex-col items-center justify-center text-slate-400 space-y-3 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+                <CheckCircle2 className="w-10 h-10 text-green-400/50" />
+                <p className="text-sm font-medium">Ini adalah gerakan terakhir</p>
+              </div>
+            )}
+          </div>
 
-      {/* Playlist Preview */}
-      <div>
-        <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3">Antrean Gerakan Selanjutnya</h3>
-        <div className="space-y-2">
-          {playlist.slice(currentIndex + 1, currentIndex + 4).map((item, i) => (
-            <div key={item.id} className="flex items-center gap-4 p-3 bg-white border border-slate-200 rounded-xl shadow-sm opacity-70">
-              <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0 font-bold text-slate-400 text-sm">
-                {currentIndex + 2 + i}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[10px] text-sf-warmGold font-bold uppercase tracking-wider">{item.sequenceName}</p>
-                <p className="text-sm font-bold text-slate-800 truncate">{item.movementName}</p>
-              </div>
-              <ChevronRight className="w-5 h-5 text-slate-300 shrink-0" />
-            </div>
-          ))}
-          {playlist.length - currentIndex - 4 > 0 && (
-            <div className="text-center py-2 text-xs font-semibold text-slate-400">
-              + {playlist.length - currentIndex - 4} gerakan lainnya
-            </div>
-          )}
         </div>
       </div>
 
