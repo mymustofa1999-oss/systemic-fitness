@@ -298,9 +298,51 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
             )}
           </div>
 
+          {/* Queue Panel (Moved to Left Column) */}
+          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 mt-8">
+            <h3 className="text-lg font-extrabold text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
+              <ListOrdered className="h-6 w-6 text-sf-deepNavy" /> Antrean Selanjutnya
+            </h3>
+            
+            {playlist.length - currentIndex - 1 > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {playlist.slice(currentIndex + 1).map((item, i) => (
+                  <div key={item.id} className="flex items-start gap-3 p-3 bg-slate-50 hover:bg-slate-100 transition-colors rounded-2xl group cursor-pointer border border-slate-100 hover:border-slate-200 hover:shadow-md" onClick={() => setCurrentIndex(currentIndex + 1 + i)}>
+                    {/* Thumbnail */}
+                    <div className="relative w-28 md:w-32 shrink-0 aspect-video bg-slate-200 rounded-xl overflow-hidden shadow-sm flex items-center justify-center border border-slate-200/60 transition-all">
+                      {(() => {
+                        const ytId = extractYouTubeId(item.videoUrl || "");
+                        if (ytId) {
+                          return <img src={`https://img.youtube.com/vi/${ytId}/mqdefault.jpg`} alt="" className="w-full h-full object-cover" />;
+                        }
+                        return <Video className="w-6 h-6 text-slate-400" />;
+                      })()}
+                      <div className="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur-sm">
+                        #{currentIndex + 2 + i}
+                      </div>
+                    </div>
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0 pt-1">
+                      <h4 className="text-sm md:text-base font-bold text-slate-800 line-clamp-2 leading-tight group-hover:text-sf-deepNavy transition-colors">
+                        {formatMovementName(item.movementName, (userData?.data as any)?.profile?.gender)}
+                      </h4>
+                      <p className="text-[10px] text-sf-warmGold font-bold uppercase tracking-widest mt-1.5 line-clamp-1">{item.sequenceName}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="h-40 flex flex-col items-center justify-center text-slate-400 space-y-3 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+                <CheckCircle2 className="w-10 h-10 text-green-400/50" />
+                <p className="text-sm font-medium">Ini adalah gerakan terakhir</p>
+              </div>
+            )}
+          </div>
+
         </div>
 
-        {/* RIGHT COLUMN: Details & Queue */}
+        {/* RIGHT COLUMN: Details */}
         <div className="lg:col-span-4 space-y-6 flex flex-col">
           
           {/* Workout Parameters Panel */}
@@ -355,48 +397,7 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
               </div>
             </div>
           </div>
-
-          <div className="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 flex-1 flex flex-col h-full max-h-[500px]">
-            <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-widest mb-5 flex items-center gap-2 shrink-0">
-              <ListOrdered className="h-5 w-5 text-sf-deepNavy" /> Antrean Selanjutnya
-            </h3>
-            
-            {playlist.length - currentIndex - 1 > 0 ? (
-              <div className="flex-1 overflow-y-auto pr-2 space-y-1 custom-scrollbar">
-                {playlist.slice(currentIndex + 1).map((item, i) => (
-                  <div key={item.id} className="flex items-start gap-3 p-2 bg-transparent hover:bg-slate-50 transition-colors rounded-xl group cursor-pointer border border-transparent hover:border-slate-100" onClick={() => setCurrentIndex(currentIndex + 1 + i)}>
-                    {/* Thumbnail */}
-                    <div className="relative w-32 shrink-0 aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-sm flex items-center justify-center border border-slate-200/60 group-hover:shadow-md transition-all">
-                      {(() => {
-                        const ytId = extractYouTubeId(item.videoUrl || "");
-                        if (ytId) {
-                          return <img src={`https://img.youtube.com/vi/${ytId}/mqdefault.jpg`} alt="" className="w-full h-full object-cover" />;
-                        }
-                        return <Video className="w-6 h-6 text-slate-300" />;
-                      })()}
-                      <div className="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur-sm">
-                        #{currentIndex + 2 + i}
-                      </div>
-                    </div>
-
-                    {/* Info */}
-                    <div className="flex-1 min-w-0 pt-0.5">
-                      <h4 className="text-sm font-bold text-slate-800 line-clamp-2 leading-tight group-hover:text-sf-deepNavy transition-colors">
-                        {formatMovementName(item.movementName, (userData?.data as any)?.profile?.gender)}
-                      </h4>
-                      <p className="text-[10px] text-sf-warmGold font-bold uppercase tracking-widest mt-1.5">{item.sequenceName}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="h-40 flex flex-col items-center justify-center text-slate-400 space-y-3 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
-                <CheckCircle2 className="w-10 h-10 text-green-400/50" />
-                <p className="text-sm font-medium">Ini adalah gerakan terakhir</p>
-              </div>
-            )}
-          </div>
-
+          {/* The queue was moved to the left column */}
         </div>
       </div>
 
