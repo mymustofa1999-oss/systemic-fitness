@@ -11,6 +11,36 @@ import { cn } from "@/lib/utils";
 import { toast } from "@/stores/toastStore";
 import { useAuth } from "@/hooks/useAuth";
 
+function formatMovementName(rawName: string, gender: string | undefined): string {
+  if (!rawName) return "-";
+  if (!rawName.includes(" | ")) return rawName;
+
+  const normalizedGender = (gender || "").toLowerCase();
+  
+  // Extract level suffix if present
+  let levelSuffix = "";
+  let baseName = rawName;
+  const levelMatch = rawName.match(/(\s*\[L\d+\])$/i);
+  if (levelMatch) {
+    levelSuffix = levelMatch[1];
+    baseName = rawName.replace(/(\s*\[L\d+\])$/i, "");
+  }
+
+  const parts = baseName.split(" | ");
+  if (parts.length === 2) {
+    const femaleName = parts[0].trim();
+    const maleName = parts[1].trim();
+
+    if (normalizedGender === "female" || normalizedGender === "wanita" || normalizedGender === "women") {
+      return femaleName + levelSuffix;
+    } else if (normalizedGender === "male" || normalizedGender === "pria" || normalizedGender === "men") {
+      return maleName + levelSuffix;
+    }
+  }
+
+  return rawName;
+}
+
 // ─── Modal Rating ────────────────────────────────────────────────────────
 function EndSessionModal({ isOpen, onClose, onFinish, isTrainer }: { isOpen: boolean; onClose: () => void; onFinish: (rating: number, notes: string) => void; isTrainer: boolean }) {
   const [rating, setRating] = useState(0);
@@ -178,7 +208,7 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 pb-20 px-4 xl:px-0">
+    <div className="w-full max-w-[1600px] mx-auto space-y-4 pb-20 px-4 md:px-8">
       <div className="flex items-center justify-between">
         <Link href={`/clients/${customerId}/training-card`} className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors bg-white px-4 py-2 rounded-full shadow-sm border border-slate-200 font-medium">
           <ArrowLeft className="h-4 w-4" /> Batal / Kembali
@@ -191,18 +221,20 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
       <div className="grid lg:grid-cols-12 gap-8">
         
         {/* LEFT COLUMN: Video & Controls */}
-        <div className="lg:col-span-8 space-y-6 flex flex-col">
+        <div className="lg:col-span-8 space-y-4 flex flex-col">
           
           {/* Header Title Out of Video */}
-          <div className="bg-sf-deepNavy text-white p-6 md:p-8 rounded-3xl shadow-xl ring-1 ring-slate-900/10">
-            <p className="text-sf-warmGold text-sm font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+          <div className="bg-sf-deepNavy text-white px-5 py-4 md:px-6 md:py-5 rounded-2xl shadow-xl ring-1 ring-slate-900/10 shrink-0">
+            <p className="text-sf-warmGold text-xs font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-sf-warmGold" /> {currentItem.sequenceName}
             </p>
-            <h2 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">{currentItem.movementName}</h2>
+            <h2 className="text-2xl md:text-3xl font-extrabold leading-tight tracking-tight truncate">
+              {formatMovementName(currentItem.movementName, (userData?.data as any)?.profile?.gender)}
+            </h2>
           </div>
 
           {/* Video Player */}
-          <div className="bg-black rounded-3xl overflow-hidden shadow-2xl ring-1 ring-slate-900/10 aspect-video relative flex items-center justify-center group w-full">
+          <div className="bg-black rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/10 aspect-video relative flex items-center justify-center group w-full">
             {currentItem.videoUrl ? (
               extractYouTubeId(currentItem.videoUrl) ? (
                 <iframe
@@ -339,7 +371,7 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[10px] text-sf-warmGold font-bold uppercase tracking-widest mb-0.5">{item.sequenceName}</p>
-                      <p className="text-sm font-bold text-slate-700 truncate">{item.movementName}</p>
+                      <p className="text-sm font-bold text-slate-700 truncate">{formatMovementName(item.movementName, (userData?.data as any)?.profile?.gender)}</p>
                     </div>
                   </div>
                 ))}
