@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUsers";
 import { useTrainerCard } from "@/hooks/useNewFeatures";
 import { useDLMovements } from "@/hooks/useDigitalLibrary";
-import { ArrowLeft, SkipForward, SkipBack, CheckCircle2, ChevronRight, Video, X, Activity, ListOrdered } from "lucide-react";
+import { ArrowLeft, SkipForward, SkipBack, CheckCircle2, ChevronRight, Video, X, Activity, ListOrdered, Music } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/stores/toastStore";
 import { useAuth } from "@/hooks/useAuth";
@@ -266,6 +266,16 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
               </div>
             )}
           </div>
+
+          {/* BPM Indicator for Level 4/Dynamic */}
+          {currentItem.bpm && currentItem.bpm !== "-" && (
+             <div className="bg-sf-warmGold/10 border border-sf-warmGold/20 rounded-2xl p-4 flex items-center justify-center gap-3 w-full shrink-0">
+                 <div className="w-10 h-10 rounded-full bg-sf-warmGold/20 flex items-center justify-center">
+                   <Music className="text-sf-warmGold w-5 h-5 animate-pulse" />
+                 </div>
+                 <span className="text-sf-deepNavy font-extrabold text-lg">Target BPM (Ketukan Lagu): {currentItem.bpm}</span>
+             </div>
+          )}
 
           {/* Navigation Controls (Compacted) */}
           <div className="bg-white rounded-2xl p-4 md:p-5 shadow-xl border border-slate-100 flex items-center justify-between mt-auto">
