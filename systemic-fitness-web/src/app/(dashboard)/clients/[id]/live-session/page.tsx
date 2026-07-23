@@ -221,7 +221,7 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
       <div className="grid lg:grid-cols-12 gap-8">
         
         {/* LEFT COLUMN: Video & Controls */}
-        <div className="lg:col-span-8 space-y-4 flex flex-col">
+        <div className="lg:col-span-9 space-y-4 flex flex-col">
           
           {/* Header Title Out of Video */}
           <div className="bg-sf-deepNavy text-white px-5 py-4 md:px-6 md:py-5 rounded-2xl shadow-xl ring-1 ring-slate-900/10 shrink-0">
@@ -267,33 +267,33 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
             )}
           </div>
 
-          {/* Large Navigation Controls */}
-          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 flex items-center justify-between mt-auto">
+          {/* Navigation Controls (Compacted) */}
+          <div className="bg-white rounded-2xl p-4 md:p-5 shadow-xl border border-slate-100 flex items-center justify-between mt-auto">
             <button 
               disabled={isFirst}
               onClick={() => setCurrentIndex(prev => prev - 1)}
-              className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-slate-700"
+              className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-slate-700"
             >
-              <SkipBack className="w-6 h-6 md:w-8 md:h-8" />
+              <SkipBack className="w-5 h-5 md:w-6 md:h-6" />
             </button>
             
-            <div className="text-xl md:text-2xl font-bold text-slate-400 tabular-nums tracking-widest">
+            <div className="text-lg md:text-xl font-bold text-slate-400 tabular-nums tracking-widest">
               <span className="text-sf-deepNavy">{currentIndex + 1}</span> <span className="mx-2 opacity-50">/</span> {playlist.length}
             </div>
 
             {!isLast ? (
               <button 
                 onClick={() => setCurrentIndex(prev => prev + 1)}
-                className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center rounded-full bg-sf-warmGold hover:bg-yellow-500 text-slate-900 transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-sf-warmGold/30"
+                className="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-sf-warmGold hover:bg-yellow-500 text-slate-900 transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-sf-warmGold/30"
               >
-                <SkipForward className="w-8 h-8 md:w-10 md:h-10 ml-1.5" />
+                <SkipForward className="w-6 h-6 md:w-7 md:h-7 ml-1" />
               </button>
             ) : (
               <button 
                 onClick={() => isTrainer ? handleFinish(0, "") : setShowEndModal(true)}
-                className="px-8 md:px-10 h-20 md:h-24 flex items-center justify-center gap-3 rounded-full bg-green-500 hover:bg-green-400 text-white font-extrabold text-xl md:text-2xl transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-green-500/30 tracking-wide"
+                className="px-6 md:px-8 h-14 md:h-16 flex items-center justify-center gap-2 rounded-full bg-green-500 hover:bg-green-400 text-white font-extrabold text-lg md:text-xl transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-green-500/30 tracking-wide"
               >
-                Selesai <CheckCircle2 className="w-7 h-7 md:w-8 md:h-8" />
+                Selesai <CheckCircle2 className="w-6 h-6 md:w-7 md:h-7" />
               </button>
             )}
           </div>
@@ -343,15 +343,15 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
         </div>
 
         {/* RIGHT COLUMN: Details */}
-        <div className="lg:col-span-4 space-y-6 flex flex-col">
+        <div className="lg:col-span-3 space-y-4 flex flex-col">
           
           {/* Workout Parameters Panel */}
-          <div className="bg-sf-deepNavy rounded-3xl p-6 md:p-8 shadow-xl ring-1 ring-slate-900/10 relative overflow-hidden">
+          <div className="bg-sf-deepNavy rounded-3xl p-5 md:p-6 shadow-xl ring-1 ring-slate-900/10 relative overflow-hidden">
             {/* Background accent */}
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-sf-warmGold/10 rounded-full blur-3xl pointer-events-none" />
             
-            <h3 className="text-white font-extrabold text-xl mb-6 flex items-center gap-2.5">
-              <Activity className="h-6 w-6 text-sf-warmGold" /> Parameter Latihan
+            <h3 className="text-white font-extrabold text-lg mb-5 flex items-center gap-2">
+              <Activity className="h-5 w-5 text-sf-warmGold" /> Parameter Latihan
             </h3>
             
             <div className="space-y-4 relative z-10">
