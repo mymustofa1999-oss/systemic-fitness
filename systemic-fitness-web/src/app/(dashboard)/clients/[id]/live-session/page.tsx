@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUsers";
@@ -131,6 +131,34 @@ function extractYouTubeId(url: string): string | null {
   return null;
 }
 
+function calculateBPM(age: number | null, intensityCode: string) {
+  if (!age || !intensityCode) return "";
+  const maxHR = 220 - age;
+  let minPct = 0;
+  let maxPct = 0;
+  
+  const code = intensityCode.toLowerCase();
+  if (code === "functional" || code.includes("func")) {
+    minPct = 0.50;
+    maxPct = 0.60;
+  } else if (code === "cardiorespiratory" || code.includes("cardio") || code.includes("resp")) {
+    minPct = 0.70;
+    maxPct = 0.85;
+  } else if (code === "metabolic" || code.includes("meta")) {
+    minPct = 0.85;
+    maxPct = 0.95;
+  } else {
+    return "";
+  }
+  
+  const minBPM = Math.round(maxHR * minPct);
+  const maxBPM = Math.round(maxHR * maxPct);
+  
+  const roundedMin = Math.round(minBPM / 10) * 10;
+  const roundedMax = Math.round(maxBPM / 10) * 10;
+  return `${roundedMin}-${roundedMax} BPM`;
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────
 export default function LiveSessionPage({ params }: { params: { id: string } }) {
   const customerId = params.id;
@@ -142,12 +170,70 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showEndModal, setShowEndModal] = useState(false);
+  const [selectedBpm, setSelectedBpm] = useState<string>("No BPM");
+  const [isBpmPlaying, setIsBpmPlaying] = useState<boolean>(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    setIsBpmPlaying(false);
+    setSelectedBpm("No BPM");
+  }, [currentIndex]);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  const playBpmAudio = (bpm: string) => {
+    if (!bpm || bpm === 'No BPM') {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      setIsBpmPlaying(false);
+      return;
+    }
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+
+    const url = `/bpm/${bpm}.mp3`;
+    const audio = new Audio(url);
+    audio.loop = true;
+    audioRef.current = audio;
+    audio.play()
+      .then(() => {
+        setIsBpmPlaying(true);
+      })
+      .catch((err) => {
+        console.error("Error playing BPM audio:", err);
+        setIsBpmPlaying(false);
+      });
+  };
+
+  const stopBpmAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    setIsBpmPlaying(false);
+  };
 
   const playlist = useMemo(() => {
     const data = cardData?.data as any;
     if (!data?.sequences) return [];
     
     const clientGender = (userData?.data as any)?.profile?.gender?.toLowerCase() === "male" ? "male" : "female";
+    const clientAge = (userData?.data as any)?.profile?.age || (userData?.data as any)?.profile?.age_years || null;
     const allMovements = (movementsData?.data ?? []) as any[];
     
     const items: any[] = [];
@@ -167,15 +253,15 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
 
           items.push({
             id: `${sIdx}-${setIdx}-${itemIdx}`,
-            sequenceName: seq.name || `Bagian ${sIdx + 1}`,
+            sequenceName: seq.program_category_name || seq.name || `Bagian ${sIdx + 1}`,
             movementName: movement?.name || item.movement_name || "Gerakan tidak diketahui",
             videoUrl,
-            reps: item.reps || set.parameter_reps || "-",
-            sets: item.sets_count || set.parameter_sets || "-",
-            duration: set.duration || set.parameter_duration || "-",
-            rest: set.parameter_rest || "-",
-            bpm: set.bpm || ((set.bpm_lower && set.bpm_upper) ? `${set.bpm_lower}-${set.bpm_upper}` : "-"),
-            beban: item.extra_load || set.extra_load || ((set.beban_lower_value && set.beban_upper_value) ? `${set.beban_lower_value}-${set.beban_upper_value}` : "-"),
+            reps: item.reps || set.reps || "-",
+            sets: item.sets_count || set.sets_count || set.set_number || "-",
+            duration: set.duration || (set.duration_mins ? `${set.duration_mins}'` : null) || seq.duration || "-",
+            rest: set.rest || item.rest || set.notes || item.notes || "-",
+            bpm: set.bpm || calculateBPM(clientAge, seq.program_category_code || seq.program_category_name || "") || ((set.bpm_lower && set.bpm_upper) ? `${set.bpm_lower}-${set.bpm_upper}` : "-"),
+            beban: item.equipment || item.extra_load || set.equipment || set.extra_load || [set.equipment_upper, set.equipment_lower].filter(Boolean).join(" / ") || ((set.beban_lower_value && set.beban_upper_value) ? `${set.beban_lower_value}-${set.beban_upper_value}` : "-"),
             isLevel1: !!set.breathing_core,
             breathing_core: set.breathing_core || "-",
             breathing_diaphragm: set.breathing_diaphragm || "-",
@@ -277,15 +363,69 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
             )}
           </div>
 
-          {/* BPM Indicator for Level 4/Dynamic */}
-          {currentItem.bpm && currentItem.bpm !== "-" && (
-             <div className="bg-sf-warmGold/10 border border-sf-warmGold/20 rounded-2xl p-4 flex items-center justify-center gap-3 w-full shrink-0">
-                 <div className="w-10 h-10 rounded-full bg-sf-warmGold/20 flex items-center justify-center">
-                   <Music className="text-sf-warmGold w-5 h-5 animate-pulse" />
-                 </div>
-                 <span className="text-sf-deepNavy font-extrabold text-lg">Target BPM (Ketukan Lagu): {currentItem.bpm}</span>
+          {/* 🎵 BPM Metronome Player Box 🎵 */}
+          <div className="bg-sf-deepNavy text-white rounded-2xl p-4 md:p-5 shadow-xl ring-1 ring-slate-900/10 flex flex-col sm:flex-row items-center justify-between gap-4 w-full shrink-0">
+             <div className="flex items-center gap-3.5">
+               <div className={cn("w-11 h-11 rounded-full flex items-center justify-center transition-all shrink-0", isBpmPlaying ? "bg-sf-warmGold text-slate-950 animate-pulse shadow-lg shadow-sf-warmGold/40" : "bg-white/10 text-slate-300")}>
+                 <Music className="w-5 h-5" />
+               </div>
+               <div>
+                 <p className="text-[10px] font-bold uppercase tracking-widest text-sf-warmGold flex items-center gap-2">
+                   BPM MUSIC PLAYER {currentItem.bpm && currentItem.bpm !== "-" ? <span className="text-white/70">• Target: {currentItem.bpm}</span> : ""}
+                 </p>
+                 <p className="text-sm font-extrabold text-white mt-0.5">
+                   {isBpmPlaying
+                     ? `Playing @ ${selectedBpm} BPM`
+                     : selectedBpm === "No BPM"
+                     ? "Muted (No BPM Selected)"
+                     : `Paused @ ${selectedBpm} BPM`}
+                 </p>
+               </div>
              </div>
-          )}
+
+             <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+               <select
+                 value={selectedBpm}
+                 onChange={(e) => {
+                   const val = e.target.value;
+                   setSelectedBpm(val);
+                   if (isBpmPlaying) {
+                     playBpmAudio(val);
+                   }
+                 }}
+                 className="bg-slate-800 border border-slate-700 hover:border-slate-600 rounded-xl px-3.5 py-2.5 text-xs font-bold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold cursor-pointer transition-colors"
+               >
+                 <option value="No BPM" className="text-slate-400">No BPM</option>
+                 {["60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200"].map((val) => (
+                   <option key={val} value={val} className="text-white">
+                     {val} BPM
+                   </option>
+                 ))}
+               </select>
+
+               <button
+                 onClick={() => {
+                   if (selectedBpm === "No BPM") return;
+                   if (isBpmPlaying) {
+                     stopBpmAudio();
+                   } else {
+                     playBpmAudio(selectedBpm);
+                   }
+                 }}
+                 disabled={selectedBpm === "No BPM"}
+                 className={cn(
+                   "px-5 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-md",
+                   selectedBpm === "No BPM"
+                     ? "bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/50"
+                     : isBpmPlaying
+                     ? "bg-red-500 hover:bg-red-600 text-white shadow-red-500/20 active:scale-95"
+                     : "bg-sf-warmGold hover:bg-yellow-500 text-slate-950 shadow-sf-warmGold/20 active:scale-95"
+                 )}
+               >
+                 {isBpmPlaying ? "Stop" : "Play"}
+               </button>
+             </div>
+          </div>
 
           {/* Navigation Controls (Compacted) */}
           <div className="bg-white rounded-2xl p-4 md:p-5 shadow-xl border border-slate-100 flex items-center justify-between mt-auto">
