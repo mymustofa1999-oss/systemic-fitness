@@ -8,9 +8,10 @@ import { SearchableSelect } from "@/components/shared/SearchableSelect";
 interface InviteUserModalProps {
   open: boolean;
   onClose: () => void;
+  defaultRole?: string;
 }
 
-export function InviteUserModal({ open, onClose }: InviteUserModalProps) {
+export function InviteUserModal({ open, onClose, defaultRole }: InviteUserModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const { mutate: invite, isPending } = useInviteUser();
 
@@ -25,11 +26,11 @@ export function InviteUserModal({ open, onClose }: InviteUserModalProps) {
     if (open) {
       setEmail("");
       setFullName("");
-      setRole("client");
+      setRole(defaultRole || "client");
       setMessage("");
       setErrors([]);
     }
-  }, [open]);
+  }, [open, defaultRole]);
 
   // Close on Escape
   useEffect(() => {
@@ -119,7 +120,7 @@ export function InviteUserModal({ open, onClose }: InviteUserModalProps) {
           <div>
             <label className="label">Role *</label>
             <SearchableSelect
-              options={[{ value: "client", label: "Client" }, { value: "trainer", label: "Trainer" }, { value: "finance", label: "Finance" }, { value: "admin", label: "Admin" }]}
+              options={[{ value: "client", label: "Client" }, { value: "trainer", label: "Trainer" }, { value: "consultant", label: "Consultant" }, { value: "finance", label: "Finance" }, { value: "admin", label: "Admin" }]}
               value={role}
               onChange={setRole}
               placeholder="Select role..."
@@ -127,6 +128,7 @@ export function InviteUserModal({ open, onClose }: InviteUserModalProps) {
             <p className="text-xs text-slate-400 mt-1">
               {role === "client" && "Can view workouts, log progress, chat with trainer"}
               {role === "trainer" && "Can manage workouts, programs, and assigned clients"}
+              {role === "consultant" && "Can review assessment v2, lab consultations, and clinical notes"}
               {role === "finance" && "Can view payments, subscriptions, and financial reports"}
               {role === "admin" && "Full access to all features except owner settings"}
             </p>

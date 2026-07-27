@@ -121,6 +121,8 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
   int _sessionIndex = 0; // 0 = Full Program, 1 = Daily Reset
   Set<int> _trainedDays = {};
   String _activeTab = 'FC';
+  int _activePillarIdx = 0;
+  int _activeSetIdx = 0;
 
   // BPM Sync Playback State
   final AudioPlayer _bpmPlayer = AudioPlayer();
@@ -227,6 +229,7 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
         _sessionStarted = true;
         _isPaused = paused;
         _sessionDurationSeconds = elapsed;
+        _trainedDays.add(DateTime.now().weekday - 1);
       });
       if (!paused) _startSessionTimer();
     } catch (_) {
@@ -241,6 +244,7 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
       _sessionStarted = true;
       _isPaused = false;
       _sessionDurationSeconds = 0;
+      _trainedDays.add(DateTime.now().weekday - 1);
     });
     _startSessionTimer();
     _persistSession(false);
@@ -1267,8 +1271,8 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
 
       if (hasTrained) {
         borderColor = const Color(0xFF10B981);
-        bgColor = const Color(0x1810B981);
-        textColor = const Color(0xFF10B981);
+        bgColor = const Color(0xFF10B981);
+        textColor = Colors.white;
       } else if (is60) {
         borderColor = theme.goldBorder;
         bgColor = Colors.transparent;
@@ -1421,7 +1425,7 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'JADWAL MINGGUAN',
+                    'JADWAL LATIHAN',
                     style: TextStyle(
                       fontSize: 9,
                       fontWeight: FontWeight.w800,
@@ -1436,7 +1440,7 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
                       int idx = entry.key;
                       Map<String, String> day = entry.value;
                       final is60 = day['type'] == '60';
-                      final hasTrained = _trainedDays.contains(idx);
+                      final hasTrained = _trainedDays.contains(idx) || (_sessionStarted && idx == (DateTime.now().weekday - 1));
 
                       return Column(
                         mainAxisSize: MainAxisSize.min,
@@ -1464,6 +1468,8 @@ class _TrainingCardScreenState extends State<TrainingCardScreen> {
         ],
       ),
     );
+  }
+
   // ── Session Toggle ───────────────────────────────────────────────
   Widget _buildSessionToggle(_TrainingCardTheme theme) {
     return Container(

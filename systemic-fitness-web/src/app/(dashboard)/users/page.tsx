@@ -18,6 +18,7 @@ const roleColors: Record<string, string> = {
   owner: "bg-purple-100 text-purple-700",
   admin: "bg-blue-100 text-blue-700",
   finance: "bg-amber-100 text-amber-700",
+  consultant: "bg-teal-100 text-teal-700",
   trainer: "bg-emerald-100 text-emerald-700",
   client: "bg-slate-100 text-slate-600",
 };
@@ -51,6 +52,7 @@ export default function UsersPage() {
 
   // Modals
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [defaultRole, setDefaultRole] = useState("client");
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
 
   // Data
@@ -154,9 +156,17 @@ export default function UsersPage() {
             {meta?.total != null ? `${meta.total} users total` : "Manage platform users and roles"}
           </p>
         </div>
-        <button onClick={() => setInviteOpen(true)} className="btn-primary">
-          <UserPlus className="h-4 w-4" /> Invite User
-        </button>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button onClick={() => { setDefaultRole("trainer"); setInviteOpen(true); }} className="btn-primary flex items-center gap-1.5">
+            <UserPlus className="h-4 w-4" /> Add Trainer
+          </button>
+          <button onClick={() => { setDefaultRole("consultant"); setInviteOpen(true); }} className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-1.5 shadow-sm">
+            <UserPlus className="h-4 w-4" /> Add Consultant
+          </button>
+          <button onClick={() => { setDefaultRole("client"); setInviteOpen(true); }} className="btn-secondary flex items-center gap-1.5">
+            <UserPlus className="h-4 w-4" /> Invite User
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -168,6 +178,7 @@ export default function UsersPage() {
             { value: "owner", label: "Owner" },
             { value: "admin", label: "Admin" },
             { value: "finance", label: "Finance" },
+            { value: "consultant", label: "Consultant" },
             { value: "trainer", label: "Trainer" },
             { value: "client", label: "Client" },
           ]}
@@ -220,7 +231,7 @@ export default function UsersPage() {
       )}
 
       {/* Invite Modal */}
-      <InviteUserModal open={inviteOpen} onClose={() => setInviteOpen(false)} />
+      <InviteUserModal open={inviteOpen} onClose={() => setInviteOpen(false)} defaultRole={defaultRole} />
 
       {/* Delete Confirm */}
       <ConfirmDialog

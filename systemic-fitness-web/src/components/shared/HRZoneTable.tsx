@@ -25,7 +25,7 @@ export function HRZoneTable({
         <tbody>
           {/* Max HR */}
           <tr className="border-b border-slate-200">
-            <td rowSpan={6} className="border-r border-slate-200 font-bold p-2.5 px-2 text-center align-middle text-slate-600 bg-slate-50/50 w-[12%]">
+            <td rowSpan={6} className="border-r border-slate-200 font-bold p-2.5 px-2 text-center align-middle text-slate-600 bg-slate-50/50 w-1/4">
               <div className="flex flex-col items-center justify-center gap-2">
                 <span>HR Zone</span>
                 {setEditingHR && (
@@ -42,12 +42,11 @@ export function HRZoneTable({
                 )}
               </div>
             </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-rose-100/50 text-rose-800 w-[12%]">Max HR</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-100/50 font-semibold text-rose-900 w-[15%]">
+            <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-rose-100/50 text-rose-800 w-1/4">Max HR</td>
+            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-100/50 font-semibold text-rose-900 w-1/4">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.max_hr_upper} onChange={e => setHrForm({...hrForm, max_hr_upper: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[0].value)}
             </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-200/40 font-semibold text-rose-900 w-[12%]">{hrZones[0].value !== "-" ? Math.round(Number(hrZones[0].value) / 4) : "-"}</td>
-            <td colSpan={4} className="p-2.5 px-4 font-bold text-center bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px]">Program</td>
+            <td className="p-2.5 px-4 text-center bg-rose-200/40 font-semibold text-rose-900 w-1/4">{hrZones[0].value !== "-" ? Math.round(Number(hrZones[0].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 5 */}
@@ -56,12 +55,7 @@ export function HRZoneTable({
             <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-100/50 font-semibold text-amber-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone5_lower} onChange={e => setHrForm({...hrForm, zone5_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[1].value)}
             </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-200/40 font-semibold text-amber-900">{hrZones[1].value !== "-" ? Math.round(Number(hrZones[1].value) / 4) : "-"}</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-50/50 w-12">
-              <input type="checkbox" checked readOnly className="w-4 h-4 accent-emerald-500 rounded-sm" />
-            </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 font-semibold text-emerald-800 bg-emerald-50/50">Functional Conditioning</td>
-            <td colSpan={2} className="p-2.5 px-4 text-center text-emerald-700 bg-emerald-50/50">BPM 90-120</td>
+            <td className="p-2.5 px-4 text-center bg-amber-200/40 font-semibold text-amber-900">{hrZones[1].value !== "-" ? Math.round(Number(hrZones[1].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 4 */}
@@ -70,8 +64,7 @@ export function HRZoneTable({
             <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-fuchsia-100/50 font-semibold text-fuchsia-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone4_lower} onChange={e => setHrForm({...hrForm, zone4_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[2].value)}
             </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-fuchsia-200/40 font-semibold text-fuchsia-900">{hrZones[2].value !== "-" ? Math.round(Number(hrZones[2].value) / 4) : "-"}</td>
-            <td colSpan={4}></td>
+            <td className="p-2.5 px-4 text-center bg-fuchsia-200/40 font-semibold text-fuchsia-900">{hrZones[2].value !== "-" ? Math.round(Number(hrZones[2].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 3 */}
@@ -80,12 +73,7 @@ export function HRZoneTable({
             <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-100/50 font-semibold text-emerald-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone3_lower} onChange={e => setHrForm({...hrForm, zone3_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[3].value)}
             </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-200/40 font-semibold text-emerald-900">{hrZones[3].value !== "-" ? Math.round(Number(hrZones[3].value) / 4) : "-"}</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-50/50 w-12">
-              <input type="checkbox" checked readOnly className="w-4 h-4 accent-amber-500 rounded-sm" />
-            </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 font-semibold text-amber-800 bg-amber-50/50">Cardiorespiratory Conditioning</td>
-            <td colSpan={2} className="p-2.5 px-4 text-center text-amber-700 bg-amber-50/50">BPM 80 - 100 | Weight: 0.5 - 1 kg</td>
+            <td className="p-2.5 px-4 text-center bg-emerald-200/40 font-semibold text-emerald-900">{hrZones[3].value !== "-" ? Math.round(Number(hrZones[3].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 2 */}
@@ -94,12 +82,7 @@ export function HRZoneTable({
             <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-sky-100/50 font-semibold text-sky-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone2_lower} onChange={e => setHrForm({...hrForm, zone2_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[4].value)}
             </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-sky-200/40 font-semibold text-sky-900">{hrZones[4].value !== "-" ? Math.round(Number(hrZones[4].value) / 4) : "-"}</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-orange-50/50 w-12">
-              <input type="checkbox" checked readOnly className="w-4 h-4 accent-orange-500 rounded-sm" />
-            </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 font-semibold text-orange-800 bg-orange-50/50">Metabolic Conditioning</td>
-            <td colSpan={2} className="p-2.5 px-4 text-center text-orange-700 bg-orange-50/50">Weight: 1.5 - 2.5 kg | No Resistance</td>
+            <td className="p-2.5 px-4 text-center bg-sky-200/40 font-semibold text-sky-900">{hrZones[4].value !== "-" ? Math.round(Number(hrZones[4].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 1 */}
@@ -108,8 +91,7 @@ export function HRZoneTable({
             <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-indigo-50/70 font-semibold text-indigo-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone1_lower} onChange={e => setHrForm({...hrForm, zone1_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[5].value)}
             </td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-indigo-100/40 font-semibold text-indigo-900">{hrZones[5].value !== "-" ? Math.round(Number(hrZones[5].value) / 4) : "-"}</td>
-            <td colSpan={4}></td>
+            <td className="p-2.5 px-4 text-center bg-indigo-100/40 font-semibold text-indigo-900">{hrZones[5].value !== "-" ? Math.round(Number(hrZones[5].value) / 4) : "-"}</td>
           </tr>
         </tbody>
       </table>

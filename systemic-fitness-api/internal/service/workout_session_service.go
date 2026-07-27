@@ -25,6 +25,7 @@ func NewWorkoutSessionService(
 
 // LogWorkoutSessionInput is the body for finishing a guided training session.
 type LogWorkoutSessionInput struct {
+	CustomerID      string `json:"customer_id"`
 	SessionType     string `json:"session_type"     validate:"required,oneof=full daily"`
 	DurationSeconds int    `json:"duration_seconds" validate:"min=0"`
 	Level           string `json:"level"`

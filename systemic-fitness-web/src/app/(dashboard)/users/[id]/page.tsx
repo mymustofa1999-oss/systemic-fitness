@@ -18,8 +18,8 @@ import { cn, formatDate, formatRelative, getInitials, formatCurrency } from "@/l
 
 const roleColors: Record<string, string> = {
   owner: "bg-purple-100 text-purple-700", admin: "bg-blue-100 text-blue-700",
-  finance: "bg-amber-100 text-amber-700", trainer: "bg-emerald-100 text-emerald-700",
-  client: "bg-slate-100 text-slate-600",
+  finance: "bg-amber-100 text-amber-700", consultant: "bg-teal-100 text-teal-700",
+  trainer: "bg-emerald-100 text-emerald-700", client: "bg-slate-100 text-slate-600",
 };
 
 const statusColors: Record<string, string> = {

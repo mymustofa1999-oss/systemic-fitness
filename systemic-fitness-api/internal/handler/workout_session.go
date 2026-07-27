@@ -34,6 +34,9 @@ func (h *WorkoutSessionHandler) Log(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userID := middleware.GetUserID(r.Context())
+	if input.CustomerID != "" {
+		userID = input.CustomerID
+	}
 	log, err := h.service.Log(r.Context(), userID, input)
 	if err != nil {
 		slog.Error("[WorkoutSession.Log] failed", "user_id", userID, "error", err)

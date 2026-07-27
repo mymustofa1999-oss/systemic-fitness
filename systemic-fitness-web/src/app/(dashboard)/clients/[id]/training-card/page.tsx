@@ -1947,8 +1947,12 @@ function VideoPreviewModal({ movement, bpm, gender, onClose }: { movement: any; 
   let femaleId = isMale ? null : rawFemaleId;
 
   // Fallbacks just in case the specific gender video is missing but the other exists
-  if (isMale && !maleId && rawFemaleId) femaleId = rawFemaleId;
-  if (isFemale && !femaleId && rawMaleId) maleId = rawMaleId;
+  // For pipe-split exercises (Female Exercise | Male Exercise), never cross-fallback to the other gender!
+  const isPipeSplit = (movement.name || "").includes("|");
+  if (!isPipeSplit) {
+    if (isMale && !maleId && rawFemaleId) maleId = rawFemaleId;
+    if (isFemale && !femaleId && rawMaleId) femaleId = rawMaleId;
+  }
 
   const hasBoth = maleId && femaleId;
   const audioRef = useRef<HTMLAudioElement | null>(null);

@@ -608,16 +608,17 @@ func (s *AssessmentV2Service) GetTrainingCard(ctx context.Context, userID string
 					if userProfile != nil && userProfile.Gender != nil {
 						gender = strings.ToLower(*userProfile.Gender)
 					}
+					isPipe := strings.Contains(tm.Title, "|") || (item.MovementName != nil && strings.Contains(*item.MovementName, "|"))
 					if gender == "male" || gender == "men" {
-						if item.VideoURLMale != nil {
+						if item.VideoURLMale != nil && *item.VideoURLMale != "" && *item.VideoURLMale != "waitlist" {
 							tm.VideoUrl = *item.VideoURLMale
-						} else if item.VideoURLFemale != nil {
+						} else if !isPipe && item.VideoURLFemale != nil && *item.VideoURLFemale != "" && *item.VideoURLFemale != "waitlist" {
 							tm.VideoUrl = *item.VideoURLFemale
 						}
 					} else {
-						if item.VideoURLFemale != nil {
+						if item.VideoURLFemale != nil && *item.VideoURLFemale != "" && *item.VideoURLFemale != "waitlist" {
 							tm.VideoUrl = *item.VideoURLFemale
-						} else if item.VideoURLMale != nil {
+						} else if !isPipe && item.VideoURLMale != nil && *item.VideoURLMale != "" && *item.VideoURLMale != "waitlist" {
 							tm.VideoUrl = *item.VideoURLMale
 						}
 					}

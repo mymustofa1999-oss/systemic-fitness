@@ -10,6 +10,7 @@ import { ArrowLeft, SkipForward, SkipBack, CheckCircle2, ChevronRight, Video, X,
 import { cn } from "@/lib/utils";
 import { toast } from "@/stores/toastStore";
 import { useAuth } from "@/hooks/useAuth";
+import { apiPost } from "@/lib/api";
 
 function formatMovementName(rawName: string, gender: string | undefined): string {
   if (!rawName) return "-";
@@ -202,7 +203,16 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
   const isLast = currentIndex === playlist.length - 1;
 
   const handleFinish = async (_rating: number, _notes: string) => {
-    // TODO: Connect this to actual backend endpoint when available
+    try {
+      await apiPost("/api/v2/workout-sessions", {
+        customer_id: customerId,
+        session_type: "full",
+        duration_seconds: 3600,
+        level: (cardData?.data as any)?.level || "",
+      });
+    } catch (e) {
+      console.error("Failed to log session:", e);
+    }
     toast.success("Sesi latihan berhasil diselesaikan!");
     router.push(`/clients/${customerId}/training-card`);
   };

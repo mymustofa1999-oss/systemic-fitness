@@ -197,6 +197,7 @@ interface ProfileHeaderProps {
   session: "full" | "daily";
   lang: string;
   sessions?: any[];
+  sessionStarted?: boolean;
 }
 
 function ProfileHeader({
@@ -207,6 +208,7 @@ function ProfileHeader({
   session,
   lang,
   sessions = [],
+  sessionStarted = false,
 }: ProfileHeaderProps) {
   const getAge = (dobString?: string) => {
     if (!dobString) return null;
@@ -277,8 +279,9 @@ function ProfileHeader({
   const trainedDays = useMemo(() => {
     const trained = new Set<number>();
     sessions.forEach(s => {
-      if (s.completed_at) {
-        const d = new Date(s.completed_at);
+      const dateStr = s.completed_at || s.created_at;
+      if (dateStr) {
+        const d = new Date(dateStr);
         const idx = currentWeekDates.findIndex(cwd => 
           cwd.getFullYear() === d.getFullYear() &&
           cwd.getMonth() === d.getMonth() &&
@@ -289,8 +292,19 @@ function ProfileHeader({
         }
       }
     });
+    if (sessionStarted) {
+      const now = new Date();
+      const idx = currentWeekDates.findIndex(cwd => 
+        cwd.getFullYear() === now.getFullYear() &&
+        cwd.getMonth() === now.getMonth() &&
+        cwd.getDate() === now.getDate()
+      );
+      if (idx !== -1) {
+        trained.add(idx);
+      }
+    }
     return trained;
-  }, [sessions, currentWeekDates]);
+  }, [sessions, currentWeekDates, sessionStarted]);
 
   const dayLabels = lang === "en"
     ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -416,7 +430,7 @@ function ProfileHeader({
             textTransform: "uppercase",
           }}
         >
-          {lang === "en" ? "WEEKLY SCHEDULE" : "JADWAL MINGGUAN"}
+          {lang === "en" ? "TRAINING SCHEDULE" : "JADWAL LATIHAN"}
         </span>
 
         <div
@@ -438,8 +452,8 @@ function ProfileHeader({
 
             if (hasTrained) {
               borderStyle = "1px solid #10b981";
-              bgStyle = "#10b98115";
-              colorStyle = "#10b981";
+              bgStyle = "#10b981";
+              colorStyle = "#ffffff";
               shadowStyle = "0 0 0 2px var(--tc-bg), 0 0 0 4px #10b981";
             } else if (is60) {
               borderStyle = "1px solid var(--tc-gold-border)";
@@ -471,13 +485,14 @@ function ProfileHeader({
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 10,
+                    fontSize: hasTrained ? 14 : 10,
                     fontWeight: 700,
                     transition: "all 0.2s ease",
                     marginBottom: 6,
+                    boxShadow: shadowStyle !== "none" ? shadowStyle : undefined,
                   }}
                 >
-                  {day.val}
+                  {hasTrained ? "✓" : day.val}
                 </div>
                 <span
                   style={{
@@ -1891,15 +1906,19 @@ export default function TrainingCardPage() {
     enabled: true,
   });
 
+  const { data: sessionsRes } = useWorkoutSessions("full");
+  const workoutSessions = sessionsRes?.data || [];
+
   const presetCard = useMemo(() => {
     if (!isOverriddenTier) return null;
     
     const userGender = profileRes?.data?.profile?.gender || "female";
     const getMovementVideo = (mv: any) => {
+      const isPipe = (mv.title || "").includes("|");
       if (userGender.toLowerCase() === "male" || userGender.toLowerCase() === "men") {
-        return mv.video_url_male || mv.video_url_female || "";
+        return mv.video_url_male || (!isPipe ? mv.video_url_female : "") || "";
       }
-      return mv.video_url_female || mv.video_url_male || "";
+      return mv.video_url_female || (!isPipe ? mv.video_url_male : "") || "";
     };
 
     const movements = TIER2_MOVEMENTS.map((mv, index) => ({
@@ -2220,6 +2239,8 @@ export default function TrainingCardPage() {
           assessment={assessmentRes?.data}
           session={session}
           lang={lang}
+          sessions={workoutSessions}
+          sessionStarted={sessionStarted}
         />
 
         {/* ── Session Toggle ──────────────────────────────── */}
@@ -2400,6 +2421,8 @@ export default function TrainingCardPage() {
         assessment={assessmentRes?.data}
         session={session}
         lang={lang}
+        sessions={workoutSessions}
+        sessionStarted={sessionStarted}
       />
 
       {/* ── Sequence Tabs ───────────────────────────────────── */}
