@@ -316,8 +316,8 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
 
       <div className="grid lg:grid-cols-12 gap-8">
         
-        {/* LEFT COLUMN: Video & Controls */}
-        <div className="lg:col-span-9 space-y-4 flex flex-col">
+        {/* LEFT COLUMN: Main Content */}
+        <div className="lg:col-span-8 space-y-4 flex flex-col">
           
           {/* Header Title Out of Video */}
           <div className="bg-sf-deepNavy text-white px-5 py-4 md:px-6 md:py-5 rounded-2xl shadow-xl ring-1 ring-slate-900/10 shrink-0">
@@ -427,6 +427,56 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
              </div>
           </div>
 
+          {/* Parameter Latihan (Wide Layout) */}
+          <div className="bg-sf-deepNavy rounded-2xl p-5 md:p-6 shadow-xl ring-1 ring-slate-900/10 shrink-0">
+            <h3 className="text-white font-extrabold text-lg mb-4 flex items-center gap-2">
+              <Activity className="h-5 w-5 text-sf-warmGold" /> Parameter Latihan
+            </h3>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              
+              {/* Sets / Reps */}
+              <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Sets / Reps</p>
+                <p className="text-xl font-extrabold text-white">{currentItem.sets} <span className="text-slate-500 font-normal mx-1">x</span> {currentItem.reps}</p>
+              </div>
+              
+              {/* Duration */}
+              <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Duration</p>
+                <p className="text-lg font-bold text-sf-warmGold">{currentItem.duration}</p>
+              </div>
+              
+              {/* Rest */}
+              <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Rest</p>
+                <p className="text-lg font-bold text-white">{currentItem.rest}</p>
+              </div>
+
+              {/* Equip / Beban */}
+              <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800 md:col-span-3 lg:col-span-2">
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Equip / Beban</p>
+                <p className="text-lg font-bold text-white truncate" title={currentItem.beban}>{currentItem.beban}</p>
+              </div>
+
+              {/* Breathing */}
+              <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800 md:col-span-2 lg:col-span-4">
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Breathing</p>
+                <p className="text-sm font-bold text-slate-200 capitalize leading-relaxed flex gap-4">
+                  {currentItem.breathing_core && currentItem.breathing_core !== "-" ? <span><span className="text-slate-500">Core:</span> {currentItem.breathing_core}</span> : null}
+                  {currentItem.breathing_diaphragm && currentItem.breathing_diaphragm !== "-" ? <span><span className="text-slate-500">Diaphragm:</span> {currentItem.breathing_diaphragm}</span> : null}
+                  {(!currentItem.breathing_core || currentItem.breathing_core === "-") && (!currentItem.breathing_diaphragm || currentItem.breathing_diaphragm === "-") ? "-" : null}
+                </p>
+              </div>
+
+              {/* BPM Zone */}
+              <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800 flex flex-col justify-center">
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">BPM Zone</p>
+                <p className="text-lg font-bold text-white leading-tight">{currentItem.bpm}</p>
+              </div>
+            </div>
+          </div>
+
           {/* Navigation Controls (Compacted) */}
           <div className="bg-white rounded-2xl p-4 md:p-5 shadow-xl border border-slate-100 flex items-center justify-between mt-auto">
             <button 
@@ -458,18 +508,21 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
             )}
           </div>
 
-          {/* Queue Panel (Moved to Left Column) */}
-          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 mt-8">
-            <h3 className="text-lg font-extrabold text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
-              <ListOrdered className="h-6 w-6 text-sf-deepNavy" /> Antrean Selanjutnya
+        </div>
+
+        {/* RIGHT COLUMN: Queue */}
+        <div className="lg:col-span-4 space-y-4 flex flex-col lg:sticky lg:top-4 lg:h-[calc(100vh-8rem)]">
+          <div className="bg-white rounded-3xl p-5 md:p-6 shadow-xl border border-slate-100 flex flex-col h-full overflow-hidden">
+            <h3 className="text-lg font-extrabold text-slate-800 uppercase tracking-widest mb-4 flex items-center gap-2 shrink-0">
+              <ListOrdered className="h-6 w-6 text-sf-deepNavy" /> Antrean
             </h3>
             
             {playlist.length - currentIndex - 1 > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
                 {playlist.slice(currentIndex + 1).map((item, i) => (
-                  <div key={item.id} className="flex items-start gap-3 p-3 bg-slate-50 hover:bg-slate-100 transition-colors rounded-2xl group cursor-pointer border border-slate-100 hover:border-slate-200 hover:shadow-md" onClick={() => setCurrentIndex(currentIndex + 1 + i)}>
+                  <div key={item.id} className="flex flex-col xl:flex-row items-start xl:items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100 transition-colors rounded-2xl group cursor-pointer border border-slate-100 hover:border-slate-200 hover:shadow-md" onClick={() => setCurrentIndex(currentIndex + 1 + i)}>
                     {/* Thumbnail */}
-                    <div className="relative w-28 md:w-32 shrink-0 aspect-video bg-slate-200 rounded-xl overflow-hidden shadow-sm flex items-center justify-center border border-slate-200/60 transition-all">
+                    <div className="relative w-full xl:w-28 shrink-0 aspect-video bg-slate-200 rounded-xl overflow-hidden shadow-sm flex items-center justify-center border border-slate-200/60 transition-all">
                       {(() => {
                         const ytId = extractYouTubeId(item.videoUrl || "");
                         if (ytId) {
@@ -483,81 +536,22 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
                     </div>
 
                     {/* Info */}
-                    <div className="flex-1 min-w-0 pt-1">
-                      <h4 className="text-sm md:text-base font-bold text-slate-800 line-clamp-2 leading-tight group-hover:text-sf-deepNavy transition-colors">
+                    <div className="flex-1 min-w-0 pt-1 xl:pt-0">
+                      <h4 className="text-sm font-bold text-slate-800 line-clamp-2 leading-tight group-hover:text-sf-deepNavy transition-colors">
                         {formatMovementName(item.movementName, (userData?.data as any)?.profile?.gender)}
                       </h4>
-                      <p className="text-[10px] text-sf-warmGold font-bold uppercase tracking-widest mt-1.5 line-clamp-1">{item.sequenceName}</p>
+                      <p className="text-[10px] text-sf-warmGold font-bold uppercase tracking-widest mt-1 line-clamp-1">{item.sequenceName}</p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="h-40 flex flex-col items-center justify-center text-slate-400 space-y-3 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+              <div className="flex-1 flex flex-col items-center justify-center text-slate-400 space-y-3 bg-slate-50 rounded-2xl border border-slate-100 border-dashed min-h-[150px]">
                 <CheckCircle2 className="w-10 h-10 text-green-400/50" />
                 <p className="text-sm font-medium">Ini adalah gerakan terakhir</p>
               </div>
             )}
           </div>
-
-        </div>
-
-        {/* RIGHT COLUMN: Details */}
-        <div className="lg:col-span-3 space-y-4 flex flex-col">
-          
-          {/* Workout Parameters Panel */}
-          <div className="bg-sf-deepNavy rounded-3xl p-5 md:p-6 shadow-xl ring-1 ring-slate-900/10 relative overflow-hidden">
-            {/* Background accent */}
-            <div className="absolute -top-24 -right-24 w-48 h-48 bg-sf-warmGold/10 rounded-full blur-3xl pointer-events-none" />
-            
-            <h3 className="text-white font-extrabold text-lg mb-5 flex items-center gap-2">
-              <Activity className="h-5 w-5 text-sf-warmGold" /> Parameter Latihan
-            </h3>
-            
-            <div className="space-y-4 relative z-10">
-              
-              {/* Sets / Reps */}
-              <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
-                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Sets / Reps</p>
-                <p className="text-3xl font-extrabold text-white">{currentItem.sets} <span className="text-slate-500 font-normal mx-2">x</span> {currentItem.reps}</p>
-              </div>
-              
-              {/* Duration & Rest */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
-                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Duration</p>
-                  <p className="text-xl font-bold text-sf-warmGold">{currentItem.duration}</p>
-                </div>
-                <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
-                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Rest</p>
-                  <p className="text-xl font-bold text-white">{currentItem.rest}</p>
-                </div>
-              </div>
-
-              {/* Equip / Beban */}
-              <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
-                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Equip / Beban</p>
-                <p className="text-xl font-bold text-white truncate" title={currentItem.beban}>{currentItem.beban}</p>
-              </div>
-
-              {/* Breathing & BPM */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800">
-                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">Breathing</p>
-                  <p className="text-sm font-bold text-slate-200 capitalize leading-relaxed">
-                    {currentItem.breathing_core && currentItem.breathing_core !== "-" ? <span className="block"><span className="text-slate-500">C:</span> {currentItem.breathing_core}</span> : null}
-                    {currentItem.breathing_diaphragm && currentItem.breathing_diaphragm !== "-" ? <span className="block"><span className="text-slate-500">D:</span> {currentItem.breathing_diaphragm}</span> : null}
-                    {(!currentItem.breathing_core || currentItem.breathing_core === "-") && (!currentItem.breathing_diaphragm || currentItem.breathing_diaphragm === "-") ? "-" : null}
-                  </p>
-                </div>
-                <div className="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800 flex flex-col justify-center">
-                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1.5">BPM Zone</p>
-                  <p className="text-lg font-bold text-white leading-tight">{currentItem.bpm}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* The queue was moved to the left column */}
         </div>
       </div>
 
