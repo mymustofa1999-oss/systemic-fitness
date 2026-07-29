@@ -99,30 +99,31 @@ func (s *MenuService) ListTree(ctx context.Context) ([]repository.Menu, error) {
 
 // buildTree converts a flat list of menus into a nested tree structure.
 func buildTree(flatMenus []repository.Menu) []repository.Menu {
-	menuMap := make(map[string]*repository.Menu, len(flatMenus))
-	for i := range flatMenus {
-		flatMenus[i].Children = nil
-		menuMap[flatMenus[i].ID] = &flatMenus[i]
-	}
+	// Group menus by ParentID
+	childrenMap := make(map[string][]repository.Menu)
+	var roots []repository.Menu
 
-	roots := make([]repository.Menu, 0)
-	for i := range flatMenus {
-		m := &flatMenus[i]
+	for _, m := range flatMenus {
+		m.Children = nil // ensure clean start
 		if m.ParentID == nil {
-			roots = append(roots, *m)
-		} else if parent, ok := menuMap[*m.ParentID]; ok {
-			parent.Children = append(parent.Children, *m)
+			roots = append(roots, m)
+		} else {
+			childrenMap[*m.ParentID] = append(childrenMap[*m.ParentID], m)
 		}
 	}
 
-	// Copy children back to roots
-	for i := range roots {
-		if p, ok := menuMap[roots[i].ID]; ok {
-			roots[i].Children = p.Children
+	// Recursively populate children
+	var populate func(menus []repository.Menu) []repository.Menu
+	populate = func(menus []repository.Menu) []repository.Menu {
+		for i := range menus {
+			if children, ok := childrenMap[menus[i].ID]; ok {
+				menus[i].Children = populate(children)
+			}
 		}
+		return menus
 	}
 
-	return roots
+	return populate(roots)
 }
 
 // ════════════════════════════════════════════════════════════════════

@@ -66,6 +66,108 @@ const fallbackNavigation: MenuItem[] = [
   { id: "2", parent_id: null, code: "settings", label: "Settings", icon: "Settings", href: "/settings", sort_order: 99, is_active: true, created_at: "", updated_at: "", children: [] },
 ];
 
+// ─── SidebarItem Component ──────────────────────────────────────
+
+const SidebarItem = ({
+  entry,
+  pathname,
+  sidebarCollapsed,
+  expandedGroups,
+  toggleGroup,
+  level = 0
+}: {
+  entry: MenuItem;
+  pathname: string;
+  sidebarCollapsed: boolean;
+  expandedGroups: string[];
+  toggleGroup: (code: string) => void;
+  level?: number;
+}) => {
+  const hasChildren = entry.children && entry.children.length > 0;
+  const isExpanded = expandedGroups.includes(entry.code) && !sidebarCollapsed;
+
+  // We need to know if any child (recursive) is active
+  const isChildActive = (item: MenuItem): boolean => {
+    if (item.href && item.href !== "/" && pathname.startsWith(item.href)) return true;
+    if (item.children) return item.children.some(isChildActive);
+    return false;
+  };
+
+  const isActive = entry.href === "/" ? pathname === "/" : entry.href ? pathname.startsWith(entry.href) : false;
+  const hasActiveChild = hasChildren && isChildActive(entry);
+  const Icon = getIcon(entry.icon);
+
+  if (hasChildren) {
+    return (
+      <div key={entry.id}>
+        <button
+          onClick={() => sidebarCollapsed ? undefined : toggleGroup(entry.code)}
+          className={cn(
+            "w-full flex items-center gap-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+            level === 0 ? "px-3" : "px-3",
+            hasActiveChild
+              ? "text-sf-systemBlue"
+              : "text-sidebar-text hover:bg-sidebar-hover hover:text-white",
+            sidebarCollapsed && "justify-center px-2"
+          )}
+          style={{ paddingLeft: !sidebarCollapsed ? `${12 + level * 16}px` : undefined }}
+          title={sidebarCollapsed ? entry.label : undefined}
+        >
+          <Icon className={cn("shrink-0", level === 0 ? "h-5 w-5" : "h-4 w-4")} />
+          {!sidebarCollapsed && (
+            <>
+              <span className="flex-1 text-left">{entry.label}</span>
+              <ChevronRight
+                className={cn(
+                  "h-4 w-4 transition-transform",
+                  isExpanded && "rotate-90"
+                )}
+              />
+            </>
+          )}
+        </button>
+
+        {isExpanded && (
+          <div className="border-l border-white/5 space-y-0.5 mt-0.5" style={{ marginLeft: `${22 + level * 16}px`, paddingLeft: "12px" }}>
+            {entry.children!.map((child) => (
+              <SidebarItem
+                key={child.id}
+                entry={child}
+                pathname={pathname}
+                sidebarCollapsed={sidebarCollapsed}
+                expandedGroups={expandedGroups}
+                toggleGroup={toggleGroup}
+                level={level + 1}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Regular nav item
+  return (
+    <Link
+      key={entry.id}
+      href={entry.href || "#"}
+      className={cn(
+        "flex items-center gap-3 py-2 rounded-lg text-sm transition-colors",
+        level === 0 ? "px-3 font-medium py-2.5" : "px-3",
+        isActive
+          ? "bg-sidebar-active text-white"
+          : "text-sidebar-text hover:bg-sidebar-hover hover:text-white",
+        sidebarCollapsed && "justify-center px-2"
+      )}
+      style={{ paddingLeft: !sidebarCollapsed && level > 0 ? `${12 + level * 16}px` : undefined }}
+      title={sidebarCollapsed ? entry.label : undefined}
+    >
+      <Icon className={cn("shrink-0", level === 0 ? "h-5 w-5" : "h-4 w-4")} />
+      {!sidebarCollapsed && <span>{entry.label}</span>}
+    </Link>
+  );
+};
+
 // ─── Component ──────────────────────────────────────────────────
 
 export function Sidebar() {
@@ -128,97 +230,17 @@ export function Sidebar() {
             ))}
           </div>
         ) : (
-          menus.map((entry) => {
-            const hasChildren = entry.children && entry.children.length > 0;
-
-            if (hasChildren) {
-              const isExpanded = expandedGroups.includes(entry.code) && !sidebarCollapsed;
-              const hasActiveChild = entry.children!.some(
-                (child) => child.href && pathname.startsWith(child.href) && child.href !== "/"
-              );
-              const Icon = getIcon(entry.icon);
-
-              return (
-                <div key={entry.id}>
-                  <button
-                    onClick={() => sidebarCollapsed ? undefined : toggleGroup(entry.code)}
-                    className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                      hasActiveChild
-                        ? "text-sf-systemBlue"
-                        : "text-sidebar-text hover:bg-sidebar-hover hover:text-white",
-                      sidebarCollapsed && "justify-center px-2"
-                    )}
-                    title={sidebarCollapsed ? entry.label : undefined}
-                  >
-                    <Icon className="h-5 w-5 shrink-0" />
-                    {!sidebarCollapsed && (
-                      <>
-                        <span className="flex-1 text-left">{entry.label}</span>
-                        <ChevronRight
-                          className={cn(
-                            "h-4 w-4 transition-transform",
-                            isExpanded && "rotate-90"
-                          )}
-                        />
-                      </>
-                    )}
-                  </button>
-
-                  {isExpanded && (
-                    <div className="ml-4 pl-3 border-l border-white/5 space-y-0.5 mt-0.5">
-                      {entry.children!.map((child) => {
-                        const ChildIcon = getIcon(child.icon);
-                        const isActive = child.href === "/"
-                          ? pathname === "/"
-                          : child.href ? pathname.startsWith(child.href) : false;
-
-                        return (
-                          <Link
-                            key={child.id}
-                            href={child.href || "#"}
-                            className={cn(
-                              "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
-                              isActive
-                                ? "bg-sidebar-active text-white"
-                                : "text-sidebar-text hover:bg-sidebar-hover hover:text-white"
-                            )}
-                          >
-                            <ChildIcon className="h-4 w-4 shrink-0" />
-                            <span>{child.label}</span>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-
-            // Regular nav item
-            const Icon = getIcon(entry.icon);
-            const isActive = entry.href === "/"
-              ? pathname === "/"
-              : entry.href ? pathname.startsWith(entry.href) : false;
-
-            return (
-              <Link
-                key={entry.id}
-                href={entry.href || "#"}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-sidebar-active text-white"
-                    : "text-sidebar-text hover:bg-sidebar-hover hover:text-white",
-                  sidebarCollapsed && "justify-center px-2"
-                )}
-                title={sidebarCollapsed ? entry.label : undefined}
-              >
-                <Icon className="h-5 w-5 shrink-0" />
-                {!sidebarCollapsed && <span>{entry.label}</span>}
-              </Link>
-            );
-          })
+          menus.map((entry) => (
+            <SidebarItem
+              key={entry.id}
+              entry={entry}
+              pathname={pathname}
+              sidebarCollapsed={sidebarCollapsed}
+              expandedGroups={expandedGroups}
+              toggleGroup={toggleGroup}
+              level={0}
+            />
+          ))
         )}
       </nav>
 
