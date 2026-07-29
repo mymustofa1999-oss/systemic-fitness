@@ -56,10 +56,12 @@ func main() {
 		if name == "" {
 			continue
 		}
-		category := getCol(2)
-		implications := getCol(3)
-		adjustments := getCol(4)
-		flag := getCol(5)
+		activeIngredient := getCol(2)
+		category := getCol(3)
+		mainFunction := getCol(4)
+		implications := getCol(5)
+		adjustments := getCol(6)
+		flag := getCol(7)
 
 		// Wait, medicines table does not have a unique constraint on name!
 		// Let's check if it exists by name first.
@@ -69,9 +71,9 @@ func main() {
 		if err == pgx.ErrNoRows {
 			// Insert
 			_, err = conn.Exec(ctx, `
-				INSERT INTO medicines (name, category, exercise_implications, exercise_adjustments, flag_level, is_system)
-				VALUES ($1, $2, $3, $4, $5, true)
-			`, name, category, implications, adjustments, flag)
+				INSERT INTO medicines (name, active_ingredient, category, main_function, exercise_implications, exercise_adjustments, flag_level, is_system)
+				VALUES ($1, $2, $3, $4, $5, $6, $7, true)
+			`, name, activeIngredient, category, mainFunction, implications, adjustments, flag)
 			if err != nil {
 				log.Printf("Error inserting %s: %v\n", name, err)
 			} else {
@@ -81,9 +83,9 @@ func main() {
 			// Update
 			_, err = conn.Exec(ctx, `
 				UPDATE medicines 
-				SET category = $2, exercise_implications = $3, exercise_adjustments = $4, flag_level = $5
+				SET active_ingredient = $2, category = $3, main_function = $4, exercise_implications = $5, exercise_adjustments = $6, flag_level = $7
 				WHERE id = $1
-			`, existingId, category, implications, adjustments, flag)
+			`, existingId, activeIngredient, category, mainFunction, implications, adjustments, flag)
 			if err != nil {
 				log.Printf("Error updating %s: %v\n", name, err)
 			} else {

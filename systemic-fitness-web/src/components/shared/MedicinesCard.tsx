@@ -88,18 +88,20 @@ export function MedicinesCard({ customerId, data, readOnly }: { customerId: stri
                     )}
                   </div>
                   
-                  {fullMed?.exercise_implications && (
-                    <p className="text-[11px] text-slate-500 leading-tight">
-                      <span className="font-semibold text-slate-600">Info:</span> {fullMed.exercise_implications}
+                  {fullMed?.category && (
+                    <p className="text-[11px] text-slate-500 leading-tight mb-1">
+                      <span className="font-semibold text-slate-600">Golongan:</span> {fullMed.category}
                     </p>
                   )}
-                  {fullMed?.flag_level && 
-                    !(fullMed.flag_level.trim().toUpperCase() === "MERAH" || 
-                      fullMed.flag_level.trim().toUpperCase() === "KUNING" || 
-                      fullMed.flag_level.trim().toUpperCase() === "HIJAU") && (
+                  {fullMed?.main_function && (
+                    <p className="text-[11px] text-slate-500 leading-tight mb-1">
+                      <span className="font-semibold text-slate-600">Fungsi Utama:</span> {fullMed.main_function}
+                    </p>
+                  )}
+                  {fullMed?.exercise_implications && (
                     <div className="bg-amber-50/50 border border-amber-100 rounded p-1.5 mt-0.5">
                       <p className="text-[11px] text-amber-800 leading-tight">
-                        <span className="font-semibold">Implikasi Latihan:</span> {fullMed.flag_level}
+                        <span className="font-semibold">Implikasi Latihan:</span> {fullMed.exercise_implications}
                       </p>
                     </div>
                   )}
