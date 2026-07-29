@@ -14,7 +14,7 @@ import {
   CalendarDays, Dumbbell, ClipboardList, CalendarRange, Apple, UtensilsCrossed,
   Cookie, Repeat, FileText, TrendingUp, Zap, Library, BookOpen, Pill, Layers,
   ClipboardCheck, Shield, Star, CalendarClock, ArrowRightLeft,
-  HeartPulse, Stethoscope, type LucideIcon,
+  HeartPulse, Stethoscope, Smartphone, MapPin, Calendar, User, type LucideIcon,
 } from "lucide-react";
 
 // ─── Icon Map ──────────────────────────────────────────────────
@@ -52,6 +52,10 @@ const iconMap: Record<string, LucideIcon> = {
   ArrowRightLeft,
   HeartPulse,
   Stethoscope,
+  Smartphone,
+  MapPin,
+  Calendar,
+  User,
 };
 
 function getIcon(iconName: string | null): LucideIcon {
@@ -104,13 +108,12 @@ const SidebarItem = ({
           onClick={() => sidebarCollapsed ? undefined : toggleGroup(entry.code)}
           className={cn(
             "w-full flex items-center gap-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-            level === 0 ? "px-3" : "px-3",
+            "px-3",
             hasActiveChild
               ? "text-sf-systemBlue"
               : "text-sidebar-text hover:bg-sidebar-hover hover:text-white",
             sidebarCollapsed && "justify-center px-2"
           )}
-          style={{ paddingLeft: !sidebarCollapsed ? `${12 + level * 16}px` : undefined }}
           title={sidebarCollapsed ? entry.label : undefined}
         >
           <Icon className={cn("shrink-0", level === 0 ? "h-5 w-5" : "h-4 w-4")} />
@@ -128,7 +131,7 @@ const SidebarItem = ({
         </button>
 
         {isExpanded && (
-          <div className="border-l border-white/5 space-y-0.5 mt-0.5" style={{ marginLeft: `${22 + level * 16}px`, paddingLeft: "12px" }}>
+          <div className="border-l border-white/5 space-y-0.5 mt-0.5 ml-5 pl-2">
             {entry.children!.map((child) => (
               <SidebarItem
                 key={child.id}
@@ -159,7 +162,6 @@ const SidebarItem = ({
           : "text-sidebar-text hover:bg-sidebar-hover hover:text-white",
         sidebarCollapsed && "justify-center px-2"
       )}
-      style={{ paddingLeft: !sidebarCollapsed && level > 0 ? `${12 + level * 16}px` : undefined }}
       title={sidebarCollapsed ? entry.label : undefined}
     >
       <Icon className={cn("shrink-0", level === 0 ? "h-5 w-5" : "h-4 w-4")} />

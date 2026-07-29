@@ -4,10 +4,10 @@
 
 -- Parent group "Consultant" id = 'a0000000-0000-0000-0000-0000000000c1'
 
--- 1. "My Clients" (Level 2)
+-- 1. "My Clients" (Level 1)
 INSERT INTO menus (id, parent_id, code, label, icon, href, sort_order) VALUES
-  ('a0000000-0000-0000-0000-000000000100', 'a0000000-0000-0000-0000-0000000000c1', 'sf_consultant_my_clients', 'My Clients', 'UsersRound', NULL, 3)
-ON CONFLICT (code) DO UPDATE SET label = EXCLUDED.label;
+  ('a0000000-0000-0000-0000-000000000100', NULL, 'sf_consultant_my_clients', 'My Clients', 'UsersRound', NULL, 5)
+ON CONFLICT (code) DO UPDATE SET label = EXCLUDED.label, parent_id = EXCLUDED.parent_id, sort_order = EXCLUDED.sort_order;
 
 -- 1.1 "Digital" (Level 3)
 INSERT INTO menus (id, parent_id, code, label, icon, href, sort_order) VALUES
@@ -40,10 +40,10 @@ INSERT INTO menus (id, parent_id, code, label, icon, href, sort_order) VALUES
 ON CONFLICT (code) DO UPDATE SET label = EXCLUDED.label, href = EXCLUDED.href;
 
 
--- 2. "My Schedule" (Level 2)
+-- 2. "My Schedule" (Level 1)
 INSERT INTO menus (id, parent_id, code, label, icon, href, sort_order) VALUES
-  ('a0000000-0000-0000-0000-000000000110', 'a0000000-0000-0000-0000-0000000000c1', 'sf_consultant_my_schedule', 'My Schedule', 'Calendar', NULL, 4)
-ON CONFLICT (code) DO UPDATE SET label = EXCLUDED.label;
+  ('a0000000-0000-0000-0000-000000000110', NULL, 'sf_consultant_my_schedule', 'My Schedule', 'Calendar', NULL, 6)
+ON CONFLICT (code) DO UPDATE SET label = EXCLUDED.label, parent_id = EXCLUDED.parent_id, sort_order = EXCLUDED.sort_order;
 
 -- 2.1 "Private Consultation" (Level 3)
 INSERT INTO menus (id, parent_id, code, label, icon, href, sort_order) VALUES
