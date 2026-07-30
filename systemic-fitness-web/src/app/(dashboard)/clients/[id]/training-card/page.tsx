@@ -826,7 +826,8 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         sets: seq.sets.map((set) => ({
           set_number: set.set_number,
           duration: set.duration || null,
-          equipment_upper: set.equipment || set.equipment_upper || null,
+          equipment_upper: set.equipment_upper || null,
+          equipment: set.equipment_upper || null,
           equipment_lower: set.equipment_lower || null,
 
           type_id: set.type_id || null,

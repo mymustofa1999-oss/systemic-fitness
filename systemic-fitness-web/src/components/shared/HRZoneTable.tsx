@@ -43,55 +43,49 @@ export function HRZoneTable({
               </div>
             </td>
             <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-rose-100/50 text-rose-800 w-1/4">Max HR</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-rose-100/50 font-semibold text-rose-900 w-1/4">
+            <td className="p-2.5 px-4 text-center bg-rose-100/50 font-semibold text-rose-900 w-1/4">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.max_hr_upper} onChange={e => setHrForm({...hrForm, max_hr_upper: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[0].value)}
             </td>
-            <td className="p-2.5 px-4 text-center bg-rose-200/40 font-semibold text-rose-900 w-1/4">{hrZones[0].value !== "-" ? Math.round(Number(hrZones[0].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 5 */}
           <tr className="border-b border-slate-200">
             <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-amber-100/50 text-amber-800">Zona 5</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-amber-100/50 font-semibold text-amber-900">
+            <td className="p-2.5 px-4 text-center bg-amber-100/50 font-semibold text-amber-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone5_lower} onChange={e => setHrForm({...hrForm, zone5_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[1].value)}
             </td>
-            <td className="p-2.5 px-4 text-center bg-amber-200/40 font-semibold text-amber-900">{hrZones[1].value !== "-" ? Math.round(Number(hrZones[1].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 4 */}
           <tr className="border-b border-slate-200">
             <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-fuchsia-100/50 text-fuchsia-800">Zona 4</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-fuchsia-100/50 font-semibold text-fuchsia-900">
+            <td className="p-2.5 px-4 text-center bg-fuchsia-100/50 font-semibold text-fuchsia-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone4_lower} onChange={e => setHrForm({...hrForm, zone4_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[2].value)}
             </td>
-            <td className="p-2.5 px-4 text-center bg-fuchsia-200/40 font-semibold text-fuchsia-900">{hrZones[2].value !== "-" ? Math.round(Number(hrZones[2].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 3 */}
           <tr className="border-b border-slate-200">
             <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-emerald-100/50 text-emerald-800">Zona 3</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-emerald-100/50 font-semibold text-emerald-900">
+            <td className="p-2.5 px-4 text-center bg-emerald-100/50 font-semibold text-emerald-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone3_lower} onChange={e => setHrForm({...hrForm, zone3_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[3].value)}
             </td>
-            <td className="p-2.5 px-4 text-center bg-emerald-200/40 font-semibold text-emerald-900">{hrZones[3].value !== "-" ? Math.round(Number(hrZones[3].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 2 */}
           <tr className="border-b border-slate-200">
             <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-sky-100/50 text-sky-800">Zona 2</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-sky-100/50 font-semibold text-sky-900">
+            <td className="p-2.5 px-4 text-center bg-sky-100/50 font-semibold text-sky-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone2_lower} onChange={e => setHrForm({...hrForm, zone2_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[4].value)}
             </td>
-            <td className="p-2.5 px-4 text-center bg-sky-200/40 font-semibold text-sky-900">{hrZones[4].value !== "-" ? Math.round(Number(hrZones[4].value) / 4) : "-"}</td>
           </tr>
 
           {/* Zona 1 */}
           <tr>
             <td className="border-r border-slate-200 p-2.5 px-4 font-bold bg-indigo-50/70 text-indigo-800">Zona 1</td>
-            <td className="border-r border-slate-200 p-2.5 px-4 text-center bg-indigo-50/70 font-semibold text-indigo-900">
+            <td className="p-2.5 px-4 text-center bg-indigo-50/70 font-semibold text-indigo-900">
               {editingHR && hrForm && setHrForm ? <input type="number" value={hrForm.zone1_lower} onChange={e => setHrForm({...hrForm, zone1_lower: e.target.value})} className="w-14 px-1 py-0.5 text-center rounded border border-slate-300" /> : (hrZones[5].value)}
             </td>
-            <td className="p-2.5 px-4 text-center bg-indigo-100/40 font-semibold text-indigo-900">{hrZones[5].value !== "-" ? Math.round(Number(hrZones[5].value) / 4) : "-"}</td>
           </tr>
         </tbody>
       </table>
