@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -331,6 +332,13 @@ func (r *TrainerCardRepository) UpsertCard(ctx context.Context, card *TrainerCar
 	}
 	defer tx.Rollback(ctx)
 
+	if card.ID == "" {
+		card.ID = uuid.New().String()
+	} else {
+		// If it's an update, ensure we have the card.ID for sequences, sets, etc.
+		// Wait, ON CONFLICT (customer_id) will handle it. We can just RETURNING id into card.ID
+	}
+
 	// 1. Upsert the trainer card
 	err = tx.QueryRow(ctx,
 		`INSERT INTO trainer_cards (customer_id, level, notes, created_by)
@@ -351,68 +359,81 @@ func (r *TrainerCardRepository) UpsertCard(ctx context.Context, card *TrainerCar
 		return fmt.Errorf("delete old sequences: %w", err)
 	}
 
-	// 3. Insert sequences → sets → items
+	batch := &pgx.Batch{}
+
+	// 3. Queue sequences → sets → items
 	for si := range card.Sequences {
 		seq := &card.Sequences[si]
 		seq.TrainerCardID = card.ID
+		if seq.ID == "" {
+			seq.ID = uuid.New().String()
+		}
 		if seq.SortOrder == 0 {
 			seq.SortOrder = si
 		}
 
-		err = tx.QueryRow(ctx,
-			`INSERT INTO trainer_card_sequences (trainer_card_id, program_category_id, duration, sort_order)
-			 VALUES ($1, $2, $3, $4)
-			 RETURNING id, created_at, updated_at`,
-			seq.TrainerCardID, seq.ProgramCategoryID, seq.Duration, seq.SortOrder,
-		).Scan(&seq.ID, &seq.CreatedAt, &seq.UpdatedAt)
-		if err != nil {
-			return fmt.Errorf("insert sequence %d: %w", si, err)
-		}
+		batch.Queue(
+			`INSERT INTO trainer_card_sequences (id, trainer_card_id, program_category_id, duration, sort_order)
+			 VALUES ($1, $2, $3, $4, $5)`,
+			seq.ID, seq.TrainerCardID, seq.ProgramCategoryID, seq.Duration, seq.SortOrder,
+		)
 
 		for seti := range seq.Sets {
 			set := &seq.Sets[seti]
 			set.SequenceID = seq.ID
+			if set.ID == "" {
+				set.ID = uuid.New().String()
+			}
 			if set.SortOrder == 0 {
 				set.SortOrder = seti
 			}
 
-			err = tx.QueryRow(ctx,
+			batch.Queue(
 				`INSERT INTO trainer_card_sets
-				    (sequence_id, set_number, duration, equipment_upper, equipment_lower, equipment,
+				    (id, sequence_id, set_number, duration, equipment_upper, equipment_lower, equipment,
 				     type_id, bpm, extra_load, notes, sort_order,
 				     pattern, breathing_core, breathing_diaphragm)
-				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-				 RETURNING id, created_at, updated_at`,
-				set.SequenceID, set.SetNumber, set.Duration,
+				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+				set.ID, set.SequenceID, set.SetNumber, set.Duration,
 				set.EquipmentUpper, set.EquipmentLower, set.Equipment,
 				set.TypeID, set.BPM, set.ExtraLoad, set.Notes, set.SortOrder,
 				set.Pattern, set.BreathingCore, set.BreathingDiaphragm,
-			).Scan(&set.ID, &set.CreatedAt, &set.UpdatedAt)
-			if err != nil {
-				return fmt.Errorf("insert set %d-%d: %w", si, seti, err)
-			}
+			)
 
 			for itemi := range set.Items {
 				item := &set.Items[itemi]
 				item.SetID = set.ID
+				if item.ID == "" {
+					item.ID = uuid.New().String()
+				}
 				if item.SortOrder == 0 {
 					item.SortOrder = itemi
 				}
 
-				err = tx.QueryRow(ctx,
+				batch.Queue(
 					`INSERT INTO trainer_card_set_items
-					    (set_id, movement_id, movement_name, body_part, equipment, reps, sets_count, sort_order,
+					    (id, set_id, movement_id, movement_name, body_part, equipment, reps, sets_count, sort_order,
 					     breathing_core, breathing_diaphragm, allowed_tiers)
-					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-					 RETURNING id, created_at, updated_at`,
-					item.SetID, item.MovementID, item.MovementName,
+					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+					item.ID, item.SetID, item.MovementID, item.MovementName,
 					item.BodyPart, item.Equipment, item.Reps, item.SetsCount, item.SortOrder,
 					item.BreathingCore, item.BreathingDiaphragm, nonNilTiers(item.AllowedTiers),
-				).Scan(&item.ID, &item.CreatedAt, &item.UpdatedAt)
-				if err != nil {
-					return fmt.Errorf("insert item %d-%d-%d: %w", si, seti, itemi, err)
-				}
+				)
 			}
+		}
+	}
+
+	if batch.Len() > 0 {
+		br := tx.SendBatch(ctx, batch)
+		// We need to consume all results otherwise commit fails
+		for i := 0; i < batch.Len(); i++ {
+			if _, err := br.Exec(); err != nil {
+				br.Close()
+				return fmt.Errorf("batch execute at idx %d: %w", i, err)
+			}
+		}
+		if err := br.Close(); err != nil {
+			return fmt.Errorf("close batch: %w", err)
 		}
 	}
 
