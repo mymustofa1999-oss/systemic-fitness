@@ -280,7 +280,9 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
             isLevel1: !!set.breathing_core,
             breathing_core: set.breathing_core || "-",
             breathing_diaphragm: set.breathing_diaphragm || "-",
-            seqIndex: sIdx,
+              equip_upper: set.equipment_upper || "-",
+              equip_lower: set.equipment_lower || "-",
+              seqIndex: sIdx,
             setIndex: setIdx,
             itemIndex: itemIdx
           });
