@@ -380,6 +380,37 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
             )}
           </div>
 
+          {/* Navigation Controls (Compacted) */}
+          <div className="bg-white rounded-2xl p-4 md:p-5 shadow-xl border border-slate-100 flex items-center justify-between">
+            <button 
+              disabled={isFirst}
+              onClick={() => setCurrentIndex(prev => prev - 1)}
+              className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-slate-700"
+            >
+              <SkipBack className="w-5 h-5 md:w-6 md:h-6" />
+            </button>
+            
+            <div className="text-lg md:text-xl font-bold text-slate-400 tabular-nums tracking-widest">
+              <span className="text-sf-deepNavy">{currentIndex + 1}</span> <span className="mx-2 opacity-50">/</span> {playlist.length}
+            </div>
+
+            {!isLast ? (
+              <button 
+                onClick={() => setCurrentIndex(prev => prev + 1)}
+                className="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-sf-warmGold hover:bg-yellow-500 text-slate-900 transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-sf-warmGold/30"
+              >
+                <SkipForward className="w-6 h-6 md:w-7 md:h-7 ml-1" />
+              </button>
+            ) : (
+              <button 
+                onClick={() => isTrainer ? handleFinish(0, "") : setShowEndModal(true)}
+                className="px-6 md:px-8 h-14 md:h-16 flex items-center justify-center gap-2 rounded-full bg-green-500 hover:bg-green-400 text-white font-extrabold text-lg md:text-xl transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-green-500/30 tracking-wide"
+              >
+                Selesai <CheckCircle2 className="w-6 h-6 md:w-7 md:h-7" />
+              </button>
+            )}
+          </div>
+
           {/* 🎵 BPM Metronome Player Box 🎵 */}
           <div className="bg-sf-deepNavy text-white rounded-2xl p-4 md:p-5 shadow-xl ring-1 ring-slate-900/10 flex flex-col sm:flex-row items-center justify-between gap-4 w-full shrink-0">
              <div className="flex items-center gap-3.5">
@@ -480,27 +511,27 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
                   <div className="p-2 border-b border-slate-700/50 text-center bg-slate-900/30">
                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Equipment</p>
                   </div>
-                  <div className="flex flex-1 divide-x divide-slate-700/50">
+                  <div className="flex flex-col flex-1 divide-y divide-slate-700/50">
                     <div className="flex-1 p-2 flex flex-col items-center justify-center text-center">
-                      <p className="text-[9px] text-slate-500 font-bold uppercase mb-1">Upper</p>
-                      <p className="text-xs md:text-sm font-bold text-white leading-tight">
-                        {currentItem.equip_upper !== "-" ? currentItem.equip_upper.split(",").map((s:string,idx:number)=><div key={idx}>{s.trim()}</div>) : "-"}
-                      </p>
+                      <span className="bg-sf-deepNavy/80 text-sf-warmGold text-[9px] font-bold uppercase px-2 py-0.5 rounded border border-sf-warmGold/20 mb-1.5">Upper</span>
+                      <div className="text-[11px] font-bold text-white leading-tight break-words">
+                        {currentItem.equip_upper !== "-" ? currentItem.equip_upper.split(",").map((s:string,idx:number)=><div key={idx} className="mb-0.5">{s.trim()}</div>) : "-"}
+                      </div>
                     </div>
                     <div className="flex-1 p-2 flex flex-col items-center justify-center text-center">
-                      <p className="text-[9px] text-slate-500 font-bold uppercase mb-1">Lower</p>
-                      <p className="text-xs md:text-sm font-bold text-white leading-tight">
-                        {currentItem.equip_lower !== "-" ? currentItem.equip_lower.split(",").map((s:string,idx:number)=><div key={idx}>{s.trim()}</div>) : "-"}
-                      </p>
+                      <span className="bg-sf-deepNavy/80 text-sf-warmGold text-[9px] font-bold uppercase px-2 py-0.5 rounded border border-sf-warmGold/20 mb-1.5">Lower</span>
+                      <div className="text-[11px] font-bold text-white leading-tight break-words">
+                        {currentItem.equip_lower !== "-" ? currentItem.equip_lower.split(",").map((s:string,idx:number)=><div key={idx} className="mb-0.5">{s.trim()}</div>) : "-"}
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 {/* SET / REPS */}
                 <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800 flex flex-col items-center justify-center text-center">
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Set/Reps</p>
-                  <p className="text-xl md:text-2xl font-extrabold text-white">
-                    {currentItem.sets} <span className="text-slate-500 font-normal mx-1 text-lg">x</span> {currentItem.reps}
+                  <span className="bg-sf-deepNavy/80 text-sf-warmGold text-[10px] font-bold uppercase px-3 py-1 rounded border border-sf-warmGold/20 mb-2 tracking-widest">Set/Reps</span>
+                  <p className="text-2xl md:text-3xl font-extrabold text-white">
+                    {currentItem.sets} <span className="text-slate-500 font-normal mx-1 text-xl">x</span> {currentItem.reps}
                   </p>
                 </div>
 
@@ -526,38 +557,6 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
 
               </div>
             </div>
-
-          {/* Navigation Controls (Compacted) */}
-          <div className="bg-white rounded-2xl p-4 md:p-5 shadow-xl border border-slate-100 flex items-center justify-between mt-auto">
-            <button 
-              disabled={isFirst}
-              onClick={() => setCurrentIndex(prev => prev - 1)}
-              className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-slate-700"
-            >
-              <SkipBack className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-            
-            <div className="text-lg md:text-xl font-bold text-slate-400 tabular-nums tracking-widest">
-              <span className="text-sf-deepNavy">{currentIndex + 1}</span> <span className="mx-2 opacity-50">/</span> {playlist.length}
-            </div>
-
-            {!isLast ? (
-              <button 
-                onClick={() => setCurrentIndex(prev => prev + 1)}
-                className="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-sf-warmGold hover:bg-yellow-500 text-slate-900 transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-sf-warmGold/30"
-              >
-                <SkipForward className="w-6 h-6 md:w-7 md:h-7 ml-1" />
-              </button>
-            ) : (
-              <button 
-                onClick={() => isTrainer ? handleFinish(0, "") : setShowEndModal(true)}
-                className="px-6 md:px-8 h-14 md:h-16 flex items-center justify-center gap-2 rounded-full bg-green-500 hover:bg-green-400 text-white font-extrabold text-lg md:text-xl transition-all transform hover:scale-105 hover:-translate-y-1 shadow-xl shadow-green-500/30 tracking-wide"
-              >
-                Selesai <CheckCircle2 className="w-6 h-6 md:w-7 md:h-7" />
-              </button>
-            )}
-          </div>
-
         </div>
 
         {/* RIGHT COLUMN: Queue */}
