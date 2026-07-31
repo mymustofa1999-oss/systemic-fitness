@@ -345,11 +345,13 @@ function formatMovementName(rawName: string, gender: string | undefined): string
         return femaleName + levelSuffix;
     }
 
-    if (normalizedGender === "female" || normalizedGender === "wanita" || normalizedGender === "women") {
-      return femaleName + levelSuffix;
-    } else if (normalizedGender === "male" || normalizedGender === "pria" || normalizedGender === "men") {
+    if (normalizedGender === "male" || normalizedGender === "pria" || normalizedGender === "men" || normalizedGender === "laki-laki") {
       return maleName + levelSuffix;
     }
+    
+    // Default to female name for female, wanita, women, or if gender is unknown/empty.
+    // This prevents the raw string with "|" from ever being shown to the user.
+    return femaleName + levelSuffix;
   }
 
   return rawName;
