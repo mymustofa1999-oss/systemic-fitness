@@ -2063,7 +2063,7 @@ function SortableItemRow({
           <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600 p-1 md:block hidden shrink-0" title="Geser untuk mengatur urutan">
             <GripVertical className="h-5 w-5" />
           </div>
-        )}}
+        )}
       {/* Bagian Nama & Body Part */}
       <div className="flex-1">
         <div className="flex items-center justify-end mb-1.5">
