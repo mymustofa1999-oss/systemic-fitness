@@ -1663,7 +1663,15 @@ function SetBlock({
                </div>
              ) : (
                <div className="text-sm space-y-1 mt-1">
-                 <div><span className="font-semibold text-slate-600">{set.equipment_upper || "-"}</span></div>
+                 {set.equipment_upper ? (
+                   <ul className="list-disc ml-4 text-slate-600 font-semibold space-y-0.5">
+                     {set.equipment_upper.split(",").map((eq, idx) => (
+                       <li key={idx}>{eq.trim()}</li>
+                     ))}
+                   </ul>
+                 ) : (
+                   <div><span className="font-semibold text-slate-600">-</span></div>
+                 )}
                  <div className="text-[10px] text-slate-400">
                    Acuan: {recommendedUpper || "-"}
                  </div>
@@ -1689,11 +1697,19 @@ function SetBlock({
                </div>
              ) : (
                <div className="text-sm space-y-1 mt-1">
-                 <div><span className="font-semibold text-slate-600">{set.equipment_lower || "-"}</span></div>
-                 <div className="text-[10px] text-slate-400">
-                   Acuan: {recommendedLower || "-"}
-                 </div>
-               </div>
+                  {set.equipment_lower ? (
+                    <ul className="list-disc ml-4 text-slate-600 font-semibold space-y-0.5">
+                      {set.equipment_lower.split(",").map((eq, idx) => (
+                        <li key={idx}>{eq.trim()}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div><span className="font-semibold text-slate-600">-</span></div>
+                  )}
+                  <div className="text-[10px] text-slate-400">
+                    Acuan: {recommendedLower || "-"}
+                  </div>
+                </div>
              )}
           </div>
         </div>

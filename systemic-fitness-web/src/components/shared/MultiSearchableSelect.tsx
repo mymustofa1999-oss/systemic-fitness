@@ -38,10 +38,13 @@ export function MultiSearchableSelect({
 
   const selectedValues = value ? value.split(",").map(v => v.trim()).filter(Boolean) : [];
   
-  const selectedOptions = options.filter(o => selectedValues.includes(o.value));
+  const displayLabels = selectedValues.map(val => {
+    const opt = options.find(o => o.value === val);
+    return opt ? opt.label : val;
+  });
   
-  const displayLabel = selectedOptions.length > 0 
-    ? selectedOptions.map(o => o.label).join(", ")
+  const displayLabel = displayLabels.length > 0 
+    ? displayLabels.join(", ")
     : placeholder;
 
   const filtered = options.filter((o) =>
@@ -78,7 +81,7 @@ export function MultiSearchableSelect({
             className
           )}
         >
-          <span className={cn("truncate", selectedOptions.length === 0 && "text-slate-400")}>
+          <span className={cn("truncate", selectedValues.length === 0 && "text-slate-400")}>
             {displayLabel}
           </span>
           <div className="flex items-center gap-1 shrink-0">
