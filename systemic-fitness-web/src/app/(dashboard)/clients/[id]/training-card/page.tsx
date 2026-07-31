@@ -563,11 +563,17 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const [editing, setEditing] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, boolean>>({});
   const [form, _setForm] = useState<CardForm | null>(null);
-  const setForm = (val: CardForm | null) => {
-    if (val && val.sequences) {
-      val.sequences = ensureUids(val.sequences);
+  const setForm = (val: React.SetStateAction<CardForm | null>) => {
+    if (typeof val === "function") {
+      _setForm((prev: any) => {
+        const nextVal = (val as any)(prev);
+        if (nextVal && nextVal.sequences) nextVal.sequences = ensureUids(nextVal.sequences);
+        return nextVal;
+      });
+    } else {
+      if (val && val.sequences) val.sequences = ensureUids(val.sequences);
+      _setForm(val);
     }
-    _setForm(val);
   };
   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -1013,6 +1019,21 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     sets[seti] = { ...sets[seti], ...patch };
     seqs[si] = { ...seqs[si], sets };
     setForm({ ...form, sequences: seqs });
+  }
+
+  
+  function reorderItem(si: number, seti: number, oldIndex: number, newIndex: number) {
+    if (!form) return;
+    const newSequences = [...form.sequences];
+    const newSets = [...newSequences[si].sets];
+    const newItems = [...newSets[seti].items];
+    
+    const reordered = arrayMove(newItems, oldIndex, newIndex);
+    
+    newSets[seti] = { ...newSets[seti], items: reordered };
+    newSequences[si] = { ...newSequences[si], sets: newSets };
+    
+    setForm({ ...form, sequences: newSequences });
   }
 
   function addItem(si: number, seti: number, bodyPart: string = "upper") {
