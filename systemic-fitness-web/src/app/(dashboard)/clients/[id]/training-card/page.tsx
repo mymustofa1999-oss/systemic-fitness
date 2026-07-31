@@ -1638,7 +1638,11 @@ function SetBlock({
                 />
               ) : (
                 <div className="text-sm font-medium text-slate-800">
-                  {set.breathing_core ? set.breathing_core.split(',').map((s: string) => s.trim()).join(', ') : "-"}
+                  {set.breathing_core ? (
+                    <ul className="list-disc ml-4 space-y-0.5">
+                      {set.breathing_core.split(',').map((s: string, idx: number) => <li key={idx}>{s.trim()}</li>)}
+                    </ul>
+                  ) : "-"}
                 </div>
             )}
           </div>
@@ -2158,7 +2162,11 @@ function SortableItemRow({
                 />
               ) : (
                 <div className="font-medium text-sm text-center">
-                  {item.breathing_core ? item.breathing_core.split(',').map((s: string) => s.trim()).join(', ') : "-"}
+                  {item.breathing_core ? (
+                    <ul className="list-disc ml-4 space-y-0.5 text-slate-600 text-left">
+                      {item.breathing_core.split(',').map((s: string, idx: number) => <li key={idx}>{s.trim()}</li>)}
+                    </ul>
+                  ) : "-"}
                 </div>
             )}
           </div>
