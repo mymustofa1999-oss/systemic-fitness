@@ -335,9 +335,15 @@ function formatMovementName(rawName: string, gender: string | undefined): string
   }
 
   const parts = baseName.split(" | ");
-  if (parts.length === 2) {
+  if (parts.length >= 2) {
     const femaleName = parts[0].trim();
     const maleName = parts[1].trim();
+    
+    // Fix: if maleName is a youtube link (which happens if data was entered incorrectly)
+    // just return the female name (the actual movement name) for both genders.
+    if (maleName.startsWith("http")) {
+        return femaleName + levelSuffix;
+    }
 
     if (normalizedGender === "female" || normalizedGender === "wanita" || normalizedGender === "women") {
       return femaleName + levelSuffix;
@@ -2052,12 +2058,12 @@ function SortableItemRow({
   } as any;
 
   return (
-    <div ref={setNodeRef} style={style} className={`flex flex-col md:flex-row gap-4 bg-white p-3 border ${isDragging ? "border-violet-400 shadow-md" : "border-slate-200"} rounded-md shadow-sm relative`}>
-      {editing && (
-        <div {...attributes} {...listeners} className="absolute -left-3 top-1/2 -translate-y-1/2 p-2 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500 bg-white border border-slate-200 rounded-full shadow-sm z-10 md:flex hidden">
-          <GripVertical className="h-4 w-4" />
-        </div>
-      )}
+    <div ref={setNodeRef} style={style} className={`flex flex-col md:flex-row gap-4 bg-white p-3 border ${isDragging ? "border-violet-400 shadow-md" : "border-slate-200"} rounded-md shadow-sm relative md:items-center items-start`}>
+        {editing && (
+          <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600 p-1 md:block hidden shrink-0" title="Geser untuk mengatur urutan">
+            <GripVertical className="h-5 w-5" />
+          </div>
+        )}}
       {/* Bagian Nama & Body Part */}
       <div className="flex-1">
         <div className="flex items-center justify-end mb-1.5">
