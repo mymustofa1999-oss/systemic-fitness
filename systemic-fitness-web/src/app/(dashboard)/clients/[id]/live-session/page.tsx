@@ -28,9 +28,15 @@ function formatMovementName(rawName: string, gender: string | undefined): string
   }
 
   const parts = baseName.split(" | ");
-  if (parts.length === 2) {
+  if (parts.length >= 2) {
     const femaleName = parts[0].trim();
     const maleName = parts[1].trim();
+    
+    // Fix: if maleName is a youtube link (which happens if data was entered incorrectly)
+    // just return the female name (the actual movement name) for both genders.
+    if (maleName.startsWith("http")) {
+        return femaleName + levelSuffix;
+    }
 
     if (normalizedGender === "female" || normalizedGender === "wanita" || normalizedGender === "women") {
       return femaleName + levelSuffix;
