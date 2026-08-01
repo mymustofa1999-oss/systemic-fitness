@@ -32,7 +32,7 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { SearchableSelect } from "@/components/shared/SearchableSelect";
 import {
   ArrowLeft, Plus, Trash2, Save, Loader2, Check, X, ChevronDown, Info, Pill, ExternalLink, ClipboardCheck,
-  Crown, Star, Zap, Clock, CreditCard, FileText, User, Activity, Phone, ActivitySquare, Upload, File
+  Crown, Star, Zap, Clock, CreditCard, FileText, User, Activity, Phone, ActivitySquare, Upload, File, ClipboardList
 } from "lucide-react";
 import { cn, formatCurrency, formatDate } from "@/lib/utils";
 
@@ -115,20 +115,16 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                </div>
                <ChevronDown className="h-4 w-4 text-slate-400 -rotate-90 group-hover:text-white transition-colors" />
              </Link>
-             <Link href={`/clients/${params.id}/assessment-v2`} className="bg-white border border-slate-200 hover:border-sf-deepNavy transition-colors rounded-xl p-3 flex items-center justify-between group shadow-sm">
-               <div className="flex items-center gap-3">
-                 <div className="p-2 rounded-lg bg-slate-100 text-sf-deepNavy group-hover:bg-sf-deepNavy/10 transition-colors"><Star className="h-5 w-5" /></div>
-                 <div className="text-left">
-                   <p className="text-sm font-bold text-slate-900">Hasil Asesmen v2</p>
-                   <p className="text-[10px] text-slate-500">
-                     {assessmentData 
-                       ? `Score: ${assessmentData.system_score ? Number(assessmentData.system_score).toFixed(1) : "-"} | Phase ${assessmentData.physical_status_level || "-"}` 
-                       : "Score, Chronobiology, Phase"}
-                   </p>
-                 </div>
-               </div>
-               <ChevronDown className="h-4 w-4 text-slate-300 -rotate-90 group-hover:text-sf-deepNavy transition-colors" />
-             </Link>
+             <Link href={`/clients/${params.id}/systemic-session-log`} className="bg-white border border-slate-200 hover:border-sf-deepNavy transition-colors rounded-xl p-3 flex items-center justify-between group shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-slate-100 text-sf-deepNavy group-hover:bg-sf-deepNavy/10 transition-colors"><ClipboardList className="h-5 w-5" /></div>
+                  <div className="text-left">
+                    <p className="text-sm font-bold text-slate-900">SYSTEMIC SESSION LOG</p>
+                    <p className="text-[10px] text-slate-500">Record Meds, Vitals, Symptoms, & Habits</p>
+                  </div>
+                </div>
+                <ChevronDown className="h-4 w-4 text-slate-300 -rotate-90 group-hover:text-sf-deepNavy transition-colors" />
+              </Link>
              <Link href={`/clients/${params.id}/training-session-log`} className="bg-white border border-slate-200 hover:border-green-600 transition-colors rounded-xl p-3 flex items-center justify-between group shadow-sm">
                <div className="flex items-center gap-3">
                  <div className="p-2 rounded-lg bg-green-50 text-green-600 group-hover:bg-green-100 transition-colors"><FileText className="h-5 w-5" /></div>

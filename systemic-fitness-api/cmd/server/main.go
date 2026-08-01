@@ -238,6 +238,11 @@ func main() {
 	trainingSessionService := service.NewTrainingSessionService(trainingSessionRepo)
 	trainingSessionHandler := handler.NewTrainingSessionHandler(trainingSessionService)
 
+	// Systemic Session Logs
+	systemicSessionRepo := repository.NewSystemicSessionLogRepository(db)
+	systemicSessionService := service.NewSystemicSessionLogService(systemicSessionRepo)
+	systemicSessionHandler := handler.NewSystemicSessionLogHandler(systemicSessionService)
+
 	// Adapter for paid-subscription middleware (avoids middleware → service import cycle).
 	subscriptionInfoFn := func(ctx context.Context, userID string) (middleware.SubscriptionInfo, error) {
 		res, err := clientSubService.GetMySubscription(ctx, userID)
@@ -312,6 +317,10 @@ func main() {
 					// Training Session Logs
 					r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/training-sessions", trainingSessionHandler.GetLogs)
 					r.With(middleware.RequireMinRole(model.RoleTrainer)).Post("/training-sessions", trainingSessionHandler.UpsertLogs)
+
+					// Systemic Session Logs
+					r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/systemic-session-log", systemicSessionHandler.GetLogs)
+					r.With(middleware.RequireMinRole(model.RoleTrainer)).Post("/systemic-session-log", systemicSessionHandler.CreateLog)
 				})
 			})
 
