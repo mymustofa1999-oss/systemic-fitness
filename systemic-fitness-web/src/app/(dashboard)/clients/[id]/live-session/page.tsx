@@ -172,10 +172,10 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
   const customerId = params.id;
   const router = useRouter();
   const { isTrainer } = useAuth();
-  const { data: userData } = useUser(customerId);
-  const { data: cardData } = useTrainerCard(customerId);
-  const { data: setupData } = useCustomerSetup(customerId);
-  const { data: movementsData } = useDLMovements({ limit: 1000 });
+  const { data: userData, isLoading: userLoading } = useUser(customerId);
+  const { data: cardData, isLoading: cardLoading } = useTrainerCard(customerId);
+  const { data: setupData, isLoading: setupLoading } = useCustomerSetup(customerId);
+  const { data: movementsData, isLoading: movementsLoading } = useDLMovements({ limit: 1000 });
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showEndModal, setShowEndModal] = useState(false);
@@ -294,7 +294,8 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
     return items;
   }, [cardData, userData, movementsData]);
 
-  if (!cardData || !movementsData) return <div className="p-8 text-center text-slate-500">Memuat sesi...</div>;
+  if (cardLoading || movementsLoading || setupLoading || userLoading) return <div className="p-8 text-center text-slate-500">Memuat sesi...</div>;
+  if (!cardData || !movementsData) return <div className="p-8 text-center text-slate-500">Data sesi tidak ditemukan.</div>;
   if (playlist.length === 0) return (
     <div className="p-8 text-center space-y-4">
       <p className="text-slate-500">Training Card kosong atau belum dibuat.</p>
