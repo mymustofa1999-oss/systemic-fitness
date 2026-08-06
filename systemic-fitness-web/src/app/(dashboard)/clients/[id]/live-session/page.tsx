@@ -4,7 +4,7 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUsers";
-import { useTrainerCard } from "@/hooks/useNewFeatures";
+import { useTrainerCard, useCustomerSetup } from "@/hooks/useNewFeatures";
 import { useDLMovements } from "@/hooks/useDigitalLibrary";
 import { ArrowLeft, SkipForward, SkipBack, CheckCircle2, ChevronRight, Video, X, Activity, ListOrdered, Music } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -174,6 +174,7 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
   const { isTrainer } = useAuth();
   const { data: userData } = useUser(customerId);
   const { data: cardData } = useTrainerCard(customerId);
+  const { data: setupData } = useCustomerSetup(customerId);
   const { data: movementsData } = useDLMovements({ limit: 1000 });
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -302,6 +303,12 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
   );
 
   const currentItem = playlist[currentIndex];
+
+  const setup = setupData?.data as any;
+  const userProfile = userData?.data as any;
+  const maxHrCalc = userProfile?.profile?.age ? 220 - (userProfile.profile.age as number) : null;
+  const maxHrDisplay = setup?.hr_zone?.max_hr_upper ?? (maxHrCalc || "-");
+
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === playlist.length - 1;
 
@@ -535,10 +542,10 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
                   </p>
                 </div>
 
-                {/* MAX HR (BPM Zone) */}
+                {/* MAX HR */}
                 <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50 backdrop-blur-sm transition-colors hover:bg-slate-800 flex flex-col items-center justify-center text-center">
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Max HR / BPM</p>
-                  <p className="text-lg md:text-xl font-bold text-white leading-tight">{currentItem.bpm}</p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Max HR</p>
+                  <p className="text-lg md:text-xl font-bold text-white leading-tight">{maxHrDisplay}</p>
                 </div>
 
                 {/* BREATHING */}
