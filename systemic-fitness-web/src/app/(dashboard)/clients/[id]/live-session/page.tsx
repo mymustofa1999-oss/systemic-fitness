@@ -307,8 +307,17 @@ export default function LiveSessionPage({ params }: { params: { id: string } }) 
 
   const setup = setupData?.data as any;
   const userProfile = userData?.data as any;
-  const maxHrCalc = userProfile?.profile?.age ? 220 - (userProfile.profile.age as number) : null;
-  const maxHrDisplay = setup?.hr_zone?.max_hr_upper ?? (maxHrCalc || "-");
+  
+  // Calculate age from date_of_birth or fallback to age fields
+  let computedAge = userProfile?.profile?.age || userProfile?.profile?.age_years;
+  if (!computedAge && userProfile?.profile?.date_of_birth) {
+    const dob = new Date(userProfile.profile.date_of_birth);
+    const diff = Date.now() - dob.getTime();
+    computedAge = Math.abs(new Date(diff).getUTCFullYear() - 1970);
+  }
+  
+  const maxHrCalc = computedAge ? 220 - (computedAge as number) : null;
+  const maxHrDisplay = setup?.hr_zone?.max_hr_upper || maxHrCalc || "-";
 
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === playlist.length - 1;
