@@ -265,8 +265,7 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Tgl Lahir</td>
-            <td className={val} colSpan={2}>{editing ? <input type="date" value={form.date_of_birth} onChange={(e) => setForm({ ...form, date_of_birth: e.target.value })} className={inp} /> : (profile?.date_of_birth || "-")}</td>
-            <td className={cn(val, "font-mono w-16")}>{profile?.date_of_birth ? new Date(profile.date_of_birth).getFullYear() : "-"}</td>
+            <td className={val} colSpan={3}>{editing ? <input type="date" value={form.date_of_birth} onChange={(e) => setForm({ ...form, date_of_birth: e.target.value })} className={inp} /> : (profile?.date_of_birth || "-")}</td>
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Usia</td>
@@ -285,9 +284,11 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Tinggi</td>
-            <td className={val}>{editing ? <input type="number" value={form.height_cm} onChange={(e) => setForm({ ...form, height_cm: e.target.value })} className={inp} placeholder="cm" /> : (profile?.height_cm ? `${profile.height_cm} cm` : "-")}</td>
+            <td className={val} colSpan={3}>{editing ? <input type="number" value={form.height_cm} onChange={(e) => setForm({ ...form, height_cm: e.target.value })} className={inp} placeholder="cm" /> : (profile?.height_cm ? `${profile.height_cm} cm` : "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
             <td className={lbl}>Berat</td>
-            <td className={val}>{editing ? <input type="number" value={form.weight_kg} onChange={(e) => setForm({ ...form, weight_kg: e.target.value })} className={inp} placeholder="kg" /> : (profile?.weight_kg ? `${profile.weight_kg} kg` : "-")}</td>
+            <td className={val} colSpan={3}>{editing ? <input type="number" value={form.weight_kg} onChange={(e) => setForm({ ...form, weight_kg: e.target.value })} className={inp} placeholder="kg" /> : (profile?.weight_kg ? `${profile.weight_kg} kg` : "-")}</td>
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Alamat Jalan</td>
@@ -299,21 +300,27 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Kelurahan</td>
-            <td className={val}>{editing ? <input type="text" value={form.sub_district} onChange={(e) => setForm({ ...form, sub_district: e.target.value })} className={inp} placeholder="Kelurahan" /> : (profile?.sub_district || "-")}</td>
+            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.sub_district} onChange={(e) => setForm({ ...form, sub_district: e.target.value })} className={inp} placeholder="Kelurahan" /> : (profile?.sub_district || "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
             <td className={lbl}>Kecamatan</td>
-            <td className={val}>{editing ? <input type="text" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} className={inp} placeholder="Kecamatan" /> : (profile?.district || "-")}</td>
+            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} className={inp} placeholder="Kecamatan" /> : (profile?.district || "-")}</td>
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Asal Kota</td>
-            <td className={val}>{editing ? <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={inp} placeholder="Asal Kota" /> : (profile?.city || "-")}</td>
+            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={inp} placeholder="Asal Kota" /> : (profile?.city || "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
             <td className={lbl}>Provinsi</td>
-            <td className={val}>{editing ? <input type="text" value={form.province} onChange={(e) => setForm({ ...form, province: e.target.value })} className={inp} placeholder="Provinsi" /> : (profile?.province || "-")}</td>
+            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.province} onChange={(e) => setForm({ ...form, province: e.target.value })} className={inp} placeholder="Provinsi" /> : (profile?.province || "-")}</td>
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Kode Pos</td>
-            <td className={val}>{editing ? <input type="text" value={form.postal_code} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} className={inp} placeholder="Kode Pos" /> : (profile?.postal_code || "-")}</td>
+            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.postal_code} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} className={inp} placeholder="Kode Pos" /> : (profile?.postal_code || "-")}</td>
+          </tr>
+          <tr className="border-b border-slate-100">
             <td className={lbl}>Negara</td>
-            <td className={val}>{editing ? <input type="text" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className={inp} placeholder="Negara" /> : (profile?.country || "-")}</td>
+            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className={inp} placeholder="Negara" /> : (profile?.country || "-")}</td>
           </tr>
           <tr className="border-b border-slate-100">
             <td className={lbl}>Regional</td>
