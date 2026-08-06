@@ -308,6 +308,43 @@ export default function SystemicSessionLogPage({
 
             {/* Col 2: Symptoms & Lifestyle Inputs */}
             <div className="lg:col-span-5 space-y-6">
+              <div className="bg-purple-50/50 p-5 rounded-xl border border-purple-100 shadow-sm transition-all hover:shadow-md">
+                <h3 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider flex items-center gap-2">
+                  <Coffee className="h-4 w-4 text-purple-500" /> Dietary Risk (Past 24h)
+                </h3>
+                <div className="grid grid-cols-2 gap-y-3.5 gap-x-4">
+                  {[
+                    { id: "dr_low_fiber_intake", label: "Low Fiber Intake" },
+                    { id: "dr_cakes_pastries", label: "Cakes / Pastries" },
+                    { id: "dr_starchy_foods", label: "Starchy Foods" },
+                    { id: "dr_sugary_drinks", label: "Sugary Drinks" },
+                    { id: "dr_butter_fatty", label: "Butter / Fatty" },
+                    { id: "dr_large_carb_portion", label: "Large Carb Portion" },
+                    { id: "dr_seafood_organ_meats", label: "Seafood / Organ Meats" },
+                    { id: "dr_none_of_above", label: "None of the above" },
+                  ].map((item) => (
+                    <label key={item.id} className="flex items-center gap-2.5 text-sm text-slate-700 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={!!formData[item.id as keyof SystemicSessionLog]}
+                        onChange={(e) => handleCheckbox(item.id as keyof SystemicSessionLog, e.target.checked)}
+                        className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-600 cursor-pointer"
+                      />
+                      <span className="truncate group-hover:text-purple-700 transition-colors">{item.label}</span>
+                    </label>
+                  ))}
+                </div>
+                <div className="mt-5">
+                  <input
+                    type="text"
+                    value={formData.dr_food_detail || ""}
+                    onChange={(e) => setFormData({ ...formData, dr_food_detail: e.target.value })}
+                    placeholder="Food detail notes..."
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
               <div className="bg-orange-50/50 p-5 rounded-xl border border-orange-100 shadow-sm transition-all hover:shadow-md">
                 <h3 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider flex items-center gap-2">
                   <AlertTriangle className="h-4 w-4 text-orange-500" /> Exercise Symptoms
@@ -349,43 +386,6 @@ export default function SystemicSessionLogPage({
                   </div>
                 </div>
               </div>
-
-              <div className="bg-purple-50/50 p-5 rounded-xl border border-purple-100 shadow-sm transition-all hover:shadow-md">
-                <h3 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider flex items-center gap-2">
-                  <Coffee className="h-4 w-4 text-purple-500" /> Dietary Risk (Past 24h)
-                </h3>
-                <div className="grid grid-cols-2 gap-y-3.5 gap-x-4">
-                  {[
-                    { id: "dr_low_fiber_intake", label: "Low Fiber Intake" },
-                    { id: "dr_cakes_pastries", label: "Cakes / Pastries" },
-                    { id: "dr_starchy_foods", label: "Starchy Foods" },
-                    { id: "dr_sugary_drinks", label: "Sugary Drinks" },
-                    { id: "dr_butter_fatty", label: "Butter / Fatty" },
-                    { id: "dr_large_carb_portion", label: "Large Carb Portion" },
-                    { id: "dr_seafood_organ_meats", label: "Seafood / Organ Meats" },
-                    { id: "dr_none_of_above", label: "None of the above" },
-                  ].map((item) => (
-                    <label key={item.id} className="flex items-center gap-2.5 text-sm text-slate-700 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        checked={!!formData[item.id as keyof SystemicSessionLog]}
-                        onChange={(e) => handleCheckbox(item.id as keyof SystemicSessionLog, e.target.checked)}
-                        className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-600 cursor-pointer"
-                      />
-                      <span className="truncate group-hover:text-purple-700 transition-colors">{item.label}</span>
-                    </label>
-                  ))}
-                </div>
-                <div className="mt-5">
-                  <input
-                    type="text"
-                    value={formData.dr_food_detail || ""}
-                    onChange={(e) => setFormData({ ...formData, dr_food_detail: e.target.value })}
-                    placeholder="Food detail notes..."
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 outline-none transition-all"
-                  />
-                </div>
-              </div>
             </div>
 
             {/* Col 3: Recovery & Submit */}
@@ -410,15 +410,24 @@ export default function SystemicSessionLogPage({
                   <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wider flex items-center gap-2">
                     <Moon className="h-4 w-4 text-indigo-500" /> Sleep Recovery
                   </h3>
-                  <select
-                    value={formData.sleep_recovery || ""}
-                    onChange={(e) => setFormData({ ...formData, sleep_recovery: e.target.value })}
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none cursor-pointer"
-                  >
-                    <option value="Good Recovery - slept well and felt refreshed">Good Recovery</option>
-                    <option value="Woke up once or twice (urination)">Woke up 1-2 times</option>
-                    <option value="Difficulty sleeping - sleep deprived">Difficulty sleeping</option>
-                  </select>
+                  <div className="space-y-3">
+                    <select
+                      value={formData.sleep_recovery || ""}
+                      onChange={(e) => setFormData({ ...formData, sleep_recovery: e.target.value })}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none cursor-pointer"
+                    >
+                      <option value="Good Recovery - slept well and felt refreshed">Good Recovery</option>
+                      <option value="Woke up once or twice (urination)">Woke up 1-2 times</option>
+                      <option value="Difficulty sleeping - sleep deprived">Difficulty sleeping</option>
+                    </select>
+                    <input
+                      type="text"
+                      value={formData.sleep_notes || ""}
+                      onChange={(e) => setFormData({ ...formData, sleep_notes: e.target.value })}
+                      placeholder="Sleep notes..."
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none transition-all"
+                    />
+                  </div>
                 </div>
 
                 <div className="bg-emerald-50/50 p-5 rounded-xl border border-emerald-100 shadow-sm transition-all hover:shadow-md">
