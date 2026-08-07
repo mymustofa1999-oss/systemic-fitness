@@ -125,12 +125,12 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                 </div>
                 <ChevronDown className="h-4 w-4 text-slate-300 -rotate-90 group-hover:text-sf-deepNavy transition-colors" />
               </Link>
-             <Link href={`/clients/${params.id}/training-session-log`} className="bg-white border border-slate-200 hover:border-green-600 transition-colors rounded-xl p-3 flex items-center justify-between group shadow-sm">
+             <Link href={`/clients/${params.id}/systemic-assessment`} className="bg-white border border-slate-200 hover:border-green-600 transition-colors rounded-xl p-3 flex items-center justify-between group shadow-sm">
                <div className="flex items-center gap-3">
                  <div className="p-2 rounded-lg bg-green-50 text-green-600 group-hover:bg-green-100 transition-colors"><FileText className="h-5 w-5" /></div>
                  <div className="text-left">
-                   <p className="text-sm font-bold text-slate-900">Training Session Log</p>
-                   <p className="text-[10px] text-slate-500">Record HR, BP, Meals, and Meds</p>
+                   <p className="text-sm font-bold text-slate-900">SYSTEMIC ASSESMENT</p>
+                   <p className="text-[10px] text-slate-500">Quarterly Functional & Metabolic Review</p>
                  </div>
                </div>
                <ChevronDown className="h-4 w-4 text-slate-300 -rotate-90 group-hover:text-green-600 transition-colors" />

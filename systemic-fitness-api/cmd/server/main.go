@@ -102,6 +102,7 @@ func main() {
 	bankAccountRepo := repository.NewBankAccountRepository(db)
 	equipmentRepo := repository.NewEquipmentRepository(db)
 	assessmentRepo := repository.NewAssessmentRepository(db)
+	quarterlyAssessmentRepo := repository.NewQuarterlyAssessmentRepository(db)
 	nutritionGuidanceRepo := repository.NewNutritionGuidanceRepository(db)
 	promotionRepo := repository.NewPromotionRepository(db)
 	cmsContentRepo := repository.NewCMSContentRepository(db)
@@ -221,6 +222,7 @@ func main() {
 	bankAccountHandler := handler.NewBankAccountHandler(bankAccountService)
 	equipmentHandler := handler.NewEquipmentHandler(equipmentService)
 	assessmentHandler := handler.NewAssessmentHandler(assessmentService)
+	quarterlyAssessmentHandler := handler.NewQuarterlyAssessmentHandler(quarterlyAssessmentRepo)
 	nutritionGuidanceHandler := handler.NewNutritionGuidanceHandler(nutritionGuidanceService)
 	promotionHandler := handler.NewPromotionHandler(promotionService, uploadService)
 	publicCMSHandler := handler.NewPublicCMSHandler(cmsService)
@@ -901,7 +903,13 @@ func main() {
 				r.Get("/{id}", assessmentV2Handler.Get)
 			})
 
-			// ── Workout Sessions & Reminders (Level 5/6 client) ─────
+			// 🎯 Quarterly Assessments (Systemic Assessment)
+			r.Route("/v2/quarterly-assessments", func(r chi.Router) {
+				r.With(middleware.RequireMinRole(model.RoleTrainer)).Post("/", quarterlyAssessmentHandler.Create)
+				r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/client/{id}", quarterlyAssessmentHandler.ListByClient)
+			})
+
+			// 🎯 Workout Sessions & Reminders (Level 5/6 client) 🎯🎯🎯─────
 			// Self-scoped to the authenticated client via GetUserID.
 			r.Route("/v2/workout-sessions", func(r chi.Router) {
 				r.Post("/", workoutSessionHandler.Log)
