@@ -180,7 +180,7 @@ export function MedicinesCard({ customerId, data, readOnly }: { customerId: stri
             <div className="flex justify-end gap-2">
               <button onClick={() => setRemoveTarget(null)} className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Batal</button>
               <button onClick={() => {
-                removeMed.mutate({ customerId, medicineId: removeTarget.id });
+                removeMed.mutate({ customerId, medicineId: removeTarget.medicine_id });
                 setRemoveTarget(null);
               }} className="px-4 py-2 text-sm font-medium text-white bg-rose-500 hover:bg-rose-600 rounded-lg">Hapus</button>
             </div>
