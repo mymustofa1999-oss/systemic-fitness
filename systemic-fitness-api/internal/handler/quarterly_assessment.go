@@ -7,9 +7,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 
-	"systemic-fitness-api/internal/model"
-	"systemic-fitness-api/internal/repository"
-	"systemic-fitness-api/pkg/response"
+	"github.com/fitcoach/api/internal/model"
+	"github.com/fitcoach/api/internal/repository"
+	"github.com/fitcoach/api/pkg/response"
 )
 
 type QuarterlyAssessmentHandler struct {
@@ -32,7 +32,7 @@ func (h *QuarterlyAssessmentHandler) Create(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	response.JSON(w, http.StatusCreated, input)
+	response.Created(w, input)
 }
 
 func (h *QuarterlyAssessmentHandler) ListByClient(w http.ResponseWriter, r *http.Request) {
@@ -53,5 +53,5 @@ func (h *QuarterlyAssessmentHandler) ListByClient(w http.ResponseWriter, r *http
 		assessments = []model.QuarterlyAssessment{}
 	}
 
-	response.JSON(w, http.StatusOK, assessments)
+	response.OK(w, assessments)
 }

@@ -1,0 +1,930 @@
+Sheet: Scoring Guide
+[
+  [
+    "SCORING REFERENCE"
+  ],
+  [],
+  [
+    "SYSTEMIC SCORE™",
+    "Total = P1 + P2 + P3   (maximum 3.0)"
+  ],
+  [
+    "P1 — Blood Pressure",
+    "1.0 🟢 ΔSBP ≤ +15 AND ΔDBP ≤ +10  ·  0.5 🟡 ΔSBP +16-25 OR ΔDBP +11-15  ·  0 🔴 ΔSBP > +25 OR ΔDBP > +15"
+  ],
+  [
+    "P2 — Heart Rate",
+    "1.0 🟢 ΔHR ≤ 25 bpm  ·  0.5 🟡 ΔHR 26-40 bpm  ·  0 🔴 ΔHR > 40 bpm"
+  ],
+  [
+    "P3 — Symptoms",
+    "1.0 🟢 None  ·  0.5 🟡 symptom but session completed & resolved < 5 min  ·  0 🔴 session stopped or symptom > 5 min"
+  ],
+  [
+    "SYSTEMIC STATUS",
+    "3.0 🟢 Adaptive · 2.0-2.5 🟡 Acceptable · 1.0-1.5 🟠 Suboptimal · 0-0.5 🔴 Non-Adaptive"
+  ],
+  [
+    "SAFETY OVERRIDE",
+    "If Stopped = Yes, status becomes 🔴 Non-Adaptive regardless of total."
+  ],
+  [],
+  [
+    "SYSTEMIC DAILY HABIT",
+    "Total = 4 parameters (maximum 4.0). Asked at the pre-session BP measurement."
+  ],
+  [
+    "1 — Nutrition Readiness",
+    "During the past 24 hours, did you consume any of the following? Tick ✓ each item consumed, or tick 'None of the above'."
+  ],
+  [
+    "  checklist",
+    "Sugary drinks (soft drinks, boba, sweet tea, sweet coffee) · Cakes, pastries, biscuits or desserts · Any food containing starch (meatball, noodles, bread, cassava, potatoes, corn, sweet potatoes, taro) · Large portions of rice, noodles, bread or refined carbohydrates · Butter, creamy foods or fatty meat · Organ meats · Seafood known to trigger your symptoms"
+  ],
+  [
+    "  status",
+    "1.0 🟢 Ready — no risk food  ·  0.5 🟡 Monitor — one risk food  ·  0 🔴 Needs Attention — two or more"
+  ],
+  [
+    "2 — Hydration Readiness",
+    "Approximately how much water have you consumed today?"
+  ],
+  [
+    "  status",
+    "1.0 🟢 Well Hydrated — more than 1.5 L  ·  0.5 🟡 Mildly Dehydrated — around 1-1.5 L  ·  0 🔴 Poor Hydration — less than 1 L"
+  ],
+  [
+    "3 — Sleep Recovery",
+    "How did you sleep last night?"
+  ],
+  [
+    "  status",
+    "1.0 🟢 Good Recovery — slept well and felt refreshed  ·  0.5 🟡 Monitor — woke up once or twice (urination)  ·  0 🔴 Poor Recovery — frequently woke up or had difficulty sleeping"
+  ],
+  [
+    "4 — Daily Activity",
+    "Before today's session, how active have you been?"
+  ],
+  [
+    "  status",
+    "1.0 🟢 Active — regular daily movement  ·  0.5 🟡 Low Activity — mostly sitting  ·  0 🔴 Sedentary — almost no movement today"
+  ],
+  [
+    "LIFESTYLE STATUS",
+    "4.0 🟢 Excellent Lifestyle — proceed with the planned programme"
+  ],
+  [
+    null,
+    "3.0-3.5 🟢 Good Lifestyle — proceed with routine monitoring"
+  ],
+  [
+    null,
+    "2.0-2.5 🟡 Moderate Lifestyle — monitor BP & HR closely, consider reducing intensity"
+  ],
+  [
+    null,
+    "below 2.0 🔴 Low Lifestyle — reassess before training, consider modifying the programme"
+  ],
+  [],
+  [
+    "NOTES COLUMNS",
+    "Food Detail, Hydration Notes, Sleep Notes, Activity Notes, Symptom Notes and General Notes are free text and never affect the score."
+  ],
+  [
+    "REVIEW CADENCE",
+    "Systemic Score & Daily Habit → monthly (1 block = 8 sessions).  Level, medical condition & lab report → quarterly (3 blocks = 24 sessions)."
+  ],
+  [
+    "HALF-POINT NOTE",
+    "The original table lists 4 / 3 / 2 / 0-1 only. Because parameters score in 0.5 steps, totals of 3.5, 2.5 and 1.5 are possible; they band down (3.5→Good, 2.5→Moderate, 1.5→Low). Confirm if you want different cut-offs."
+  ],
+  [
+    "HISTORICAL DATA",
+    "Daily Habit cells for the first 48 sessions are blank — these signals were not collected before this version."
+  ],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  []
+]
+
+Sheet: Ref
+[
+  [
+    "EXIT CRITERIA REFERENCE TABLE — edit only when the Systemic Assessment document is revised"
+  ],
+  [],
+  [
+    "Level",
+    "Functional Criteria",
+    "Movement Quality Criteria"
+  ],
+  [
+    1,
+    "• Able to transition safely between sitting and standing.\r\n• Able to remain standing throughout the training session.\r\n• Able to maintain standing balance without continuous physical assistance.\r\n• Able to complete standing Isolate Movements independently.",
+    "• Demonstrates acceptable movement quality during standing Isolate Movements.\r\n• No major loss of balance.\r\n• No significant compensatory movement patterns that compromise safety."
+  ],
+  [
+    2,
+    "• Able to walk independently without continuous physical assistance.\r\n• Able to stand comfortably throughout the training session.\r\n• Able to initiate Dynamic Movement using external balance support.",
+    "• Demonstrates good control during standing Isolate Movements.\r\n• Demonstrates coordinated upper and lower body movement while using balance support.\r\n• Maintains postural control throughout movement.\r\n• No major compensatory movement patterns that compromise safety."
+  ],
+  [
+    3,
+    "• Able to perform Dynamic Movement independently without external balance support.\r\n• Able to maintain upright posture throughout Dynamic Movement.\r\n• Able to safely change movement direction while maintaining balance.",
+    "• Demonstrates controlled Dynamic Movement.\r\n• Maintains coordinated upper and lower body movement throughout the session.\r\n• Demonstrates stable balance throughout movement.\r\n• Performs movement without major compensatory patterns."
+  ],
+  [
+    4,
+    "• Able to perform Dynamic Movement independently with external load.\r\n• Able to complete the full training session without external balance support.\r\n• Able to maintain movement quality while handling prescribed training load.",
+    "• Demonstrates consistent movement quality throughout the session.\r\n• Maintains coordinated Dynamic Movement with external load.\r\n• Demonstrates stable balance throughout movement.\r\n• Performs movement without significant compensatory patterns."
+  ],
+  [
+    5,
+    "• Able to complete higher-tempo Dynamic Movement independently.\r\n• Able to maintain coordination while performing loaded Dynamic Movement.\r\n• Able to complete the full training session independently without external support.",
+    "• Maintains movement quality throughout the prescribed tempo.\r\n• Maintains coordination despite increased movement complexity.\r\n• Demonstrates consistent postural control throughout the session.\r\n• Performs all prescribed movement patterns without significant compensatory movements."
+  ],
+  [
+    6,
+    "Highest level — no exit criteria.",
+    "Highest level — no exit criteria."
+  ],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  []
+]
+
+Sheet: Systemic Assesment 
+[
+  [
+    "QUARTERLY REVIEW  ·  every 3 months (24 sessions)"
+  ],
+  [
+    "Min Avg\r\nSystemic Score",
+    2.25,
+    "← pass threshold. Score must be GREATER than this value. Edit here to change it for every row."
+  ],
+  [],
+  [
+    "QUARTER",
+    null,
+    null,
+    "EXIT CRITERIA — auto-filled, reference only",
+    null,
+    "EXIT CHECKLIST — 3 parameters",
+    null,
+    null,
+    null,
+    "OUTCOME",
+    null,
+    "BODY COMPOSITION",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "MEDICAL & RECORDS"
+  ],
+  [
+    "Quarter",
+    "Period",
+    "Current\r\nLevel",
+    "EXIT CRITERIA — Functional",
+    "EXIT CRITERIA — Movement Quality",
+    "Functional",
+    "Movement\r\nQuality",
+    "Avg Systemic\r\nScore",
+    "Score\r\nStatus",
+    "DECISION",
+    "New\r\nLevel",
+    "Height\r\n(cm)",
+    "Weight\r\n(kg)",
+    "Gender",
+    "BMI",
+    "BMI Category",
+    "Waist Circum-\r\nference (cm)",
+    "Waist\r\nStatus",
+    "Medical Condition",
+    "Lab Report (PDF link)",
+    "Review\r\nDate"
+  ],
+  [
+    "Q1",
+    null,
+    5,
+    "• Able to complete higher-tempo Dynamic Movement independently.\r\n• Able to maintain coordination while performing loaded Dynamic Movement.\r\n• Able to complete the full training session independently without external support.",
+    "• Maintains movement quality throughout the prescribed tempo.\r\n• Maintains coordination despite increased movement complexity.\r\n• Demonstrates consistent postural control throughout the session.\r\n• Performs all prescribed movement patterns without significant compensatory movements.",
+    "✔",
+    "✔",
+    2.5,
+    "✔",
+    "PROGRESS",
+    6,
+    167,
+    58,
+    "Female",
+    20.8,
+    "Normal",
+    76,
+    "Within Range",
+    null,
+    null,
+    "3 agustus 2026"
+  ],
+  [
+    "Q2",
+    null,
+    null,
+    "",
+    "",
+    null,
+    null,
+    null,
+    "",
+    "INCOMPLETE",
+    "",
+    null,
+    null,
+    null,
+    "",
+    "",
+    null,
+    ""
+  ],
+  [
+    "Q3",
+    null,
+    null,
+    "",
+    "",
+    null,
+    null,
+    null,
+    "",
+    "INCOMPLETE",
+    "",
+    null,
+    null,
+    null,
+    "",
+    "",
+    null,
+    ""
+  ],
+  [
+    "Q4",
+    null,
+    null,
+    "",
+    "",
+    null,
+    null,
+    null,
+    "",
+    "INCOMPLETE",
+    "",
+    null,
+    null,
+    null,
+    "",
+    "",
+    null,
+    ""
+  ],
+  [],
+  [
+    "HOW TO USE"
+  ],
+  [
+    "Current Level",
+    "Choose from the dropdown. The two Exit Criteria columns beside it change instantly — selecting Level 4 shows the requirements to progress to Level 5."
+  ],
+  [
+    "Exit Criteria",
+    "Reference text only, not a checklist. Auto-filled from the Ref sheet — never type into these cells. If the Systemic Assessment document is revised, edit the Ref sheet only."
+  ],
+  [
+    "Functional / Movement Quality",
+    "Mark ✔ only when EVERY item shown in the criteria column beside it is met. One item short = ✖."
+  ],
+  [
+    "Avg Systemic Score",
+    "Carry across from the Monthly Review sheet. Passes only when GREATER than the threshold in B5 (2.25). A score of exactly 2.25 does not pass."
+  ],
+  [
+    "Decision",
+    "PROGRESS requires all three parameters to pass. Any ✖ = HOLD for one quarter. Shows INCOMPLETE until all three are filled in."
+  ],
+  [
+    "BMI",
+    "Weight ÷ (Height/100)², calculated per row. Asia-Pacific thresholds: <18.5 Underweight · 18.5–22.9 Normal · 23–24.9 Overweight · 25–29.9 Obese I · ≥30 Obese II."
+  ],
+  [
+    "Waist Circumference",
+    "Measured at the midpoint between the lowest rib and the top of the iliac crest, at the end of a normal exhale. At Risk: Male ≥90 cm · Female ≥80 cm."
+  ],
+  [
+    "Lab Report",
+    "Paste the shareable PDF link. Keep the file itself in the client folder, not in this sheet."
+  ],
+  [
+    "Important",
+    "Body composition and medical condition do NOT feed the decision. They are trend markers recorded alongside it, in the same way as Vital Signal."
+  ],
+  [],
+  [
+    "Row Q1 contains example values — clear it before using with a real client."
+  ],
+  [
+    "BMI & waist thresholds: WHO Asia-Pacific classification (2000) / Kemenkes RI P2PTM.  Exit criteria text: Systemic Assessment document (Systemic Fitness)."
+  ],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  []
+]
+
+Sheet: Database Obat
+[
+  [
+    "No",
+    "Nama Obat / Merk",
+    "Kandungan Aktif",
+    "Klasifikasi / Golongan",
+    "Fungsi Utama",
+    "Implikasi Latihan ⚠️",
+    "Protokol & Penyesuaian Latihan 📝",
+    "Flag"
+  ],
+  [
+    1,
+    "Allopurinol",
+    "Allopurinol",
+    "Penghambat Xanthine Oxidase (Anti Asam Urat)",
+    "Asam urat, batu ginjal",
+    "1. Kantuk, pusing, sakit kepala, gangguan pencernaan.\r\n2. Pada awal terapi, serangan gout akut justru bisa terpicu (nyeri sendi hebat mendadak).\r\n3. SeranganJANGAN disalahartikan sebagai cedera latihan.\r\n4. Ruam kulit luas = sinyal reaksi serius, sarankan periksa.",
+    "1. Hidrasi baik (membantu ginjal membuang asam urat).\r\n2. Nyeri sendi akut, merah, bengkak, panas = bukan untuk 'dilatih', hentikan & sarankan periksa.\r\n3. Hindari dehidrasi berat karena memicu serangan.",
+    "KUNING"
+  ],
+  [
+    2,
+    "Amlodipine",
+    "Amlodipine",
+    "Calcium Channel Blocker (Antagonis Kalsium)",
+    "Hipertensi, angina",
+    "1. Hipotensi pasca-latihan akibat vasodilatasi (pusing/pingsan setelah sesi berakhir).\r\n2. Pusing saat perubahan posisi.\r\n3. Jantung berdebar (palpitasi), wajah/leher memerah (flushing).\r\n4. Edema pergelangan kaki (efek obat, JANGAN disalahartikan efek dari latihan).\r\n5. Kantuk & kelelahan.",
+    "1. Pendinginan aktif diperpanjang (jalan ringan 8–10 menit, jangan langsung diam/duduk).\r\n2. BP pre & post sesi wajib dipantau.\r\n3. Transisi posisi perlahan.\r\n4. Bila perlu catat lingkar pergelangan kaki agar edema obat tidak dibaca sebagai respons latihan.",
+    "KUNING"
+  ],
+  [
+    3,
+    "Angintriz",
+    "Trimetazidine",
+    "Anti-Angina Metabolik (Trimetazidine)",
+    "Angina pectoris",
+    "1. Tremor, otot kaku, gerakan sulit dikontrol, gangguan keseimbangan / risiko jatuh.\r\n2. Hipotensi ortostatik (pusing/pingsan saat perubahan posisi).\r\n3. Jantung berdebar, lemas, gangguan pencernaan.",
+    "1. Gerakan kompleks selalu dengan pengawasan.\r\n2. Transisi posisi perlahan dan bertahap.\r\n3. Jika ada tremor/kekakuan baru muncul = catat & sarankan lapor dokter.\r\n4. Ada kondisi dasar angina: nyeri dada = stop total.",
+    "MERAH"
+  ],
+  [
+    4,
+    "Arcalion",
+    "Sulbutiamine",
+    "Suplemen Vitamin B1 (Sulbutiamine)",
+    "Suplemen vitamin B1, energi mental",
+    "1. Aman.\r\n2. Efek ringan: agitasi/gelisah ringan, reaksi kulit alergi.",
+    "1. Pemantauan standar.\r\n2. Gelisah berlebihan sebelum sesi dicatat.",
+    "HIJAU"
+  ],
+  [
+    5,
+    "Ardium",
+    "Diosmin 90% + Hesperidin 10% (MPFF 500 mg)",
+    "Venotonik (Flavonoid — Wasir/Varises)",
+    "Wasir & varises",
+    "1. Obatnya sendiri ringan (sakit perut, pusing ringan). \r\n2. KONDISI DASAR: varises/wasir — mengejan berlebihan memperburuk keduanya.",
+    "1. Minimalkan manuver Valsalva (menahan napas saat beban berat).\r\n2. Hindari beban statis sangat lama dalam posisi berdiri.\r\n3. Ajarkan pola napas exhale-on-effort.\r\n4. Untuk varises: hindari berdiri statis lama, sisipkan gerakan pumping betis.",
+    "HIJAU"
+  ],
+  [
+    6,
+    "Aromasin",
+    "Exemestane",
+    "Aromatase Inhibitor (Terapi Kanker Payudara)",
+    "Terapi kanker payudara",
+    "1. Nyeri sendi & otot kronis (efek samping paling umum).\r\n2. Penurunan kepadatan tulang (risiko fraktur meningkat).\r\n3. Hot flashes yang bisa menguat saat latihan.\r\n4. Kelelahan, sulit tidur, pusing",
+    "1. Latihan beban UTAMA/PENTING untuk proteksi tulang, tapi progresi bertahap.\r\n2. Hindari beban tinggi (lompatan) tanpa clearance kepadatan tulang.\r\n3. Pemanasan untuk sendi lebih panjang.\r\n4. Sesuaikan suhu ruangan & sediakan handuk/kipas untuk hot flashes.",
+    "MERAH"
+  ],
+  [
+    7,
+    "Atorvastatin",
+    "Atorvastatin",
+    "Statin (Penurun Kolesterol)",
+    "Kolesterol & trigliserida tinggi",
+    "1. Nyeri/pegal otot (myalgia) — WAJIB dibedakan dari DOMS.\r\n2. Nyeri simetris kiri-kanan, tanpa pemicu jelas, lemah otot, tidak membaik dengan istirahat.\r\n3. Nyeri otot hebat + urine berwarna gelap seperti teh = HENTIKAN, rujuk medis segera.\r\n4. Nyeri sendi, gangguan pencernaan ringan.",
+    "1. Pantau progresi beban, terutama pada klien baru mulai statin atau naik dosis.\r\n2. Risiko myalgia tertinggi 4–6 minggu pertama jika baru mulai/naik dosis statin.\r\n2. Tanya lokasi & pola nyeri otot setiap sesi; catat.\r\n3. Nyeri simetris tanpa pemicu = tandai, sarankan konsultasi dokter, turunkan volume.",
+    "KUNING"
+  ],
+  [
+    8,
+    "Avodart",
+    "Dutasteride",
+    "Penghambat 5-Alpha Reductase (Prostat)",
+    "Pembesaran prostat jinak (BPH)",
+    "1. Efek samping dominan bersifat seksual (bukan hambatan latihan).\r\n2. Untuk sesi: hampir tidak ada implikasi langsung.\r\n3. Nyeri/bengkak area genital = sarankan cek, hindari latihan yang menekan area tersebut.",
+    "1. Tidak ada penyesuaian khusus.\r\n2. Cukup pemantauan standar BP rutin.",
+    "HIJAU"
+  ],
+  [
+    9,
+    "Candesartan",
+    "Candesartan",
+    "ARB (Angiotensin Receptor Blocker)",
+    "Hipertensi, gagal jantung",
+    "1. Hipotensi ortostatik, pusing terutama setelah bangun dari posisi rendah.\r\n2. Kelelahan, gejala hiperkalemia (lemah otot, jantung tidak beraturan).\r\n3. Nyeri punggung sebagai efek samping umum (jangan langsung diasumsikan cedera).",
+    "1. BP pre & post sesi wajib dipantau.\r\n2. Perubahan posisi bertahap.\r\n3. Hidrasi terjaga, hindari suplemen kalium tanpa izin dokter.\r\n4. Waspada pusing pada latihan pagi setelah bangun tidur.",
+    "KUNING"
+  ],
+  [
+    10,
+    "Clopidogrel",
+    "Clopidogrel",
+    "Antiplatelet (Pencegah Penggumpalan)",
+    "Pencegahan stroke & penggumpalan darah",
+    "1. Risiko perdarahan & memar.\r\n2. Bisa terjadi memar besar dari benturan ringan.\r\n3. Luka kecil sulit berhenti dari pendarahan.\r\n4. Bisa mudah mimisan.\r\n5. Sinyal perdarahan internal: pusing berat, lemas mendadak, memar luas.\r\n6. Heartburn & nyeri perut umum.",
+    "1. HINDARI: latihan berisiko benturan/jatuh, permukaan licin, alat dengan sudut keras.\r\n2. Kurangi manuver Valsalva ekstrem (menahan napas saat latihan beban).\r\n3. Bila luka harus ditekan lebih lama.\r\n4. Latihan ddekat dinding/pegangan.",
+    "MERAH"
+  ],
+  [
+    11,
+    "Concor",
+    "Bisoprolol",
+    "Beta Blocker",
+    "Hipertensi, gagal jantung kronis, angina",
+    "1. Respons denyut jantung TUMPUL — nadi tidak naik normal saat latihan.\r\n2. Waspadai: bradikardia (nadi <60/menit), pusing berat seperti akan pingsan.\r\n3. Hipotensi ortostatik (pusing/pingsan saat perubahan posisi).\r\n4. Kelelahan tidak wajar, tangan/kaki dingin.\r\n5. Sesak napas, mengi (terutama carvedilol/non-selektif).\r\n6. Pada klien diabetes: bisa hipoglikemia  (gemetar, palpitasi & keringat dingin).",
+    "1. Denyut jantung TIDAK BISA dipakai sebagai acuan intensitas.Gunakan skala RPE.\r\n2. BP wajib dipantau pre & post sesi.\r\n3. Transisi posisi berdiri harus bertahap.\r\n4. Pendinginan diperpanjang (min. 10 menit) untuk mencegah hipotensi pasca-latihan.\r\n5. Jika nadi istirahat <50 atau pusing hebat: sesi ditunda dan rujuk.",
+    "MERAH"
+  ],
+  [
+    12,
+    "Cordarone",
+    "Amiodarone",
+    "Antiaritmia",
+    "Aritmia jantung",
+    "1. Denyut jantung bisa lambat (bradikardia) atau respons abnormal saat latihan.\r\n2. Fotosensitivitas berat (kulit mudah terbakar matahari).\r\n3. Gangguan tiroid (memengaruhi energi & toleransi latihan).\r\n4. Mual, kehilangan nafsu makan.\r\n5. Pusing berat & hampir pingsan = sinyal bahaya utama.",
+    "1. Pantau nadi & BP pre-post sesi wajib.\r\n2. Nadi tidak dipakai sebagai acuan intensitas, gunakan RPE.\r\n3. Latihan luar ruang: wajib pelindung matahari penuh atau pindah indoor.\r\n4. Intensitas hanya dalam batas yang bisa ditoleransi klien.",
+    "MERAH"
+  ],
+  [
+    13,
+    "Coveram",
+    "Perindopril + Amlodipine",
+    "ACE Inhibitor",
+    "Hipertensi & penyakit jantung koroner",
+    "1. Hipotensi ortostatik (pusing saat bangun dari posisi berbaring/duduk).\r\n2. Pusing berat seperti akan pingsan.\r\n3. Batg uk kering saat latihan (efek obat, bukan tanda jantung tapi tetap catat).\r\n4. Bisa ada gejala hiperkalemia (lemah otot, denyut jantung tidak beraturan, kesemutan).\r\n5. Bisa ada tanda angioedema (bengkak wajah/lidah/tenggorokan). Ini DARURAT.",
+    "1. BP pre & post sesi wajib dipantau.\r\n2. Transisi posisi perlahan, terutama dari gerakan lantai.\r\n3. Hidrasi cukup, tetapi HINDARI minuman elektrolit tinggi kalium & suplemen kalium.\r\n4. Pendinginan bertahap.\r\n5. Latihan di lingkungan panas kurang disarankan.",
+    "KUNING"
+  ],
+  [
+    14,
+    "Crestor",
+    "Rosuvastatin",
+    "Statin (Penurun Kolesterol)",
+    "Kolesterol & trigliserida tinggi",
+    "1. Nyeri/pegal otot (myalgia) — WAJIB dibedakan dari DOMS.\r\n2. Nyeri simetris kiri-kanan, tanpa pemicu jelas, lemah otot, tidak membaik dengan istirahat.\r\n3. Nyeri otot hebat + urine berwarna gelap seperti teh = HENTIKAN, rujuk medis segera.\r\n4. Nyeri sendi, gangguan pencernaan ringan.",
+    "1. Pantau progresi beban, terutama pada klien baru mulai statin atau naik dosis.\r\n2. Risiko myalgia tertinggi 4–6 minggu pertama jika baru mulai/naik dosis statin.\r\n2. Tanya lokasi & pola nyeri otot setiap sesi; catat.\r\n3. Nyeri simetris tanpa pemicu = tandai, sarankan konsultasi dokter, turunkan volume.",
+    "KUNING"
+  ],
+  [
+    15,
+    "Cyclo Proginova",
+    "Estradiol valerate + Norgestrel",
+    "Hormon Estrogen/Progestin",
+    "Regulasi siklus haid, terapi menopause",
+    "1. Resiko trombosis (DVT): waspada nyeri betis SATU SISI, bengkak, hangat, kemerahan.\r\n2. Sesak napas mendadak + nyeri dada = kemungkinan emboli paru, ini DARURAT.\r\n3. Efek umum: payudara nyeri/kencang, kembung, retensi cairan.\r\n4. Mood swings, mual.",
+    "1. Nyeri betis unilateral = stop, JANGAN massage/stretch, rujuk.\r\n2. Fluktuasi berat badan hormonal tidak dijadikan bahan evaluasi program.\r\n3. Intensitas fleksibel mengikuti siklus & gejala.\r\n4. Hindari posisi statis sangat lama pada sesi panjang.",
+    "KUNING"
+  ],
+  [
+    16,
+    "Dalfarol",
+    "Vitamin E (D-alfa tokoferol 200 IU)",
+    "Vitamin E (Antioksidan)",
+    "Antioksidan",
+    "1. Aman pada dosis normal\r\n2. Dosis tinggi + pengencer darah = risiko perdarahan sedikit meningkat.\r\n3. Efek ringan: mual, pusing, penglihatan kabur sementara.",
+    "1. Pemantauan standar.\r\n2. Cek silang daftar obat: bila klien juga memakai antikoagulan/antiplatelet, hindari benturan & risiko jatuh.",
+    "HIJAU"
+  ],
+  [
+    17,
+    "Disflatyl",
+    "Simethicone",
+    "Antiflatulen (Simethicone)",
+    "Mengurangi gas & kembung",
+    "1. Tidak ada implikasi latihan bermakna.\r\n2. Efek ringan: sendawa, mual.",
+    "1. Pemantauan standar saja.\r\n2. Tidak memerlukan penyesuaian program.",
+    "HIJAU"
+  ],
+  [
+    18,
+    "Eliquis",
+    "Apixaban",
+    "Antikoagulan (Pengencer Darah)",
+    "Pencegahan penggumpalan darah (DVT/emboli paru)",
+    "1. Risiko perdarahan LEBIH TINGGI.\r\n2. Memar spontan, gusi berdarah, mimisan lama berhenti, menstruasi berat.\r\n3. Sinyal darurat: batuk/muntah darah, urine/BAB berdarah atau hitam.\r\n4. Sakit kepala sangat berat mendadak (kemungkinan perdarahan otak), pingsan.\r\n5. Anemia (lemas, pucat, cepat lelah) menurunkan toleransi latihan.",
+    "1. LARANGAN : Aktivitas kontak berat, risiko jatuh, benturan kepala.\r\n2. Semua latihan keseimbangan wajib dengan pengawasan.\r\n3. Hindari beban maksimal + Valsalva maneuver.\r\n4. Setiap memar baru/luas dicatat & dilaporkan.",
+    "MERAH"
+  ],
+  [
+    19,
+    "Equfina",
+    "Safinamide",
+    "Anti-Parkinson (MAO-B Inhibitor)",
+    "Parkinson — meningkatkan dopamin",
+    "Kondisi dasar Parkinson: gangguan gerak, kekakuan, tremor, hipotensi ortostatik kuat, risiko jatuh sangat tinggi. Efek obat: potensi gangguan hati (lelah tak wajar, kulit/mata menguning = rujuk). Respons gerak bisa berfluktuasi mengikuti jadwal obat (fase 'on-off').",
+    "Jadwalkan sesi pada fase 'on' obat (koordinasi dengan klien/keluarga). Semua latihan berdiri dengan pengaman. Transisi posisi sangat perlahan. Fokus program: keseimbangan, gait, mobilitas — sesuai level routing yang tepat. Clearance dokter saraf wajib. TD pra & pasca dengan pengukuran berdiri.",
+    "MERAH"
+  ],
+  [
+    20,
+    "Euthyrox",
+    "Levothyroxine",
+    "Hormon Tiroid (Levothyroxine)",
+    "Hipotiroidisme",
+    "Jika dosis berlebih: jantung berdebar, denyut cepat, intoleransi panas & keringat berlebih, gemetar, sulit tidur, kram kaki — semuanya bisa muncul/menguat saat latihan. Jika dosis kurang: lelah berlebihan, toleransi latihan rendah. Rambut rontok & perubahan mood pada bulan awal.",
+    "Catat nadi istirahat di setiap sesi — tren naik konsisten atau palpitasi saat latihan ringan = sarankan cek dokter (kemungkinan dosis perlu penyesuaian). Kurangi intensitas di lingkungan panas. Kram kaki berulang dicatat.",
+    "KUNING"
+  ],
+  [
+    21,
+    "Farnormin",
+    "Atenolol",
+    "Beta Blocker",
+    "Hipertensi, angina, aritmia, pasca serangan jantung",
+    "1. Respons denyut jantung TUMPUL — nadi tidak naik normal saat latihan.\r\n2. Waspadai: bradikardia (nadi <60/menit), pusing berat seperti akan pingsan.\r\n3. Hipotensi ortostatik (pusing/pingsan saat perubahan posisi).\r\n4. Kelelahan tidak wajar, tangan/kaki dingin.\r\n5. Sesak napas, mengi (terutama carvedilol/non-selektif).\r\n6. Pada klien diabetes: bisa hipoglikemia  (gemetar, palpitasi & keringat dingin).",
+    "1. Denyut jantung TIDAK BISA dipakai sebagai acuan intensitas.Gunakan skala RPE.\r\n2. BP wajib dipantau pre & post sesi.\r\n3. Transisi posisi berdiri harus bertahap.\r\n4. Pendinginan diperpanjang (min. 10 menit) untuk mencegah hipotensi pasca-latihan.\r\n5. Jika nadi istirahat <50 atau pusing hebat: sesi ditunda dan rujuk.",
+    "MERAH"
+  ],
+  [
+    22,
+    "Frego",
+    "Flunarizine",
+    "Antivertigo/Antimigrain (Flunarizine)",
+    "Migrain, vertigo, gangguan vestibular",
+    "1. Mudah mengantuk.\r\n2. Kenaikan berat badan, sehingga BB lebih sulit turun.\r\n3. Gelisah, tremor, gerakan wajah/mulut kadang tidak disadari.\r\n4. Kesulitan bergerak (gejala ekstrapiramidal).\r\n5. Depresi, nyeri otot.\r\n6. Perubahan posisi kepala cepat bisa memicu serangan vertigo.",
+    "1. Hindari perubahan posisi kepala mendadak\r\n2. Kondisikan alat2 pengaman keseimbangan saat latihan.\r\n3. Kantuk berat = turunkan kompleksitas gerakan.\r\n4. Tremor/kaku baru = catat & sarankan rujuk dokter.",
+    "KUNING"
+  ],
+  [
+    23,
+    "Glucophage",
+    "Metformin",
+    "Biguanide (Metformin)",
+    "Diabetes tipe 2",
+    "1. Waspadai: gangguan pencernaan (mual, diare, kembung) yang tidak nyaman.\r\n2. Penurunan nafsu makan.\r\n3. Hipoglikemia bila latihan intens + asupan kurang.\r\n4. Kondisi dasar diabetes tetap perlu pemantauan.",
+    "1. Pastikan klien sudah makan 1–2 jam sebelum sesi.\r\n2. Sediakan karbohidrat cepat (permen/jus) di lokasi sebagai standar klien diabetes.\r\n3. Waspadai gejala gula rendah: gemetar, keringat dingin, linglung, pucat.\r\n4. Hindari latihan intens dalam kondisi puasa.",
+    "KUNING"
+  ],
+  [
+    24,
+    "Glucosamine",
+    "Glucosamine",
+    "Suplemen Sendi (Glucosamine)",
+    "Nyeri sendi, osteoartritis",
+    "1. Aman.\r\n2. Efek ringan: kantuk, pusing, gangguan pencernaan, flushing.\r\n3. Kondisi dasar osteoartritis lebih relevan: nyeri sendi memengaruhi pemilihan gerakan.",
+    "1. Kelola beban sendi: rentang gerak bebas nyeri.\r\n2. Hindari impact tinggi pada sendi bermasalah, perkuat otot penyangga.\r\n3. Nyeri sendi >3/10 saat gerakan = modifikasi.",
+    "HIJAU"
+  ],
+  [
+    25,
+    "Glucovan / Glucovance",
+    "Metformin + Glibenclamide",
+    "Sulfonilurea + Biguanide (Kombinasi)",
+    "Diabetes tipe 2",
+    "1. RISIKO HIPOGLIKEMIA saat latihan dan hingga 24 jam sesudahnya.\r\n2. Gemetar, keringat dingin, pucat, sulit konsentrasi, jantung berdebar, linglung.\r\n3. Mual, perut kembung, maag.\r\n4. Latihan meningkatkan sensitivitas insulin sehingga efek obat 'bertumpuk'\r\n",
+    "1. Karbohidrat cepat WAJIB tersedia di lokasi setiap sesi.\r\n2. Klien disarankan cek gula darah sebelum & sesudah latihan (idealnya >100 mg/dL pra-sesi).\r\n3. JANGAN melatih klien yang belum makan.\r\n4. Sesi pertama dengan intensitas konservatif untuk memetakan respons.\r\n5. Edukasi klien: gejala gula rendah bisa muncul malam hari pasca-latihan.\r\n6. Gejala muncul saat sesi = stop, beri karbohidrat cepat, observasi 15 menit.",
+    "MERAH"
+  ],
+  [
+    26,
+    "HCT",
+    "Hydrochlorothiazide",
+    "Diuretik",
+    "Hipertensi, terapi gagal jantung",
+    "1. Risiko dehidrasi & gangguan elektrolit.\r\n2. Kram otot, kelelahan cepat, jantung berdebar/tidak beraturan.\r\n3. Pusing, hipotensi.\r\n4. Frekuensi buang air kecil meningkat.\r\n5. Toleransi terhadap panas menurun drastis.",
+    "1. Hidrasi terjadwal sebelum-selama-sesudah sesi.\r\n2. HINDARI latihan di lingkungan panas/lembap atau jam terik.\r\n3. Waspadai kram berulang & denyut tidak beraturan = sinyal elektrolit, hentikan sesi.\r\n4. BP pre & post sesi wajib dipantau.",
+    "KUNING"
+  ],
+  [
+    27,
+    "Irbesartan",
+    "Irbesartan",
+    "ARB (Angiotensin Receptor Blocker)",
+    "Hipertensi, terapi gagal jantung",
+    "1. Hipotensi ortostatik, pusing terutama setelah bangun dari posisi rendah.\r\n2. Kelelahan, gejala hiperkalemia (lemah otot, jantung tidak beraturan).\r\n3. Nyeri punggung sebagai efek samping umum (jangan langsung diasumsikan cedera).",
+    "1. BP pre & post sesi wajib dipantau.\r\n2. Perubahan posisi bertahap.\r\n3. Hidrasi terjaga, hindari suplemen kalium tanpa izin dokter.\r\n4. Waspada pusing pada latihan pagi setelah bangun tidur.",
+    "KUNING"
+  ],
+  [
+    28,
+    "Isoprolol / Bisoprolol",
+    "Bisoprolol",
+    "Beta Blocker",
+    "Hipertensi",
+    "1. Respons denyut jantung TUMPUL — nadi tidak naik normal saat latihan.\r\n2. Waspadai: bradikardia (nadi <60/menit), pusing berat seperti akan pingsan.\r\n3. Hipotensi ortostatik (pusing/pingsan saat perubahan posisi).\r\n4. Kelelahan tidak wajar, tangan/kaki dingin.\r\n5. Sesak napas, mengi (terutama carvedilol/non-selektif).\r\n6. Pada klien diabetes: bisa hipoglikemia  (gemetar, palpitasi & keringat dingin).",
+    "1. Denyut jantung TIDAK BISA dipakai sebagai acuan intensitas.Gunakan skala RPE.\r\n2. BP wajib dipantau pre & post sesi.\r\n3. Transisi posisi berdiri harus bertahap.\r\n4. Pendinginan diperpanjang (min. 10 menit) untuk mencegah hipotensi pasca-latihan.\r\n5. Jika nadi istirahat <50 atau pusing hebat: sesi ditunda dan rujuk.",
+    "MERAH"
+  ],
+  [
+    29,
+    "Jardiance Duo",
+    "Empagliflozin + Metformin",
+    "SGLT2 Inhibitor (± Metformin)",
+    "Diabetes tipe 2",
+    "1. Efek diuretik ringan: dehidrasi lebih cepat, sering buang air kecil.\r\n2. Hipotensi & pusing hingga hampir pingsan.\r\n3. Pada kasus langka : ketoasidosis euglikemik: mual, lemas berat, napas cepat. \r\n4. Risiko infeksi saluran kemih/genital.",
+    "1. Hidrasi ketat & terjadwal. Protokol hidrasi lebih agresif dari klien biasa.\r\n2. Jika lemas + mual + napas cepat = stop & rujuk meski gula darah normal.",
+    "MERAH"
+  ],
+  [
+    30,
+    "Lipanthyl",
+    "Fenofibrate",
+    "Fibrate (Penurun Trigliserida)",
+    "Kolesterol & trigliserida tinggi",
+    "1. Nyeri otot serupa statin.\r\n2. Risiko myopati (lemah otot) MENINGKAT signifikan bila dikombinasi dengan statin.\r\n3. Gangguan pencernaan, nyeri punggung, sakit kepala.",
+    "1. Cek daftar obat: jika klien memakai fibrate + statin bersamaan, maka progresi beban jadi lambat.\r\n2. Nyeri otot hebat + urine gelap = hentikan & rujuk dokter.",
+    "KUNING"
+  ],
+  [
+    31,
+    "Lipitor",
+    "Atorvastatin",
+    "Statin (Penurun Kolesterol)",
+    "Kolesterol & trigliserida tinggi",
+    "1. Nyeri/pegal otot (myalgia) — WAJIB dibedakan dari DOMS.\r\n2. Nyeri simetris kiri-kanan, tanpa pemicu jelas, lemah otot, tidak membaik dengan istirahat.\r\n3. Nyeri otot hebat + urine berwarna gelap seperti teh = HENTIKAN, rujuk medis segera.\r\n4. Nyeri sendi, gangguan pencernaan ringan.",
+    "1. Pantau progresi beban, terutama pada klien baru mulai statin atau naik dosis.\r\n2. Risiko myalgia tertinggi 4–6 minggu pertama jika baru mulai/naik dosis statin.\r\n2. Tanya lokasi & pola nyeri otot setiap sesi; catat.\r\n3. Nyeri simetris tanpa pemicu = tandai, sarankan konsultasi dokter, turunkan volume.",
+    "KUNING"
+  ],
+  [
+    32,
+    "Lixiana",
+    "Edoxaban",
+    "Antikoagulan (Pengencer Darah)",
+    "Pencegahan stroke, emboli, atrial fibrilasi",
+    "1. Risiko perdarahan LEBIH TINGGI.\r\n2. Memar spontan, gusi berdarah, mimisan lama berhenti, menstruasi berat.\r\n3. Sinyal darurat: batuk/muntah darah, urine/BAB berdarah atau hitam.\r\n4. Sakit kepala sangat berat mendadak (kemungkinan perdarahan otak), pingsan.\r\n5. Anemia (lemas, pucat, cepat lelah) menurunkan toleransi latihan.",
+    "1. LARANGAN : Aktivitas kontak berat, risiko jatuh, benturan kepala.\r\n2. Semua latihan keseimbangan wajib dengan pengawasan.\r\n3. Hindari beban maksimal + Valsalva maneuver.\r\n4. Setiap memar baru/luas dicatat & dilaporkan.",
+    "MERAH"
+  ],
+  [
+    33,
+    "Maltofer",
+    "Iron Polymaltose Complex",
+    "Suplemen Besi (Anti-Anemia)",
+    "Penambah darah (anemia)",
+    "1. Toleransi latihan RENDAH akibat anemia.\r\n2. Cepat lelah, sesak pada intensitas ringan, pusing, jantung berdebar, pucat.\r\n3. Efek obat: sembelit/diare, mual, tinja berwarna gelap (normal karena besi).",
+    "1. Mulai dari intensitas rendah, progresi mengikuti perbaikan energi klien.\r\n2. RPE dipantau ketat; sesak & pusing pada beban ringan = turunkan.\r\n3. Beri jeda pemulihan antar-set lebih panjang.\r\n4. Catat tren BP sebagai indikator perbaikan anemia.",
+    "KUNING"
+  ],
+  [
+    34,
+    "Merislon",
+    "Betahistine",
+    "Antivertigo (Betahistine)",
+    "Vertigo",
+    "1. Bisa vertigo/gangguan vestibular/ pusing berputar dari perubahan posisi kepala.\r\n2. Maag, kembung, sakit kepala, mulut kering.",
+    "1. Perubahan posisi kepala bertahap; hindari gerakan memutar kepala cepat.\r\n2. Latihan dekat pegangan/dinding.\r\n3. Vertigo muncul saat sesi = dudukkan klien, fiksasi pandangan ke satu titik, tunggu reda.\r\n4. Hindari latihan dengan perut kosong bila maag aktif.",
+    "KUNING"
+  ],
+  [
+    35,
+    "Micardis",
+    "Telmisartan",
+    "ARB (Angiotensin Receptor Blocker)",
+    "Hipertensi",
+    "1. Hipotensi ortostatik, pusing terutama setelah bangun dari posisi rendah.\r\n2. Kelelahan, gejala hiperkalemia (lemah otot, jantung tidak beraturan).\r\n3. Nyeri punggung sebagai efek samping umum (jangan langsung diasumsikan cedera).",
+    "1. BP pre & post sesi wajib dipantau.\r\n2. Perubahan posisi bertahap.\r\n3. Hidrasi terjaga, hindari suplemen kalium tanpa izin dokter.\r\n4. Waspada pusing pada latihan pagi setelah bangun tidur.",
+    "KUNING"
+  ],
+  [
+    36,
+    "Modexa",
+    "Mometasone furoate (nasal spray)",
+    "Kortikosteroid Nasal",
+    "Rhinitis alergi, polip hidung",
+    "1. Efek lokal: mimisan ringan, hidung perih.\r\n2. Tidak ada efek sistemik bermakna pada dosis nasal normal.",
+    "1. Pemantauan standar.\r\n2. Mimisan saat sesi: hentikan sementara, posisi duduk condong ke depan, tekan cuping hidung.",
+    "HIJAU"
+  ],
+  [
+    37,
+    "Neurobion",
+    "Vitamin B1 + B6 + B12",
+    "Suplemen Vitamin B",
+    "Kesehatan saraf, produksi sel darah merah",
+    "1. Aman untuk latihan.\r\n2. Efek ringan: gangguan pencernaan.",
+    "1. Pemantauan standar.\r\n2. Bila dikonsumsi karena neuropati (kebas/kesemutan kaki): periksa keseimbangan & pilih alas kaki tepat.",
+    "HIJAU"
+  ],
+  [
+    38,
+    "Nexium",
+    "Esomeprazole",
+    "Penghambat Pompa Proton (PPI)",
+    "Penurun asam lambung (GERD)",
+    "1. Umumnya aman.\r\n2. Penggunaan jangka panjang: kram otot, kesemutan, kelelahan,keropos tulang.\r\n3. Sakit kepala & gangguan pencernaan ringan.",
+    "1. Pemantauan standar.\r\n2. Kram otot berulang tanpa sebab jelas pada pengguna jangka panjang = sarankan cek magnesium.\r\n3. Refluks memburuk saat posisi tertentu (supine penuh, inversi) — sesuaikan pilihan gerakan.",
+    "HIJAU"
+  ],
+  [
+    39,
+    "Nitrokaf Retard",
+    "Nitroglycerin",
+    "Nitrat (Anti-Angina)",
+    "Pengobatan angina pectoris",
+    "1. Hipotensi, bisa pingsan (sinkop) jika latihan dilakukan dekat waktu konsumsi obat.\r\n2. Sakit kepala berdenyut (efek obat umum), pusing berat.\r\n3. Jantung berdebar/tidak beraturan, pucat & keringat dingin.\r\n4. Nyeri dada yang muncul SAAT latihan = gejala angina aktif.",
+    "1. BP pra-sesi WAJIB dipantau. Jika sistolik rendah dari baseline klien, sesi ditunda.\r\n2. Jangan memulai latihan dalam 1 jam setelah dosis (konfirmasi jadwal obat klien).\r\n3. Intensitas dijaga di zona yang nyaman bagi klien.\r\n4. Nyeri dada = Gejala angina aktif. Stop. Protokol darurat. Panggil Ambulans.",
+    "MERAH"
+  ],
+  [
+    40,
+    "Norvask",
+    "Amlodipine besilate",
+    "Calcium Channel Blocker (Antagonis Kalsium)",
+    "Hipertensi & anti-angina",
+    "1. Hipotensi pasca-latihan akibat vasodilatasi (pusing/pingsan setelah sesi berakhir).\r\n2. Pusing saat perubahan posisi.\r\n3. Jantung berdebar (palpitasi), wajah/leher memerah (flushing).\r\n4. Edema pergelangan kaki (efek obat, JANGAN disalahartikan efek dari latihan).\r\n5. Kantuk & kelelahan.",
+    "1. Pendinginan aktif diperpanjang (jalan ringan 8–10 menit, jangan langsung diam/duduk).\r\n2. BP pre & post sesi wajib dipantau.\r\n3. Transisi posisi perlahan.\r\n4. Bila perlu catat lingkar pergelangan kaki agar edema obat tidak dibaca sebagai respons latihan.",
+    "KUNING"
+  ],
+  [
+    41,
+    "Omletec",
+    "Omeprazole (perlu konfirmasi)",
+    "Penghambat Pompa Proton (PPI)",
+    "Penurun asam lambung",
+    "1. Umumnya aman.\r\n2. Penggunaan jangka panjang: kram otot, kesemutan, kelelahan,keropos tulang.\r\n3. Sakit kepala & gangguan pencernaan ringan.",
+    "1. Pemantauan standar.\r\n2. Kram otot berulang tanpa sebab jelas pada pengguna jangka panjang = sarankan cek magnesium.\r\n3. Refluks memburuk saat posisi tertentu (supine penuh, inversi) — sesuaikan pilihan gerakan.",
+    "HIJAU"
+  ],
+  [
+    42,
+    "Pradaxa",
+    "Dabigatran etexilate",
+    "Antikoagulan (Pengencer Darah)",
+    "Pengencer darah",
+    "1. Risiko perdarahan LEBIH TINGGI.\r\n2. Memar spontan, gusi berdarah, mimisan lama berhenti, menstruasi berat.\r\n3. Sinyal darurat: batuk/muntah darah, urine/BAB berdarah atau hitam.\r\n4. Sakit kepala sangat berat mendadak (kemungkinan perdarahan otak), pingsan.\r\n5. Anemia (lemas, pucat, cepat lelah) menurunkan toleransi latihan.",
+    "1. LARANGAN : Aktivitas kontak berat, risiko jatuh, benturan kepala.\r\n2. Semua latihan keseimbangan wajib dengan pengawasan.\r\n3. Hindari beban maksimal + Valsalva maneuver.\r\n4. Setiap memar baru/luas dicatat & dilaporkan.",
+    "MERAH"
+  ],
+  [
+    43,
+    "Prorenal",
+    "Asam amino esensial + keto-analog",
+    "Suplemen Asam Amino Ginjal (Terapi Gagal Ginjal)",
+    "Terapi penyakit ginjal kronis",
+    "1. Kondisi dasar PENYAKIT GINJAL : kelelahan kronis, kehilangan koordinasi.\r\n2. Hipertensi sulit terkontrol, pembatasan cairan mungkin diberlakukan dokter.\r\n3. Risiko gangguan elektrolit (kram, jantung tidak beraturan).",
+    "1. WAJIB clearance dokter sebelum program.\r\n2. Perhatikan batas intensitas, batas cairan, hari dialisis (jangan latihan pada hari dialisis).\r\n3. Pastikan semua rentang gerakan maksimum (terutama bagian upper)\r\n3. Pemantauan ketat  BP pre & post latihan.\r\n4. Intensitas rendah-sedang, durasi pendek, progresi sangat bertahap.\r\n5. Kram + denyut tidak beraturan = stop & rujuk.",
+    "MERAH"
+  ],
+  [
+    44,
+    "Prostam",
+    "Tamsulosin",
+    "Alpha Blocker (Prostat)",
+    "Pembesaran prostat jinak (BPH)",
+    "1. Hipotensi ortostatik (pusing saat bangun dari posisi berbaring/duduk).\r\n2. Kantuk, hidung tersumbat, jantung berdebar, kelelahan.",
+    "1. BP pre & post sesi wajib dipantau.\r\n2. Transisi posisi SANGAT bertahap: lantai → duduk → jeda → berdiri.\r\n3. Pusing = duduk dulu, jangan dipaksakan.",
+    "KUNING"
+  ],
+  [
+    45,
+    "Ramipril",
+    "Ramipril",
+    "ACE Inhibitor",
+    "Hipertensi",
+    "1. Hipotensi ortostatik (pusing saat bangun dari posisi berbaring/duduk).\r\n2. Pusing berat seperti akan pingsan.\r\n3. Batg uk kering saat latihan (efek obat, bukan tanda jantung tapi tetap catat).\r\n4. Bisa ada gejala hiperkalemia (lemah otot, denyut jantung tidak beraturan, kesemutan).\r\n5. Bisa ada tanda angioedema (bengkak wajah/lidah/tenggorokan). Ini DARURAT.",
+    "1. BP pre & post sesi wajib dipantau.\r\n2. Transisi posisi perlahan, terutama dari gerakan lantai.\r\n3. Hidrasi cukup, tetapi HINDARI minuman elektrolit tinggi kalium & suplemen kalium.\r\n4. Pendinginan bertahap.\r\n5. Latihan di lingkungan panas kurang disarankan.",
+    "KUNING"
+  ],
+  [
+    46,
+    "Regumen",
+    "Norethisterone",
+    "Progestin (Norethisterone)",
+    "Perdarahan rahim disfungsional, endometriosis, PMS",
+    "1. Retensi urin, gangguan pencernaan, jerawat, perubahan libido & mood.\r\n2. Nyeri payudara, mual, insomnia (memengaruhi pemulihan latihan).\r\n3. Depresi & kantuk (somnolen), eksaserbasi migrain.\r\n4. Risiko trombosis: waspada nyeri betis satu sisi & sesak mendadak.",
+    "1. Nyeri betis unilateral = stop & rujuk, jangan dipijat.\r\n2. Kualitas tidur ditanyakan tiap sesi (memengaruhi dosis latihan).\r\n3. Migrain aktif = sesi diringankan atau ditunda.",
+    "KUNING"
+  ],
+  [
+    47,
+    "Seloxy",
+    "Multivitamin + mineral antioksidan",
+    "Suplemen Antioksidan/Multivitamin",
+    "Antioksidan, metabolisme",
+    "1. Aman untuk latihan.\r\n2. Efek ringan: pusing, mual, gangguan pencernaan.",
+    "1. Pemantauan standar.\r\n2. Tidak memerlukan penyesuaian program.",
+    "HIJAU"
+  ],
+  [
+    48,
+    "Simvastatin",
+    "Simvastatin",
+    "Statin (Penurun Kolesterol)",
+    "Kolesterol & trigliserida tinggi",
+    "1. Nyeri/pegal otot (myalgia) — WAJIB dibedakan dari DOMS.\r\n2. Nyeri simetris kiri-kanan, tanpa pemicu jelas, lemah otot, tidak membaik dengan istirahat.\r\n3. Nyeri otot hebat + urine berwarna gelap seperti teh = HENTIKAN, rujuk medis segera.\r\n4. Nyeri sendi, gangguan pencernaan ringan.",
+    "1. Pantau progresi beban, terutama pada klien baru mulai statin atau naik dosis.\r\n2. Risiko myalgia tertinggi 4–6 minggu pertama jika baru mulai/naik dosis statin.\r\n2. Tanya lokasi & pola nyeri otot setiap sesi; catat.\r\n3. Nyeri simetris tanpa pemicu = tandai, sarankan konsultasi dokter, turunkan volume.",
+    "KUNING"
+  ],
+  [
+    49,
+    "Suvesco",
+    "Rosuvastatin 10 mg",
+    "Statin (Penurun Kolesterol)",
+    "Penurun kolesterol",
+    "1. Nyeri/pegal otot (myalgia) — WAJIB dibedakan dari DOMS.\r\n2. Nyeri simetris kiri-kanan, tanpa pemicu jelas, lemah otot, tidak membaik dengan istirahat.\r\n3. Nyeri otot hebat + urine berwarna gelap seperti teh = HENTIKAN, rujuk medis segera.\r\n4. Nyeri sendi, gangguan pencernaan ringan.",
+    "1. Pantau progresi beban, terutama pada klien baru mulai statin atau naik dosis.\r\n2. Risiko myalgia tertinggi 4–6 minggu pertama jika baru mulai/naik dosis statin.\r\n2. Tanya lokasi & pola nyeri otot setiap sesi; catat.\r\n3. Nyeri simetris tanpa pemicu = tandai, sarankan konsultasi dokter, turunkan volume.",
+    "KUNING"
+  ]
+]
+

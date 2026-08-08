@@ -1,6 +1,5 @@
-import { useState, useCallback } from "react";
-import useSWR from "swr";
-import { fetcher } from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiGet, apiPost } from "@/lib/api";
 
 export interface QuarterlyAssessment {
   id: string;
@@ -29,57 +28,37 @@ export interface QuarterlyAssessment {
 }
 
 export function useQuarterlyAssessments(clientId: string | undefined) {
-  const { data, error, mutate, isLoading } = useSWR<QuarterlyAssessment[]>(
-    clientId ? `/v2/quarterly-assessments/client/${clientId}` : null,
-    fetcher
-  );
+  const query = useQuery({
+    queryKey: ["quarterly-assessments", clientId],
+    queryFn: () => {
+      if (!clientId) return { data: [] };
+      return apiGet(`/v2/quarterly-assessments/client/${clientId}`);
+    },
+    enabled: !!clientId,
+  });
 
   return {
-    assessments: data || [],
-    isLoading,
-    isError: error,
-    mutate,
+    assessments: (query.data?.data || []) as QuarterlyAssessment[],
+    isLoading: query.isLoading,
+    isError: query.isError,
+    mutate: () => query.refetch(),
   };
 }
 
 export function useCreateQuarterlyAssessment() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const submit = useCallback(
-    async (payload: Omit<QuarterlyAssessment, "id" | "created_at" | "updated_at">) => {
-      setIsSubmitting(true);
-      setError(null);
-      try {
-        const token = localStorage.getItem("sf_access_token");
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/v2/quarterly-assessments`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(payload),
-          }
-        );
-
-        if (!res.ok) {
-          const errData = await res.json().catch(() => null);
-          throw new Error(errData?.error || "Failed to submit assessment");
-        }
-
-        const data = await res.json();
-        setIsSubmitting(false);
-        return data;
-      } catch (err: any) {
-        setError(err);
-        setIsSubmitting(false);
-        throw err;
-      }
+  const qc = useQueryClient();
+  
+  const mutation = useMutation({
+    mutationFn: (payload: Omit<QuarterlyAssessment, "id" | "created_at" | "updated_at">) =>
+      apiPost(`/v2/quarterly-assessments`, payload),
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["quarterly-assessments", vars.client_id] });
     },
-    []
-  );
+  });
 
-  return { submit, isSubmitting, error };
+  return {
+    submit: mutation.mutateAsync,
+    isSubmitting: mutation.isPending,
+    error: mutation.error,
+  };
 }
