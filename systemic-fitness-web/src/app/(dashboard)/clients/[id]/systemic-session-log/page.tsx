@@ -204,15 +204,17 @@ export default function SystemicSessionLogPage({
                   </div>
                   <div className="col-span-2">
                     <label className="block text-xs text-slate-500 mb-1.5 font-medium uppercase">Medication / Status</label>
-                    <input
-                      type="text"
+                    <select
                       value={formData.medication_status || ""}
                       onChange={(e) =>
                         setFormData({ ...formData, medication_status: e.target.value })
                       }
-                      placeholder="e.g. Amlodipine 5mg"
-                      className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-sf-deepNavy outline-none transition-all"
-                    />
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-sf-deepNavy outline-none transition-all cursor-pointer"
+                    >
+                      <option value="">-- Select Status --</option>
+                      <option value="✅ Consumed">✅ Consumed (Sudah minum)</option>
+                      <option value="❎ Not Consumed">❎ Not Consumed (Tidak minum)</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -352,13 +354,19 @@ export default function SystemicSessionLogPage({
                 <div className="space-y-4">
                   <div>
                     <label className="block text-xs text-slate-500 mb-1.5 font-medium uppercase">Symptom Experienced</label>
-                    <input
-                      type="text"
+                    <select
                       value={formData.symptom || ""}
                       onChange={(e) => setFormData({ ...formData, symptom: e.target.value })}
-                      placeholder="e.g. Dizziness, None"
-                      className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-orange-400 outline-none transition-all"
-                    />
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-orange-400 outline-none transition-all cursor-pointer"
+                    >
+                      <option value="">-- Select Symptom --</option>
+                      <option value="None">None</option>
+                      <option value="Chest pain/tightness">Chest pain/tightness</option>
+                      <option value="Palpitations">Palpitations</option>
+                      <option value="Dizziness">Dizziness</option>
+                      <option value="Shortness of breath">Shortness of breath</option>
+                      <option value="Nausea/vomiting">Nausea/vomiting</option>
+                    </select>
                   </div>
                   <div className="flex flex-wrap items-center gap-6 pt-2">
                     <label className="flex items-center gap-2.5 text-sm text-slate-700 cursor-pointer group">
