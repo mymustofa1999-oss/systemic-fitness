@@ -173,13 +173,13 @@ export default function SystemicAssessmentPage({
             
             <div className="p-6 space-y-8">
               {/* Row 1: Basic Info */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Quarter</label>
                   <select
                     value={quarter}
                     onChange={(e) => setQuarter(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
                   >
                     <option value="Q1">Q1</option>
                     <option value="Q2">Q2</option>
@@ -194,17 +194,17 @@ export default function SystemicAssessmentPage({
                     value={periodRange}
                     onChange={(e) => setPeriodRange(e.target.value)}
                     placeholder="e.g., Jan-Mar 2026"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
                   />
                 </div>
-                <div>
+                <div className="md:col-span-2">
                   <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Review Date</label>
                   <input
                     type="date"
                     value={reviewDate}
                     onChange={(e) => setReviewDate(e.target.value)}
                     required
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
                   />
                 </div>
               </div>
@@ -281,11 +281,11 @@ export default function SystemicAssessmentPage({
                     required
                     value={avgScore}
                     onChange={(e) => setAvgScore(e.target.value ? parseFloat(e.target.value) : "")}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
                     placeholder="e.g., 2.50"
                   />
                   {typeof avgScore === "number" && (
-                    <div className={cn("mt-2 text-xs flex items-center gap-1", scoreMet ? "text-green-600" : "text-red-500")}>
+                    <div className={cn("mt-2 text-xs flex items-center gap-1", scoreMet ? "text-green-600" : "text-slate-500")}>
                       {scoreMet ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
                       {scoreMet ? "Score threshold met" : "Score too low"}
                     </div>
@@ -315,13 +315,13 @@ export default function SystemicAssessmentPage({
                 <h3 className="font-semibold text-slate-800 flex items-center gap-2 mb-4">
                   <UserIcon className="w-4 h-4 text-sf-deepNavy" /> Body Composition & Medical
                 </h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Gender</label>
                     <select
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
                     >
                       <option value="Female">Female</option>
                       <option value="Male">Male</option>
@@ -333,7 +333,7 @@ export default function SystemicAssessmentPage({
                       type="number"
                       value={height}
                       onChange={(e) => setHeight(e.target.value ? parseFloat(e.target.value) : "")}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
                     />
                   </div>
                   <div>
@@ -343,7 +343,7 @@ export default function SystemicAssessmentPage({
                       step="0.1"
                       value={weight}
                       onChange={(e) => setWeight(e.target.value ? parseFloat(e.target.value) : "")}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
                     />
                   </div>
                   <div>
@@ -353,7 +353,7 @@ export default function SystemicAssessmentPage({
                       step="0.1"
                       value={waist}
                       onChange={(e) => setWaist(e.target.value ? parseFloat(e.target.value) : "")}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
                     />
                   </div>
                 </div>
@@ -366,7 +366,7 @@ export default function SystemicAssessmentPage({
                       <span className={cn(
                         "text-xs px-2 py-0.5 rounded-full",
                         bmiCategory === "Normal" ? "bg-green-100 text-green-700" :
-                        bmiCategory.includes("Obese") ? "bg-red-100 text-red-700" :
+                        bmiCategory.includes("Obese") ? "bg-slate-200 text-slate-700" :
                         "bg-amber-100 text-amber-700"
                       )}>{bmiCategory}</span>
                     </div>
@@ -374,7 +374,7 @@ export default function SystemicAssessmentPage({
                       <span className="text-slate-500">Waist Status:</span>{" "}
                       <span className={cn(
                         "font-semibold",
-                        waistStatus === "Within Range" ? "text-green-600" : "text-red-600"
+                        waistStatus === "Within Range" ? "text-green-600" : "text-slate-600"
                       )}>{waistStatus}</span>
                     </div>
                   </div>
@@ -388,7 +388,7 @@ export default function SystemicAssessmentPage({
                       value={medicalCondition}
                       onChange={(e) => setMedicalCondition(e.target.value)}
                       placeholder="List any ongoing medical conditions..."
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
                     />
                   </div>
                   <div>
@@ -398,7 +398,7 @@ export default function SystemicAssessmentPage({
                       value={labReport}
                       onChange={(e) => setLabReport(e.target.value)}
                       placeholder="https://..."
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-blue-600"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm text-blue-600"
                     />
                   </div>
                 </div>
