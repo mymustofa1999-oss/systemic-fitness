@@ -15,9 +15,13 @@ import {
   Save,
   FileText,
   ChevronRight,
+  Upload,
+  Loader2,
+  X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/stores/toastStore";
+import axios from "axios";
 
 const EXIT_CRITERIA = {
   1: {
@@ -70,7 +74,36 @@ export default function SystemicAssessmentPage({
   const [waist, setWaist] = useState<number | "">("");
   const [medicalCondition, setMedicalCondition] = useState("");
   const [labReport, setLabReport] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const [reviewDate, setReviewDate] = useState(() => new Date().toISOString().split("T")[0]);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("File too large. Maximum size is 10MB");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await axios.post("/api/uploads", formData, {
+        baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080",
+      });
+      const url = res.data?.data?.url;
+      if (url) {
+        setLabReport(url);
+        toast.success("File uploaded successfully");
+      }
+    } catch (err: any) {
+      toast.error("Upload failed: " + err.message);
+    } finally {
+      setIsUploading(false);
+      e.target.value = ""; // Reset input
+    }
+  };
 
   // Calculations
   const scoreThreshold = 2.25;
@@ -421,8 +454,28 @@ export default function SystemicAssessmentPage({
                 <textarea rows={2} value={medicalCondition} onChange={e => setMedicalCondition(e.target.value)} placeholder="Enter medical conditions..." className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400 resize-none" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1">Lab Report (PDF URL)</label>
-                <input type="url" value={labReport} onChange={e => setLabReport(e.target.value)} placeholder="https://..." className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400 text-blue-600" />
+                <label className="block text-xs font-bold text-slate-500 mb-1">Lab Report (Document/Photo)</label>
+                {labReport ? (
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50 border border-emerald-200 rounded-lg">
+                    <a href={labReport} target="_blank" rel="noreferrer" className="text-emerald-600 font-medium text-sm truncate hover:underline flex-1">
+                      View Uploaded File
+                    </a>
+                    <button type="button" onClick={() => setLabReport("")} className="p-1 text-slate-400 hover:text-red-500 rounded-full hover:bg-slate-200 transition-colors">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <label className={cn(
+                    "flex flex-col items-center justify-center w-full h-[42px] border-2 border-dashed rounded-lg cursor-pointer transition-colors",
+                    isUploading ? "bg-slate-100 border-slate-300 cursor-not-allowed" : "bg-slate-50 border-slate-300 hover:bg-slate-100 hover:border-amber-400"
+                  )}>
+                    <div className="flex items-center gap-2 text-slate-500">
+                      {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                      <span className="text-sm font-medium">{isUploading ? "Uploading..." : "Click to Upload File"}</span>
+                    </div>
+                    <input type="file" className="hidden" accept=".pdf,image/*" onChange={handleFileUpload} disabled={isUploading} />
+                  </label>
+                )}
               </div>
             </div>
           </div>
