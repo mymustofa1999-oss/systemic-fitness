@@ -13,11 +13,8 @@ import {
   CheckCircle,
   XCircle,
   Save,
-  User as UserIcon,
-  Ruler,
-  Weight,
   FileText,
-  AlertTriangle,
+  ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/stores/toastStore";
@@ -54,12 +51,13 @@ export default function SystemicAssessmentPage({
 }: {
   params: { id: string };
 }) {
-  const { user } = useUser(params.id);
-  const { assessments, mutate, isLoading: isLoadingAssessments } = useQuarterlyAssessments(params.id);
+  const { data: userData } = useUser(params.id);
+  const user = userData?.data as any;
+  const { assessments, mutate, isLoading } = useQuarterlyAssessments(params.id);
   const { submit, isSubmitting } = useCreateQuarterlyAssessment();
 
-  // Form State
-  const [quarter, setQuarter] = useState("Q1");
+  // Form State for the NEW row
+  const [quarter, setQuarter] = useState(`Q${(assessments?.length || 0) + 1}`);
   const [periodRange, setPeriodRange] = useState("");
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const [functionalMet, setFunctionalMet] = useState(false);
@@ -78,7 +76,7 @@ export default function SystemicAssessmentPage({
   const scoreThreshold = 2.25;
   const scoreMet = typeof avgScore === "number" && avgScore > scoreThreshold;
   const isProgress = functionalMet && movementMet && scoreMet;
-  const decision = isProgress ? "PROGRESS" : "HOLD";
+  const decision = isProgress ? "PROGRESS" : "INCOMPLETE";
   const newLevel = isProgress ? (currentLevel < 6 ? currentLevel + 1 : 6) : currentLevel;
 
   let bmi = 0;
@@ -139,6 +137,7 @@ export default function SystemicAssessmentPage({
       setFunctionalMet(false);
       setMovementMet(false);
       setAvgScore("");
+      setQuarter(`Q${assessments.length + 2}`); // next quarter
       
     } catch (err: any) {
       toast.error(err.message || "Failed to save assessment");
@@ -146,321 +145,246 @@ export default function SystemicAssessmentPage({
   };
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Link
-          href={`/clients/${params.id}`}
-          className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
-        >
-          <ArrowLeft className="h-5 w-5 text-slate-600" />
-        </Link>
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Systemic Assessment</h1>
-          <p className="text-sm text-slate-500">
-            Quarterly Review for {user ? `${user.first_name} ${user.last_name}` : "Client"}
-          </p>
+    <div className="min-h-screen bg-slate-50 p-6 md:p-8 space-y-8 pb-24">
+      {/* Navigation */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <Link
+            href={`/clients/${params.id}`}
+            className="p-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-500 transition-colors shadow-sm"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <div>
+            <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
+              <Link href="/clients" className="hover:text-sf-deepNavy transition-colors">
+                Clients
+              </Link>
+              <ChevronRight className="h-3 w-3" />
+              <Link href={`/clients/${params.id}`} className="hover:text-sf-deepNavy transition-colors">
+                {user?.full_name || "..."}
+              </Link>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900">Systemic Assessment</h1>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* LEFT COLUMN: FORM */}
-        <div className="lg:col-span-2 space-y-6">
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="p-4 border-b border-slate-200 bg-slate-50/50 flex justify-between items-center">
-              <h2 className="font-semibold text-slate-900">New Quarterly Review</h2>
-            </div>
-            
-            <div className="p-6 space-y-8">
-              {/* Row 1: Basic Info */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Quarter</label>
-                  <select
-                    value={quarter}
-                    onChange={(e) => setQuarter(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
-                  >
-                    <option value="Q1">Q1</option>
-                    <option value="Q2">Q2</option>
-                    <option value="Q3">Q3</option>
-                    <option value="Q4">Q4</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Period Range</label>
-                  <input
-                    type="text"
-                    value={periodRange}
-                    onChange={(e) => setPeriodRange(e.target.value)}
-                    placeholder="e.g., Jan-Mar 2026"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Review Date</label>
-                  <input
-                    type="date"
-                    value={reviewDate}
-                    onChange={(e) => setReviewDate(e.target.value)}
-                    required
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
-                  />
-                </div>
-              </div>
+      <div className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+        <div className="bg-sf-deepNavy text-white px-6 py-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold flex items-center gap-2">
+              <FileText className="h-5 w-5 text-sf-gold" />
+              QUARTERLY REVIEW
+            </h2>
+            <p className="text-xs text-slate-300 mt-1">every 3 months (24 sessions)</p>
+          </div>
+          <div className="text-sm bg-white/10 px-4 py-2 rounded-lg border border-white/10 flex items-center gap-2">
+            Min Avg Systemic Score: <strong className="text-sf-gold">{scoreThreshold}</strong>
+            <span className="text-xs text-slate-300 ml-2">&larr; pass threshold.</span>
+          </div>
+        </div>
 
-              {/* Row 2: Level & Exit Criteria */}
-              <div className="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-semibold text-slate-800 flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-sf-deepNavy" /> Level & Exit Criteria
-                  </h3>
-                  <div className="w-1/3">
-                    <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Current Level</label>
-                    <select
-                      value={currentLevel}
-                      onChange={(e) => setCurrentLevel(Number(e.target.value))}
-                      className="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm font-semibold text-slate-900"
-                    >
-                      {[1, 2, 3, 4, 5, 6].map((l) => (
-                        <option key={l} value={l}>Level {l}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+        <div className="overflow-x-auto pb-4 custom-scrollbar">
+          <form onSubmit={handleSubmit}>
+            <table className="w-max min-w-full text-sm text-left border-collapse">
+              <thead className="bg-slate-100 text-slate-600 border-b-2 border-slate-300 text-xs uppercase text-center">
+                {/* Top Level Headers */}
+                <tr>
+                  <th colSpan={3} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider">QUARTER</th>
+                  <th colSpan={2} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider font-semibold">EXIT CRITERIA — auto-filled, reference only</th>
+                  <th colSpan={4} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider font-semibold">EXIT CHECKLIST — 3 parameters</th>
+                  <th colSpan={2} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider">OUTCOME</th>
+                  <th colSpan={7} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider">BODY COMPOSITION</th>
+                  <th colSpan={3} className="px-4 py-2.5 bg-black text-amber-400 tracking-wider">MEDICAL & RECORDS</th>
+                </tr>
+                {/* Sub Headers */}
+                <tr className="text-[10px] text-white border-b border-black">
+                  <th className="px-3 py-2 font-semibold border-r border-black bg-black">Quarter</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black min-w-[100px] bg-black">Period</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black min-w-[80px] bg-black">Current<br/>Level</th>
+                  <th className="px-4 py-2 font-semibold border-r border-black min-w-[280px] bg-teal-900 text-white">EXIT CRITERIA - Functional</th>
+                  <th className="px-4 py-2 font-semibold border-r border-black min-w-[280px] bg-teal-900 text-white">EXIT CRITERIA - Movement Quality</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Functional</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Movement<br/>Quality</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black min-w-[100px] text-center bg-black">Avg Systemic<br/>Score</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Score<br/>Status</th>
+                  <th className="px-4 py-2 font-bold border-r border-black text-center bg-black">DECISION</th>
+                  <th className="px-3 py-2 font-bold border-r border-black text-center bg-black">New<br/>Level</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Height<br/>(cm)</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Weight<br/>(kg)</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Gender</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">BMI</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">BMI Category</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Waist<br/>Circum (cm)</th>
+                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Waist<br/>Status</th>
+                  <th className="px-4 py-2 font-semibold border-r border-black min-w-[200px] bg-black">Medical Condition</th>
+                  <th className="px-4 py-2 font-semibold border-r border-black min-w-[180px] bg-black">Lab Report (PDF link)</th>
+                  <th className="px-4 py-2 font-semibold min-w-[120px] text-center bg-black">Review<br/>Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 bg-white">
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={21} className="py-12 text-center text-slate-500">
+                      <Activity className="h-6 w-6 animate-spin mx-auto mb-2 text-sf-gold" />
+                      Loading history...
+                    </td>
+                  </tr>
+                ) : (
+                  <>
+                    {/* Render historical records (Read-Only) */}
+                    {assessments.map((a) => (
+                      <tr key={a.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-3 py-3 border-r border-slate-200 font-bold text-slate-900 text-center">{a.quarter}</td>
+                        <td className="px-3 py-3 border-r border-slate-200 text-slate-600">{a.period_range || "-"}</td>
+                        <td className="px-3 py-3 border-r border-slate-300 font-bold text-center text-sf-deepNavy bg-slate-50">{a.current_level}</td>
+                        
+                        <td className="px-4 py-3 border-r border-slate-200 text-[11px] whitespace-pre-wrap text-slate-500 leading-tight">
+                          {EXIT_CRITERIA[a.current_level as keyof typeof EXIT_CRITERIA]?.functional || ""}
+                        </td>
+                        <td className="px-4 py-3 border-r border-slate-300 text-[11px] whitespace-pre-wrap text-slate-500 leading-tight">
+                          {EXIT_CRITERIA[a.current_level as keyof typeof EXIT_CRITERIA]?.movement || ""}
+                        </td>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-xs font-semibold text-slate-500 uppercase mb-1">Functional Criteria</p>
-                      <div className="text-xs text-slate-600 bg-white p-3 rounded-lg border border-slate-200 whitespace-pre-wrap min-h-[100px]">
-                        {EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA].functional}
-                      </div>
-                    </div>
-                    <label className="flex items-center gap-2 cursor-pointer p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={functionalMet}
-                        onChange={(e) => setFunctionalMet(e.target.checked)}
-                        className="w-4 h-4 text-green-600 rounded border-slate-300 focus:ring-green-600"
-                      />
-                      <span className="text-sm font-medium text-slate-700">All functional criteria met</span>
-                    </label>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-xs font-semibold text-slate-500 uppercase mb-1">Movement Quality Criteria</p>
-                      <div className="text-xs text-slate-600 bg-white p-3 rounded-lg border border-slate-200 whitespace-pre-wrap min-h-[100px]">
-                        {EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA].movement}
-                      </div>
-                    </div>
-                    <label className="flex items-center gap-2 cursor-pointer p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={movementMet}
-                        onChange={(e) => setMovementMet(e.target.checked)}
-                        className="w-4 h-4 text-green-600 rounded border-slate-300 focus:ring-green-600"
-                      />
-                      <span className="text-sm font-medium text-slate-700">All movement quality met</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
+                        <td className={cn("px-3 py-3 border-r border-slate-200 text-center font-bold text-lg", a.functional_criteria_met ? "bg-[#d9ead3] text-green-800" : "text-red-400")}>
+                          {a.functional_criteria_met ? "✔" : "✖"}
+                        </td>
+                        <td className={cn("px-3 py-3 border-r border-slate-300 text-center font-bold text-lg", a.movement_quality_met ? "bg-[#d9ead3] text-green-800" : "text-red-400")}>
+                          {a.movement_quality_met ? "✔" : "✖"}
+                        </td>
 
-              {/* Row 3: Score & Decision */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">
-                    Avg Systemic Score
-                  </label>
-                  <p className="text-[10px] text-slate-400 mb-2">Must be &gt; {scoreThreshold} to pass</p>
-                  <input
-                    type="number"
-                    step="0.01"
-                    required
-                    value={avgScore}
-                    onChange={(e) => setAvgScore(e.target.value ? parseFloat(e.target.value) : "")}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
-                    placeholder="e.g., 2.50"
-                  />
-                  {typeof avgScore === "number" && (
-                    <div className={cn("mt-2 text-xs flex items-center gap-1", scoreMet ? "text-green-600" : "text-slate-500")}>
-                      {scoreMet ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
-                      {scoreMet ? "Score threshold met" : "Score too low"}
-                    </div>
-                  )}
-                </div>
+                        <td className="px-3 py-3 border-r border-slate-200 text-center font-bold text-slate-800">{a.avg_systemic_score}</td>
+                        <td className={cn("px-3 py-3 border-r border-slate-300 text-center font-bold text-lg", a.score_status_met ? "bg-[#d9ead3] text-green-800" : "text-red-400")}>
+                          {a.score_status_met ? "✔" : "✖"}
+                        </td>
 
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center items-center">
-                  <p className="text-xs font-semibold text-slate-500 uppercase mb-2">Quarterly Decision</p>
-                  <div className={cn(
-                    "px-4 py-2 rounded-full font-bold text-sm",
-                    decision === "PROGRESS" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
-                  )}>
-                    {decision}
-                  </div>
-                  {decision === "PROGRESS" && (
-                    <p className="mt-2 text-xs text-slate-600">
-                      Advances to <strong>Level {newLevel}</strong>
-                    </p>
-                  )}
-                </div>
-              </div>
+                        <td className={cn(
+                          "px-4 py-3 border-r border-slate-200 text-center font-bold",
+                          a.decision === "PROGRESS" ? "text-green-800 bg-[#d9ead3]" : "text-slate-500"
+                        )}>
+                          {a.decision}
+                        </td>
+                        <td className={cn("px-3 py-3 border-r border-slate-300 text-center font-bold", a.decision === "PROGRESS" ? "bg-[#d9ead3] text-green-900" : "text-slate-500")}>
+                          {a.new_level || ""}
+                        </td>
 
-              <hr className="border-slate-200" />
+                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.height_cm || "-"}</td>
+                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.weight_kg || "-"}</td>
+                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.gender || "-"}</td>
+                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.bmi || "-"}</td>
+                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.bmi_category || "-"}</td>
+                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.waist_circumference_cm || "-"}</td>
+                        <td className="px-3 py-3 border-r border-slate-300 text-center text-slate-700">{a.waist_status || "-"}</td>
 
-              {/* Row 4: Body Composition & Medical */}
-              <div>
-                <h3 className="font-semibold text-slate-800 flex items-center gap-2 mb-4">
-                  <UserIcon className="w-4 h-4 text-sf-deepNavy" /> Body Composition & Medical
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Gender</label>
-                    <select
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
-                    >
-                      <option value="Female">Female</option>
-                      <option value="Male">Male</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Height (cm)</label>
-                    <input
-                      type="number"
-                      value={height}
-                      onChange={(e) => setHeight(e.target.value ? parseFloat(e.target.value) : "")}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Weight (kg)</label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={weight}
-                      onChange={(e) => setWeight(e.target.value ? parseFloat(e.target.value) : "")}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Waist (cm)</label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={waist}
-                      onChange={(e) => setWaist(e.target.value ? parseFloat(e.target.value) : "")}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
-                    />
-                  </div>
-                </div>
+                        <td className="px-4 py-3 border-r border-slate-200 text-slate-600 text-xs">{a.medical_condition || "-"}</td>
+                        <td className="px-4 py-3 border-r border-slate-200 text-slate-600 text-xs">
+                          {a.lab_report_link ? (
+                            <a href={a.lab_report_link} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline break-all">Link</a>
+                          ) : "-"}
+                        </td>
+                        <td className="px-4 py-3 text-center text-slate-600">{new Date(a.review_date).toLocaleDateString('en-GB')}</td>
+                      </tr>
+                    ))}
 
-                {/* Auto Calcs display */}
-                {(bmi > 0 || waistStatus) && (
-                  <div className="mt-4 p-3 bg-blue-50/50 rounded-lg border border-blue-100 grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-slate-500">BMI:</span> <span className="font-semibold">{bmi.toFixed(1)}</span>{" "}
-                      <span className={cn(
-                        "text-xs px-2 py-0.5 rounded-full",
-                        bmiCategory === "Normal" ? "bg-green-100 text-green-700" :
-                        bmiCategory.includes("Obese") ? "bg-slate-200 text-slate-700" :
-                        "bg-amber-100 text-amber-700"
-                      )}>{bmiCategory}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-500">Waist Status:</span>{" "}
-                      <span className={cn(
-                        "font-semibold",
-                        waistStatus === "Within Range" ? "text-green-600" : "text-slate-600"
-                      )}>{waistStatus}</span>
-                    </div>
-                  </div>
+                    {/* New Row Input */}
+                    <tr className="bg-blue-50/10 border-t-2 border-slate-300">
+                      <td className="px-2 py-2 border-r border-slate-200">
+                        <input type="text" value={quarter} onChange={e => setQuarter(e.target.value)} className="w-16 p-1.5 text-center font-bold bg-white border border-slate-200 rounded focus:ring-1 focus:ring-sf-deepNavy" required />
+                      </td>
+                      <td className="px-2 py-2 border-r border-slate-200">
+                        <input type="text" value={periodRange} onChange={e => setPeriodRange(e.target.value)} placeholder="e.g. Jan-Mar" className="w-24 p-1.5 bg-white border border-slate-200 rounded focus:ring-1 focus:ring-sf-deepNavy text-xs" />
+                      </td>
+                      <td className="px-2 py-2 border-r border-slate-300 text-center">
+                        <select value={currentLevel} onChange={e => setCurrentLevel(Number(e.target.value))} className="w-16 p-1.5 font-bold text-center bg-white border border-slate-200 rounded focus:ring-1 focus:ring-sf-deepNavy cursor-pointer">
+                          {[1,2,3,4,5,6].map(l => <option key={l} value={l}>{l}</option>)}
+                        </select>
+                      </td>
+
+                      <td className="px-4 py-3 border-r border-slate-200 text-[10px] whitespace-pre-wrap text-slate-500 leading-tight bg-slate-50">
+                        {EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.functional || ""}
+                      </td>
+                      <td className="px-4 py-3 border-r border-slate-300 text-[10px] whitespace-pre-wrap text-slate-500 leading-tight bg-slate-50">
+                        {EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.movement || ""}
+                      </td>
+
+                      <td className="px-3 py-2 border-r border-slate-200 text-center align-middle">
+                        <input type="checkbox" checked={functionalMet} onChange={e => setFunctionalMet(e.target.checked)} className="w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-600 cursor-pointer" />
+                      </td>
+                      <td className="px-3 py-2 border-r border-slate-300 text-center align-middle">
+                        <input type="checkbox" checked={movementMet} onChange={e => setMovementMet(e.target.checked)} className="w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-600 cursor-pointer" />
+                      </td>
+
+                      <td className="px-2 py-2 border-r border-slate-200 text-center align-middle">
+                        <input type="number" step="0.01" value={avgScore} onChange={e => setAvgScore(e.target.value ? parseFloat(e.target.value) : "")} placeholder="2.50" className="w-16 p-1.5 text-center font-bold bg-white border border-slate-200 rounded focus:ring-1 focus:ring-sf-deepNavy" required />
+                      </td>
+                      <td className="px-3 py-2 border-r border-slate-300 text-center align-middle">
+                        {avgScore !== "" && scoreMet ? <span className="font-bold text-lg text-green-600">✔</span> : <span className="text-slate-300">-</span>}
+                      </td>
+
+                      <td className="px-3 py-2 border-r border-slate-200 text-center align-middle bg-slate-50">
+                        <span className={cn("px-2 py-1 rounded font-bold text-xs", decision === "PROGRESS" ? "text-green-700 bg-green-100" : "text-amber-700 bg-amber-100")}>{decision}</span>
+                      </td>
+                      <td className="px-3 py-2 border-r border-slate-300 text-center align-middle font-bold text-sf-deepNavy bg-slate-50">{newLevel}</td>
+
+                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
+                        <input type="number" value={height} onChange={e => setHeight(e.target.value ? parseFloat(e.target.value) : "")} className="w-16 p-1.5 text-center bg-white border border-slate-200 rounded focus:ring-1 focus:ring-orange-400" />
+                      </td>
+                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
+                        <input type="number" step="0.1" value={weight} onChange={e => setWeight(e.target.value ? parseFloat(e.target.value) : "")} className="w-16 p-1.5 text-center bg-white border border-slate-200 rounded focus:ring-1 focus:ring-orange-400" />
+                      </td>
+                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
+                        <select value={gender} onChange={e => setGender(e.target.value)} className="w-20 p-1.5 text-xs bg-white border border-slate-200 rounded focus:ring-1 focus:ring-orange-400 cursor-pointer">
+                          <option value="Female">Female</option>
+                          <option value="Male">Male</option>
+                        </select>
+                      </td>
+                      <td className="px-3 py-2 border-r border-slate-200 text-center align-middle text-sm text-slate-600 bg-slate-50">{bmi > 0 ? bmi.toFixed(1) : "-"}</td>
+                      <td className="px-3 py-2 border-r border-slate-200 text-center align-middle text-xs text-slate-600 bg-slate-50">{bmiCategory || "-"}</td>
+                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
+                        <input type="number" step="0.1" value={waist} onChange={e => setWaist(e.target.value ? parseFloat(e.target.value) : "")} className="w-16 p-1.5 text-center bg-white border border-slate-200 rounded focus:ring-1 focus:ring-orange-400" />
+                      </td>
+                      <td className="px-3 py-2 border-r border-slate-300 text-center align-middle text-xs text-slate-600 bg-slate-50">{waistStatus || "-"}</td>
+
+                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
+                        <input type="text" value={medicalCondition} onChange={e => setMedicalCondition(e.target.value)} placeholder="Conditions..." className="w-full min-w-[150px] p-1.5 bg-white border border-slate-200 rounded text-xs focus:ring-1 focus:ring-emerald-400" />
+                      </td>
+                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
+                        <input type="text" value={labReport} onChange={e => setLabReport(e.target.value)} placeholder="URL link" className="w-full min-w-[120px] p-1.5 bg-white border border-slate-200 rounded text-xs focus:ring-1 focus:ring-emerald-400 text-blue-600" />
+                      </td>
+                      <td className="px-2 py-2 align-middle">
+                        <div className="flex flex-col gap-2">
+                          <input type="date" value={reviewDate} onChange={e => setReviewDate(e.target.value)} className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs focus:ring-1 focus:ring-emerald-400" required />
+                          <button type="submit" disabled={isSubmitting} className="w-full py-1.5 px-2 bg-sf-deepNavy text-white rounded text-xs font-bold hover:bg-slate-800 disabled:opacity-50 flex items-center justify-center gap-1">
+                            {isSubmitting ? <Activity className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />} Save
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </>
                 )}
-
-                <div className="mt-4 space-y-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Medical Condition</label>
-                    <input
-                      type="text"
-                      value={medicalCondition}
-                      onChange={(e) => setMedicalCondition(e.target.value)}
-                      placeholder="List any ongoing medical conditions..."
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">Lab Report (PDF Link)</label>
-                    <input
-                      type="url"
-                      value={labReport}
-                      onChange={(e) => setLabReport(e.target.value)}
-                      placeholder="https://..."
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm text-blue-600"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="flex items-center gap-2 px-6 py-2 bg-sf-deepNavy text-white rounded-xl hover:bg-slate-800 transition-colors disabled:opacity-50"
-              >
-                <Save className="w-4 h-4" />
-                {isSubmitting ? "Saving..." : "Save Assessment"}
-              </button>
-            </div>
+              </tbody>
+            </table>
           </form>
         </div>
-
-        {/* RIGHT COLUMN: HISTORY */}
-        <div className="space-y-4">
-          <h2 className="font-semibold text-slate-900 px-1">Assessment History</h2>
-          
-          {isLoadingAssessments ? (
-            <div className="text-sm text-slate-500 p-4">Loading history...</div>
-          ) : assessments.length === 0 ? (
-            <div className="bg-slate-50 border border-slate-200 border-dashed rounded-xl p-8 text-center">
-              <FileText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-              <p className="text-sm text-slate-500">No quarterly assessments recorded yet.</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {assessments.map((a) => (
-                <div key={a.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
-                  <div className={cn(
-                    "absolute top-0 left-0 w-1 h-full",
-                    a.decision === "PROGRESS" ? "bg-green-500" : "bg-amber-500"
-                  )} />
-                  <div className="flex justify-between items-start mb-2 pl-2">
-                    <div>
-                      <h4 className="font-bold text-slate-900">{a.quarter}</h4>
-                      <p className="text-[10px] text-slate-500">{new Date(a.review_date).toLocaleDateString()}</p>
-                    </div>
-                    <span className={cn(
-                      "text-xs font-bold px-2 py-1 rounded-md",
-                      a.decision === "PROGRESS" ? "bg-green-50 text-green-700" : "bg-amber-50 text-amber-700"
-                    )}>
-                      {a.decision}
-                    </span>
-                  </div>
-                  
-                  <div className="pl-2 space-y-1 mt-3 text-xs text-slate-600">
-                    <p>Level: <strong className="text-slate-900">{a.current_level}</strong> → {a.new_level ? <strong className="text-slate-900">{a.new_level}</strong> : "HOLD"}</p>
-                    <p>Score: <strong>{a.avg_systemic_score}</strong></p>
-                    {a.bmi_category && <p>BMI: {a.bmi_category}</p>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{__html: `
+        .custom-scrollbar::-webkit-scrollbar {
+          height: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f5f9;
+          border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+      `}} />
     </div>
   );
 }

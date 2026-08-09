@@ -31,7 +31,7 @@ export function useQuarterlyAssessments(clientId: string | undefined) {
   const query = useQuery({
     queryKey: ["quarterly-assessments", clientId],
     queryFn: () => {
-      if (!clientId) return { data: [] };
+      if (!clientId) return { success: true, message: "", data: [] } as any;
       return apiGet(`/v2/quarterly-assessments/client/${clientId}`);
     },
     enabled: !!clientId,
