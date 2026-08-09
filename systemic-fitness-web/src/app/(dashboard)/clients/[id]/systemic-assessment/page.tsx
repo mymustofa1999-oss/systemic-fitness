@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/stores/toastStore";
-import axios from "axios";
+import api from "@/lib/api";
 
 const EXIT_CRITERIA = {
   1: {
@@ -89,7 +89,7 @@ export default function SystemicAssessmentPage({
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await axios.post("/api/uploads", formData, {
+      const res = await api.post("/api/uploads", formData, {
         baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080",
       });
       const url = res.data?.data?.url;
