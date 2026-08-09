@@ -165,17 +165,18 @@ export default function SystemicAssessmentPage({
                 {user?.full_name || "..."}
               </Link>
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">Systemic Assessment</h1>
+            <h1 className="text-2xl font-bold text-slate-900">Systemic Assesment</h1>
           </div>
         </div>
       </div>
 
+      {/* Historical Data Table */}
       <div className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
         <div className="bg-sf-deepNavy text-white px-6 py-4 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold flex items-center gap-2">
               <FileText className="h-5 w-5 text-sf-gold" />
-              QUARTERLY REVIEW
+              QUARTERLY REVIEW (HISTORY)
             </h2>
             <p className="text-xs text-slate-300 mt-1">every 3 months (24 sessions)</p>
           </div>
@@ -186,187 +187,252 @@ export default function SystemicAssessmentPage({
         </div>
 
         <div className="overflow-x-auto pb-4 custom-scrollbar">
-          <form onSubmit={handleSubmit}>
-            <table className="w-max min-w-full text-sm text-left border-collapse">
-              <thead className="bg-slate-100 text-slate-600 border-b-2 border-slate-300 text-xs uppercase text-center">
-                {/* Top Level Headers */}
+          <table className="w-max min-w-full text-sm text-left border-collapse">
+            <thead className="bg-slate-100 text-slate-600 border-b-2 border-slate-300 text-xs uppercase text-center">
+              {/* Top Level Headers */}
+              <tr>
+                <th colSpan={3} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider">QUARTER</th>
+                <th colSpan={2} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider font-semibold">EXIT CRITERIA — auto-filled, reference only</th>
+                <th colSpan={4} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider font-semibold">EXIT CHECKLIST — 3 parameters</th>
+                <th colSpan={2} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider">OUTCOME</th>
+                <th colSpan={7} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider">BODY COMPOSITION</th>
+                <th colSpan={3} className="px-4 py-2.5 bg-black text-amber-400 tracking-wider">MEDICAL & RECORDS</th>
+              </tr>
+              {/* Sub Headers */}
+              <tr className="text-[10px] text-white border-b border-black">
+                <th className="px-3 py-2 font-semibold border-r border-black bg-black">Quarter</th>
+                <th className="px-3 py-2 font-semibold border-r border-black min-w-[100px] bg-black">Period</th>
+                <th className="px-3 py-2 font-semibold border-r border-black min-w-[80px] bg-black">Current<br/>Level</th>
+                <th className="px-4 py-2 font-semibold border-r border-black min-w-[280px] bg-teal-900 text-white">EXIT CRITERIA - Functional</th>
+                <th className="px-4 py-2 font-semibold border-r border-black min-w-[280px] bg-teal-900 text-white">EXIT CRITERIA - Movement Quality</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Functional</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Movement<br/>Quality</th>
+                <th className="px-3 py-2 font-semibold border-r border-black min-w-[100px] text-center bg-black">Avg Systemic<br/>Score</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Score<br/>Status</th>
+                <th className="px-4 py-2 font-bold border-r border-black text-center bg-black">DECISION</th>
+                <th className="px-3 py-2 font-bold border-r border-black text-center bg-black">New<br/>Level</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Height<br/>(cm)</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Weight<br/>(kg)</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Gender</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">BMI</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">BMI Category</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Waist<br/>Circum (cm)</th>
+                <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Waist<br/>Status</th>
+                <th className="px-4 py-2 font-semibold border-r border-black min-w-[200px] bg-black">Medical Condition</th>
+                <th className="px-4 py-2 font-semibold border-r border-black min-w-[180px] bg-black">Lab Report (PDF link)</th>
+                <th className="px-4 py-2 font-semibold min-w-[120px] text-center bg-black">Review<br/>Date</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 bg-white">
+              {isLoading ? (
                 <tr>
-                  <th colSpan={3} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider">QUARTER</th>
-                  <th colSpan={2} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider font-semibold">EXIT CRITERIA — auto-filled, reference only</th>
-                  <th colSpan={4} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider font-semibold">EXIT CHECKLIST — 3 parameters</th>
-                  <th colSpan={2} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider">OUTCOME</th>
-                  <th colSpan={7} className="px-4 py-2.5 border-r border-black bg-black text-amber-400 tracking-wider">BODY COMPOSITION</th>
-                  <th colSpan={3} className="px-4 py-2.5 bg-black text-amber-400 tracking-wider">MEDICAL & RECORDS</th>
+                  <td colSpan={21} className="py-12 text-center text-slate-500">
+                    <Activity className="h-6 w-6 animate-spin mx-auto mb-2 text-sf-gold" />
+                    Loading history...
+                  </td>
                 </tr>
-                {/* Sub Headers */}
-                <tr className="text-[10px] text-white border-b border-black">
-                  <th className="px-3 py-2 font-semibold border-r border-black bg-black">Quarter</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black min-w-[100px] bg-black">Period</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black min-w-[80px] bg-black">Current<br/>Level</th>
-                  <th className="px-4 py-2 font-semibold border-r border-black min-w-[280px] bg-teal-900 text-white">EXIT CRITERIA - Functional</th>
-                  <th className="px-4 py-2 font-semibold border-r border-black min-w-[280px] bg-teal-900 text-white">EXIT CRITERIA - Movement Quality</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Functional</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Movement<br/>Quality</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black min-w-[100px] text-center bg-black">Avg Systemic<br/>Score</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Score<br/>Status</th>
-                  <th className="px-4 py-2 font-bold border-r border-black text-center bg-black">DECISION</th>
-                  <th className="px-3 py-2 font-bold border-r border-black text-center bg-black">New<br/>Level</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Height<br/>(cm)</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Weight<br/>(kg)</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Gender</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">BMI</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">BMI Category</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Waist<br/>Circum (cm)</th>
-                  <th className="px-3 py-2 font-semibold border-r border-black text-center bg-black">Waist<br/>Status</th>
-                  <th className="px-4 py-2 font-semibold border-r border-black min-w-[200px] bg-black">Medical Condition</th>
-                  <th className="px-4 py-2 font-semibold border-r border-black min-w-[180px] bg-black">Lab Report (PDF link)</th>
-                  <th className="px-4 py-2 font-semibold min-w-[120px] text-center bg-black">Review<br/>Date</th>
+              ) : assessments.length === 0 ? (
+                <tr>
+                  <td colSpan={21} className="py-12 text-center text-slate-500 italic">
+                    Belum ada data assessment. Silakan input di bawah.
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 bg-white">
-                {isLoading ? (
-                  <tr>
-                    <td colSpan={21} className="py-12 text-center text-slate-500">
-                      <Activity className="h-6 w-6 animate-spin mx-auto mb-2 text-sf-gold" />
-                      Loading history...
+              ) : (
+                assessments.map((a) => (
+                  <tr key={a.id} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-3 py-3 border-r border-slate-200 font-bold text-slate-900 text-center">{a.quarter}</td>
+                    <td className="px-3 py-3 border-r border-slate-200 text-slate-600">{a.period_range || "-"}</td>
+                    <td className="px-3 py-3 border-r border-slate-300 font-bold text-center text-sf-deepNavy bg-slate-50">{a.current_level}</td>
+                    
+                    <td className="px-4 py-3 border-r border-slate-200 text-[11px] whitespace-pre-wrap text-slate-500 leading-tight">
+                      {EXIT_CRITERIA[a.current_level as keyof typeof EXIT_CRITERIA]?.functional || ""}
                     </td>
+                    <td className="px-4 py-3 border-r border-slate-300 text-[11px] whitespace-pre-wrap text-slate-500 leading-tight">
+                      {EXIT_CRITERIA[a.current_level as keyof typeof EXIT_CRITERIA]?.movement || ""}
+                    </td>
+
+                    <td className={cn("px-3 py-3 border-r border-slate-200 text-center font-bold text-lg", a.functional_criteria_met ? "bg-[#d9ead3] text-green-800" : "text-red-400")}>
+                      {a.functional_criteria_met ? "✔" : "✖"}
+                    </td>
+                    <td className={cn("px-3 py-3 border-r border-slate-300 text-center font-bold text-lg", a.movement_quality_met ? "bg-[#d9ead3] text-green-800" : "text-red-400")}>
+                      {a.movement_quality_met ? "✔" : "✖"}
+                    </td>
+
+                    <td className="px-3 py-3 border-r border-slate-200 text-center font-bold text-slate-800">{a.avg_systemic_score}</td>
+                    <td className={cn("px-3 py-3 border-r border-slate-300 text-center font-bold text-lg", a.score_status_met ? "bg-[#d9ead3] text-green-800" : "text-red-400")}>
+                      {a.score_status_met ? "✔" : "✖"}
+                    </td>
+
+                    <td className={cn(
+                      "px-4 py-3 border-r border-slate-200 text-center font-bold",
+                      a.decision === "PROGRESS" ? "text-green-800 bg-[#d9ead3]" : "text-slate-500"
+                    )}>
+                      {a.decision}
+                    </td>
+                    <td className={cn("px-3 py-3 border-r border-slate-300 text-center font-bold", a.decision === "PROGRESS" ? "bg-[#d9ead3] text-green-900" : "text-slate-500")}>
+                      {a.new_level || ""}
+                    </td>
+
+                    <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.height_cm || "-"}</td>
+                    <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.weight_kg || "-"}</td>
+                    <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.gender || "-"}</td>
+                    <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.bmi || "-"}</td>
+                    <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.bmi_category || "-"}</td>
+                    <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.waist_circumference_cm || "-"}</td>
+                    <td className="px-3 py-3 border-r border-slate-300 text-center text-slate-700">{a.waist_status || "-"}</td>
+
+                    <td className="px-4 py-3 border-r border-slate-200 text-slate-600 text-xs">{a.medical_condition || "-"}</td>
+                    <td className="px-4 py-3 border-r border-slate-200 text-slate-600 text-xs">
+                      {a.lab_report_link ? (
+                        <a href={a.lab_report_link} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline break-all">Link</a>
+                      ) : "-"}
+                    </td>
+                    <td className="px-4 py-3 text-center text-slate-600">{new Date(a.review_date).toLocaleDateString('en-GB')}</td>
                   </tr>
-                ) : (
-                  <>
-                    {/* Render historical records (Read-Only) */}
-                    {assessments.map((a) => (
-                      <tr key={a.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-3 py-3 border-r border-slate-200 font-bold text-slate-900 text-center">{a.quarter}</td>
-                        <td className="px-3 py-3 border-r border-slate-200 text-slate-600">{a.period_range || "-"}</td>
-                        <td className="px-3 py-3 border-r border-slate-300 font-bold text-center text-sf-deepNavy bg-slate-50">{a.current_level}</td>
-                        
-                        <td className="px-4 py-3 border-r border-slate-200 text-[11px] whitespace-pre-wrap text-slate-500 leading-tight">
-                          {EXIT_CRITERIA[a.current_level as keyof typeof EXIT_CRITERIA]?.functional || ""}
-                        </td>
-                        <td className="px-4 py-3 border-r border-slate-300 text-[11px] whitespace-pre-wrap text-slate-500 leading-tight">
-                          {EXIT_CRITERIA[a.current_level as keyof typeof EXIT_CRITERIA]?.movement || ""}
-                        </td>
-
-                        <td className={cn("px-3 py-3 border-r border-slate-200 text-center font-bold text-lg", a.functional_criteria_met ? "bg-[#d9ead3] text-green-800" : "text-red-400")}>
-                          {a.functional_criteria_met ? "✔" : "✖"}
-                        </td>
-                        <td className={cn("px-3 py-3 border-r border-slate-300 text-center font-bold text-lg", a.movement_quality_met ? "bg-[#d9ead3] text-green-800" : "text-red-400")}>
-                          {a.movement_quality_met ? "✔" : "✖"}
-                        </td>
-
-                        <td className="px-3 py-3 border-r border-slate-200 text-center font-bold text-slate-800">{a.avg_systemic_score}</td>
-                        <td className={cn("px-3 py-3 border-r border-slate-300 text-center font-bold text-lg", a.score_status_met ? "bg-[#d9ead3] text-green-800" : "text-red-400")}>
-                          {a.score_status_met ? "✔" : "✖"}
-                        </td>
-
-                        <td className={cn(
-                          "px-4 py-3 border-r border-slate-200 text-center font-bold",
-                          a.decision === "PROGRESS" ? "text-green-800 bg-[#d9ead3]" : "text-slate-500"
-                        )}>
-                          {a.decision}
-                        </td>
-                        <td className={cn("px-3 py-3 border-r border-slate-300 text-center font-bold", a.decision === "PROGRESS" ? "bg-[#d9ead3] text-green-900" : "text-slate-500")}>
-                          {a.new_level || ""}
-                        </td>
-
-                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.height_cm || "-"}</td>
-                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.weight_kg || "-"}</td>
-                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.gender || "-"}</td>
-                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.bmi || "-"}</td>
-                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.bmi_category || "-"}</td>
-                        <td className="px-3 py-3 border-r border-slate-200 text-center text-slate-700">{a.waist_circumference_cm || "-"}</td>
-                        <td className="px-3 py-3 border-r border-slate-300 text-center text-slate-700">{a.waist_status || "-"}</td>
-
-                        <td className="px-4 py-3 border-r border-slate-200 text-slate-600 text-xs">{a.medical_condition || "-"}</td>
-                        <td className="px-4 py-3 border-r border-slate-200 text-slate-600 text-xs">
-                          {a.lab_report_link ? (
-                            <a href={a.lab_report_link} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline break-all">Link</a>
-                          ) : "-"}
-                        </td>
-                        <td className="px-4 py-3 text-center text-slate-600">{new Date(a.review_date).toLocaleDateString('en-GB')}</td>
-                      </tr>
-                    ))}
-
-                    {/* New Row Input */}
-                    <tr className="bg-blue-50/10 border-t-2 border-slate-300">
-                      <td className="px-2 py-2 border-r border-slate-200">
-                        <input type="text" value={quarter} onChange={e => setQuarter(e.target.value)} className="w-16 p-1.5 text-center font-bold bg-white border border-slate-200 rounded focus:ring-1 focus:ring-sf-deepNavy" required />
-                      </td>
-                      <td className="px-2 py-2 border-r border-slate-200">
-                        <input type="text" value={periodRange} onChange={e => setPeriodRange(e.target.value)} placeholder="e.g. Jan-Mar" className="w-24 p-1.5 bg-white border border-slate-200 rounded focus:ring-1 focus:ring-sf-deepNavy text-xs" />
-                      </td>
-                      <td className="px-2 py-2 border-r border-slate-300 text-center">
-                        <select value={currentLevel} onChange={e => setCurrentLevel(Number(e.target.value))} className="w-16 p-1.5 font-bold text-center bg-white border border-slate-200 rounded focus:ring-1 focus:ring-sf-deepNavy cursor-pointer">
-                          {[1,2,3,4,5,6].map(l => <option key={l} value={l}>{l}</option>)}
-                        </select>
-                      </td>
-
-                      <td className="px-4 py-3 border-r border-slate-200 text-[10px] whitespace-pre-wrap text-slate-500 leading-tight bg-slate-50">
-                        {EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.functional || ""}
-                      </td>
-                      <td className="px-4 py-3 border-r border-slate-300 text-[10px] whitespace-pre-wrap text-slate-500 leading-tight bg-slate-50">
-                        {EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.movement || ""}
-                      </td>
-
-                      <td className="px-3 py-2 border-r border-slate-200 text-center align-middle">
-                        <input type="checkbox" checked={functionalMet} onChange={e => setFunctionalMet(e.target.checked)} className="w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-600 cursor-pointer" />
-                      </td>
-                      <td className="px-3 py-2 border-r border-slate-300 text-center align-middle">
-                        <input type="checkbox" checked={movementMet} onChange={e => setMovementMet(e.target.checked)} className="w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-600 cursor-pointer" />
-                      </td>
-
-                      <td className="px-2 py-2 border-r border-slate-200 text-center align-middle">
-                        <input type="number" step="0.01" value={avgScore} onChange={e => setAvgScore(e.target.value ? parseFloat(e.target.value) : "")} placeholder="2.50" className="w-16 p-1.5 text-center font-bold bg-white border border-slate-200 rounded focus:ring-1 focus:ring-sf-deepNavy" required />
-                      </td>
-                      <td className="px-3 py-2 border-r border-slate-300 text-center align-middle">
-                        {avgScore !== "" && scoreMet ? <span className="font-bold text-lg text-green-600">✔</span> : <span className="text-slate-300">-</span>}
-                      </td>
-
-                      <td className="px-3 py-2 border-r border-slate-200 text-center align-middle bg-slate-50">
-                        <span className={cn("px-2 py-1 rounded font-bold text-xs", decision === "PROGRESS" ? "text-green-700 bg-green-100" : "text-amber-700 bg-amber-100")}>{decision}</span>
-                      </td>
-                      <td className="px-3 py-2 border-r border-slate-300 text-center align-middle font-bold text-sf-deepNavy bg-slate-50">{newLevel}</td>
-
-                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
-                        <input type="number" value={height} onChange={e => setHeight(e.target.value ? parseFloat(e.target.value) : "")} className="w-16 p-1.5 text-center bg-white border border-slate-200 rounded focus:ring-1 focus:ring-orange-400" />
-                      </td>
-                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
-                        <input type="number" step="0.1" value={weight} onChange={e => setWeight(e.target.value ? parseFloat(e.target.value) : "")} className="w-16 p-1.5 text-center bg-white border border-slate-200 rounded focus:ring-1 focus:ring-orange-400" />
-                      </td>
-                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
-                        <select value={gender} onChange={e => setGender(e.target.value)} className="w-20 p-1.5 text-xs bg-white border border-slate-200 rounded focus:ring-1 focus:ring-orange-400 cursor-pointer">
-                          <option value="Female">Female</option>
-                          <option value="Male">Male</option>
-                        </select>
-                      </td>
-                      <td className="px-3 py-2 border-r border-slate-200 text-center align-middle text-sm text-slate-600 bg-slate-50">{bmi > 0 ? bmi.toFixed(1) : "-"}</td>
-                      <td className="px-3 py-2 border-r border-slate-200 text-center align-middle text-xs text-slate-600 bg-slate-50">{bmiCategory || "-"}</td>
-                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
-                        <input type="number" step="0.1" value={waist} onChange={e => setWaist(e.target.value ? parseFloat(e.target.value) : "")} className="w-16 p-1.5 text-center bg-white border border-slate-200 rounded focus:ring-1 focus:ring-orange-400" />
-                      </td>
-                      <td className="px-3 py-2 border-r border-slate-300 text-center align-middle text-xs text-slate-600 bg-slate-50">{waistStatus || "-"}</td>
-
-                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
-                        <input type="text" value={medicalCondition} onChange={e => setMedicalCondition(e.target.value)} placeholder="Conditions..." className="w-full min-w-[150px] p-1.5 bg-white border border-slate-200 rounded text-xs focus:ring-1 focus:ring-emerald-400" />
-                      </td>
-                      <td className="px-2 py-2 border-r border-slate-200 align-middle">
-                        <input type="text" value={labReport} onChange={e => setLabReport(e.target.value)} placeholder="URL link" className="w-full min-w-[120px] p-1.5 bg-white border border-slate-200 rounded text-xs focus:ring-1 focus:ring-emerald-400 text-blue-600" />
-                      </td>
-                      <td className="px-2 py-2 align-middle">
-                        <div className="flex flex-col gap-2">
-                          <input type="date" value={reviewDate} onChange={e => setReviewDate(e.target.value)} className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs focus:ring-1 focus:ring-emerald-400" required />
-                          <button type="submit" disabled={isSubmitting} className="w-full py-1.5 px-2 bg-sf-deepNavy text-white rounded text-xs font-bold hover:bg-slate-800 disabled:opacity-50 flex items-center justify-center gap-1">
-                            {isSubmitting ? <Activity className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />} Save
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </>
-                )}
-              </tbody>
-            </table>
-          </form>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
+      </div>
+
+      {/* Input Form Section (Vertical Layout) */}
+      <div className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden mt-8">
+        <div className="bg-amber-400 text-black px-6 py-4 flex items-center justify-between border-b-4 border-black">
+          <h2 className="text-lg font-bold flex items-center gap-2">
+            <Activity className="h-5 w-5" />
+            INPUT NEW ASSESSMENT
+          </h2>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-8">
+          {/* SECTION 1: QUARTER & PERIOD */}
+          <div>
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Quarter & Periode</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Quarter</label>
+                <input type="text" value={quarter} onChange={e => setQuarter(e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400 font-bold" required />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Period Range</label>
+                <input type="text" value={periodRange} onChange={e => setPeriodRange(e.target.value)} placeholder="e.g. Jan-Mar" className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Review Date</label>
+                <input type="date" value={reviewDate} onChange={e => setReviewDate(e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400" required />
+              </div>
+            </div>
+          </div>
+
+          {/* SECTION 2: EXIT CHECKLIST */}
+          <div>
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2 flex items-center justify-between">
+              Exit Checklist
+              <span className="text-xs font-normal text-slate-500 bg-slate-100 px-2 py-1 rounded">Target Score: > {scoreThreshold}</span>
+            </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
+              
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-bold text-slate-700 mb-1">Current Level</label>
+                <select value={currentLevel} onChange={e => setCurrentLevel(Number(e.target.value))} className="w-full p-2.5 font-bold text-center bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400">
+                  {[1,2,3,4,5,6].map(l => <option key={l} value={l}>Level {l}</option>)}
+                </select>
+              </div>
+
+              <div className="lg:col-span-3 space-y-3">
+                <label className="flex items-start gap-3 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-green-400 transition-colors">
+                  <input type="checkbox" checked={functionalMet} onChange={e => setFunctionalMet(e.target.checked)} className="mt-0.5 w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-600" />
+                  <div>
+                    <span className="block text-sm font-bold text-slate-800">Functional Met</span>
+                    <span className="block text-[10px] text-slate-500 mt-1 leading-tight">{EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.functional || ""}</span>
+                  </div>
+                </label>
+              </div>
+
+              <div className="lg:col-span-3 space-y-3">
+                <label className="flex items-start gap-3 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-green-400 transition-colors">
+                  <input type="checkbox" checked={movementMet} onChange={e => setMovementMet(e.target.checked)} className="mt-0.5 w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-600" />
+                  <div>
+                    <span className="block text-sm font-bold text-slate-800">Movement Quality Met</span>
+                    <span className="block text-[10px] text-slate-500 mt-1 leading-tight">{EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.movement || ""}</span>
+                  </div>
+                </label>
+              </div>
+
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-bold text-slate-700 mb-1">Avg Systemic Score</label>
+                <input type="number" step="0.01" value={avgScore} onChange={e => setAvgScore(e.target.value ? parseFloat(e.target.value) : "")} placeholder="2.50" className="w-full p-2.5 text-center font-bold bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400" required />
+                <div className="mt-2 text-center">
+                  {avgScore !== "" ? (
+                    scoreMet ? <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">✔ Score Passed</span> : <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">✖ Needs {scoreThreshold}</span>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="lg:col-span-2 flex flex-col justify-center items-center p-3 bg-white border border-slate-200 rounded-lg">
+                <span className="text-xs text-slate-500 font-medium mb-1">Calculated Outcome</span>
+                <span className={cn("px-3 py-1 rounded-md font-bold text-sm mb-1", decision === "PROGRESS" ? "text-green-700 bg-green-100" : "text-amber-700 bg-amber-100")}>{decision}</span>
+                <span className="text-xs text-slate-500">New Level: <strong className="text-sf-deepNavy">{newLevel}</strong></span>
+              </div>
+
+            </div>
+          </div>
+
+          {/* SECTION 3: BODY COMPOSITION */}
+          <div>
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Body Composition</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Gender</label>
+                <select value={gender} onChange={e => setGender(e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400">
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Height (cm)</label>
+                <input type="number" value={height} onChange={e => setHeight(e.target.value ? parseFloat(e.target.value) : "")} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Weight (kg)</label>
+                <input type="number" step="0.1" value={weight} onChange={e => setWeight(e.target.value ? parseFloat(e.target.value) : "")} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Waist Circumference (cm)</label>
+                <input type="number" step="0.1" value={waist} onChange={e => setWaist(e.target.value ? parseFloat(e.target.value) : "")} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400" />
+              </div>
+            </div>
+            {/* Auto-calculated indicators */}
+            {(bmi > 0 || waistStatus) && (
+              <div className="flex gap-4 mt-3">
+                {bmi > 0 && <span className="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">BMI: {bmi.toFixed(1)} ({bmiCategory})</span>}
+                {waistStatus && <span className={cn("text-xs px-3 py-1 rounded-full font-medium", waistStatus === "At Risk" ? "bg-red-50 text-red-700" : "bg-green-50 text-green-700")}>Waist: {waistStatus}</span>}
+              </div>
+            )}
+          </div>
+
+          {/* SECTION 4: MEDICAL */}
+          <div>
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Medical & Records</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Medical Condition</label>
+                <textarea rows={2} value={medicalCondition} onChange={e => setMedicalCondition(e.target.value)} placeholder="Enter medical conditions..." className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400 resize-none" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Lab Report (PDF URL)</label>
+                <input type="url" value={labReport} onChange={e => setLabReport(e.target.value)} placeholder="https://..." className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-400 text-blue-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4 flex justify-end">
+            <button type="submit" disabled={isSubmitting} className="py-3 px-8 bg-black text-amber-400 rounded-xl font-bold hover:bg-slate-800 disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95">
+              {isSubmitting ? <Activity className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} SAVE ASSESSMENT
+            </button>
+          </div>
+        </form>
       </div>
 
       <style dangerouslySetInnerHTML={{__html: `
