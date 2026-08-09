@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2, Loader2, Video, Search, ChevronRight, X } from "lucide-react";
+import { Plus, Trash2, Loader2, Video, Search, ChevronRight, X, Pencil, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   useDLLevels,
   useDLMenuItems,
   useDLMovements,
+  useUpdateDLMovement
 } from "@/hooks/useDigitalLibrary";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
@@ -151,9 +152,11 @@ export default function ModulCardPage() {
 
   const addMutation = useAddModulCardItem();
   const deleteMutation = useDeleteModulCardItem();
+  const updateMovementMutation = useUpdateDLMovement();
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
+  const [itemToEdit, setItemToEdit] = useState<any>(null);
   const [videoModalUrl, setVideoModalUrl] = useState<string | null>(null);
 
   const theme = LEVEL_THEMES[selectedLevel] || { headerBg: "bg-slate-600", accent: "bg-slate-50" };
@@ -242,7 +245,7 @@ export default function ModulCardPage() {
                   <th className="px-4 py-3 font-semibold border-r border-slate-200 w-32 text-center">SECTION</th>
                   <th className="px-4 py-3 font-semibold border-r border-slate-200">FEMALE</th>
                   <th className="px-4 py-3 font-semibold border-r border-slate-200">MALE</th>
-                  <th className="px-4 py-3 font-semibold w-12 text-center"></th>
+                  <th className="px-4 py-3 font-semibold w-20 text-center"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -300,10 +303,18 @@ export default function ModulCardPage() {
                         )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-center align-top">
+                    <td className="px-4 py-3 text-center align-top whitespace-nowrap">
+                      <button
+                        onClick={() => setItemToEdit(row)}
+                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors mr-1"
+                        title="Edit URL Video"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
                       <button
                         onClick={() => setItemToDelete(row)}
                         className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                        title="Hapus dari Modul"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -347,6 +358,24 @@ export default function ModulCardPage() {
         description={`Apakah Anda yakin ingin menghapus "${itemToDelete?.movement?.name}"?`}
         confirmLabel={deleteMutation.isPending ? "Menghapus..." : "Hapus"}
       />
+
+      {itemToEdit && (
+        <EditVideoModal
+          item={itemToEdit}
+          onClose={() => setItemToEdit(null)}
+          onSave={async (femaleUrl, maleUrl) => {
+            await updateMovementMutation.mutateAsync({
+              id: itemToEdit.movement_id,
+              data: {
+                video_url_female: femaleUrl,
+                video_url_male: maleUrl
+              }
+            });
+            setItemToEdit(null);
+          }}
+          isLoading={updateMovementMutation.isPending}
+        />
+      )}
 
       {/* Video Modal */}
       {videoModalUrl && (
@@ -457,3 +486,41 @@ function AddMovementModal({
     </div>
   );
 }
+
+ f u n c t i o n   E d i t V i d e o M o d a l ( {   i t e m ,   o n C l o s e ,   o n S a v e ,   i s L o a d i n g   } :   {   i t e m :   a n y ,   o n C l o s e :   ( )   = >   v o i d ,   o n S a v e :   ( f :   s t r i n g ,   m :   s t r i n g )   = >   v o i d ,   i s L o a d i n g :   b o o l e a n   } )   { 
+     c o n s t   [ f U r l ,   s e t F U r l ]   =   u s e S t a t e ( i t e m ? . m o v e m e n t ? . v i d e o _ u r l _ f e m a l e   | |   " " ) ; 
+     c o n s t   [ m U r l ,   s e t M U r l ]   =   u s e S t a t e ( i t e m ? . m o v e m e n t ? . v i d e o _ u r l _ m a l e   | |   " " ) ; 
+ 
+     r e t u r n   ( 
+         < d i v   c l a s s N a m e = " f i x e d   i n s e t - 0   z - 5 0   f l e x   i t e m s - c e n t e r   j u s t i f y - c e n t e r   p - 4   b g - s l a t e - 9 0 0 / 6 0   b a c k d r o p - b l u r - s m " > 
+             < d i v   c l a s s N a m e = " b g - w h i t e   r o u n d e d - 2 x l   s h a d o w - x l   w - f u l l   m a x - w - m d   o v e r f l o w - h i d d e n   f l e x   f l e x - c o l " > 
+                 < d i v   c l a s s N a m e = " p x - 6   p y - 4   b o r d e r - b   b o r d e r - s l a t e - 1 0 0   f l e x   j u s t i f y - b e t w e e n   i t e m s - c e n t e r   b g - s l a t e - 5 0 " > 
+                     < h 3   c l a s s N a m e = " f o n t - s e m i b o l d   t e x t - s l a t e - 8 0 0 " > E d i t   V i d e o   U R L < / h 3 > 
+                     < b u t t o n   o n C l i c k = { o n C l o s e }   c l a s s N a m e = " p - 1   t e x t - s l a t e - 4 0 0   h o v e r : t e x t - s l a t e - 6 0 0   r o u n d e d - l g   h o v e r : b g - s l a t e - 2 0 0 / 5 0 " > 
+                         < X   c l a s s N a m e = " w - 5   h - 5 "   / > 
+                     < / b u t t o n > 
+                 < / d i v > 
+                 < d i v   c l a s s N a m e = " p - 6   s p a c e - y - 4   f l e x - 1   o v e r f l o w - y - a u t o " > 
+                     < p   c l a s s N a m e = " t e x t - s m   f o n t - m e d i u m   t e x t - s l a t e - 7 0 0   b g - s l a t e - 1 0 0   p - 3   r o u n d e d - l g   m b - 4 " > { i t e m ? . m o v e m e n t ? . n a m e } < / p > 
+                     < d i v > 
+                         < l a b e l   c l a s s N a m e = " b l o c k   t e x t - x s   f o n t - s e m i b o l d   t e x t - s l a t e - 6 0 0   m b - 1 . 5   u p p e r c a s e   t r a c k i n g - w i d e " > V i d e o   U R L   ( F e m a l e ) < / l a b e l > 
+                         < i n p u t   t y p e = " u r l "   v a l u e = { f U r l }   o n C h a n g e = { e   = >   s e t F U r l ( e . t a r g e t . v a l u e ) }   p l a c e h o l d e r = " h t t p s : / / y o u t u b e . c o m / . . . "   c l a s s N a m e = " w - f u l l   p x - 3   p y - 2   b o r d e r   b o r d e r - s l a t e - 2 0 0   r o u n d e d - l g   f o c u s : o u t l i n e - n o n e   f o c u s : r i n g - 2   f o c u s : r i n g - b l u e - 5 0 0 / 2 0   f o c u s : b o r d e r - b l u e - 5 0 0   t e x t - s m "   / > 
+                     < / d i v > 
+                     < d i v > 
+                         < l a b e l   c l a s s N a m e = " b l o c k   t e x t - x s   f o n t - s e m i b o l d   t e x t - s l a t e - 6 0 0   m b - 1 . 5   u p p e r c a s e   t r a c k i n g - w i d e " > V i d e o   U R L   ( M a l e ) < / l a b e l > 
+                         < i n p u t   t y p e = " u r l "   v a l u e = { m U r l }   o n C h a n g e = { e   = >   s e t M U r l ( e . t a r g e t . v a l u e ) }   p l a c e h o l d e r = " h t t p s : / / y o u t u b e . c o m / . . . "   c l a s s N a m e = " w - f u l l   p x - 3   p y - 2   b o r d e r   b o r d e r - s l a t e - 2 0 0   r o u n d e d - l g   f o c u s : o u t l i n e - n o n e   f o c u s : r i n g - 2   f o c u s : r i n g - b l u e - 5 0 0 / 2 0   f o c u s : b o r d e r - b l u e - 5 0 0   t e x t - s m "   / > 
+                     < / d i v > 
+                 < / d i v > 
+                 < d i v   c l a s s N a m e = " p - 4   b o r d e r - t   b o r d e r - s l a t e - 1 0 0   b g - s l a t e - 5 0   f l e x   j u s t i f y - e n d   g a p - 2 " > 
+                     < b u t t o n   o n C l i c k = { o n C l o s e }   c l a s s N a m e = " p x - 4   p y - 2   t e x t - s m   f o n t - m e d i u m   t e x t - s l a t e - 6 0 0   h o v e r : b g - s l a t e - 2 0 0   r o u n d e d - l g   t r a n s i t i o n - c o l o r s " > B a t a l < / b u t t o n > 
+                     < b u t t o n   o n C l i c k = { ( )   = >   o n S a v e ( f U r l ,   m U r l ) }   d i s a b l e d = { i s L o a d i n g }   c l a s s N a m e = " f l e x   i t e m s - c e n t e r   g a p - 2   p x - 4   p y - 2   t e x t - s m   f o n t - m e d i u m   t e x t - w h i t e   b g - b l u e - 6 0 0   h o v e r : b g - b l u e - 7 0 0   d i s a b l e d : o p a c i t y - 5 0   r o u n d e d - l g   t r a n s i t i o n - c o l o r s " > 
+                         { i s L o a d i n g   ?   < L o a d e r 2   c l a s s N a m e = " w - 4   h - 4   a n i m a t e - s p i n "   / >   :   < S a v e   c l a s s N a m e = " w - 4   h - 4 "   / > } 
+                         < s p a n > S i m p a n < / s p a n > 
+                     < / b u t t o n > 
+                 < / d i v > 
+             < / d i v > 
+         < / d i v > 
+     ) ; 
+ } 
+  
+ 
