@@ -20,7 +20,7 @@ ENV UPLOAD_DIR="/app/uploads"
 # DATABASE_URL, CORS_ALLOWED_ORIGINS, JWT_SECRET must be set in the deployment platform.
 
 RUN mkdir -p /app/uploads
-VOLUME ["/app/uploads"]
+
 
 EXPOSE 8080
 CMD ["./fitcoach-api"]
