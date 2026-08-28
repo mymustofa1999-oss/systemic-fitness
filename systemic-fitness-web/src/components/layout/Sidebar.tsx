@@ -185,12 +185,61 @@ export function Sidebar() {
   
   // Ensure Dashboard is always present at the top
   const hasDashboard = rawMenus.some((m) => m.code === "dashboard" || m.href === "/");
-  const menus: MenuItem[] = hasDashboard 
+  const baseMenus: MenuItem[] = hasDashboard 
     ? rawMenus 
     : [
         { id: "static-dashboard", parent_id: null, code: "dashboard", label: "Dashboard", icon: "LayoutDashboard", href: "/", sort_order: 0, is_active: true, created_at: "", updated_at: "", children: [] },
         ...rawMenus
       ];
+
+  // ─── Menu Transformations ───────────────────────────────────────
+  const menus = React.useMemo((): MenuItem[] => {
+    const clone: MenuItem[] = JSON.parse(JSON.stringify(baseMenus));
+
+    // 1. Rename "Modul Card" → "Training Module"
+    const modulCard = clone.find((m) => m.code === "modul-card");
+    if (modulCard) modulCard.label = "Training Module";
+
+    // 2. Merge Scheduling children into My Schedule, then remove Scheduling parent
+    const mySchedule = clone.find((m) =>
+      m.code === "sf_consultant_my_schedule" || m.code === "my_schedule"
+    );
+    const schedulingIdx = clone.findIndex((m) => m.code === "scheduling");
+    if (mySchedule && schedulingIdx !== -1) {
+      const scheduling = clone[schedulingIdx];
+      if (!mySchedule.children) mySchedule.children = [];
+      if (scheduling.children && scheduling.children.length > 0) {
+        mySchedule.children = [...mySchedule.children, ...scheduling.children];
+      }
+      clone.splice(schedulingIdx, 1);
+    }
+
+    // 3. Inject "Client Classification" (Personal / Group / Online) after Clients
+    const clientsIdx = clone.findIndex((m) => m.code === "clients");
+    const alreadyHasCC = clone.some((m) => m.code === "client_classification");
+    if (clientsIdx !== -1 && !alreadyHasCC) {
+      const ccMenu: MenuItem = {
+        id: "cc-static-parent",
+        parent_id: null,
+        code: "client_classification",
+        label: "Client Classification",
+        icon: "UserCheck",
+        href: "/client-classification",
+        sort_order: clone[clientsIdx].sort_order + 0.5,
+        is_active: true,
+        created_at: "",
+        updated_at: "",
+        children: [
+          { id: "cc-personal", parent_id: "cc-static-parent", code: "cc_personal", label: "Personal", icon: "User", href: "/client-classification/personal", sort_order: 1, is_active: true, created_at: "", updated_at: "", children: [] },
+          { id: "cc-group",    parent_id: "cc-static-parent", code: "cc_group",    label: "Group",    icon: "Users", href: "/client-classification/group",    sort_order: 2, is_active: true, created_at: "", updated_at: "", children: [] },
+          { id: "cc-online",   parent_id: "cc-static-parent", code: "cc_online",   label: "Online",   icon: "Star",  href: "/client-classification/online",   sort_order: 3, is_active: true, created_at: "", updated_at: "", children: [] },
+        ],
+      };
+      clone.splice(clientsIdx + 1, 0, ccMenu);
+    }
+
+    return clone;
+  }, [baseMenus]);
 
   function toggleGroup(code: string) {
     setExpandedGroups((prev) =>
