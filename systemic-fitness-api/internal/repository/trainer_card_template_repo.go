@@ -23,12 +23,13 @@ func NewTrainerCardTemplateRepository(db *pgxpool.Pool) *TrainerCardTemplateRepo
 // ════════════════════════════════════════════════════════════════════
 
 type TrainerCardTemplate struct {
-	ID        string                        `json:"id"`
-	Level     string                        `json:"level"`
-	Notes     *string                       `json:"notes,omitempty"`
-	CreatedAt time.Time                     `json:"created_at"`
-	UpdatedAt time.Time                     `json:"updated_at"`
-	Sequences []TrainerCardTemplateSequence `json:"sequences"`
+	ID           string                        `json:"id"`
+	Level        string                        `json:"level"`
+	Notes        *string                       `json:"notes,omitempty"`
+	CreatedAt    time.Time                     `json:"created_at"`
+	UpdatedAt    time.Time                     `json:"updated_at"`
+	TargetGender *string                       `json:"target_gender,omitempty"`
+	Sequences    []TrainerCardTemplateSequence `json:"sequences"`
 }
 
 type TrainerCardTemplateSequence struct {
@@ -66,19 +67,20 @@ type TrainerCardTemplateSet struct {
 }
 
 type TrainerCardTemplateSetItem struct {
-	ID             string    `json:"id"`
-	SetID          string    `json:"set_id"`
-	MovementID     *string   `json:"movement_id,omitempty"`
-	MovementName   *string   `json:"movement_name,omitempty"`
-	BodyPart       string    `json:"body_part"`
-	Equipment      *string   `json:"equipment,omitempty"`
-	Reps           *int      `json:"reps,omitempty"`
-	SetsCount      *int      `json:"sets_count,omitempty"`
-	SortOrder      int       `json:"sort_order"`
-	VideoURLMale   *string   `json:"video_url_male,omitempty"`
-	VideoURLFemale *string   `json:"video_url_female,omitempty"`
-	CreatedAt      time.Time `json:"created_at"`
-	UpdatedAt      time.Time `json:"updated_at"`
+	ID                 string    `json:"id"`
+	SetID              string    `json:"set_id"`
+	MovementID         *string   `json:"movement_id,omitempty"`
+	MovementName       *string   `json:"movement_name,omitempty"`
+	BodyPart           string    `json:"body_part"`
+	Equipment          *string   `json:"equipment,omitempty"`
+	Reps               *int      `json:"reps,omitempty"`
+	SetsCount          *int      `json:"sets_count,omitempty"`
+	SortOrder          int       `json:"sort_order"`
+	VideoURLMale       *string   `json:"video_url_male,omitempty"`
+	VideoURLFemale     *string   `json:"video_url_female,omitempty"`
+	VideoURLSnapshot   *string   `json:"video_url_snapshot,omitempty"`
+	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
 	BreathingCore      *string   `json:"breathing_core,omitempty"`
 	BreathingDiaphragm *string   `json:"breathing_diaphragm,omitempty"`
 	AllowedTiers       []string  `json:"allowed_tiers"`
@@ -90,7 +92,7 @@ type TrainerCardTemplateSetItem struct {
 
 func (r *TrainerCardTemplateRepository) List(ctx context.Context) ([]TrainerCardTemplate, error) {
 	rows, err := r.db.Query(ctx,
-		`SELECT id, level, notes, created_at, updated_at
+		`SELECT id, level, notes, created_at, updated_at, target_gender
 		 FROM trainer_card_templates
 		 ORDER BY level ASC`)
 	if err != nil {
@@ -101,7 +103,7 @@ func (r *TrainerCardTemplateRepository) List(ctx context.Context) ([]TrainerCard
 	templates := make([]TrainerCardTemplate, 0)
 	for rows.Next() {
 		var t TrainerCardTemplate
-		if err := rows.Scan(&t.ID, &t.Level, &t.Notes, &t.CreatedAt, &t.UpdatedAt); err != nil {
+		if err := rows.Scan(&t.ID, &t.Level, &t.Notes, &t.CreatedAt, &t.UpdatedAt, &t.TargetGender); err != nil {
 			return nil, err
 		}
 		templates = append(templates, t)
@@ -112,10 +114,10 @@ func (r *TrainerCardTemplateRepository) List(ctx context.Context) ([]TrainerCard
 func (r *TrainerCardTemplateRepository) GetByLevel(ctx context.Context, level string) (*TrainerCardTemplate, error) {
 	tmpl := &TrainerCardTemplate{}
 	err := r.db.QueryRow(ctx,
-		`SELECT id, level, notes, created_at, updated_at
+		`SELECT id, level, notes, created_at, updated_at, target_gender
 		 FROM trainer_card_templates
 		 WHERE level = $1`, level,
-	).Scan(&tmpl.ID, &tmpl.Level, &tmpl.Notes, &tmpl.CreatedAt, &tmpl.UpdatedAt)
+	).Scan(&tmpl.ID, &tmpl.Level, &tmpl.Notes, &tmpl.CreatedAt, &tmpl.UpdatedAt, &tmpl.TargetGender)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, ErrNotFound
 	}
@@ -215,7 +217,7 @@ func (r *TrainerCardTemplateRepository) loadItems(ctx context.Context, set *Trai
 		`SELECT i.id, i.set_id, i.movement_id,
 		        COALESCE(i.movement_name, m.name),
 		        i.body_part, i.equipment, i.reps, i.sets_count,
-		        i.sort_order, m.video_url_male, m.video_url_female,
+		        i.sort_order, m.video_url_male, m.video_url_female, i.video_url_snapshot,
 		        i.created_at, i.updated_at,
 		        i.breathing_core, i.breathing_diaphragm, i.allowed_tiers
 		 FROM trainer_card_template_set_items i
@@ -233,7 +235,7 @@ func (r *TrainerCardTemplateRepository) loadItems(ctx context.Context, set *Trai
 		if err := rows.Scan(
 			&item.ID, &item.SetID, &item.MovementID, &item.MovementName,
 			&item.BodyPart, &item.Equipment, &item.Reps, &item.SetsCount,
-			&item.SortOrder, &item.VideoURLMale, &item.VideoURLFemale,
+			&item.SortOrder, &item.VideoURLMale, &item.VideoURLFemale, &item.VideoURLSnapshot,
 			&item.CreatedAt, &item.UpdatedAt,
 			&item.BreathingCore, &item.BreathingDiaphragm, &item.AllowedTiers,
 		); err != nil {
@@ -253,12 +255,12 @@ func (r *TrainerCardTemplateRepository) UpsertTemplate(ctx context.Context, tmpl
 
 	// 1. Upsert the template card
 	err = tx.QueryRow(ctx,
-		`INSERT INTO trainer_card_templates (level, notes)
-		 VALUES ($1, $2)
+		`INSERT INTO trainer_card_templates (level, notes, target_gender)
+		 VALUES ($1, $2, $3)
 		 ON CONFLICT (level) DO UPDATE SET
-		    notes = $2, updated_at = NOW()
+		    notes = $2, target_gender = $3, updated_at = NOW()
 		 RETURNING id, created_at, updated_at`,
-		tmpl.Level, tmpl.Notes,
+		tmpl.Level, tmpl.Notes, tmpl.TargetGender,
 	).Scan(&tmpl.ID, &tmpl.CreatedAt, &tmpl.UpdatedAt)
 	if err != nil {
 		return fmt.Errorf("upsert template: %w", err)
@@ -322,12 +324,12 @@ func (r *TrainerCardTemplateRepository) UpsertTemplate(ctx context.Context, tmpl
 				err = tx.QueryRow(ctx,
 					`INSERT INTO trainer_card_template_set_items
 					    (set_id, movement_id, movement_name, body_part, equipment, reps, sets_count, sort_order,
-					     breathing_core, breathing_diaphragm, allowed_tiers)
-					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+					     breathing_core, breathing_diaphragm, allowed_tiers, video_url_snapshot)
+					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 					 RETURNING id, created_at, updated_at`,
 					item.SetID, item.MovementID, item.MovementName,
 					item.BodyPart, item.Equipment, item.Reps, item.SetsCount, item.SortOrder,
-					item.BreathingCore, item.BreathingDiaphragm, nonNilTiers(item.AllowedTiers),
+					item.BreathingCore, item.BreathingDiaphragm, nonNilTiers(item.AllowedTiers), item.VideoURLSnapshot,
 				).Scan(&item.ID, &item.CreatedAt, &item.UpdatedAt)
 				if err != nil {
 					return fmt.Errorf("insert template item %d-%d-%d: %w", si, seti, itemi, err)

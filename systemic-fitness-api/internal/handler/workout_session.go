@@ -11,11 +11,12 @@ import (
 )
 
 type WorkoutSessionHandler struct {
-	service *service.WorkoutSessionService
+	service     *service.WorkoutSessionService
+	userService *service.UserService
 }
 
-func NewWorkoutSessionHandler(svc *service.WorkoutSessionService) *WorkoutSessionHandler {
-	return &WorkoutSessionHandler{service: svc}
+func NewWorkoutSessionHandler(svc *service.WorkoutSessionService, us *service.UserService) *WorkoutSessionHandler {
+	return &WorkoutSessionHandler{service: svc, userService: us}
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -33,17 +34,31 @@ func (h *WorkoutSessionHandler) Log(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID := middleware.GetUserID(r.Context())
+	callerID := middleware.GetUserID(r.Context())
+	callerRole := middleware.GetRole(r.Context())
+	
+	targetID := callerID
 	if input.CustomerID != "" {
-		userID = input.CustomerID
+		targetID = input.CustomerID
 	}
-	log, err := h.service.Log(r.Context(), userID, input)
+	
+	// Enforce authorization
+	if err := h.userService.AuthorizeCustomerAccess(r.Context(), callerID, callerRole, targetID); err != nil {
+		if err.Error() == "unauthenticated" {
+			response.Unauthorized(w, "Authentication required")
+		} else {
+			response.Forbidden(w, "Insufficient permissions to log workout for this user")
+		}
+		return
+	}
+
+	log, err := h.service.Log(r.Context(), targetID, input)
 	if err != nil {
-		slog.Error("[WorkoutSession.Log] failed", "user_id", userID, "error", err)
+		slog.Error("[WorkoutSession.Log] failed", "user_id", targetID, "error", err)
 		response.InternalError(w, "Failed to log workout session")
 		return
 	}
-	slog.Info("[WorkoutSession.Log] success", "user_id", userID, "type", input.SessionType)
+	slog.Info("[WorkoutSession.Log] success", "user_id", targetID, "type", input.SessionType)
 	response.Created(w, log)
 }
 

@@ -153,31 +153,6 @@ func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// ────────────────────────────────────────────────────────────────
-//  POST /api/auth/forgot-password
-// ────────────────────────────────────────────────────────────────
-
-func (h *AuthHandler) ForgotPassword(w http.ResponseWriter, r *http.Request) {
-	var input struct {
-		Email string `json:"email" validate:"required,email"`
-	}
-	if err := response.DecodeJSON(r, &input); err != nil {
-		slog.Warn("[Auth.ForgotPassword] invalid request body", "error", err)
-		response.BadRequest(w, "Invalid request body")
-		return
-	}
-	if errs := validateStruct(&input); errs != nil {
-		slog.Warn("[Auth.ForgotPassword] validation failed", "errors", errs)
-		response.ValidationError(w, errs)
-		return
-	}
-
-	slog.Info("[Auth.ForgotPassword] request received", "email", input.Email)
-	// Always return success to prevent email enumeration.
-	// In production this would trigger an async email job.
-	// TODO: generate reset token, store with expiry, send email
-	response.SuccessMessage(w, "If the email exists, a password reset link has been sent")
-}
 
 // ────────────────────────────────────────────────────────────────
 //  GET /api/auth/me

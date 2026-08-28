@@ -92,6 +92,9 @@ type User struct {
 	UpdatedAt         time.Time  `json:"updated_at"`
 	DeletedAt         *time.Time `json:"deleted_at,omitempty"`
 	NeedsReassessment bool       `json:"needs_reassessment"`
+	ResetToken        *string    `json:"-"`
+	ResetExpiresAt    *time.Time `json:"-"`
+	Classification    *string    `json:"classification,omitempty"`
 }
 
 type UserProfile struct {
@@ -113,6 +116,7 @@ type UserProfile struct {
 	Province         *string  `json:"province,omitempty"`
 	PostalCode       *string  `json:"postal_code,omitempty"`
 	Country          *string  `json:"country,omitempty"`
+	Classification   *string  `json:"classification,omitempty"`
 }
 
 // UserWithProfile combines the core user record with its extended profile.

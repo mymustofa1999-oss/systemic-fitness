@@ -42,7 +42,7 @@ func (s *TrainingScheduleService) CreateSchedule(ctx context.Context, sch *repos
 	return nil
 }
 
-func (s *TrainingScheduleService) GetSchedule(ctx context.Context, id string) (*repository.TrainingSchedule, error) {
+func (s *TrainingScheduleService) GetSchedule(ctx context.Context, id string, callerID string, callerRole model.Role) (*repository.TrainingSchedule, error) {
 	sch, err := s.scheduleRepo.GetByID(ctx, id)
 	if err != nil {
 		if !errors.Is(err, repository.ErrNotFound) {
@@ -50,6 +50,19 @@ func (s *TrainingScheduleService) GetSchedule(ctx context.Context, id string) (*
 		}
 		return nil, err
 	}
+	
+	if callerRole == model.RoleTrainer {
+		if sch.TrainerID != callerID {
+			return nil, fmt.Errorf("unauthorized")
+		}
+	} else if callerRole == model.RoleClient {
+		if sch.ClientID != callerID {
+			return nil, fmt.Errorf("unauthorized")
+		}
+	} else if callerRole != model.RoleOwner && callerRole != model.RoleAdmin && callerRole != model.RoleConsultant {
+		return nil, fmt.Errorf("unauthorized")
+	}
+	
 	return sch, nil
 }
 

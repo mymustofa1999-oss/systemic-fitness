@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"time"
 
 	"github.com/fitcoach/api/internal/model"
 	"github.com/fitcoach/api/internal/repository"
@@ -23,6 +24,46 @@ func NewUserService(userRepo *repository.UserRepository, logger *slog.Logger) *U
 	return &UserService{userRepo: userRepo, logger: logger}
 }
 
+// AuthorizeCustomerAccess implements the centralized IDOR protection rule.
+// - Owner/Admin/Consultant: Allowed
+// - Trainer: Allowed ONLY IF assigned to the customer
+// - Client: Allowed ONLY IF callerID == customerID
+func (s *UserService) AuthorizeCustomerAccess(ctx context.Context, callerID string, callerRole model.Role, customerID string) error {
+	if callerID == "" {
+		return fmt.Errorf("unauthenticated")
+	}
+	
+	// Self access is always allowed for clients
+	if callerID == customerID {
+		return nil
+	}
+	
+	// Clients cannot access other clients' data
+	if callerRole == model.RoleClient {
+		return fmt.Errorf("unauthorized")
+	}
+	
+	// Trainers must be explicitly assigned to the client
+	if callerRole == model.RoleTrainer {
+		isTrainer, err := s.userRepo.IsTrainerOfClient(ctx, callerID, customerID)
+		if err != nil {
+			s.logger.Error("check trainer assignment", "caller_id", callerID, "customer_id", customerID, "error", err)
+			return fmt.Errorf("error verifying assignment: %w", err)
+		}
+		if !isTrainer {
+			return fmt.Errorf("unauthorized")
+		}
+		return nil
+	}
+	
+	// Owner, Admin, Consultant can access all clients
+	if callerRole == model.RoleOwner || callerRole == model.RoleAdmin || callerRole == model.RoleConsultant || callerRole == model.RoleFinance {
+		return nil
+	}
+	
+	return fmt.Errorf("unauthorized")
+}
+
 // ════════════════════════════════════════════════════════════════════
 //  List
 // ════════════════════════════════════════════════════════════════════
@@ -31,6 +72,7 @@ type ListUsersInput struct {
 	Pagination model.PaginationParams
 	Role       *model.Role
 	Status     *model.UserStatus
+	Classification *string
 	// Populated by handler from JWT context — scopes list to trainer's clients
 	CallerRole model.Role
 	CallerID   string
@@ -41,6 +83,7 @@ func (s *UserService) List(ctx context.Context, input *ListUsersInput) ([]model.
 		Role:   input.Role,
 		Status: input.Status,
 		Search: input.Pagination.Search,
+		Classification: input.Classification,
 	}
 
 	// Trainer sees only their own assigned clients
@@ -66,9 +109,9 @@ func (s *UserService) List(ctx context.Context, input *ListUsersInput) ([]model.
 // ════════════════════════════════════════════════════════════════════
 
 type UserDetailResult struct {
-	User    model.User         `json:"user"`
-	Profile *model.UserProfile `json:"profile"`
-	Stats   *model.UserStats   `json:"stats"`
+	User         model.User              `json:"user"`
+	Profile      *model.UserProfile      `json:"profile"`
+	Stats        *model.UserStats        `json:"stats"`
 	Subscription *model.UserSubscription `json:"subscription,omitempty"`
 }
 
@@ -122,31 +165,32 @@ func (s *UserService) GetByID(ctx context.Context, id string, callerRole model.R
 // ════════════════════════════════════════════════════════════════════
 
 type UpdateUserInput struct {
-	FullName  *string        `json:"full_name,omitempty"  validate:"omitempty,min=1,max=100"`
-	Phone     *string        `json:"phone,omitempty"      validate:"omitempty,max=20"`
-	AvatarURL *string        `json:"avatar_url,omitempty" validate:"omitempty,url,max=2048"`
-	Role      *model.Role    `json:"role,omitempty"       validate:"omitempty,oneof=owner admin finance consultant trainer client"`
+	FullName  *string           `json:"full_name,omitempty"  validate:"omitempty,min=1,max=100"`
+	Phone     *string           `json:"phone,omitempty"      validate:"omitempty,max=20"`
+	AvatarURL *string           `json:"avatar_url,omitempty" validate:"omitempty,url,max=2048"`
+	Role      *model.Role       `json:"role,omitempty"       validate:"omitempty,oneof=owner admin finance consultant trainer client"`
 	Status    *model.UserStatus `json:"status,omitempty"  validate:"omitempty,oneof=active inactive suspended pending"`
-	Timezone  *string        `json:"timezone,omitempty"   validate:"omitempty,max=50"`
+	Timezone  *string           `json:"timezone,omitempty"   validate:"omitempty,max=50"`
 
 	// Profile fields (nested update)
-	DateOfBirth      *string  `json:"date_of_birth,omitempty"`
-	Gender           *string  `json:"gender,omitempty"           validate:"omitempty,oneof=male female other"`
-	HeightCm         *float64 `json:"height_cm,omitempty"        validate:"omitempty,gt=0,lt=300"`
-	WeightKg         *float64 `json:"weight_kg,omitempty"        validate:"omitempty,gt=0,lt=500"`
-	FitnessGoal      *string  `json:"fitness_goal,omitempty"     validate:"omitempty,oneof=lose_weight gain_muscle maintain improve_endurance flexibility"`
-	ExperienceLevel  *string  `json:"experience_level,omitempty" validate:"omitempty,oneof=beginner intermediate advanced"`
-	MedicalNotes     *string  `json:"medical_notes,omitempty"`
-	EmergencyContact *string  `json:"emergency_contact,omitempty" validate:"omitempty,max=100"`
-	Regional         *string  `json:"regional,omitempty"`
-	City             *string  `json:"city,omitempty"`
-	StreetAddress    *string  `json:"street_address,omitempty"`
-	AdditionalAddress *string `json:"additional_address,omitempty"`
-	SubDistrict      *string  `json:"sub_district,omitempty"`
-	District         *string  `json:"district,omitempty"`
-	Province         *string  `json:"province,omitempty"`
-	PostalCode       *string  `json:"postal_code,omitempty"`
+	DateOfBirth       *string  `json:"date_of_birth,omitempty"`
+	Gender            *string  `json:"gender,omitempty"           validate:"omitempty,oneof=male female other"`
+	HeightCm          *float64 `json:"height_cm,omitempty"        validate:"omitempty,gt=0,lt=300"`
+	WeightKg          *float64 `json:"weight_kg,omitempty"        validate:"omitempty,gt=0,lt=500"`
+	FitnessGoal       *string  `json:"fitness_goal,omitempty"     validate:"omitempty,oneof=lose_weight gain_muscle maintain improve_endurance flexibility"`
+	ExperienceLevel   *string  `json:"experience_level,omitempty" validate:"omitempty,oneof=beginner intermediate advanced"`
+	MedicalNotes      *string  `json:"medical_notes,omitempty"`
+	EmergencyContact  *string  `json:"emergency_contact,omitempty" validate:"omitempty,max=100"`
+	Regional          *string  `json:"regional,omitempty"`
+	City              *string  `json:"city,omitempty"`
+	StreetAddress     *string  `json:"street_address,omitempty"`
+	AdditionalAddress *string  `json:"additional_address,omitempty"`
+	SubDistrict       *string  `json:"sub_district,omitempty"`
+	District          *string  `json:"district,omitempty"`
+	Province          *string  `json:"province,omitempty"`
+	PostalCode        *string  `json:"postal_code,omitempty"`
 	Country          *string  `json:"country,omitempty"`
+	Classification   *string  `json:"classification,omitempty" validate:"omitempty,oneof=personal group online"`
 }
 
 func (s *UserService) Update(
@@ -224,7 +268,13 @@ func (s *UserService) Update(
 	}
 
 	// 4. Update profile if any profile fields were provided
-	hasProfileUpdate := input.DateOfBirth != nil || input.Gender != nil ||
+	if input.Classification != nil {
+		if callerRole != model.RoleAdmin && callerRole != model.RoleConsultant && callerRole != model.RoleOwner {
+			return nil, fmt.Errorf("unauthorized: only admin and consultant can change classification")
+		}
+	}
+
+	hasProfileUpdate := input.DateOfBirth != nil || input.Gender != nil || input.Classification != nil ||
 		input.HeightCm != nil || input.WeightKg != nil ||
 		input.FitnessGoal != nil || input.ExperienceLevel != nil ||
 		input.MedicalNotes != nil || input.EmergencyContact != nil ||
@@ -236,24 +286,25 @@ func (s *UserService) Update(
 
 	if hasProfileUpdate {
 		profile := &model.UserProfile{
-			UserID:           targetID,
-			DateOfBirth:      input.DateOfBirth,
-			Gender:           input.Gender,
-			HeightCm:         input.HeightCm,
-			WeightKg:         input.WeightKg,
-			FitnessGoal:      input.FitnessGoal,
-			ExperienceLevel:  input.ExperienceLevel,
-			MedicalNotes:     input.MedicalNotes,
-			EmergencyContact: input.EmergencyContact,
-			Regional:         input.Regional,
-			City:             input.City,
-			StreetAddress:    input.StreetAddress,
+			UserID:            targetID,
+			DateOfBirth:       input.DateOfBirth,
+			Gender:            input.Gender,
+			HeightCm:          input.HeightCm,
+			WeightKg:          input.WeightKg,
+			FitnessGoal:       input.FitnessGoal,
+			ExperienceLevel:   input.ExperienceLevel,
+			MedicalNotes:      input.MedicalNotes,
+			EmergencyContact:  input.EmergencyContact,
+			Regional:          input.Regional,
+			City:              input.City,
+			StreetAddress:     input.StreetAddress,
 			AdditionalAddress: input.AdditionalAddress,
-			SubDistrict:      input.SubDistrict,
-			District:         input.District,
-			Province:         input.Province,
-			PostalCode:       input.PostalCode,
-			Country:          input.Country,
+			SubDistrict:       input.SubDistrict,
+			District:          input.District,
+			Province:          input.Province,
+			PostalCode:        input.PostalCode,
+			Country:           input.Country,
+			Classification:    input.Classification,
 		}
 		if err := s.userRepo.UpsertProfile(ctx, profile); err != nil {
 			s.logger.Error("update: upsert profile", "user_id", targetID, "error", err)
@@ -318,8 +369,15 @@ func (s *UserService) Invite(ctx context.Context, input *InviteUserInput, caller
 		return nil, fmt.Errorf("generating invite token: %w", err)
 	}
 
-	// TODO: Store invite token in a dedicated table with expiry
-	// TODO: Send email via email service with invite link containing this token
+	// Store invite token (valid for 7 days)
+	expiresAt := time.Now().Add(7 * 24 * time.Hour)
+	if err := s.userRepo.SetResetToken(ctx, user.ID, token, expiresAt); err != nil {
+		s.logger.Error("invite: set reset token", "error", err)
+		return nil, fmt.Errorf("saving invite token: %w", err)
+	}
+
+	// Note: We don't strictly require SMTP here; the caller (frontend Admin UI)
+	// can display the InviteToken directly to the Admin.
 
 	s.logger.Info("user invited",
 		"user_id", user.ID,

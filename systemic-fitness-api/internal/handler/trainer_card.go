@@ -1,15 +1,18 @@
 package handler
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
+	"io"
 	"log/slog"
 	"net/http"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/fitcoach/api/internal/model"
 	"github.com/fitcoach/api/internal/middleware"
+	"github.com/fitcoach/api/internal/model"
 	"github.com/fitcoach/api/internal/repository"
 	"github.com/fitcoach/api/internal/service"
 	"github.com/fitcoach/api/pkg/response"
@@ -232,10 +235,24 @@ type upsertSequenceInput struct {
 func (h *TrainerCardHandler) UpsertCard(w http.ResponseWriter, r *http.Request) {
 	customerID := chi.URLParam(r, "customerId")
 
+	bodyBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		response.BadRequest(w, "Invalid request body")
+		return
+	}
+	r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
+	var raw map[string]any
+	json.Unmarshal(bodyBytes, &raw)
+
+	seqVal, hasSequences := raw["sequences"]
+	explicitNull := hasSequences && seqVal == nil
+
 	var input struct {
-		Level     string                `json:"level"     validate:"required,min=1,max=30"`
-		Notes     *string               `json:"notes,omitempty"`
-		Sequences []upsertSequenceInput `json:"sequences" validate:"required,min=1,dive"`
+		Level        string                `json:"level"     validate:"required,min=1,max=30"`
+		Notes        *string               `json:"notes,omitempty"`
+		TargetGender *string               `json:"target_gender,omitempty" validate:"omitempty,oneof=male female universal"`
+		Sequences    []upsertSequenceInput `json:"sequences" validate:"omitempty,dive"`
 	}
 	if err := response.DecodeJSON(r, &input); err != nil {
 		response.BadRequest(w, "Invalid request body: "+err.Error())
@@ -246,78 +263,127 @@ func (h *TrainerCardHandler) UpsertCard(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	// Extract created_by from auth context
+	updateSequences := false
+	if hasSequences {
+		if explicitNull {
+			updateSequences = true
+			input.Sequences = nil
+		} else if len(input.Sequences) > 0 {
+			updateSequences = true
+		}
+	}
+
 	createdBy := r.Context().Value("user_id")
 	var createdByStr *string
 	if uid, ok := createdBy.(string); ok {
 		createdByStr = &uid
 	}
 
-	// Build domain model
 	card := &repository.TrainerCard{
-		CustomerID: customerID,
-		Level:      input.Level,
-		Notes:      input.Notes,
-		CreatedBy:  createdByStr,
+		CustomerID:   customerID,
+		Level:        input.Level,
+		Notes:        input.Notes,
+		CreatedBy:    createdByStr,
+		}
+
+	if updateSequences {
+		existingCard, _ := h.cardService.GetByCustomerID(r.Context(), customerID)
+
+		for si, seqIn := range input.Sequences {
+			seq := repository.TrainerCardSequence{
+				ProgramCategoryID: seqIn.ProgramCategoryID,
+				Duration:          seqIn.Duration,
+				SortOrder:         seqIn.SortOrder,
+			}
+			if seq.SortOrder == 0 {
+				seq.SortOrder = si
+			}
+
+			if existingCard != nil {
+				for _, exSeq := range existingCard.Sequences {
+					if exSeq.ProgramCategoryID == seq.ProgramCategoryID {
+						seq.ID = exSeq.ID
+						break
+					}
+				}
+			}
+
+			for seti, setIn := range seqIn.Sets {
+				set := repository.TrainerCardSet{
+					SetNumber:          setIn.SetNumber,
+					Duration:           setIn.Duration,
+					EquipmentUpper:     setIn.EquipmentUpper,
+					EquipmentLower:     setIn.EquipmentLower,
+					Equipment:          setIn.Equipment,
+					TypeID:             setIn.TypeID,
+					BPM:                setIn.BPM,
+					ExtraLoad:          setIn.ExtraLoad,
+					Notes:              setIn.Notes,
+					SortOrder:          setIn.SortOrder,
+					Pattern:            setIn.Pattern,
+					BreathingCore:      setIn.BreathingCore,
+					BreathingDiaphragm: setIn.BreathingDiaphragm,
+				}
+				if set.SortOrder == 0 {
+					set.SortOrder = seti
+				}
+
+				if existingCard != nil && seq.ID != "" {
+					for _, exSeq := range existingCard.Sequences {
+						if exSeq.ID == seq.ID {
+							for _, exSet := range exSeq.Sets {
+								if exSet.SetNumber == set.SetNumber {
+									set.ID = exSet.ID
+									break
+								}
+							}
+							break
+						}
+					}
+				}
+
+				for itemi, itemIn := range setIn.Items {
+					item := repository.TrainerCardSetItem{
+						MovementID:         itemIn.MovementID,
+						MovementName:       itemIn.MovementName,
+						BodyPart:           itemIn.BodyPart,
+						Equipment:          itemIn.Equipment,
+						Reps:               itemIn.Reps,
+						SetsCount:          itemIn.SetsCount,
+						SortOrder:          itemIn.SortOrder,
+						BreathingCore:      itemIn.BreathingCore,
+						BreathingDiaphragm: itemIn.BreathingDiaphragm,
+					}
+					if item.SortOrder == 0 {
+						item.SortOrder = itemi
+					}
+
+					if existingCard != nil && set.ID != "" {
+						for _, exSeq := range existingCard.Sequences {
+							if exSeq.ID == seq.ID {
+								for _, exSet := range exSeq.Sets {
+									if exSet.ID == set.ID {
+										for _, exItem := range exSet.Items {
+											if exItem.SortOrder == item.SortOrder {
+												item.ID = exItem.ID
+												break
+											}
+										}
+										break
+									}
+								}
+								break
+							}
+						}
+					}
+					set.Items = append(set.Items, item)
+				}
+				seq.Sets = append(seq.Sets, set)
+			}
+			card.Sequences = append(card.Sequences, seq)
+		}
 	}
 
-	for si, seqIn := range input.Sequences {
-		seq := repository.TrainerCardSequence{
-			ProgramCategoryID: seqIn.ProgramCategoryID,
-			Duration:          seqIn.Duration,
-			SortOrder:         seqIn.SortOrder,
-		}
-		if seq.SortOrder == 0 {
-			seq.SortOrder = si
-		}
-
-		for seti, setIn := range seqIn.Sets {
-			set := repository.TrainerCardSet{
-				SetNumber:          setIn.SetNumber,
-				Duration:           setIn.Duration,
-				EquipmentUpper:     setIn.EquipmentUpper,
-				EquipmentLower:     setIn.EquipmentLower,
-				Equipment:          setIn.Equipment,
-				TypeID:             setIn.TypeID,
-				BPM:                setIn.BPM,
-				ExtraLoad:          setIn.ExtraLoad,
-				Notes:              setIn.Notes,
-				SortOrder:          setIn.SortOrder,
-				Pattern:            setIn.Pattern,
-				BreathingCore:      setIn.BreathingCore,
-				BreathingDiaphragm: setIn.BreathingDiaphragm,
-			}
-			if set.SortOrder == 0 {
-				set.SortOrder = seti
-			}
-
-			for itemi, itemIn := range setIn.Items {
-				item := repository.TrainerCardSetItem{
-					MovementID:         itemIn.MovementID,
-					MovementName:       itemIn.MovementName,
-					BodyPart:           itemIn.BodyPart,
-					Equipment:          itemIn.Equipment,
-					Reps:               itemIn.Reps,
-					SetsCount:          itemIn.SetsCount,
-					SortOrder:          itemIn.SortOrder,
-					BreathingCore:      itemIn.BreathingCore,
-					BreathingDiaphragm: itemIn.BreathingDiaphragm,
-				}
-				if item.SortOrder == 0 {
-					item.SortOrder = itemi
-				}
-				set.Items = append(set.Items, item)
-			}
-
-			seq.Sets = append(seq.Sets, set)
-		}
-
-		card.Sequences = append(card.Sequences, seq)
-	}
-
-	// A manual save is an explicit human edit: drop the auto-generated marker so
-	// GetTrainingCard never regenerates (overwrites) these movements. The admin UI
-	// re-sends whatever notes the card already had, which may still carry it.
 	if card.Notes != nil && strings.Contains(*card.Notes, "Auto-generated") {
 		cleaned := strings.TrimSpace(strings.ReplaceAll(*card.Notes, "Auto-generated upon subscription activation.", ""))
 		if cleaned == "" {
@@ -327,7 +393,7 @@ func (h *TrainerCardHandler) UpsertCard(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
-	if err := h.cardService.UpsertCard(r.Context(), card); err != nil {
+	if err := h.cardService.UpsertCard(r.Context(), card, updateSequences); err != nil {
 		slog.Error("[TrainingCard.UpsertCard] failed", "customer_id", customerID, "error", err)
 		response.InternalError(w, "Failed to save training card")
 		return

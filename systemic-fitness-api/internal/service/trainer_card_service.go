@@ -109,8 +109,8 @@ func (s *TrainerCardService) GetByCustomerID(ctx context.Context, customerID str
 	return card, nil
 }
 
-func (s *TrainerCardService) UpsertCard(ctx context.Context, card *repository.TrainerCard) error {
-	if err := s.repo.UpsertCard(ctx, card); err != nil {
+func (s *TrainerCardService) UpsertCard(ctx context.Context, card *repository.TrainerCard, updateSequences bool) error {
+	if err := s.repo.UpsertCard(ctx, card, updateSequences); err != nil {
 		s.logger.Error("upsert training card", "customer_id", card.CustomerID, "error", err)
 		return fmt.Errorf("upserting training card: %w", err)
 	}
@@ -130,14 +130,37 @@ func (s *TrainerCardService) DeleteCard(ctx context.Context, customerID string) 
 // AutoCreateDefaultCard generates a default training card and program assignments for a customer
 // based on their latest v2 assessment details and health condition classifications.
 
-// resolveLevelFromStatus maps an assessment physical_status_level to the
-// trainer-card / template level string. level_4_5_perf clients are the
-// performance tier and resolve to the "5-6" template; everyone else to "1".
-func resolveLevelFromStatus(physicalStatusLevel string) string {
-	if physicalStatusLevel == "level_4_5_perf" {
-		return "5-6"
+func resolveLevelFromStatus(physicalStatusLevel string, gender string) string {
+	baseLevel := 1
+	if physicalStatusLevel != "" {
+		if strings.Contains(physicalStatusLevel, "0_1") {
+			baseLevel = 1
+		} else if strings.Contains(physicalStatusLevel, "2_3") {
+			baseLevel = 1
+		} else if strings.Contains(physicalStatusLevel, "4_5") {
+			baseLevel = 4
+		} else if strings.Contains(physicalStatusLevel, "6") {
+			baseLevel = 6
+		} else {
+			// fallback for any other string containing digits
+			for _, char := range physicalStatusLevel {
+				if char >= '1' && char <= '6' {
+					baseLevel = int(char - '0')
+					break
+				}
+			}
+		}
 	}
-	return "1"
+
+	normGender := strings.ToLower(gender)
+	isMale := normGender == "male" || normGender == "men" || normGender == "pria" || normGender == "laki-laki"
+	
+	finalLevel := baseLevel*2 - 1
+	if isMale {
+		finalLevel = baseLevel * 2
+	}
+	
+	return strconv.Itoa(finalLevel)
 }
 
 func (s *TrainerCardService) AutoCreateDefaultCard(ctx context.Context, customerID string) error {
@@ -171,12 +194,7 @@ func (s *TrainerCardService) AutoCreateDefaultCard(ctx context.Context, customer
 		return fmt.Errorf("ensuring program assignments: %w", err)
 	}
 
-	// 3. Resolve level
-	level := resolveLevelFromStatus(meta.PhysicalStatusLevel)
-
-	// 4. Resolve durations & loads using engine functions
-	rec := ResolveSequenceFormula(meta.SpecificSlug)
-
+	// 3. Resolve gender first so we can map to the 12 levels
 	gender := "male"
 	age := 30
 	height := 170.0
@@ -195,6 +213,12 @@ func (s *TrainerCardService) AutoCreateDefaultCard(ctx context.Context, customer
 			}
 		}
 	}
+
+	// 3.5 Resolve level
+	level := resolveLevelFromStatus(meta.PhysicalStatusLevel, gender)
+
+	// 4. Resolve durations & loads using engine functions
+	rec := ResolveSequenceFormula(meta.SpecificSlug)
 	ResolveLoadWeight(rec, gender, age, height)
 
 	// 4.5 Auto-calculate & save HR zones based on age (Max HR = 220 - age)
@@ -388,7 +412,7 @@ func (s *TrainerCardService) AutoCreateDefaultCard(ctx context.Context, customer
 		Sequences:  sequences,
 	}
 
-	if err := s.repo.UpsertCard(ctx, card); err != nil {
+	if err := s.repo.UpsertCard(ctx, card, true); err != nil {
 		return fmt.Errorf("saving auto-created card: %w", err)
 	}
 
@@ -413,7 +437,11 @@ func (s *TrainerCardService) ShouldRegenFromTemplate(ctx context.Context, custom
 	if meta.PhysicalStatusLevel == "" {
 		return false, nil
 	}
-	level := resolveLevelFromStatus(meta.PhysicalStatusLevel)
+	gender := "male"
+	if meta.Gender != nil && *meta.Gender != "" {
+		gender = *meta.Gender
+	}
+	level := resolveLevelFromStatus(meta.PhysicalStatusLevel, gender)
 	tmpl, err := s.templateRepo.GetByLevel(ctx, level)
 	if err != nil || tmpl == nil {
 		return false, nil

@@ -316,6 +316,11 @@ type TrainerAvailability struct {
 	IsActive  bool   `json:"is_active"`
 }
 
+type TrainerAvailabilityWithUser struct {
+	TrainerAvailability
+	TrainerName string `json:"trainer_name"`
+}
+
 func (r *SchedulingRepository) SetAvailability(ctx context.Context, a *TrainerAvailability) error {
 	query := `
 		INSERT INTO trainer_availability (trainer_id, day_of_week, start_time, end_time, is_active)
@@ -356,4 +361,51 @@ func (r *SchedulingRepository) DeleteAvailability(ctx context.Context, id string
 		return ErrNotFound
 	}
 	return nil
+}
+
+func (r *SchedulingRepository) ReplaceAvailability(ctx context.Context, trainerID string, slots []TrainerAvailability) error {
+	tx, err := r.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+
+	_, err = tx.Exec(ctx, `DELETE FROM trainer_availability WHERE trainer_id = $1`, trainerID)
+	if err != nil {
+		return err
+	}
+
+	for _, a := range slots {
+		_, err = tx.Exec(ctx, `
+			INSERT INTO trainer_availability (trainer_id, day_of_week, start_time, end_time, is_active)
+			VALUES ($1, $2, $3, $4, $5)`,
+			trainerID, a.DayOfWeek, a.StartTime, a.EndTime, a.IsActive)
+		if err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit(ctx)
+}
+
+func (r *SchedulingRepository) ListAllAvailability(ctx context.Context) ([]TrainerAvailabilityWithUser, error) {
+	rows, err := r.db.Query(ctx, `
+		SELECT ta.id, ta.trainer_id, ta.day_of_week, ta.start_time, ta.end_time, ta.is_active, u.full_name
+		FROM trainer_availability ta
+		JOIN users u ON ta.trainer_id = u.id
+		ORDER BY ta.trainer_id, ta.day_of_week, ta.start_time`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var slots []TrainerAvailabilityWithUser
+	for rows.Next() {
+		var a TrainerAvailabilityWithUser
+		if err := rows.Scan(&a.ID, &a.TrainerID, &a.DayOfWeek, &a.StartTime, &a.EndTime, &a.IsActive, &a.TrainerName); err != nil {
+			return nil, err
+		}
+		slots = append(slots, a)
+	}
+	return slots, rows.Err()
 }

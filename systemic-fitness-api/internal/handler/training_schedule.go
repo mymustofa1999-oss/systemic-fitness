@@ -59,8 +59,15 @@ func (h *TrainingScheduleHandler) ListSchedules(w http.ResponseWriter, r *http.R
 // GET /api/training-schedules/{id}
 func (h *TrainingScheduleHandler) GetSchedule(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	sch, err := h.scheduleService.GetSchedule(r.Context(), id)
+	callerID := middleware.GetUserID(r.Context())
+	callerRole := middleware.GetRole(r.Context())
+	
+	sch, err := h.scheduleService.GetSchedule(r.Context(), id, callerID, callerRole)
 	if err != nil {
+		if err.Error() == "unauthorized" {
+			response.Forbidden(w, "Insufficient permissions to view this schedule")
+			return
+		}
 		if errors.Is(err, repository.ErrNotFound) {
 			response.NotFound(w, "Schedule not found")
 			return

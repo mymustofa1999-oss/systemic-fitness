@@ -77,6 +77,8 @@ type CreateMovementInput struct {
 	NameEN         *string  `json:"name_en,omitempty"      validate:"omitempty,max=150"`
 	InstructionsEN []string `json:"instructions_en,omitempty"`
 	DescriptionEN  *string  `json:"description_en,omitempty"`
+	IsActive       bool     `json:"is_active"`
+	TargetGender   *string  `json:"target_gender,omitempty" validate:"omitempty,oneof=male female universal"`
 }
 
 func (s *DigitalLibraryService) CreateMovement(ctx context.Context, input *CreateMovementInput) (*repository.DLMovement, error) {
@@ -94,6 +96,8 @@ func (s *DigitalLibraryService) CreateMovement(ctx context.Context, input *Creat
 		NameEN:         input.NameEN,
 		InstructionsEN: input.InstructionsEN,
 		DescriptionEN:  input.DescriptionEN,
+		IsActive:       input.IsActive,
+		TargetGender:   input.TargetGender,
 	}
 	if err := s.dlRepo.CreateMovement(ctx, m); err != nil {
 		s.logger.Error("create dl movement", "name", input.Name, "error", err)
@@ -117,38 +121,108 @@ type UpdateMovementInput struct {
 	NameEN         *string  `json:"name_en,omitempty"      validate:"omitempty,max=150"`
 	InstructionsEN []string `json:"instructions_en,omitempty"`
 	DescriptionEN  *string  `json:"description_en,omitempty"`
+	IsActive       bool     `json:"is_active"`
+	TargetGender   *string  `json:"target_gender,omitempty" validate:"omitempty,oneof=male female universal"`
 }
 
-func (s *DigitalLibraryService) UpdateMovement(ctx context.Context, id string, input *UpdateMovementInput) (*repository.DLMovement, error) {
-	if _, err := s.dlRepo.GetMovementByID(ctx, id); err != nil {
+func (s *DigitalLibraryService) UpdateMovement(ctx context.Context, id string, input *UpdateMovementInput, explicitNulls []string) (*repository.DLMovement, error) {
+	existing, err := s.dlRepo.GetMovementByID(ctx, id)
+	if err != nil {
 		if !errors.Is(err, repository.ErrNotFound) {
 			s.logger.Error("update dl movement: fetch", "id", id, "error", err)
 		}
 		return nil, err
 	}
 
-	m := &repository.DLMovement{
-		ID:             id,
-		Name:           input.Name,
-		BodyPart:       input.BodyPart,
-		VideoURLMale:   input.VideoURLMale,
-		VideoURLFemale: input.VideoURLFemale,
-		ImageURL:       input.ImageURL,
-		Instructions:   input.Instructions,
-		Categories:     input.Categories,
-		Type:           input.Type,
-		Pattern:        input.Pattern,
-		Level:          input.Level,
-		NameEN:         input.NameEN,
-		InstructionsEN: input.InstructionsEN,
-		DescriptionEN:  input.DescriptionEN,
+	// Helper to check if a JSON key was explicitly sent as null
+	isNull := func(field string) bool {
+		for _, v := range explicitNulls {
+			if v == field {
+				return true
+			}
+		}
+		return false
 	}
-	if err := s.dlRepo.UpdateMovement(ctx, m); err != nil {
+
+	// ALWAYS update required fields because they are explicitly validated
+	existing.Name = input.Name
+	existing.BodyPart = input.BodyPart
+	existing.Categories = input.Categories
+	existing.IsActive = input.IsActive
+
+	// ONLY update optional fields if they are explicitly provided in the JSON payload
+	if input.VideoURLMale != nil {
+		existing.VideoURLMale = input.VideoURLMale
+	} else if isNull("video_url_male") {
+		existing.VideoURLMale = nil
+	}
+	
+	if input.VideoURLFemale != nil {
+		existing.VideoURLFemale = input.VideoURLFemale
+	} else if isNull("video_url_female") {
+		existing.VideoURLFemale = nil
+	}
+	
+	if input.ImageURL != nil {
+		existing.ImageURL = input.ImageURL
+	} else if isNull("image_url") {
+		existing.ImageURL = nil
+	}
+	
+	if input.Instructions != nil {
+		existing.Instructions = input.Instructions
+	} else if isNull("instructions") {
+		existing.Instructions = nil
+	}
+	
+	if input.Type != nil {
+		existing.Type = input.Type
+	} else if isNull("type") {
+		existing.Type = nil
+	}
+	
+	if input.Pattern != nil {
+		existing.Pattern = input.Pattern
+	} else if isNull("pattern") {
+		existing.Pattern = nil
+	}
+	
+	if input.Level != nil {
+		existing.Level = input.Level
+	} else if isNull("level") {
+		existing.Level = nil
+	}
+	
+	if input.NameEN != nil {
+		existing.NameEN = input.NameEN
+	} else if isNull("name_en") {
+		existing.NameEN = nil
+	}
+	
+	if input.InstructionsEN != nil {
+		existing.InstructionsEN = input.InstructionsEN
+	} else if isNull("instructions_en") {
+		existing.InstructionsEN = nil
+	}
+	
+	if input.DescriptionEN != nil {
+		existing.DescriptionEN = input.DescriptionEN
+	} else if isNull("description_en") {
+		existing.DescriptionEN = nil
+	}
+	
+	if input.TargetGender != nil {
+		existing.TargetGender = input.TargetGender
+	} else if isNull("target_gender") {
+		existing.TargetGender = nil
+	}
+
+	if err := s.dlRepo.UpdateMovement(ctx, existing); err != nil {
 		s.logger.Error("update dl movement: save", "id", id, "error", err)
 		return nil, err
 	}
 	s.logger.Info("dl movement updated", "id", id)
-	return m, nil
+	return existing, nil
 }
 
 func (s *DigitalLibraryService) DeleteMovement(ctx context.Context, id string) error {
@@ -173,8 +247,8 @@ func (s *DigitalLibraryService) ListMenuItems(ctx context.Context, code string, 
 	return items, nil
 }
 
-func (s *DigitalLibraryService) AddModulCardItem(ctx context.Context, levelID string, movementID string) error {
-	err := s.dlRepo.AddModulCardItem(ctx, levelID, movementID)
+func (s *DigitalLibraryService) AddModulCardItem(ctx context.Context, levelID string, movementID string, categoryCode *string, setName *string, groupType *string, section *string) error {
+	err := s.dlRepo.AddModulCardItem(ctx, levelID, movementID, categoryCode, setName, groupType, section)
 	if err != nil {
 		s.logger.Error("add modul card item", "level_id", levelID, "movement_id", movementID, "error", err)
 		return err

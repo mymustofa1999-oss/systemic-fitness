@@ -65,6 +65,8 @@ type DLMovement struct {
 	NameEN         *string   `json:"name_en,omitempty"`
 	InstructionsEN []string  `json:"instructions_en,omitempty"`
 	DescriptionEN  *string   `json:"description_en,omitempty"`
+	IsActive       bool      `json:"is_active"`
+	TargetGender   *string   `json:"target_gender,omitempty"`
 }
 
 type DLMenuItem struct {
@@ -167,14 +169,14 @@ func (r *DigitalLibraryRepository) ListLevels(ctx context.Context) ([]DLLevel, e
 
 // ─── Movements (CRUD) ───────────────────────────────────────────
 
-const movementCols = `id, name, body_part, video_url_male, video_url_female, image_url, instructions, categories, type, pattern, level, created_at, updated_at, name_en, instructions_en, description_en`
+const movementCols = `id, name, body_part, video_url_male, video_url_female, image_url, instructions, categories, type, pattern, level, created_at, updated_at, name_en, instructions_en, description_en, is_active, target_gender`
 
 func scanMovement(row pgx.Row) (*DLMovement, error) {
 	m := &DLMovement{}
 	err := row.Scan(
 		&m.ID, &m.Name, &m.BodyPart, &m.VideoURLMale, &m.VideoURLFemale, &m.ImageURL,
 		&m.Instructions, &m.Categories, &m.Type, &m.Pattern, &m.Level, &m.CreatedAt, &m.UpdatedAt,
-		&m.NameEN, &m.InstructionsEN, &m.DescriptionEN,
+		&m.NameEN, &m.InstructionsEN, &m.DescriptionEN, &m.IsActive, &m.TargetGender,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, ErrNotFound
@@ -224,7 +226,7 @@ func (r *DigitalLibraryRepository) ListMovements(ctx context.Context, params mod
 		if err := rows.Scan(
 			&m.ID, &m.Name, &m.BodyPart, &m.VideoURLMale, &m.VideoURLFemale, &m.ImageURL,
 			&m.Instructions, &m.Categories, &m.Type, &m.Pattern, &m.Level, &m.CreatedAt, &m.UpdatedAt,
-			&m.NameEN, &m.InstructionsEN, &m.DescriptionEN,
+			&m.NameEN, &m.InstructionsEN, &m.DescriptionEN, &m.IsActive, &m.TargetGender,
 		); err != nil {
 			return nil, 0, err
 		}
@@ -240,13 +242,13 @@ func (r *DigitalLibraryRepository) GetMovementByID(ctx context.Context, id strin
 
 func (r *DigitalLibraryRepository) CreateMovement(ctx context.Context, m *DLMovement) error {
 	query := `
-		INSERT INTO dl_movements (name, body_part, video_url_male, video_url_female, image_url, instructions, categories, type, pattern, level, name_en, instructions_en, description_en)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+		INSERT INTO dl_movements (name, body_part, video_url_male, video_url_female, image_url, instructions, categories, type, pattern, level, name_en, instructions_en, description_en, is_active, target_gender)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
 		RETURNING id, created_at, updated_at`
 	err := r.db.QueryRow(ctx, query,
 		m.Name, m.BodyPart, m.VideoURLMale, m.VideoURLFemale, m.ImageURL,
 		m.Instructions, m.Categories, m.Type, m.Pattern, m.Level,
-		m.NameEN, m.InstructionsEN, m.DescriptionEN,
+		m.NameEN, m.InstructionsEN, m.DescriptionEN, m.IsActive, m.TargetGender,
 	).Scan(&m.ID, &m.CreatedAt, &m.UpdatedAt)
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate key") || strings.Contains(err.Error(), "dl_movements_name_key") {
@@ -262,13 +264,13 @@ func (r *DigitalLibraryRepository) UpdateMovement(ctx context.Context, m *DLMove
 		UPDATE dl_movements SET
 			name = $2, body_part = $3, video_url_male = $4, video_url_female = $5, image_url = $6,
 			instructions = $7, categories = $8, type = $9, pattern = $10, level = $11,
-			name_en = $12, instructions_en = $13, description_en = $14
+			name_en = $12, instructions_en = $13, description_en = $14, is_active = $15, target_gender = $16
 		WHERE id = $1
 		RETURNING updated_at`
 	err := r.db.QueryRow(ctx, query,
 		m.ID, m.Name, m.BodyPart, m.VideoURLMale, m.VideoURLFemale, m.ImageURL,
 		m.Instructions, m.Categories, m.Type, m.Pattern, m.Level,
-		m.NameEN, m.InstructionsEN, m.DescriptionEN,
+		m.NameEN, m.InstructionsEN, m.DescriptionEN, m.IsActive, m.TargetGender,
 	).Scan(&m.UpdatedAt)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -328,7 +330,7 @@ func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCo
 		       mi.created_at, mi.updated_at,
 		       m.id, m.name, m.body_part, m.video_url_male, m.video_url_female, m.image_url,
 		       m.instructions, m.categories, m.type, m.pattern, m.level, m.created_at, m.updated_at,
-		       m.name_en, m.instructions_en, m.description_en,
+		       m.name_en, m.instructions_en, m.description_en, m.is_active, m.target_gender,
 		       l.level_number
 		FROM dl_menu_items mi
 		JOIN dl_categories c ON c.id = mi.category_id
@@ -353,7 +355,7 @@ func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCo
 			&mi.CreatedAt, &mi.UpdatedAt,
 			&m.ID, &m.Name, &m.BodyPart, &m.VideoURLMale, &m.VideoURLFemale, &m.ImageURL,
 			&m.Instructions, &m.Categories, &m.Type, &m.Pattern, &m.Level, &m.CreatedAt, &m.UpdatedAt,
-			&m.NameEN, &m.InstructionsEN, &m.DescriptionEN,
+			&m.NameEN, &m.InstructionsEN, &m.DescriptionEN, &m.IsActive, &m.TargetGender,
 			&levelNum,
 		); err != nil {
 			return nil, err
@@ -362,11 +364,11 @@ func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCo
 		mi.Movement = &m
 		items = append(items, mi)
 	}
-	return items, nil
+	return items, rows.Err()
 }
 
-// AddModulCardItem adds a movement to a specific level for ALL categories (FC, CC, MC)
-func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID string, movementID string) error {
+// AddModulCardItem adds a movement to a specific level. If categoryCode is provided, it adds only to that category.
+func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID string, movementID string, categoryCode *string, setName *string, groupType *string, section *string) error {
 	cats, err := r.ListCategories(ctx)
 	if err != nil {
 		return err
@@ -390,8 +392,21 @@ func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID
 	if err != nil {
 		return err
 	}
+	
+	// Update pattern if section is provided
+	if section != nil && *section != "" {
+		_, err = tx.Exec(ctx, "UPDATE dl_movements SET pattern = $1 WHERE id = $2", *section, movementID)
+		if err != nil {
+			return err
+		}
+	}
 
 	for _, c := range cats {
+		// Filter by category if provided
+		if categoryCode != nil && *categoryCode != "" && !strings.EqualFold(c.Code, *categoryCode) {
+			continue
+		}
+
 		// Check if it already exists to avoid duplicates
 		var exists bool
 		err = tx.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM dl_menu_items WHERE category_id = $1 AND level_id = $2 AND movement_id = $3)", c.ID, levelID, movementID).Scan(&exists)
@@ -403,9 +418,9 @@ func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID
 		}
 
 		_, err = tx.Exec(ctx, `
-			INSERT INTO dl_menu_items (category_id, level_id, movement_id, body_part, sort_order)
-			VALUES ($1, $2, $3, $4, $5)`,
-			c.ID, levelID, movementID, bodyPart, nextSort)
+			INSERT INTO dl_menu_items (category_id, level_id, movement_id, body_part, sort_order, set_name, group_type)
+			VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+			c.ID, levelID, movementID, bodyPart, nextSort, setName, groupType)
 		if err != nil {
 			return err
 		}

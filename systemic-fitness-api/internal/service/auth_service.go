@@ -33,6 +33,7 @@ type AuthService struct {
 	jwtManager *utils.JWTManager
 	bcryptCost int
 	logger     *slog.Logger
+	mailer     MailerService
 }
 
 func NewAuthService(
@@ -40,12 +41,14 @@ func NewAuthService(
 	jwtManager *utils.JWTManager,
 	bcryptCost int,
 	logger *slog.Logger,
+	mailer MailerService,
 ) *AuthService {
 	return &AuthService{
 		userRepo:   userRepo,
 		jwtManager: jwtManager,
 		bcryptCost: bcryptCost,
 		logger:     logger,
+		mailer:     mailer,
 	}
 }
 

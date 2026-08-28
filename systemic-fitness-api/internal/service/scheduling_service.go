@@ -152,10 +152,27 @@ func (s *SchedulingService) SetAvailability(ctx context.Context, a *repository.T
 	return nil
 }
 
+func (s *SchedulingService) ReplaceAvailability(ctx context.Context, trainerID string, slots []repository.TrainerAvailability) error {
+	if err := s.schedulingRepo.ReplaceAvailability(ctx, trainerID, slots); err != nil {
+		s.logger.Error("replace availability", "trainer_id", trainerID, "error", err)
+		return fmt.Errorf("replacing availability: %w", err)
+	}
+	return nil
+}
+
 func (s *SchedulingService) ListAvailability(ctx context.Context, trainerID string) ([]repository.TrainerAvailability, error) {
 	slots, err := s.schedulingRepo.ListAvailability(ctx, trainerID)
 	if err != nil {
 		s.logger.Error("list availability", "trainer_id", trainerID, "error", err)
+		return nil, err
+	}
+	return slots, nil
+}
+
+func (s *SchedulingService) ListAllAvailability(ctx context.Context) ([]repository.TrainerAvailabilityWithUser, error) {
+	slots, err := s.schedulingRepo.ListAllAvailability(ctx)
+	if err != nil {
+		s.logger.Error("list all availability", "error", err)
 		return nil, err
 	}
 	return slots, nil

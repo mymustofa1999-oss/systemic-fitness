@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -101,6 +102,41 @@ func RequireSelfOrRole(allowedRoles ...model.Role) func(http.Handler) http.Handl
 			// Role-based check
 			if _, ok := roleSet[userRole]; !ok {
 				response.Forbidden(w, "Insufficient permissions for this resource")
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+
+// CustomerAuthorizer interface breaks dependency cycles.
+type CustomerAuthorizer interface {
+	AuthorizeCustomerAccess(ctx context.Context, callerID string, callerRole model.Role, customerID string) error
+}
+
+// RequireCustomerAccess ensures the caller has rights to view/edit the target customer.
+// It uses the provided paramName (e.g. "customerId", "userId") to extract the target ID from the URL.
+func RequireCustomerAccess(authz CustomerAuthorizer, paramName string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			targetID := chi.URLParam(r, paramName)
+			if targetID == "" {
+				response.BadRequest(w, "missing "+paramName+" in URL")
+				return
+			}
+
+			callerID := GetUserID(r.Context())
+			callerRole := GetRole(r.Context())
+
+			err := authz.AuthorizeCustomerAccess(r.Context(), callerID, callerRole, targetID)
+			if err != nil {
+				if err.Error() == "unauthenticated" {
+					response.Unauthorized(w, "Authentication required")
+				} else {
+					response.Forbidden(w, "Insufficient permissions for this resource")
+				}
 				return
 			}
 

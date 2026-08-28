@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -115,6 +117,24 @@ func (h *DigitalLibraryHandler) CreateMovement(w http.ResponseWriter, r *http.Re
 // PUT /api/digital-library/movements/{id}
 func (h *DigitalLibraryHandler) UpdateMovement(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
+
+	bodyBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		response.BadRequest(w, "Invalid request body")
+		return
+	}
+	r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
+	var raw map[string]any
+	var explicitNulls []string
+	if err := json.Unmarshal(bodyBytes, &raw); err == nil {
+		for k, v := range raw {
+			if v == nil {
+				explicitNulls = append(explicitNulls, k)
+			}
+		}
+	}
+
 	var input service.UpdateMovementInput
 	if err := response.DecodeJSON(r, &input); err != nil {
 		response.BadRequest(w, "Invalid request body: "+err.Error())
@@ -125,7 +145,7 @@ func (h *DigitalLibraryHandler) UpdateMovement(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	m, err := h.dlService.UpdateMovement(r.Context(), id, &input)
+	m, err := h.dlService.UpdateMovement(r.Context(), id, &input, explicitNulls)
 	if err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
 			response.NotFound(w, "Movement not found")
@@ -186,14 +206,18 @@ func (h *DigitalLibraryHandler) ListMenuItems(w http.ResponseWriter, r *http.Req
 // POST /api/digital-library/modul-cards
 func (h *DigitalLibraryHandler) AddModulCardItem(w http.ResponseWriter, r *http.Request) {
 	var req struct {
-		LevelID    string `json:"level_id"`
-		MovementID string `json:"movement_id"`
+		LevelID      string  `json:"level_id"`
+		MovementID   string  `json:"movement_id"`
+		CategoryCode *string `json:"category_code,omitempty"`
+		SetName      *string `json:"set_name,omitempty"`
+		GroupType    *string `json:"group_type,omitempty"`
+		Section      *string `json:"section,omitempty"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		response.BadRequest(w, "Invalid request body")
 		return
 	}
-	if err := h.dlService.AddModulCardItem(r.Context(), req.LevelID, req.MovementID); err != nil {
+	if err := h.dlService.AddModulCardItem(r.Context(), req.LevelID, req.MovementID, req.CategoryCode, req.SetName, req.GroupType, req.Section); err != nil {
 		response.InternalError(w, "Failed to add modul card item")
 		return
 	}
@@ -340,7 +364,7 @@ func (h *DigitalLibraryHandler) UploadMovementImage(w http.ResponseWriter, r *ht
 		Level:          m.Level,
 	}
 
-	updated, err := h.dlService.UpdateMovement(r.Context(), id, updateInput)
+	updated, err := h.dlService.UpdateMovement(r.Context(), id, updateInput, nil)
 	if err != nil {
 		slog.Error("[DL.UploadMovementImage] update failed", "id", id, "error", err)
 		response.InternalError(w, "Image uploaded but failed to update movement")

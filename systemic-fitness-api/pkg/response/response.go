@@ -1,6 +1,7 @@
 package response
 
 import (
+	"strings"
 	"encoding/json"
 	"net/http"
 
@@ -81,11 +82,27 @@ func SuccessMessage(w http.ResponseWriter, message string) {
 // ─── Error Responses ────────────────────────────────────────────
 
 func writeError(w http.ResponseWriter, status int, message string, errors []string) {
+	// Mask PostgreSQL internal errors if leaked by mistake
+	if strings.Contains(message, "SQLSTATE") || strings.Contains(message, "ERROR:") {
+		if strings.Contains(message, "invalid input syntax for type uuid") {
+			status = http.StatusBadRequest
+			message = "Invalid ID format"
+		} else {
+			status = http.StatusInternalServerError
+			message = "Internal server error"
+		}
+	}
+
 	write(w, status, Envelope{
 		Success: false,
 		Message: message,
 		Errors:  errors,
 	})
+}
+
+// TooManyRequests sends a 429 response.
+func TooManyRequests(w http.ResponseWriter, message string) {
+	writeError(w, http.StatusTooManyRequests, message, nil)
 }
 
 // BadRequest sends a 400 response.

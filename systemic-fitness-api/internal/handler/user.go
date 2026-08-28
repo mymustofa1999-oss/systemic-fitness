@@ -36,6 +36,10 @@ func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 		CallerID:   callerID,
 	}
 
+	if cls := r.URL.Query().Get("classification"); cls != "" {
+		input.Classification = &cls
+	}
+
 	// Parse optional role filter
 	if roleStr := r.URL.Query().Get("role"); roleStr != "" {
 		role := model.Role(roleStr)
@@ -294,6 +298,11 @@ func (h *UserHandler) ListClients(w http.ResponseWriter, r *http.Request) {
 		Role:       &clientRole,
 		CallerRole: callerRole,
 		CallerID:   callerID,
+	}
+
+	classQuery := r.URL.Query().Get("classification")
+	if classQuery != "" {
+		input.Classification = &classQuery
 	}
 
 	users, meta, err := h.userService.List(r.Context(), input)

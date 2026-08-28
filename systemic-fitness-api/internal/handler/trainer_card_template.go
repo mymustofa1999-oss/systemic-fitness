@@ -58,14 +58,15 @@ func (h *TrainerCardTemplateHandler) GetTemplate(w http.ResponseWriter, r *http.
 // ────────────────────────────────────────────────────────────────
 
 type upsertTemplateSetItemInput struct {
-	MovementID   *string `json:"movement_id,omitempty"`
-	MovementName *string `json:"movement_name,omitempty"`
-	BodyPart     string  `json:"body_part"    validate:"required,oneof=upper lower core"`
-	Equipment    *string `json:"equipment,omitempty"`
-	Reps         *int     `json:"reps,omitempty"`
-	SetsCount    *int     `json:"sets_count,omitempty"`
-	SortOrder    int      `json:"sort_order"`
-	AllowedTiers []string `json:"allowed_tiers,omitempty"`
+	MovementID       *string  `json:"movement_id,omitempty"`
+	MovementName     *string  `json:"movement_name,omitempty"`
+	BodyPart         string   `json:"body_part"    validate:"required,oneof=upper lower core"`
+	Equipment        *string  `json:"equipment,omitempty"`
+	Reps             *int     `json:"reps,omitempty"`
+	SetsCount        *int     `json:"sets_count,omitempty"`
+	SortOrder        int      `json:"sort_order"`
+	AllowedTiers     []string `json:"allowed_tiers,omitempty"`
+	VideoURLSnapshot *string  `json:"video_url_snapshot,omitempty"`
 }
 
 type upsertTemplateSetInput struct {
@@ -92,8 +93,9 @@ func (h *TrainerCardTemplateHandler) UpsertTemplate(w http.ResponseWriter, r *ht
 	level := chi.URLParam(r, "level")
 
 	var input struct {
-		Notes     *string                       `json:"notes,omitempty"`
-		Sequences []upsertTemplateSequenceInput `json:"sequences" validate:"required,min=1,dive"`
+		Notes        *string                       `json:"notes,omitempty"`
+		TargetGender *string                       `json:"target_gender,omitempty" validate:"omitempty,oneof=male female universal"`
+		Sequences    []upsertTemplateSequenceInput `json:"sequences" validate:"required,min=1,dive"`
 	}
 	if err := response.DecodeJSON(r, &input); err != nil {
 		response.BadRequest(w, "Invalid request body: "+err.Error())
@@ -105,8 +107,9 @@ func (h *TrainerCardTemplateHandler) UpsertTemplate(w http.ResponseWriter, r *ht
 	}
 
 	tmpl := &repository.TrainerCardTemplate{
-		Level: level,
-		Notes: input.Notes,
+		Level:        level,
+		Notes:        input.Notes,
+		TargetGender: input.TargetGender,
 	}
 
 	for si, seqIn := range input.Sequences {
@@ -137,14 +140,15 @@ func (h *TrainerCardTemplateHandler) UpsertTemplate(w http.ResponseWriter, r *ht
 
 			for itemi, itemIn := range setIn.Items {
 				item := repository.TrainerCardTemplateSetItem{
-					MovementID:   itemIn.MovementID,
-					MovementName: itemIn.MovementName,
-					BodyPart:     itemIn.BodyPart,
-					Equipment:    itemIn.Equipment,
-					Reps:         itemIn.Reps,
-					SetsCount:    itemIn.SetsCount,
-					SortOrder:    itemIn.SortOrder,
-					AllowedTiers: itemIn.AllowedTiers,
+					MovementID:       itemIn.MovementID,
+					MovementName:     itemIn.MovementName,
+					BodyPart:         itemIn.BodyPart,
+					Equipment:        itemIn.Equipment,
+					Reps:             itemIn.Reps,
+					SetsCount:        itemIn.SetsCount,
+					SortOrder:        itemIn.SortOrder,
+					AllowedTiers:     itemIn.AllowedTiers,
+					VideoURLSnapshot: itemIn.VideoURLSnapshot,
 				}
 				if item.SortOrder == 0 {
 					item.SortOrder = itemi

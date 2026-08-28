@@ -37,6 +37,7 @@ func scanUser(row pgx.Row) (*model.User, error) {
 		&u.ID, &u.Email, &u.PasswordHash, &u.FullName,
 		&u.Phone, &u.AvatarURL, &u.Role, &u.Status,
 		&u.Timezone, &u.CreatedAt, &u.UpdatedAt, &u.DeletedAt,
+		&u.Classification,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, ErrNotFound
@@ -48,10 +49,10 @@ func scanUser(row pgx.Row) (*model.User, error) {
 }
 
 const userColumns = `id, email, password_hash, full_name, phone, avatar_url,
-	role, status, timezone, created_at, updated_at, deleted_at`
+	role, status, timezone, created_at, updated_at, deleted_at, NULL as classification`
 
 const userPrefixedColumns = `u.id, u.email, u.password_hash, u.full_name, u.phone, u.avatar_url,
-	u.role, u.status, u.timezone, u.created_at, u.updated_at, u.deleted_at`
+	u.role, u.status, u.timezone, u.created_at, u.updated_at, u.deleted_at, COALESCE(up.classification, NULL)`
 
 func (r *UserRepository) Create(ctx context.Context, user *model.User) error {
 	query := `
@@ -134,6 +135,7 @@ type UserListFilter struct {
 	Status    *model.UserStatus
 	TrainerID *string // if set, only list clients assigned to this trainer
 	Search    string
+	Classification *string
 }
 
 func (r *UserRepository) List(ctx context.Context, params model.PaginationParams, filter UserListFilter) ([]model.User, int, error) {
@@ -158,10 +160,19 @@ func (r *UserRepository) List(ctx context.Context, params model.PaginationParams
 		argIdx++
 	}
 
+	// ALWAYS include user_profiles since userPrefixedColumns references 'up'
+	joinClause := " LEFT JOIN user_profiles up ON u.id = up.user_id "
+	
+	// Classification filtering
+	if filter.Classification != nil {
+		where = append(where, fmt.Sprintf("up.classification = $%d", argIdx))
+		args = append(args, *filter.Classification)
+		argIdx++
+	}
+
 	// Trainer scoping: only show assigned clients
-	joinClause := ""
 	if filter.TrainerID != nil {
-		joinClause = fmt.Sprintf("JOIN trainer_clients tc ON u.id = tc.client_id AND tc.trainer_id = $%d AND tc.status = 'active'", argIdx)
+		joinClause += fmt.Sprintf(" JOIN trainer_clients tc ON u.id = tc.client_id AND tc.trainer_id = $%d AND tc.status = 'active' ", argIdx)
 		args = append(args, *filter.TrainerID)
 		argIdx++
 	}
@@ -215,6 +226,7 @@ func (r *UserRepository) List(ctx context.Context, params model.PaginationParams
 			&u.ID, &u.Email, &u.PasswordHash, &u.FullName,
 			&u.Phone, &u.AvatarURL, &u.Role, &u.Status,
 			&u.Timezone, &u.CreatedAt, &u.UpdatedAt, &u.DeletedAt,
+			&u.Classification,
 			&u.NeedsReassessment,
 		); err != nil {
 			return nil, 0, fmt.Errorf("scan user row: %w", err)
@@ -236,8 +248,8 @@ func (r *UserRepository) UpsertProfile(ctx context.Context, p *model.UserProfile
 			user_id, date_of_birth, gender, height_cm, weight_kg,
 			fitness_goal, experience_level, medical_notes, emergency_contact,
 			regional, city, street_address, additional_address, sub_district,
-			district, province, postal_code, country
-		) VALUES ($1, $2::date, $3::gender_type, $4, $5, $6::fitness_goal, $7::experience_level, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+			district, province, postal_code, country, classification
+		) VALUES ($1, $2::date, $3::gender_type, $4, $5, $6::fitness_goal, $7::experience_level, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
 		ON CONFLICT (user_id) DO UPDATE SET
 			date_of_birth    = COALESCE(EXCLUDED.date_of_birth, user_profiles.date_of_birth),
 			gender           = COALESCE(EXCLUDED.gender, user_profiles.gender),
@@ -255,13 +267,14 @@ func (r *UserRepository) UpsertProfile(ctx context.Context, p *model.UserProfile
 			district         = COALESCE(EXCLUDED.district, user_profiles.district),
 			province         = COALESCE(EXCLUDED.province, user_profiles.province),
 			postal_code      = COALESCE(EXCLUDED.postal_code, user_profiles.postal_code),
-			country          = COALESCE(EXCLUDED.country, user_profiles.country)`
+			country          = COALESCE(EXCLUDED.country, user_profiles.country),
+			classification   = COALESCE(EXCLUDED.classification, user_profiles.classification)`
 
 	_, err := r.db.Exec(ctx, query,
 		p.UserID, p.DateOfBirth, p.Gender, p.HeightCm, p.WeightKg,
 		p.FitnessGoal, p.ExperienceLevel, p.MedicalNotes, p.EmergencyContact,
 		p.Regional, p.City, p.StreetAddress, p.AdditionalAddress, p.SubDistrict,
-		p.District, p.Province, p.PostalCode, p.Country,
+		p.District, p.Province, p.PostalCode, p.Country, p.Classification,
 	)
 	return err
 }
@@ -273,13 +286,13 @@ func (r *UserRepository) GetProfile(ctx context.Context, userID string) (*model.
 		SELECT user_id, date_of_birth, gender, height_cm, weight_kg,
 		       fitness_goal, experience_level, medical_notes, emergency_contact,
 		       regional, city, street_address, additional_address, sub_district,
-		       district, province, postal_code, country
+		       district, province, postal_code, country, classification
 		FROM user_profiles WHERE user_id = $1`, userID,
 	).Scan(
 		&p.UserID, &dob, &p.Gender, &p.HeightCm, &p.WeightKg,
 		&p.FitnessGoal, &p.ExperienceLevel, &p.MedicalNotes, &p.EmergencyContact,
 		&p.Regional, &p.City, &p.StreetAddress, &p.AdditionalAddress, &p.SubDistrict,
-		&p.District, &p.Province, &p.PostalCode, &p.Country,
+		&p.District, &p.Province, &p.PostalCode, &p.Country, &p.Classification,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, nil // profile doesn't exist yet — that's ok
@@ -485,7 +498,7 @@ func (r *UserRepository) ListTeamMembers(ctx context.Context, params model.Pagin
 		return nil, 0, err
 	}
 
-	query := fmt.Sprintf(`SELECT %s FROM users u WHERE %s ORDER BY u.role, u.full_name LIMIT $%d OFFSET $%d`,
+	query := fmt.Sprintf(`SELECT %s FROM users u LEFT JOIN user_profiles up ON u.id = up.user_id WHERE %s ORDER BY u.role, u.full_name LIMIT $%d OFFSET $%d`,
 		userPrefixedColumns, whereSQL, argIdx, argIdx+1)
 	args = append(args, params.Limit, params.Offset())
 
@@ -500,7 +513,8 @@ func (r *UserRepository) ListTeamMembers(ctx context.Context, params model.Pagin
 		u := model.User{}
 		if err := rows.Scan(&u.ID, &u.Email, &u.PasswordHash, &u.FullName,
 			&u.Phone, &u.AvatarURL, &u.Role, &u.Status,
-			&u.Timezone, &u.CreatedAt, &u.UpdatedAt, &u.DeletedAt); err != nil {
+			&u.Timezone, &u.CreatedAt, &u.UpdatedAt, &u.DeletedAt,
+			&u.Classification); err != nil {
 			return nil, 0, err
 		}
 		u.PasswordHash = ""

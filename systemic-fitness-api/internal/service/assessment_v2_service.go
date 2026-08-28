@@ -191,7 +191,7 @@ func (s *AssessmentV2Service) Submit(
 	return a, nil
 }
 
-func (s *AssessmentV2Service) Get(ctx context.Context, id string) (*model.AssessmentV2, error) {
+func (s *AssessmentV2Service) Get(ctx context.Context, id string, callerID string, callerRole model.Role) (*model.AssessmentV2, error) {
 	a, err := s.repo.GetV2ByID(ctx, id)
 	if err != nil {
 		if !errors.Is(err, repository.ErrNotFound) {
@@ -199,6 +199,32 @@ func (s *AssessmentV2Service) Get(ctx context.Context, id string) (*model.Assess
 		}
 		return nil, err
 	}
+	
+	targetUserID := ""
+	if a.UserID != nil {
+		targetUserID = *a.UserID
+	}
+	
+	// IDOR Protection: Validate access to the assessment's owner
+	if callerRole == model.RoleClient {
+		if targetUserID != callerID {
+			return nil, fmt.Errorf("unauthorized")
+		}
+	} else if callerRole == model.RoleTrainer {
+		if targetUserID != "" {
+			isTrainer, tErr := s.userRepo.IsTrainerOfClient(ctx, callerID, targetUserID)
+			if tErr != nil {
+				s.logger.Error("check trainer assignment", "caller_id", callerID, "customer_id", targetUserID, "error", tErr)
+				return nil, fmt.Errorf("error verifying assignment: %w", tErr)
+			}
+			if !isTrainer {
+				return nil, fmt.Errorf("unauthorized")
+			}
+		}
+	} else if callerRole != model.RoleOwner && callerRole != model.RoleAdmin && callerRole != model.RoleConsultant {
+		return nil, fmt.Errorf("unauthorized")
+	}
+
 	return a, nil
 }
 
@@ -371,7 +397,11 @@ func (s *AssessmentV2Service) GetTrainingCard(ctx context.Context, userID string
 		} else {
 			// If they have no personal card (because they are unpaid), use their assessment level
 			if meta, err := s.trainerCardService.repo.GetActivationMetadata(ctx, userID); err == nil && meta != nil && meta.PhysicalStatusLevel != "" {
-				levelStr := resolveLevelFromStatus(meta.PhysicalStatusLevel)
+				gender := "male"
+				if meta.Gender != nil && *meta.Gender != "" {
+					gender = *meta.Gender
+				}
+				levelStr := resolveLevelFromStatus(meta.PhysicalStatusLevel, gender)
 				tmpl, terr := s.trainerCardService.GetTemplateByLevel(ctx, levelStr)
 				if terr == nil && tmpl != nil {
 					dbCard = templateToTrainerCard(tmpl, userID)

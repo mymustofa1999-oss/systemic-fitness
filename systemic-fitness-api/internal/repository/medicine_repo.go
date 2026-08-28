@@ -29,6 +29,7 @@ type Medicine struct {
 	DetailURL    *string   `json:"detail_url,omitempty"`
 	ImageURL     *string   `json:"image_url,omitempty"`
 	IsSystem             bool      `json:"is_system"`
+	IsActive             bool      `json:"is_active"`
 	CreatedBy            *string   `json:"created_by,omitempty"`
 	ActiveIngredient     *string   `json:"active_ingredient,omitempty"`
 	ExerciseImplications *string   `json:"exercise_implications,omitempty"`
@@ -39,14 +40,14 @@ type Medicine struct {
 }
 
 const medicineCols = `id, name, category, main_function, side_effects, detail_url,
-	image_url, is_system, created_by, active_ingredient, exercise_implications,
+	image_url, is_system, is_active, created_by, active_ingredient, exercise_implications,
 	exercise_adjustments, flag_level, created_at, updated_at`
 
 func scanMedicine(row pgx.Row) (*Medicine, error) {
 	m := &Medicine{}
 	err := row.Scan(
 		&m.ID, &m.Name, &m.Category, &m.MainFunction, &m.SideEffects,
-		&m.DetailURL, &m.ImageURL, &m.IsSystem, &m.CreatedBy,
+		&m.DetailURL, &m.ImageURL, &m.IsSystem, &m.IsActive, &m.CreatedBy,
 		&m.ActiveIngredient, &m.ExerciseImplications, &m.ExerciseAdjustments, &m.FlagLevel,
 		&m.CreatedAt, &m.UpdatedAt,
 	)
@@ -58,12 +59,12 @@ func scanMedicine(row pgx.Row) (*Medicine, error) {
 
 func (r *MedicineRepository) Create(ctx context.Context, m *Medicine) error {
 	query := `
-		INSERT INTO medicines (name, category, main_function, side_effects, detail_url, image_url, is_system, created_by, active_ingredient, exercise_implications, exercise_adjustments, flag_level)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+		INSERT INTO medicines (name, category, main_function, side_effects, detail_url, image_url, is_system, is_active, created_by, active_ingredient, exercise_implications, exercise_adjustments, flag_level)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 		RETURNING id, created_at, updated_at`
 	return r.db.QueryRow(ctx, query,
 		m.Name, m.Category, m.MainFunction, m.SideEffects,
-		m.DetailURL, m.ImageURL, m.IsSystem, m.CreatedBy,
+		m.DetailURL, m.ImageURL, m.IsSystem, m.IsActive, m.CreatedBy,
 		m.ActiveIngredient, m.ExerciseImplications, m.ExerciseAdjustments, m.FlagLevel,
 	).Scan(&m.ID, &m.CreatedAt, &m.UpdatedAt)
 }
@@ -78,13 +79,15 @@ func (r *MedicineRepository) Update(ctx context.Context, m *Medicine) error {
 			name = $2, category = $3, main_function = $4,
 			side_effects = $5, detail_url = $6, image_url = $7,
 			active_ingredient = $8, exercise_implications = $9,
-			exercise_adjustments = $10, flag_level = $11
+			exercise_adjustments = $10, flag_level = $11,
+			is_active = $12
 		WHERE id = $1
 		RETURNING updated_at`
 	err := r.db.QueryRow(ctx, query,
 		m.ID, m.Name, m.Category, m.MainFunction,
 		m.SideEffects, m.DetailURL, m.ImageURL,
 		m.ActiveIngredient, m.ExerciseImplications, m.ExerciseAdjustments, m.FlagLevel,
+		m.IsActive,
 	).Scan(&m.UpdatedAt)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return ErrNotFound
@@ -106,6 +109,7 @@ func (r *MedicineRepository) Delete(ctx context.Context, id string) error {
 type MedicineListFilter struct {
 	Category *string
 	Search   string
+	IsActive *bool
 }
 
 func (r *MedicineRepository) List(ctx context.Context, params model.PaginationParams, f MedicineListFilter) ([]Medicine, int, error) {
@@ -121,6 +125,11 @@ func (r *MedicineRepository) List(ctx context.Context, params model.PaginationPa
 	if f.Search != "" {
 		where += fmt.Sprintf(" AND (name ILIKE $%d OR category ILIKE $%d OR main_function ILIKE $%d)", idx, idx, idx)
 		args = append(args, "%"+f.Search+"%")
+		idx++
+	}
+	if f.IsActive != nil {
+		where += fmt.Sprintf(" AND is_active = $%d", idx)
+		args = append(args, *f.IsActive)
 		idx++
 	}
 
@@ -144,7 +153,7 @@ func (r *MedicineRepository) List(ctx context.Context, params model.PaginationPa
 		var m Medicine
 		if err := rows.Scan(
 			&m.ID, &m.Name, &m.Category, &m.MainFunction, &m.SideEffects,
-			&m.DetailURL, &m.ImageURL, &m.IsSystem, &m.CreatedBy,
+			&m.DetailURL, &m.ImageURL, &m.IsSystem, &m.IsActive, &m.CreatedBy,
 			&m.ActiveIngredient, &m.ExerciseImplications, &m.ExerciseAdjustments, &m.FlagLevel,
 			&m.CreatedAt, &m.UpdatedAt,
 		); err != nil {

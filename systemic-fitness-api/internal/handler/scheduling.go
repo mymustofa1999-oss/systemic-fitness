@@ -1,7 +1,10 @@
 package handler
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
+	"io"
 	"log/slog"
 	"net/http"
 	"time"
@@ -72,13 +75,38 @@ func (h *SchedulingHandler) CreateEventType(w http.ResponseWriter, r *http.Reque
 // PUT /api/scheduling/event-types/{id}
 func (h *SchedulingHandler) UpdateEventType(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
+
+	// FETCH existing
+	existing, err := h.schedulingService.GetEventType(r.Context(), id)
+	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			response.NotFound(w, "Event type not found")
+			return
+		}
+		response.InternalError(w, "Failed to fetch event type")
+		return
+	}
+
+	bodyBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		response.BadRequest(w, "Invalid request body")
+		return
+	}
+	r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
+	var raw map[string]any
+	if err := json.Unmarshal(bodyBytes, &raw); err != nil {
+		response.BadRequest(w, "Invalid request body: "+err.Error())
+		return
+	}
+
 	var input struct {
-		Name        string  `json:"name"         validate:"required,min=1,max=100"`
+		Name        string  `json:"name"         validate:"omitempty,min=1,max=100"`
 		Description *string `json:"description,omitempty"`
-		Category    string  `json:"category"     validate:"required,oneof=one_on_one group_class personal"`
-		DurationMin int     `json:"duration_min"  validate:"required,gt=0"`
+		Category    string  `json:"category"     validate:"omitempty,oneof=one_on_one group_class personal"`
+		DurationMin int     `json:"duration_min" validate:"omitempty,gt=0"`
 		Color       *string `json:"color,omitempty"`
-		IsActive    bool    `json:"is_active"`
+		IsActive    *bool   `json:"is_active,omitempty"`
 	}
 	if err := response.DecodeJSON(r, &input); err != nil {
 		response.BadRequest(w, "Invalid request body: "+err.Error())
@@ -89,19 +117,40 @@ func (h *SchedulingHandler) UpdateEventType(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	et := &repository.EventType{
-		ID: id, Name: input.Name, Description: input.Description, Category: input.Category,
-		DurationMin: input.DurationMin, Color: input.Color, IsActive: input.IsActive,
+	// MERGE
+	if _, ok := raw["name"]; ok {
+		existing.Name = input.Name
 	}
-	if err := h.schedulingService.UpdateEventType(r.Context(), et); err != nil {
-		if errors.Is(err, repository.ErrNotFound) {
-			response.NotFound(w, "Event type not found")
-			return
+	if v, ok := raw["description"]; ok {
+		if v == nil {
+			existing.Description = nil
+		} else {
+			existing.Description = input.Description
 		}
+	}
+	if _, ok := raw["category"]; ok {
+		existing.Category = input.Category
+	}
+	if _, ok := raw["duration_min"]; ok {
+		existing.DurationMin = input.DurationMin
+	}
+	if v, ok := raw["color"]; ok {
+		if v == nil {
+			existing.Color = nil
+		} else {
+			existing.Color = input.Color
+		}
+	}
+	if _, ok := raw["is_active"]; ok {
+		existing.IsActive = *input.IsActive
+	}
+
+	// SAVE
+	if err := h.schedulingService.UpdateEventType(r.Context(), existing); err != nil {
 		response.InternalError(w, "Failed to update event type")
 		return
 	}
-	response.OK(w, et)
+	response.OK(w, existing)
 }
 
 // DELETE /api/scheduling/event-types/{id}
@@ -210,14 +259,39 @@ func (h *SchedulingHandler) GetEvent(w http.ResponseWriter, r *http.Request) {
 // PUT /api/scheduling/events/{id}
 func (h *SchedulingHandler) UpdateEvent(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
+
+	// FETCH existing
+	existing, err := h.schedulingService.GetEvent(r.Context(), id)
+	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			response.NotFound(w, "Event not found")
+			return
+		}
+		response.InternalError(w, "Failed to fetch event")
+		return
+	}
+
+	bodyBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		response.BadRequest(w, "Invalid request body")
+		return
+	}
+	r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
+	var raw map[string]any
+	if err := json.Unmarshal(bodyBytes, &raw); err != nil {
+		response.BadRequest(w, "Invalid request body: "+err.Error())
+		return
+	}
+
 	var input struct {
 		EventTypeID     *string `json:"event_type_id,omitempty"`
-		Title           string  `json:"title"         validate:"required,min=1,max=200"`
+		Title           string  `json:"title"         validate:"omitempty,min=1,max=200"`
 		Description     *string `json:"description,omitempty"`
-		Category        string  `json:"category"      validate:"required,oneof=one_on_one group_class personal"`
-		Status          string  `json:"status"        validate:"required,oneof=scheduled cancelled completed"`
-		StartAt         string  `json:"start_at"      validate:"required"`
-		EndAt           string  `json:"end_at"        validate:"required"`
+		Category        string  `json:"category"      validate:"omitempty,oneof=one_on_one group_class personal"`
+		Status          string  `json:"status"        validate:"omitempty,oneof=scheduled cancelled completed"`
+		StartAt         string  `json:"start_at"      validate:"omitempty"`
+		EndAt           string  `json:"end_at"        validate:"omitempty"`
 		Location        *string `json:"location,omitempty"`
 		MaxParticipants *int    `json:"max_participants,omitempty"`
 	}
@@ -230,31 +304,67 @@ func (h *SchedulingHandler) UpdateEvent(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	startAt, err := time.Parse(time.RFC3339, input.StartAt)
-	if err != nil {
-		response.BadRequest(w, "Invalid start_at format")
-		return
+	// MERGE
+	if v, ok := raw["event_type_id"]; ok {
+		if v == nil {
+			existing.EventTypeID = nil
+		} else {
+			existing.EventTypeID = input.EventTypeID
+		}
 	}
-	endAt, err := time.Parse(time.RFC3339, input.EndAt)
-	if err != nil {
-		response.BadRequest(w, "Invalid end_at format")
-		return
+	if _, ok := raw["title"]; ok {
+		existing.Title = input.Title
 	}
-
-	event := &repository.CalendarEvent{
-		ID: id, EventTypeID: input.EventTypeID, Title: input.Title, Description: input.Description,
-		Category: input.Category, Status: input.Status, StartAt: startAt, EndAt: endAt,
-		Location: input.Location, MaxParticipants: input.MaxParticipants,
+	if v, ok := raw["description"]; ok {
+		if v == nil {
+			existing.Description = nil
+		} else {
+			existing.Description = input.Description
+		}
 	}
-	if err := h.schedulingService.UpdateEvent(r.Context(), event); err != nil {
-		if errors.Is(err, repository.ErrNotFound) {
-			response.NotFound(w, "Event not found")
+	if _, ok := raw["category"]; ok {
+		existing.Category = input.Category
+	}
+	if _, ok := raw["status"]; ok {
+		existing.Status = input.Status
+	}
+	if _, ok := raw["start_at"]; ok {
+		startAt, err := time.Parse(time.RFC3339, input.StartAt)
+		if err != nil {
+			response.BadRequest(w, "Invalid start_at format")
 			return
 		}
+		existing.StartAt = startAt
+	}
+	if _, ok := raw["end_at"]; ok {
+		endAt, err := time.Parse(time.RFC3339, input.EndAt)
+		if err != nil {
+			response.BadRequest(w, "Invalid end_at format")
+			return
+		}
+		existing.EndAt = endAt
+	}
+	if v, ok := raw["location"]; ok {
+		if v == nil {
+			existing.Location = nil
+		} else {
+			existing.Location = input.Location
+		}
+	}
+	if v, ok := raw["max_participants"]; ok {
+		if v == nil {
+			existing.MaxParticipants = nil
+		} else {
+			existing.MaxParticipants = input.MaxParticipants
+		}
+	}
+
+	// SAVE
+	if err := h.schedulingService.UpdateEvent(r.Context(), existing); err != nil {
 		response.InternalError(w, "Failed to update event")
 		return
 	}
-	response.OK(w, event)
+	response.OK(w, existing)
 }
 
 // DELETE /api/scheduling/events/{id}
@@ -321,6 +431,16 @@ func (h *SchedulingHandler) ListAvailability(w http.ResponseWriter, r *http.Requ
 	response.OK(w, slots)
 }
 
+// GET /api/scheduling/availability/all
+func (h *SchedulingHandler) ListAllAvailability(w http.ResponseWriter, r *http.Request) {
+	slots, err := h.schedulingService.ListAllAvailability(r.Context())
+	if err != nil {
+		response.InternalError(w, "Failed to fetch all availability")
+		return
+	}
+	response.OK(w, slots)
+}
+
 // POST /api/scheduling/availability
 func (h *SchedulingHandler) SetAvailability(w http.ResponseWriter, r *http.Request) {
 	var input struct {
@@ -348,6 +468,41 @@ func (h *SchedulingHandler) SetAvailability(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	response.Created(w, a)
+}
+
+// PUT /api/scheduling/availability
+func (h *SchedulingHandler) ReplaceAvailability(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		Slots []struct {
+			DayOfWeek int    `json:"day_of_week" validate:"min=0,max=6"`
+			StartTime string `json:"start_time"  validate:"required"`
+			EndTime   string `json:"end_time"    validate:"required"`
+			IsActive  bool   `json:"is_active"`
+		} `json:"slots" validate:"dive"`
+	}
+	if err := response.DecodeJSON(r, &input); err != nil {
+		response.BadRequest(w, "Invalid request body: "+err.Error())
+		return
+	}
+	if errs := validateStruct(&input); errs != nil {
+		response.ValidationError(w, errs)
+		return
+	}
+
+	trainerID := middleware.GetUserID(r.Context())
+	var slots []repository.TrainerAvailability
+	for _, s := range input.Slots {
+		slots = append(slots, repository.TrainerAvailability{
+			TrainerID: trainerID, DayOfWeek: s.DayOfWeek,
+			StartTime: s.StartTime, EndTime: s.EndTime, IsActive: s.IsActive,
+		})
+	}
+
+	if err := h.schedulingService.ReplaceAvailability(r.Context(), trainerID, slots); err != nil {
+		response.InternalError(w, "Failed to replace availability")
+		return
+	}
+	response.SuccessMessage(w, "Availability replaced successfully")
 }
 
 // DELETE /api/scheduling/availability/{id}

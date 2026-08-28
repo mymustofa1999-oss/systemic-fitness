@@ -8,7 +8,6 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"github.com/fitcoach/api/internal/middleware"
-	"github.com/fitcoach/api/internal/model"
 	"github.com/fitcoach/api/internal/repository"
 	"github.com/fitcoach/api/internal/service"
 	"github.com/fitcoach/api/pkg/response"
@@ -127,20 +126,20 @@ func (h *AssessmentV2Handler) LatestForUser(w http.ResponseWriter, r *http.Reque
 // GET /api/v2/assessments/{id}
 func (h *AssessmentV2Handler) Get(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	a, err := h.service.Get(r.Context(), id)
+	callerID := middleware.GetUserID(r.Context())
+	callerRole := middleware.GetRole(r.Context())
+
+	a, err := h.service.Get(r.Context(), id, callerID, callerRole)
 	if err != nil {
+		if err.Error() == "unauthorized" {
+			response.Forbidden(w, "Insufficient permissions to view this assessment")
+			return
+		}
 		if errors.Is(err, repository.ErrNotFound) {
 			response.NotFound(w, "Assessment not found")
 			return
 		}
 		response.InternalError(w, "Failed to fetch assessment")
-		return
-	}
-	// Ownership check: client may only read their own row.
-	role := middleware.GetRole(r.Context())
-	userID := middleware.GetUserID(r.Context())
-	if role == model.RoleClient && (a.UserID == nil || *a.UserID != userID) {
-		response.Forbidden(w, "Forbidden")
 		return
 	}
 	response.OK(w, a)

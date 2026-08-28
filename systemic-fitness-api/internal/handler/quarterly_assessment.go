@@ -28,7 +28,7 @@ func (h *QuarterlyAssessmentHandler) Create(w http.ResponseWriter, r *http.Reque
 	}
 
 	if err := h.repo.Create(r.Context(), &input); err != nil {
-		response.InternalError(w, "Failed to create quarterly assessment")
+		response.InternalError(w, err.Error())
 		return
 	}
 
@@ -45,7 +45,7 @@ func (h *QuarterlyAssessmentHandler) ListByClient(w http.ResponseWriter, r *http
 
 	assessments, err := h.repo.GetByClientID(r.Context(), clientID)
 	if err != nil {
-		response.InternalError(w, "Failed to fetch quarterly assessments")
+		response.InternalError(w, err.Error())
 		return
 	}
 

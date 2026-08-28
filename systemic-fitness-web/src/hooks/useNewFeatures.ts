@@ -718,3 +718,13 @@ export function useDeleteTrainerCard() {
     onError: (err: Error) => toast.error(err.message),
   });
 }
+
+export function useToggleMedicineActive() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, is_active }: { id: string, is_active: boolean }) => apiPut(`/api/medicines/${id}`, { is_active }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["medicines"] });
+    }
+  });
+}

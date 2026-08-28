@@ -487,40 +487,39 @@ function AddMovementModal({
   );
 }
 
- f u n c t i o n   E d i t V i d e o M o d a l ( {   i t e m ,   o n C l o s e ,   o n S a v e ,   i s L o a d i n g   } :   {   i t e m :   a n y ,   o n C l o s e :   ( )   = >   v o i d ,   o n S a v e :   ( f :   s t r i n g ,   m :   s t r i n g )   = >   v o i d ,   i s L o a d i n g :   b o o l e a n   } )   { 
-     c o n s t   [ f U r l ,   s e t F U r l ]   =   u s e S t a t e ( i t e m ? . m o v e m e n t ? . v i d e o _ u r l _ f e m a l e   | |   " " ) ; 
-     c o n s t   [ m U r l ,   s e t M U r l ]   =   u s e S t a t e ( i t e m ? . m o v e m e n t ? . v i d e o _ u r l _ m a l e   | |   " " ) ; 
- 
-     r e t u r n   ( 
-         < d i v   c l a s s N a m e = " f i x e d   i n s e t - 0   z - 5 0   f l e x   i t e m s - c e n t e r   j u s t i f y - c e n t e r   p - 4   b g - s l a t e - 9 0 0 / 6 0   b a c k d r o p - b l u r - s m " > 
-             < d i v   c l a s s N a m e = " b g - w h i t e   r o u n d e d - 2 x l   s h a d o w - x l   w - f u l l   m a x - w - m d   o v e r f l o w - h i d d e n   f l e x   f l e x - c o l " > 
-                 < d i v   c l a s s N a m e = " p x - 6   p y - 4   b o r d e r - b   b o r d e r - s l a t e - 1 0 0   f l e x   j u s t i f y - b e t w e e n   i t e m s - c e n t e r   b g - s l a t e - 5 0 " > 
-                     < h 3   c l a s s N a m e = " f o n t - s e m i b o l d   t e x t - s l a t e - 8 0 0 " > E d i t   V i d e o   U R L < / h 3 > 
-                     < b u t t o n   o n C l i c k = { o n C l o s e }   c l a s s N a m e = " p - 1   t e x t - s l a t e - 4 0 0   h o v e r : t e x t - s l a t e - 6 0 0   r o u n d e d - l g   h o v e r : b g - s l a t e - 2 0 0 / 5 0 " > 
-                         < X   c l a s s N a m e = " w - 5   h - 5 "   / > 
-                     < / b u t t o n > 
-                 < / d i v > 
-                 < d i v   c l a s s N a m e = " p - 6   s p a c e - y - 4   f l e x - 1   o v e r f l o w - y - a u t o " > 
-                     < p   c l a s s N a m e = " t e x t - s m   f o n t - m e d i u m   t e x t - s l a t e - 7 0 0   b g - s l a t e - 1 0 0   p - 3   r o u n d e d - l g   m b - 4 " > { i t e m ? . m o v e m e n t ? . n a m e } < / p > 
-                     < d i v > 
-                         < l a b e l   c l a s s N a m e = " b l o c k   t e x t - x s   f o n t - s e m i b o l d   t e x t - s l a t e - 6 0 0   m b - 1 . 5   u p p e r c a s e   t r a c k i n g - w i d e " > V i d e o   U R L   ( F e m a l e ) < / l a b e l > 
-                         < i n p u t   t y p e = " u r l "   v a l u e = { f U r l }   o n C h a n g e = { e   = >   s e t F U r l ( e . t a r g e t . v a l u e ) }   p l a c e h o l d e r = " h t t p s : / / y o u t u b e . c o m / . . . "   c l a s s N a m e = " w - f u l l   p x - 3   p y - 2   b o r d e r   b o r d e r - s l a t e - 2 0 0   r o u n d e d - l g   f o c u s : o u t l i n e - n o n e   f o c u s : r i n g - 2   f o c u s : r i n g - b l u e - 5 0 0 / 2 0   f o c u s : b o r d e r - b l u e - 5 0 0   t e x t - s m "   / > 
-                     < / d i v > 
-                     < d i v > 
-                         < l a b e l   c l a s s N a m e = " b l o c k   t e x t - x s   f o n t - s e m i b o l d   t e x t - s l a t e - 6 0 0   m b - 1 . 5   u p p e r c a s e   t r a c k i n g - w i d e " > V i d e o   U R L   ( M a l e ) < / l a b e l > 
-                         < i n p u t   t y p e = " u r l "   v a l u e = { m U r l }   o n C h a n g e = { e   = >   s e t M U r l ( e . t a r g e t . v a l u e ) }   p l a c e h o l d e r = " h t t p s : / / y o u t u b e . c o m / . . . "   c l a s s N a m e = " w - f u l l   p x - 3   p y - 2   b o r d e r   b o r d e r - s l a t e - 2 0 0   r o u n d e d - l g   f o c u s : o u t l i n e - n o n e   f o c u s : r i n g - 2   f o c u s : r i n g - b l u e - 5 0 0 / 2 0   f o c u s : b o r d e r - b l u e - 5 0 0   t e x t - s m "   / > 
-                     < / d i v > 
-                 < / d i v > 
-                 < d i v   c l a s s N a m e = " p - 4   b o r d e r - t   b o r d e r - s l a t e - 1 0 0   b g - s l a t e - 5 0   f l e x   j u s t i f y - e n d   g a p - 2 " > 
-                     < b u t t o n   o n C l i c k = { o n C l o s e }   c l a s s N a m e = " p x - 4   p y - 2   t e x t - s m   f o n t - m e d i u m   t e x t - s l a t e - 6 0 0   h o v e r : b g - s l a t e - 2 0 0   r o u n d e d - l g   t r a n s i t i o n - c o l o r s " > B a t a l < / b u t t o n > 
-                     < b u t t o n   o n C l i c k = { ( )   = >   o n S a v e ( f U r l ,   m U r l ) }   d i s a b l e d = { i s L o a d i n g }   c l a s s N a m e = " f l e x   i t e m s - c e n t e r   g a p - 2   p x - 4   p y - 2   t e x t - s m   f o n t - m e d i u m   t e x t - w h i t e   b g - b l u e - 6 0 0   h o v e r : b g - b l u e - 7 0 0   d i s a b l e d : o p a c i t y - 5 0   r o u n d e d - l g   t r a n s i t i o n - c o l o r s " > 
-                         { i s L o a d i n g   ?   < L o a d e r 2   c l a s s N a m e = " w - 4   h - 4   a n i m a t e - s p i n "   / >   :   < S a v e   c l a s s N a m e = " w - 4   h - 4 "   / > } 
-                         < s p a n > S i m p a n < / s p a n > 
-                     < / b u t t o n > 
-                 < / d i v > 
-             < / d i v > 
-         < / d i v > 
-     ) ; 
- } 
-  
- 
+function EditVideoModal({ item, onClose, onSave, isLoading }: { item: any, onClose: () => void, onSave: (f: string, m: string) => void, isLoading: boolean }) {
+  const [fUrl, setFUrl] = useState(item?.movement?.video_url_female || "");
+  const [mUrl, setMUrl] = useState(item?.movement?.video_url_male || "");
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col">
+        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+          <h3 className="font-semibold text-slate-800">Edit Video URL</h3>
+          <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200/50">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="p-6 space-y-4 flex-1 overflow-y-auto">
+          <p className="text-sm font-medium text-slate-700 bg-slate-100 p-3 rounded-lg mb-4">{item?.movement?.name}</p>
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Video URL (Female)</label>
+            <input type="url" value={fUrl} onChange={e => setFUrl(e.target.value)} placeholder="https://youtube.com/..." className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm" />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Video URL (Male)</label>
+            <input type="url" value={mUrl} onChange={e => setMUrl(e.target.value)} placeholder="https://youtube.com/..." className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm" />
+          </div>
+        </div>
+        <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
+          <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">Batal</button>
+          <button onClick={() => onSave(fUrl, mUrl)} disabled={isLoading} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg transition-colors">
+            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            <span>Simpan</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+

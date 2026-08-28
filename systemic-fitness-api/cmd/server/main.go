@@ -135,7 +135,8 @@ func main() {
 	}
 
 	// ─── Services ───────────────────────────────────────────────
-	authService := service.NewAuthService(userRepo, jwtManager, cfg.BcryptCost, logger)
+	mailerService := service.NewMailerService(logger)
+	authService := service.NewAuthService(userRepo, jwtManager, cfg.BcryptCost, logger, mailerService)
 	userService := service.NewUserService(userRepo, logger)
 	workoutService := service.NewWorkoutService(workoutRepo, exerciseRepo, logger)
 	programService := service.NewProgramService(programRepo, logger)
@@ -232,7 +233,7 @@ func main() {
 	tier4WaitlistHandler := handler.NewTier4WaitlistHandler(tier4WaitlistService)       // SF Phase 6
 	consultantHandler := handler.NewConsultantHandler(clinicalNoteService, labConsultationService) // SF Phase 7b
 	healthContentHandler := handler.NewHealthContentHandler(healthContentService)
-	workoutSessionHandler := handler.NewWorkoutSessionHandler(workoutSessionService)
+	workoutSessionHandler := handler.NewWorkoutSessionHandler(workoutSessionService, userService)
 	workoutReminderHandler := handler.NewWorkoutReminderHandler(workoutReminderService)
 
 	// Training Session Logs (Manual Input Form)
@@ -270,6 +271,7 @@ func main() {
 	r.Use(chimw.RequestID)
 	r.Use(chimw.RealIP)
 	r.Use(middleware.Logger(logger))
+	r.Use(middleware.SecurityHeaders)
 	r.Use(middleware.CORS(cfg.CORSAllowedOrigins))
 	r.Use(chimw.Recoverer)
 	r.Use(chimw.Heartbeat("/ping"))
@@ -281,11 +283,16 @@ func main() {
 	r.Route("/api", func(r chi.Router) {
 
 		// ── Auth (public) ───────────────────────────────────
+		authRateLimiter := middleware.NewIPRateLimiter(5, 1*time.Minute)
 		r.Route("/auth", func(r chi.Router) {
-			r.Post("/register", authHandler.Register)
-			r.Post("/login", authHandler.Login)
+			r.Group(func(r chi.Router) {
+				r.Use(authRateLimiter.Limit)
+				r.Post("/register", authHandler.Register)
+				r.Post("/login", authHandler.Login)
+				r.Post("/forgot-password", authHandler.ForgotPassword)
+				r.Post("/reset-password", authHandler.ResetPassword)
+			})
 			r.Post("/refresh", authHandler.Refresh)
-			r.Post("/forgot-password", authHandler.ForgotPassword)
 
 			r.Group(func(r chi.Router) {
 				r.Use(middleware.Auth(jwtManager))
@@ -601,6 +608,8 @@ func main() {
 				})
 
 				// Availability
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Get("/availability/all", schedulingHandler.ListAllAvailability)
+				r.Put("/availability", schedulingHandler.ReplaceAvailability)
 				r.Post("/availability", schedulingHandler.SetAvailability)
 				r.Get("/availability/{trainerId}", schedulingHandler.ListAvailability)
 				r.Delete("/availability/{id}", schedulingHandler.DeleteAvailability)
@@ -699,25 +708,26 @@ func main() {
 			// ── Training Card Types (Master) ─────────────────
 			r.Route("/training-card-types", func(r chi.Router) {
 				r.Get("/", trainerCardHandler.ListTypes)
-				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Post("/", trainerCardHandler.CreateType)
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Post("/", trainerCardHandler.CreateType)
 				r.Route("/{id}", func(r chi.Router) {
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Put("/", trainerCardHandler.UpdateType)
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Delete("/", trainerCardHandler.DeleteType)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Put("/", trainerCardHandler.UpdateType)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Delete("/", trainerCardHandler.DeleteType)
 				})
 			})
 
 			// ── Training Card Templates (Master) ─────────────
 			r.Route("/training-card-templates", func(r chi.Router) {
-				r.Get("/", trainerCardTemplateHandler.ListTemplates)
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant, model.RoleTrainer)).Get("/", trainerCardTemplateHandler.ListTemplates)
 				r.Route("/{level}", func(r chi.Router) {
-					r.Get("/", trainerCardTemplateHandler.GetTemplate)
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Post("/", trainerCardTemplateHandler.UpsertTemplate)
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Delete("/", trainerCardTemplateHandler.DeleteTemplate)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant, model.RoleTrainer)).Get("/", trainerCardTemplateHandler.GetTemplate)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Post("/", trainerCardTemplateHandler.UpsertTemplate)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Delete("/", trainerCardTemplateHandler.DeleteTemplate)
 				})
 			})
 
 			// ── Customer Setup ──────────────────────────────
 			r.Route("/customers/{customerId}", func(r chi.Router) {
+				r.Use(middleware.RequireCustomerAccess(userService, "customerId"))
 				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleConsultant)).Get("/setup", customerSetupHandler.GetFullSetup)
 
 				r.Route("/staff", func(r chi.Router) {
@@ -778,24 +788,25 @@ func main() {
 
 			// ── Medicines (Daftar Obat) ─────────────────────
 			r.Route("/medicines", func(r chi.Router) {
-				r.Get("/", medicineHandler.List)
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant, model.RoleTrainer)).Get("/", medicineHandler.List)
 				r.Get("/me", customerSetupHandler.GetMyMedicines) // Client's own medicines
-				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Post("/", medicineHandler.Create)
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleConsultant)).Post("/", medicineHandler.Create)
 				r.Route("/{id}", func(r chi.Router) {
-					r.Get("/", medicineHandler.GetByID)
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Put("/", medicineHandler.Update)
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Delete("/", medicineHandler.Delete)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant, model.RoleTrainer)).Get("/", medicineHandler.GetByID)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleConsultant)).Put("/", medicineHandler.Update)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleConsultant)).Patch("/toggle-active", medicineHandler.ToggleActive)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleConsultant)).Delete("/", medicineHandler.Delete)
 				})
 			})
 
 			// ── Equipments (Master Data) ────────────────────
 			r.Route("/equipments", func(r chi.Router) {
 				r.Get("/", equipmentHandler.List)
-				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Post("/", equipmentHandler.Create)
+				r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Post("/", equipmentHandler.Create)
 				r.Route("/{id}", func(r chi.Router) {
 					r.Get("/", equipmentHandler.GetByID)
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Put("/", equipmentHandler.Update)
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Delete("/", equipmentHandler.Delete)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Put("/", equipmentHandler.Update)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Delete("/", equipmentHandler.Delete)
 				})
 			})
 
@@ -890,15 +901,13 @@ func main() {
 				r.Get("/score-weights", assessmentV2Handler.GetWeights)
 				r.With(middleware.RequireRole(model.RoleOwner)).Patch("/score-weights", assessmentV2Handler.UpdateWeights)
 
-				// Admin/Owner/Trainer: read another user's latest v2 assessment (Phase 3 web viewer).
-				r.With(middleware.RequireMinRole(model.RoleTrainer)).
-					Get("/user/{userId}/latest", assessmentV2Handler.LatestForUser)
-
-				r.With(middleware.RequireMinRole(model.RoleTrainer)).
-					Post("/user/{userId}", assessmentV2Handler.SubmitForUser)
-
-				r.With(middleware.RequireMinRole(model.RoleTrainer)).
-					Get("/user/{userId}/training-card", assessmentV2Handler.GetTrainingCardForUser)
+				// Admin/Owner/Trainer: read another user's v2 assessment. Protected by RequireCustomerAccess.
+				r.Route("/user/{userId}", func(r chi.Router) {
+					r.Use(middleware.RequireCustomerAccess(userService, "userId"))
+					r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/latest", assessmentV2Handler.LatestForUser)
+					r.With(middleware.RequireMinRole(model.RoleTrainer)).Post("/", assessmentV2Handler.SubmitForUser)
+					r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/training-card", assessmentV2Handler.GetTrainingCardForUser)
+				})
 
 				r.Get("/{id}", assessmentV2Handler.Get)
 			})
@@ -906,7 +915,11 @@ func main() {
 			// 🎯 Quarterly Assessments (Systemic Assessment)
 			r.Route("/v2/quarterly-assessments", func(r chi.Router) {
 				r.With(middleware.RequireMinRole(model.RoleTrainer)).Post("/", quarterlyAssessmentHandler.Create)
-				r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/client/{id}", quarterlyAssessmentHandler.ListByClient)
+				
+				r.Route("/client/{id}", func(r chi.Router) {
+					r.Use(middleware.RequireCustomerAccess(userService, "id"))
+					r.With(middleware.RequireMinRole(model.RoleTrainer)).Get("/", quarterlyAssessmentHandler.ListByClient)
+				})
 			})
 
 			// 🎯 Workout Sessions & Reminders (Level 5/6 client) 🎯🎯🎯─────
@@ -979,17 +992,18 @@ func main() {
 
 			// ── Digital Library ─────────────────────────────
 			r.Route("/digital-library", func(r chi.Router) {
+				r.Use(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant, model.RoleTrainer))
 				r.Get("/categories", dlHandler.ListCategories)
 				r.Get("/levels", dlHandler.ListLevels)
 
 				r.Route("/movements", func(r chi.Router) {
 					r.Get("/", dlHandler.ListMovements)
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Post("/", dlHandler.CreateMovement)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Post("/", dlHandler.CreateMovement)
 					r.Route("/{id}", func(r chi.Router) {
 						r.Get("/", dlHandler.GetMovement)
-						r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Put("/", dlHandler.UpdateMovement)
-						r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Delete("/", dlHandler.DeleteMovement)
-						r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer)).Post("/upload-image", dlHandler.UploadMovementImage)
+						r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Put("/", dlHandler.UpdateMovement)
+						r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Delete("/", dlHandler.DeleteMovement)
+						r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Post("/upload-image", dlHandler.UploadMovementImage)
 					})
 				})
 
@@ -1001,8 +1015,8 @@ func main() {
 				})
 
 				r.Route("/modul-cards", func(r chi.Router) {
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleOwner)).Post("/", dlHandler.AddModulCardItem)
-					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleTrainer, model.RoleOwner)).Delete("/{levelID}/{movementID}", dlHandler.DeleteModulCardItem)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Post("/", dlHandler.AddModulCardItem)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Delete("/{levelID}/{movementID}", dlHandler.DeleteModulCardItem)
 				})
 			})
 

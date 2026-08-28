@@ -325,7 +325,7 @@ func (r *TrainerCardRepository) loadItems(ctx context.Context, set *TrainerCardS
 //  Upsert Full Trainer Card (transactional)
 // ════════════════════════════════════════════════════════════════
 
-func (r *TrainerCardRepository) UpsertCard(ctx context.Context, card *TrainerCard) error {
+func (r *TrainerCardRepository) UpsertCard(ctx context.Context, card *TrainerCard, updateSequences bool) error {
 	tx, err := r.db.Begin(ctx)
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
@@ -352,38 +352,93 @@ func (r *TrainerCardRepository) UpsertCard(ctx context.Context, card *TrainerCar
 		return fmt.Errorf("upsert card: %w", err)
 	}
 
-	// 2. Delete existing nested data (cascade will handle sets+items)
-	_, err = tx.Exec(ctx,
-		`DELETE FROM trainer_card_sequences WHERE trainer_card_id = $1`, card.ID)
+	if !updateSequences {
+		return tx.Commit(ctx)
+	}
+
+	var keepSeqIDs []string
+	var keepSetIDs []string
+	var keepItemIDs []string
+
+	for si := range card.Sequences {
+		seq := &card.Sequences[si]
+		if seq.ID == "" {
+			seq.ID = uuid.New().String()
+		}
+		keepSeqIDs = append(keepSeqIDs, seq.ID)
+
+		for seti := range seq.Sets {
+			set := &seq.Sets[seti]
+			if set.ID == "" {
+				set.ID = uuid.New().String()
+			}
+			keepSetIDs = append(keepSetIDs, set.ID)
+
+			for ii := range set.Items {
+				item := &set.Items[ii]
+				if item.ID == "" {
+					item.ID = uuid.New().String()
+				}
+				keepItemIDs = append(keepItemIDs, item.ID)
+			}
+		}
+	}
+
+	// Delete items not in payload
+	if len(keepItemIDs) > 0 {
+		_, err = tx.Exec(ctx, `DELETE FROM trainer_card_set_items 
+			WHERE set_id IN (SELECT id FROM trainer_card_sets WHERE sequence_id IN (SELECT id FROM trainer_card_sequences WHERE trainer_card_id = $1))
+			AND NOT (id = ANY($2))`, card.ID, keepItemIDs)
+	} else {
+		_, err = tx.Exec(ctx, `DELETE FROM trainer_card_set_items 
+			WHERE set_id IN (SELECT id FROM trainer_card_sets WHERE sequence_id IN (SELECT id FROM trainer_card_sequences WHERE trainer_card_id = $1))`, card.ID)
+	}
+	if err != nil {
+		return fmt.Errorf("delete old items: %w", err)
+	}
+
+	if len(keepSetIDs) > 0 {
+		_, err = tx.Exec(ctx, `DELETE FROM trainer_card_sets 
+			WHERE sequence_id IN (SELECT id FROM trainer_card_sequences WHERE trainer_card_id = $1)
+			AND NOT (id = ANY($2))`, card.ID, keepSetIDs)
+	} else {
+		_, err = tx.Exec(ctx, `DELETE FROM trainer_card_sets 
+			WHERE sequence_id IN (SELECT id FROM trainer_card_sequences WHERE trainer_card_id = $1)`, card.ID)
+	}
+	if err != nil {
+		return fmt.Errorf("delete old sets: %w", err)
+	}
+
+	if len(keepSeqIDs) > 0 {
+		_, err = tx.Exec(ctx, `DELETE FROM trainer_card_sequences WHERE trainer_card_id = $1 AND NOT (id = ANY($2))`, card.ID, keepSeqIDs)
+	} else {
+		_, err = tx.Exec(ctx, `DELETE FROM trainer_card_sequences WHERE trainer_card_id = $1`, card.ID)
+	}
 	if err != nil {
 		return fmt.Errorf("delete old sequences: %w", err)
 	}
 
 	batch := &pgx.Batch{}
 
-	// 3. Queue sequences → sets → items
+	// 3. Queue sequences + sets + items
 	for si := range card.Sequences {
 		seq := &card.Sequences[si]
 		seq.TrainerCardID = card.ID
-		if seq.ID == "" {
-			seq.ID = uuid.New().String()
-		}
 		if seq.SortOrder == 0 {
 			seq.SortOrder = si
 		}
 
 		batch.Queue(
 			`INSERT INTO trainer_card_sequences (id, trainer_card_id, program_category_id, duration, sort_order)
-			 VALUES ($1, $2, $3, $4, $5)`,
+			 VALUES ($1, $2, $3, $4, $5)
+			 ON CONFLICT (id) DO UPDATE SET
+			    program_category_id = EXCLUDED.program_category_id, duration = EXCLUDED.duration, sort_order = EXCLUDED.sort_order, updated_at = NOW()`,
 			seq.ID, seq.TrainerCardID, seq.ProgramCategoryID, seq.Duration, seq.SortOrder,
 		)
 
 		for seti := range seq.Sets {
 			set := &seq.Sets[seti]
 			set.SequenceID = seq.ID
-			if set.ID == "" {
-				set.ID = uuid.New().String()
-			}
 			if set.SortOrder == 0 {
 				set.SortOrder = seti
 			}
@@ -393,28 +448,33 @@ func (r *TrainerCardRepository) UpsertCard(ctx context.Context, card *TrainerCar
 				    (id, sequence_id, set_number, duration, equipment_upper, equipment_lower, equipment,
 				     type_id, bpm, extra_load, notes, sort_order,
 				     pattern, breathing_core, breathing_diaphragm)
-				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+				 ON CONFLICT (id) DO UPDATE SET
+				     set_number = EXCLUDED.set_number, duration = EXCLUDED.duration, equipment_upper = EXCLUDED.equipment_upper, equipment_lower = EXCLUDED.equipment_lower, equipment = EXCLUDED.equipment,
+				     type_id = EXCLUDED.type_id, bpm = EXCLUDED.bpm, extra_load = EXCLUDED.extra_load, notes = EXCLUDED.notes, sort_order = EXCLUDED.sort_order,
+				     pattern = EXCLUDED.pattern, breathing_core = EXCLUDED.breathing_core, breathing_diaphragm = EXCLUDED.breathing_diaphragm, updated_at = NOW()`,
 				set.ID, set.SequenceID, set.SetNumber, set.Duration,
 				set.EquipmentUpper, set.EquipmentLower, set.Equipment,
 				set.TypeID, set.BPM, set.ExtraLoad, set.Notes, set.SortOrder,
 				set.Pattern, set.BreathingCore, set.BreathingDiaphragm,
 			)
 
-			for itemi := range set.Items {
-				item := &set.Items[itemi]
+			for ii := range set.Items {
+				item := &set.Items[ii]
 				item.SetID = set.ID
-				if item.ID == "" {
-					item.ID = uuid.New().String()
-				}
 				if item.SortOrder == 0 {
-					item.SortOrder = itemi
+					item.SortOrder = ii
 				}
 
 				batch.Queue(
 					`INSERT INTO trainer_card_set_items
 					    (id, set_id, movement_id, movement_name, body_part, equipment, reps, sets_count, sort_order,
 					     breathing_core, breathing_diaphragm, allowed_tiers)
-					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+					 ON CONFLICT (id) DO UPDATE SET
+					     movement_id = EXCLUDED.movement_id, movement_name = EXCLUDED.movement_name, body_part = EXCLUDED.body_part, equipment = EXCLUDED.equipment,
+					     reps = EXCLUDED.reps, sets_count = EXCLUDED.sets_count, sort_order = EXCLUDED.sort_order,
+					     breathing_core = EXCLUDED.breathing_core, breathing_diaphragm = EXCLUDED.breathing_diaphragm, allowed_tiers = EXCLUDED.allowed_tiers = EXCLUDED.video_url_snapshot, updated_at = NOW()`,
 					item.ID, item.SetID, item.MovementID, item.MovementName,
 					item.BodyPart, item.Equipment, item.Reps, item.SetsCount, item.SortOrder,
 					item.BreathingCore, item.BreathingDiaphragm, nonNilTiers(item.AllowedTiers),
@@ -556,7 +616,6 @@ func (r *TrainerCardRepository) UpsertCustomerHRZone(ctx context.Context, custom
 	)
 	return err
 }
-
 
 type ProgramCategoryAssignmentLean struct {
 	ID   string
