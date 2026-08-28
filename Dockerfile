@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine AS builder
+FROM golang:alpine AS builder
 
 RUN apk add --no-cache git gcc musl-dev
 
@@ -15,9 +15,12 @@ WORKDIR /app
 COPY --from=builder /fitcoach-api .
 
 ENV ENV="production"
-ENV DATABASE_URL="postgres://postgres.udaihnvoqvrfzniqzqun:Fitcoach2026@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres"
-ENV CORS_ALLOWED_ORIGINS="*"
-ENV JWT_SECRET="FitcoachSecret2026!"
+ENV UPLOAD_DIR="/app/uploads"
+# Secrets should be provided at runtime via environment variables (e.g. Railway variables)
+# DATABASE_URL, CORS_ALLOWED_ORIGINS, JWT_SECRET must be set in the deployment platform.
+
+RUN mkdir -p /app/uploads
+VOLUME ["/app/uploads"]
 
 EXPOSE 8080
 CMD ["./fitcoach-api"]
