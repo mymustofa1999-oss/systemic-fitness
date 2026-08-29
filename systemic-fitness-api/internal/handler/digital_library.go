@@ -192,7 +192,12 @@ func (h *DigitalLibraryHandler) ListMenuItems(w http.ResponseWriter, r *http.Req
 		levelNum = &n
 	}
 
-	items, err := h.dlService.ListMenuItems(r.Context(), code, levelNum)
+	var genderPtr *string
+	if gender := r.URL.Query().Get("gender"); gender != "" {
+		genderPtr = &gender
+	}
+
+	items, err := h.dlService.ListMenuItems(r.Context(), code, levelNum, genderPtr)
 	if err != nil {
 		slog.Error("[DL.ListMenuItems] failed", "code", code, "error", err)
 		response.InternalError(w, "Failed to fetch menu items")
@@ -373,3 +378,22 @@ func (h *DigitalLibraryHandler) UploadMovementImage(w http.ResponseWriter, r *ht
 
 	response.OK(w, updated)
 }
+
+func (h *DigitalLibraryHandler) UpdateMenuItem(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	var req struct {
+		VideoUrlMale *string "json:\"video_url_male\""
+		VideoUrlFemale *string "json:\"video_url_female\""
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		response.BadRequest(w, "Invalid body")
+		return
+	}
+	err := h.dlService.UpdateMenuItem(r.Context(), id, req.VideoUrlMale, req.VideoUrlFemale)
+	if err != nil {
+		response.InternalError(w, "Failed")
+		return
+	}
+	response.OK(w, nil)
+}
+

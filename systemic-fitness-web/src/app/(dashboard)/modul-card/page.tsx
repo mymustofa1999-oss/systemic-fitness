@@ -68,10 +68,11 @@ export default function ModulCardPage() {
   const [selectedLevel, setSelectedLevel] = useState<number>(1);
   const selectedLevelData = activeLevels.find((l: any) => l.level_number === selectedLevel);
   
-  const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", selectedLevel);
-  const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", selectedLevel);
-  const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", selectedLevel);
-  const { data: cdData, isLoading: isLoadingCD } = useDLMenuItems("cd", selectedLevel);
+  const [selectedGender, setSelectedGender] = useState<'Male'|'Female'>('Male');
+  const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", selectedLevel, selectedGender.toLowerCase());
+  const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", selectedLevel, selectedGender.toLowerCase());
+  const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", selectedLevel, selectedGender.toLowerCase());
+  const { data: cdData, isLoading: isLoadingCD } = useDLMenuItems("cd", selectedLevel, selectedGender.toLowerCase());
   
   const isLoadingItems = isLoadingFC || isLoadingCC || isLoadingMC || isLoadingCD;
   

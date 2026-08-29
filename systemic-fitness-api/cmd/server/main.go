@@ -1016,6 +1016,7 @@ func main() {
 
 				r.Route("/modul-cards", func(r chi.Router) {
 					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Post("/", dlHandler.AddModulCardItem)
+					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Put("/menu/{id}", dlHandler.UpdateMenuItem)
 					r.With(middleware.RequireRole(model.RoleAdmin, model.RoleOwner, model.RoleConsultant)).Delete("/{levelID}/{movementID}", dlHandler.DeleteModulCardItem)
 				})
 			})

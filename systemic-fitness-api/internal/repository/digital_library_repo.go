@@ -70,17 +70,20 @@ type DLMovement struct {
 }
 
 type DLMenuItem struct {
-	ID         string      `json:"id"`
-	CategoryID string      `json:"category_id"`
-	LevelID    string      `json:"level_id"`
-	MovementID string      `json:"movement_id"`
-	BodyPart   string      `json:"body_part"`
-	SortOrder  int         `json:"sort_order"`
-	SetName    *string     `json:"set_name,omitempty"`
-	GroupType  *string     `json:"group_type,omitempty"`
-	CreatedAt  time.Time   `json:"created_at"`
-	UpdatedAt  time.Time   `json:"updated_at"`
-	Movement   *DLMovement `json:"movement,omitempty"`
+	ID             string      `json:"id"`
+	CategoryID     string      `json:"category_id"`
+	LevelID        string      `json:"level_id"`
+	MovementID     string      `json:"movement_id"`
+	BodyPart       string      `json:"body_part"`
+	SortOrder      int         `json:"sort_order"`
+	SetName        *string     `json:"set_name,omitempty"`
+	GroupType      *string     `json:"group_type,omitempty"`
+	TargetGender   *string     `json:"target_gender,omitempty"`
+	VideoUrlMale   *string     `json:"video_url_male,omitempty"`
+	VideoUrlFemale *string     `json:"video_url_female,omitempty"`
+	CreatedAt      time.Time   `json:"created_at"`
+	UpdatedAt      time.Time   `json:"updated_at"`
+	Movement       *DLMovement `json:"movement,omitempty"`
 }
 
 type DLIsolateItem struct {
@@ -315,7 +318,7 @@ func (r *DigitalLibraryRepository) DeleteMovement(ctx context.Context, id string
 
 // ─── Menu Items ─────────────────────────────────────────────────
 
-func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCode string, levelNumber *int) ([]DLMenuItem, error) {
+func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCode string, levelNumber *int, targetGender *string) ([]DLMenuItem, error) {
 	where := "WHERE c.code = $1"
 	args := []any{categoryCode}
 	idx := 2
@@ -323,10 +326,16 @@ func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCo
 	if levelNumber != nil {
 		where += fmt.Sprintf(" AND l.level_number = $%d", idx)
 		args = append(args, *levelNumber)
+		idx++
+	}
+	if targetGender != nil {
+		where += fmt.Sprintf(" AND mi.target_gender = $%d", idx)
+		args = append(args, *targetGender)
+		idx++
 	}
 
 	query := fmt.Sprintf(`
-		SELECT mi.id, mi.category_id, mi.level_id, mi.movement_id, mi.body_part, mi.sort_order, mi.set_name, mi.group_type,
+		SELECT mi.id, mi.category_id, mi.level_id, mi.movement_id, mi.body_part, mi.sort_order, mi.set_name, mi.group_type, mi.target_gender, mi.video_url_male, mi.video_url_female,
 		       mi.created_at, mi.updated_at,
 		       m.id, m.name, m.body_part, m.video_url_male, m.video_url_female, m.image_url,
 		       m.instructions, m.categories, m.type, m.pattern, m.level, m.created_at, m.updated_at,
@@ -351,7 +360,7 @@ func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCo
 		var m DLMovement
 		var levelNum int
 		if err := rows.Scan(
-			&mi.ID, &mi.CategoryID, &mi.LevelID, &mi.MovementID, &mi.BodyPart, &mi.SortOrder, &mi.SetName, &mi.GroupType,
+			&mi.ID, &mi.CategoryID, &mi.LevelID, &mi.MovementID, &mi.BodyPart, &mi.SortOrder, &mi.SetName, &mi.GroupType, &mi.TargetGender, &mi.VideoUrlMale, &mi.VideoUrlFemale,
 			&mi.CreatedAt, &mi.UpdatedAt,
 			&m.ID, &m.Name, &m.BodyPart, &m.VideoURLMale, &m.VideoURLFemale, &m.ImageURL,
 			&m.Instructions, &m.Categories, &m.Type, &m.Pattern, &m.Level, &m.CreatedAt, &m.UpdatedAt,
@@ -637,4 +646,10 @@ type DLProgramOverview struct {
 	MenuItems    []DLMenuItem    `json:"menu_items"`
 	IsolateItems []DLIsolateItem `json:"isolate_items"`
 	DynamicItems []DLDynamicItem `json:"dynamic_items"`
+}
+
+func (r *DigitalLibraryRepository) UpdateMenuItem(ctx context.Context, id string, videoUrlMale *string, videoUrlFemale *string) error {
+	query := `UPDATE dl_menu_items SET video_url_male = $1, video_url_female = $2, updated_at = NOW() WHERE id = $3`
+	_, err := r.db.Exec(ctx, query, videoUrlMale, videoUrlFemale, id)
+	return err
 }

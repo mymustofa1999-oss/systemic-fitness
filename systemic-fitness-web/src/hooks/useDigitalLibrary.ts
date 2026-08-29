@@ -75,11 +75,12 @@ export function useDeleteDLMovement() {
 
 // ─── Menu / Isolate / Dynamic Items ─────────────────────────────
 
-export function useDLMenuItems(code: string, level?: number) {
+export function useDLMenuItems(code: string, level?: number, gender?: string) {
   const params: Record<string, unknown> = {};
   if (level !== undefined) params.level = level;
+  if (gender) params.gender = gender;
   return useQuery({
-    queryKey: ["dl-menu", code, level],
+    queryKey: ["dl-menu", code, level, gender],
     queryFn: () => apiGet(`/api/digital-library/categories/${code}/menu`, params),
     enabled: !!code,
   });
@@ -134,5 +135,19 @@ export function useDeleteModulCardItem() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dl-menu"] });
     },
+  });
+}
+
+export function useUpdateDLMenuItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string, data: any }) => apiPut(`/api/digital-library/menu/${id}`, data),
+    onSuccess: () => {
+      toast.success("Menu item updated");
+      queryClient.invalidateQueries({ queryKey: ["dl-menu-items"] });
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to update menu item");
+    }
   });
 }

@@ -238,8 +238,8 @@ func (s *DigitalLibraryService) DeleteMovement(ctx context.Context, id string) e
 
 // ─── Menu Items ─────────────────────────────────────────────────
 
-func (s *DigitalLibraryService) ListMenuItems(ctx context.Context, code string, levelNumber *int) ([]repository.DLMenuItem, error) {
-	items, err := s.dlRepo.ListMenuItems(ctx, code, levelNumber)
+func (s *DigitalLibraryService) ListMenuItems(ctx context.Context, code string, levelNumber *int, gender *string) ([]repository.DLMenuItem, error) {
+	items, err := s.dlRepo.ListMenuItems(ctx, code, levelNumber, gender)
 	if err != nil {
 		s.logger.Error("list dl menu items", "code", code, "error", err)
 		return nil, err
@@ -254,6 +254,10 @@ func (s *DigitalLibraryService) AddModulCardItem(ctx context.Context, levelID st
 		return err
 	}
 	return nil
+}
+
+func (s *DigitalLibraryService) UpdateMenuItem(ctx context.Context, id string, videoUrlMale *string, videoUrlFemale *string) error {
+	return s.dlRepo.UpdateMenuItem(ctx, id, videoUrlMale, videoUrlFemale)
 }
 
 func (s *DigitalLibraryService) RemoveModulCardItem(ctx context.Context, levelID string, movementID string) error {
@@ -304,7 +308,7 @@ func (s *DigitalLibraryService) GetProgramOverview(ctx context.Context, category
 		return nil, err
 	}
 
-	menuItems, err := s.dlRepo.ListMenuItems(ctx, categoryCode, nil)
+	menuItems, err := s.dlRepo.ListMenuItems(ctx, categoryCode, nil, nil)
 	if err != nil {
 		s.logger.Error("get dl program overview: menu", "error", err)
 		return nil, err
