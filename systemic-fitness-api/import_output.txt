@@ -1,0 +1,21 @@
+DRY RUN REPORT
+FEMALE- VIDEO LEVEL 2.xlsx -> L2 female: 31 rows
+FEMALE- VIDEO LEVEL 3.xlsx -> L3 female: 41 rows
+FEMALE- VIDEO LEVEL 4.xlsx -> L4 female: 83 rows
+FEMALE-VIDEO LEVEL 1.xlsx -> L1 female: 31 rows
+FEMALE-VIDEO LEVEL 5.xlsx -> L5 female: 101 rows
+FEMALE-VIDEO LEVEL 6.xlsx -> L6 female: 94 rows
+MALE- VIDEO LEVEL 3.xlsx -> L3 male: 32 rows
+MALE-VIDEO LEVEL 1.xlsx -> L1 male: 31 rows
+MALE-VIDEO LEVEL 2.xlsx -> L2 male: 31 rows
+MALE-VIDEO LEVEL 4.xlsx -> L4 male: 70 rows
+MALE-VIDEO LEVEL 5.xlsx -> L5 male: 87 rows
+MALE-VIDEO LEVEL 6.xlsx -> L6 male: 81 rows
+
+Total Rows: 713
+Male Rows: 332
+Female Rows: 381
+Waitlist count: 23
+L1: 62, L2: 62, L3: 73, L4: 153, L5: 188, L6: 175
+FC: 218, CC: 250, MC: 127, CD: 118
+Missing movements: 

@@ -1,0 +1,791 @@
+﻿diff --git a/systemic-fitness-web/src/app/(dashboard)/clients/[id]/page.tsx b/systemic-fitness-web/src/app/(dashboard)/clients/[id]/page.tsx
+index 4b09e02..c307c9c 100644
+--- a/systemic-fitness-web/src/app/(dashboard)/clients/[id]/page.tsx
++++ b/systemic-fitness-web/src/app/(dashboard)/clients/[id]/page.tsx
+@@ -72,8 +72,8 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
+   if (!user) {
+     return (
+       <div className="text-center py-20">
+-        <p className="text-slate-500">Client tidak ditemukan</p>
+-        <Link href="/clients" className="text-sf-deepNavy hover:text-sf-deepNavy text-sm mt-2 inline-block">Kembali ke Clients</Link>
++        <p className="text-slate-500">Client not found</p>
++        <Link href="/clients" className="text-sf-deepNavy hover:text-sf-deepNavy text-sm mt-2 inline-block">Back to Clients</Link>
+       </div>
+     );
+   }
+@@ -81,7 +81,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
+   return (
+     <div className="space-y-6 pb-20">
+       <Link href="/clients" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
+-        <ArrowLeft className="h-4 w-4" /> Kembali ke Clients
++        <ArrowLeft className="h-4 w-4" /> Back to Clients
+       </Link>
+ 
+       {/* ΓòÉΓòÉΓòÉ 1. HERO PROFILE & QUICK ACTIONS ΓòÉΓòÉΓòÉ */}
+@@ -95,7 +95,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
+            <div className="relative z-10">
+               <h1 className="text-2xl font-bold mb-2 capitalize">{user.full_name}</h1>
+               <div className="flex flex-wrap items-center gap-4 text-sm text-slate-300">
+-                <span className="flex items-center gap-1.5"><User className="h-4 w-4 text-sf-warmGold" /> {age ? `${age} tahun` : "-"} ΓÇó {profile?.gender || "-"}</span>
++                <span className="flex items-center gap-1.5"><User className="h-4 w-4 text-sf-warmGold" /> {age ? `${age} years old` : "-"} ΓÇó {profile?.gender || "-"}</span>
+                 <span className="flex items-center gap-1.5"><ActivitySquare className="h-4 w-4 text-sf-warmGold" /> {profile?.height_cm || "-"} cm ΓÇó {profile?.weight_kg || "-"} kg</span>
+                 <span className="flex items-center gap-1.5"><Phone className="h-4 w-4 text-sf-warmGold" /> {user.phone || "-"}</span>
+               </div>
+@@ -110,7 +110,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
+                  <div className="bg-white/20 p-2 rounded-lg"><ClipboardCheck className="h-5 w-5 text-white" /></div>
+                  <div className="text-left">
+                    <p className="text-sm font-bold">Training Card</p>
+-                   <p className="text-[10px] text-slate-300">Set & lihat program latihan</p>
++                   <p className="text-[10px] text-slate-300">Set & view training program</p>
+                  </div>
+                </div>
+                <ChevronDown className="h-4 w-4 text-slate-400 -rotate-90 group-hover:text-white transition-colors" />
+@@ -145,15 +145,15 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
+         {/* LEFT COLUMN (70%) */}
+         <div className="lg:col-span-8 space-y-6">
+           
+-          {/* Detail Profil & Edit */}
++          {/* Client Profile & Edit */}
+           <div>
+             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
+-              <User className="h-4 w-4 text-sf-deepNavy" /> Detail Profil
++              <User className="h-4 w-4 text-sf-deepNavy" /> Client Profile
+             </h2>
+             <ClientInfoCard userId={params.id} user={user} profile={profile} age={age} />
+           </div>
+ 
+-          {/* Daftar Obat */}
++          {/* Medicines List */}
+           <div>
+              <div className="mb-6">
+                <MedicinesCard customerId={params.id} data={setup?.medicines ?? []} />
+@@ -163,7 +163,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
+           {/* Tim Penanganan */}
+           <div>
+              <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
+-               <Crown className="h-4 w-4 text-sf-warmGold" /> Tim Penanganan
++               <Crown className="h-4 w-4 text-sf-warmGold" /> Handling Team
+              </h2>
+              <div className="space-y-4">
+                <StaffCard customerId={params.id} staff={setup?.staff} />
+@@ -245,14 +245,15 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user:
+   return (
+     <div className="bg-white overflow-hidden border border-slate-200 shadow-sm rounded-xl">
+       <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
+-        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Info Client</span>
++      <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
++        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Client Info</span>
+         {!editing ? (
+           <button onClick={() => setEditing(true)} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium">Edit</button>
+         ) : (
+           <div className="flex gap-1.5">
+-            <button onClick={() => setEditing(false)} className="text-xs text-slate-500 hover:text-slate-700 font-medium">Batal</button>
++            <button onClick={() => setEditing(false)} className="text-xs text-slate-500 hover:text-slate-700 font-medium">Cancel</button>
+             <button onClick={handleSave} disabled={isPending} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium flex items-center gap-1">
+-              {isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />} Simpan
++              {isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />} Save
+             </button>
+           </div>
+         )}
+@@ -260,15 +261,15 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user:
+       <table className="w-full text-sm">
+         <tbody>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Nama</td>
++            <td className={lbl}>Name</td>
+             <td className={val} colSpan={3}>{editing ? <input value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} className={inp} /> : user.full_name}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Tgl Lahir</td>
++            <td className={lbl}>Date of Birth</td>
+             <td className={val} colSpan={3}>{editing ? <input type="date" value={form.date_of_birth} onChange={(e) => setForm({ ...form, date_of_birth: e.target.value })} className={inp} /> : (profile?.date_of_birth || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Usia</td>
++            <td className={lbl}>Age</td>
+             <td className={cn(val, "font-bold")} colSpan={3}>{age ?? "-"}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+@@ -283,56 +284,56 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user:
+             ) : (profile?.gender || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Tinggi</td>
++            <td className={lbl}>Height</td>
+             <td className={val} colSpan={3}>{editing ? <input type="number" value={form.height_cm} onChange={(e) => setForm({ ...form, height_cm: e.target.value })} className={inp} placeholder="cm" /> : (profile?.height_cm ? `${profile.height_cm} cm` : "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Berat</td>
++            <td className={lbl}>Weight</td>
+             <td className={val} colSpan={3}>{editing ? <input type="number" value={form.weight_kg} onChange={(e) => setForm({ ...form, weight_kg: e.target.value })} className={inp} placeholder="kg" /> : (profile?.weight_kg ? `${profile.weight_kg} kg` : "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Alamat Jalan</td>
+-            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.street_address} onChange={(e) => setForm({ ...form, street_address: e.target.value })} className={inp} placeholder="Alamat lengkap (nama jalan, rt/rw, nomor)" /> : (profile?.street_address || "-")}</td>
++            <td className={lbl}>Street Address</td>
++            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.street_address} onChange={(e) => setForm({ ...form, street_address: e.target.value })} className={inp} placeholder="Full address (street name, rt/rw, number)" /> : (profile?.street_address || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Detail Tambahan</td>
+-            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.additional_address} onChange={(e) => setForm({ ...form, additional_address: e.target.value })} className={inp} placeholder="Apartemen, lantai, dsb" /> : (profile?.additional_address || "-")}</td>
++            <td className={lbl}>Additional Details</td>
++            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.additional_address} onChange={(e) => setForm({ ...form, additional_address: e.target.value })} className={inp} placeholder="Apartment, floor, etc." /> : (profile?.additional_address || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Kelurahan</td>
+-            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.sub_district} onChange={(e) => setForm({ ...form, sub_district: e.target.value })} className={inp} placeholder="Kelurahan" /> : (profile?.sub_district || "-")}</td>
++            <td className={lbl}>Sub-district</td>
++            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.sub_district} onChange={(e) => setForm({ ...form, sub_district: e.target.value })} className={inp} placeholder="Sub-district" /> : (profile?.sub_district || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Kecamatan</td>
+-            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} className={inp} placeholder="Kecamatan" /> : (profile?.district || "-")}</td>
++            <td className={lbl}>District</td>
++            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} className={inp} placeholder="District" /> : (profile?.district || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Asal Kota</td>
+-            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={inp} placeholder="Asal Kota" /> : (profile?.city || "-")}</td>
++            <td className={lbl}>City of Origin</td>
++            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={inp} placeholder="City of Origin" /> : (profile?.city || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Provinsi</td>
+-            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.province} onChange={(e) => setForm({ ...form, province: e.target.value })} className={inp} placeholder="Provinsi" /> : (profile?.province || "-")}</td>
++            <td className={lbl}>Province</td>
++            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.province} onChange={(e) => setForm({ ...form, province: e.target.value })} className={inp} placeholder="Province" /> : (profile?.province || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Kode Pos</td>
+-            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.postal_code} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} className={inp} placeholder="Kode Pos" /> : (profile?.postal_code || "-")}</td>
++            <td className={lbl}>Postal Code</td>
++            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.postal_code} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} className={inp} placeholder="Postal Code" /> : (profile?.postal_code || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Negara</td>
+-            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className={inp} placeholder="Negara" /> : (profile?.country || "-")}</td>
++            <td className={lbl}>Country</td>
++            <td className={val} colSpan={3}>{editing ? <input type="text" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className={inp} placeholder="Country" /> : (profile?.country || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+             <td className={lbl}>Regional</td>
+             <td className={val} colSpan={3}>{editing ? <input type="text" value={form.regional} onChange={(e) => setForm({ ...form, regional: e.target.value })} className={inp} placeholder="Regional" /> : (profile?.regional || "-")}</td>
+           </tr>
+           <tr className="border-b border-slate-100">
+-            <td className={lbl}>Telepon</td>
++            <td className={lbl}>Phone</td>
+             <td className={val} colSpan={3}>{editing ? <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={inp} /> : (user.phone || "-")}</td>
+           </tr>
+           {(editing || profile?.medical_notes) && (
+             <tr>
+-              <td className={lbl}>Medis</td>
++              <td className={lbl}>Medical</td>
+               <td className={val} colSpan={3}>{editing ? <textarea value={form.medical_notes} onChange={(e) => setForm({ ...form, medical_notes: e.target.value })} className={cn(inp, "h-16")} /> : (profile?.medical_notes || "-")}</td>
+             </tr>
+           )}
+@@ -417,8 +418,8 @@ function StaffCard({ customerId, staff }: { customerId: string; staff: any }) {
+                 options={staffOptions}
+                 value={staff?.consultant_id || ""}
+                 onChange={(v) => v && handleAssign(v, "consultant")}
+-                placeholder="- Pilih Consultant -"
+-                searchPlaceholder="Cari nama..."
++                placeholder="- Select Consultant -"
++                searchPlaceholder="Search name..."
+                 disabled={assignStaff.isPending}
+               />
+             </td>
+@@ -431,15 +432,15 @@ function StaffCard({ customerId, staff }: { customerId: string; staff: any }) {
+                 options={staffOptions}
+                 value={staff?.trainer_id || ""}
+                 onChange={(v) => v && handleAssign(v, "trainer")}
+-                placeholder="- Pilih Certified Trainer -"
+-                searchPlaceholder="Cari nama..."
++                placeholder="- Select Certified Trainer -"
++                searchPlaceholder="Search name..."
+                 disabled={assignStaff.isPending}
+               />
+             </td>
+           </tr>
+           {/* Prioritas ΓÇö multi-tag editable */}
+           <tr>
+-            <td className={cn(lbl, "w-24 align-top")}>Prioritas</td>
++            <td className={cn(lbl, "w-24 align-top")}>Priority</td>
+             <td colSpan={3} className={val}>
+               {editingPriority ? (
+                 <div className="space-y-2">
+@@ -462,7 +463,7 @@ function StaffCard({ customerId, staff }: { customerId: string; staff: any }) {
+                       value={inputVal}
+                       onChange={(e) => setInputVal(e.target.value)}
+                       className="flex-1 border border-slate-200 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-sf-warmGold/40"
+-                      placeholder="Ketik prioritas lalu Enter..."
++                      placeholder="Type priority then Enter..."
+                       autoFocus
+                       onKeyDown={(e) => {
+                         if (e.key === "Enter") { e.preventDefault(); addPriority(); }
+@@ -472,10 +473,10 @@ function StaffCard({ customerId, staff }: { customerId: string; staff: any }) {
+                     <button type="button" onClick={handleSavePriority} disabled={updatePriority.isPending}
+                       className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-sf-deepNavy text-white text-xs font-medium hover:bg-sf-deepNavy disabled:opacity-50">
+                       {updatePriority.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+-                      Simpan
++                      Save
+                     </button>
+                     <button type="button" onClick={cancelEditPriority}
+-                      className="p-1 rounded hover:bg-slate-100 text-slate-400" title="Batal">
++                      className="p-1 rounded hover:bg-slate-100 text-slate-400" title="Cancel">
+                       <X className="h-3.5 w-3.5" />
+                     </button>
+                   </div>
+@@ -492,7 +493,7 @@ function StaffCard({ customerId, staff }: { customerId: string; staff: any }) {
+                       ))}
+                     </div>
+                   ) : (
+-                    <span className="text-slate-400">- Klik untuk edit -</span>
++                    <span className="text-slate-400">- Click to edit -</span>
+                   )}
+                 </button>
+               )}
+@@ -536,11 +537,11 @@ function HRZoneCard({ customerId, data }: { customerId: string; data: any }) {
+ 
+   const zones = [
+     { label: "Max HR", upper: "max_hr_upper", lower: "max_hr_lower", bg: "bg-red-100 text-red-800" },
+-    { label: "Zona 5", upper: "zone5_upper", lower: "zone5_lower", bg: "bg-red-50 text-red-700" },
+-    { label: "Zona 4", upper: "zone4_upper", lower: "zone4_lower", bg: "bg-orange-50 text-orange-700" },
+-    { label: "Zona 3", upper: "zone3_upper", lower: "zone3_lower", bg: "bg-yellow-50 text-yellow-700" },
+-    { label: "Zona 2", upper: "zone2_upper", lower: "zone2_lower", bg: "bg-green-50 text-green-700" },
+-    { label: "Zona 1", upper: "zone1_upper", lower: "zone1_lower", bg: "bg-blue-50 text-blue-700" },
++    { label: "Zone 5", upper: "zone5_upper", lower: "zone5_lower", bg: "bg-red-50 text-red-700" },
++    { label: "Zone 4", upper: "zone4_upper", lower: "zone4_lower", bg: "bg-orange-50 text-orange-700" },
++    { label: "Zone 3", upper: "zone3_upper", lower: "zone3_lower", bg: "bg-yellow-50 text-yellow-700" },
++    { label: "Zone 2", upper: "zone2_upper", lower: "zone2_lower", bg: "bg-green-50 text-green-700" },
++    { label: "Zone 1", upper: "zone1_upper", lower: "zone1_lower", bg: "bg-blue-50 text-blue-700" },
+   ];
+ 
+   return (
+@@ -551,9 +552,9 @@ function HRZoneCard({ customerId, data }: { customerId: string; data: any }) {
+           <button onClick={() => { setForm(initHRForm(data)); setEditing(true); }} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium">Edit</button>
+         ) : (
+           <div className="flex gap-1.5">
+-            <button onClick={() => setEditing(false)} className="text-xs text-slate-500 hover:text-slate-700 font-medium">Batal</button>
++            <button onClick={() => setEditing(false)} className="text-xs text-slate-500 hover:text-slate-700 font-medium">Cancel</button>
+             <button onClick={handleSave} disabled={upsert.isPending} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium flex items-center gap-1">
+-              {upsert.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />} Simpan
++              {upsert.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />} Save
+             </button>
+           </div>
+         )}
+@@ -645,7 +646,7 @@ function ProgramsCard({ customerId, data }: { customerId: string; data: any[] })
+       <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-100">
+         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Program</span>
+         <button onClick={() => setShowAdd(!showAdd)} className="text-xs text-sf-deepNavy hover:text-sf-deepNavy font-medium flex items-center gap-1">
+-          <Plus className="h-3 w-3" /> Tambah
++          <Plus className="h-3 w-3" /> Add
+         </button>
+       </div>
+ 
+@@ -658,8 +659,8 @@ function ProgramsCard({ customerId, data }: { customerId: string; data: any[] })
+               .map((c: any) => ({ value: c.id, label: c.name, sublabel: c.description || undefined }))}
+             value={form.program_category_id}
+             onChange={(v) => setForm({ ...form, program_category_id: v })}
+-            placeholder="Pilih program..."
+-            searchPlaceholder="Cari program..."
++            placeholder="Select program..."
++            searchPlaceholder="Search program..."
+           />
+           {selectedCat && (
+             <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
+@@ -675,7 +676,7 @@ function ProgramsCard({ customerId, data }: { customerId: string; data: any[] })
+               )}
+               {paramTemplate.beban_upper && (
+                 <div className="flex items-center gap-1">
+-                  <span className="text-slate-500">Beban Upper:</span>
++                  <span className="text-slate-500">Upper Load:</span>
+                   <input type="number" step="0.1" value={form.beban_upper_value} onChange={(e) => setForm({ ...form, beban_upper_value: e.target.value })}
+                     className="w-16 border border-slate-200 rounded px-1 py-0.5 text-center" placeholder="0.0" />
+                   <span className="text-slate-400">kg</span>
+@@ -683,7 +684,7 @@ function ProgramsCard({ customerId, data }: { customerId: string; data: any[] })
+               )}
+               {paramTemplate.beban_lower && (
+                 <div className="flex items-center gap-1">
+-                  <span className="text-slate-500">Beban Lower:</span>
++                  <span className="text-slate-500">Lower Load:</span>
+                   <input type="number" step="0.1" value={form.beban_lower_value} onChange={(e) => setForm({ ...form, beban_lower_value: e.target.value })}
+                     className="w-16 border border-slate-200 rounded px-1 py-0.5 text-center" placeholder="0.0" />
+                   <span className="text-slate-400">kg</span>
+@@ -700,16 +701,16 @@ function ProgramsCard({ customerId, data }: { customerId: string; data: any[] })
+           )}
+           <div className="flex gap-1">
+             <button onClick={handleAdd} disabled={!form.program_category_id || upsert.isPending} className="btn-primary text-xs px-2 py-1 flex-1">
+-              {upsert.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />} Simpan
++              {upsert.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />} Save
+             </button>
+-            <button onClick={() => setShowAdd(false)} className="btn-secondary text-xs px-2 py-1">Batal</button>
++            <button onClick={() => setShowAdd(false)} className="btn-secondary text-xs px-2 py-1">Cancel</button>
+           </div>
+         </div>
+       )}
+ 
+       {/* Program table */}
+       {data.length === 0 && !showAdd ? (
+-        <p className="text-xs text-slate-400 text-center py-6">Belum ada program</p>
++        <p className="text-xs text-slate-400 text-center py-6">No data available</p>
+       ) : (
+         <table className="w-full text-xs">
+           <thead>
+@@ -733,10 +734,10 @@ function ProgramsCard({ customerId, data }: { customerId: string; data: any[] })
+                 <td className="px-2 py-2 font-medium text-slate-800">{p.program_category_name}</td>
+                 <td className="px-2 py-2 text-slate-600">
+                   {[
+-                    p.beban_upper_value != null && `Beban Upper ${p.beban_upper_value}kg`,
+-                    p.beban_lower_value != null && `Beban Lower ${p.beban_lower_value}kg`,
+-                    !p.beban_upper_value && p.has_beban_upper && "beban upper",
+-                    !p.beban_lower_value && p.has_beban_lower && "beban lower",
++                    p.beban_upper_value != null && `Upper Load ${p.beban_upper_value}kg`,
++                    p.beban_lower_value != null && `Lower Load ${p.beban_lower_value}kg`,
++                    !p.beban_upper_value && p.has_beban_upper && "upper load",
++                    !p.beban_lower_value && p.has_beban_lower && "lower load",
+                     p.bpm_upper != null && `BPM (Range ${p.bpm_lower}-${p.bpm_upper})`,
+                     p.has_resistance && "resistance",
+                     !p.has_beban_upper && !p.has_beban_lower && !p.bpm_upper && !p.has_resistance && !p.beban_upper_value && !p.beban_lower_value && (p.parameter_notes || "No BPM / BPM (Range X-X)"),
+@@ -754,20 +755,20 @@ function ProgramsCard({ customerId, data }: { customerId: string; data: any[] })
+         </table>
+       )}
+ 
+-      <ConfirmDialog
+-        open={!!removeTarget}
+-        onClose={() => setRemoveTarget(null)}
+-        onConfirm={() => {
+-          remove.mutate({ customerId, programCategoryId: removeTarget.program_category_id }, {
+-            onSuccess: () => setRemoveTarget(null),
+-          });
+-        }}
+-        title="Hapus Program"
+-        description={`Hapus "${removeTarget?.program_category_name}" dari client?`}
+-        confirmLabel="Hapus"
+-        variant="danger"
+-        loading={remove.isPending}
+-      />
++        <ConfirmDialog
++          open={!!removeTarget}
++          onClose={() => setRemoveTarget(null)}
++          onConfirm={() => {
++            remove.mutate({ customerId, programCategoryId: removeTarget.program_category_id }, {
++              onSuccess: () => setRemoveTarget(null),
++            });
++          }}
++          title="Delete Program"
++          description={`Delete "${removeTarget?.program_category_name}" from client?`}
++          confirmLabel="Delete"
++          variant="danger"
++          loading={remove.isPending}
++        />
+     </div>
+   );
+ }
+@@ -819,28 +820,28 @@ function SessionJournalTable({ customerId }: { customerId: string }) {
+             options={monthNames.map((name, i) => ({ value: String(i + 1).padStart(2, "0"), label: name }))}
+             value={pickMonth}
+             onChange={setPickMonth}
+-            placeholder="Pilih bulan..."
+-            searchPlaceholder="Cari bulan..."
++            placeholder="Select month..."
++            searchPlaceholder="Search month..."
+             className="w-40"
+           />
+           <SearchableSelect
+             options={yearOptions.map((yr) => ({ value: String(yr), label: String(yr) }))}
+             value={pickYear}
+             onChange={setPickYear}
+-            placeholder="Tahun"
++            placeholder="Year"
+             className="w-28"
+           />
+           <button onClick={addPickedMonth} className="btn-primary text-sm px-4">
+-            <Plus className="h-4 w-4" /> Tambah
++            <Plus className="h-4 w-4" /> Add
+           </button>
+           <button onClick={() => setShowPicker(false)} className="btn-secondary text-sm px-4">
+-            Batal
++            Cancel
+           </button>
+         </div>
+       ) : (
+         <button onClick={() => setShowPicker(true)}
+           className="w-full py-3 border-2 border-dashed border-slate-200 rounded-xl text-sm font-medium text-slate-500 hover:border-sf-systemBlue/40 hover:text-sf-deepNavy transition-colors flex items-center justify-center gap-2">
+-          <Plus className="h-4 w-4" /> Tambah Bulan
++          <Plus className="h-4 w-4" /> Add Month
+         </button>
+       )}
+     </div>
+@@ -957,7 +958,7 @@ function MonthJournalBlock({ customerId, month }: { customerId: string; month: s
+       {!collapsed && (
+       <>
+       {isLoading ? (
+-        <div className="p-8 text-center text-sm text-slate-400">Memuat data...</div>
++        <div className="p-8 text-center text-sm text-slate-400">Loading...</div>
+       ) : (
+       <div className="overflow-x-auto">
+         <table className="w-full text-xs min-w-[1050px]">
+@@ -965,15 +966,15 @@ function MonthJournalBlock({ customerId, month }: { customerId: string; month: s
+             <tr className="bg-slate-100 border-b border-slate-200">
+               <th rowSpan={2} className="px-2 py-2 text-center font-bold text-slate-600 border-r border-slate-200 w-16">SESSION</th>
+               <th rowSpan={2} className="px-2 py-2 text-center font-bold text-slate-600 border-r border-slate-200 w-28">DATE</th>
+-              <th rowSpan={2} className="px-2 py-2 text-center font-bold text-slate-600 border-r border-slate-200 w-20">Obat</th>
++              <th rowSpan={2} className="px-2 py-2 text-center font-bold text-slate-600 border-r border-slate-200 w-20">Medicine</th>
+               <th colSpan={2} className="px-2 py-1.5 text-center font-bold text-slate-600 border-r border-slate-200 border-b border-slate-200">Last Meal</th>
+               <th colSpan={3} className="px-2 py-1.5 text-center font-bold text-white bg-blue-400 border-r border-blue-300 border-b border-blue-300">BP Pre-Sesi</th>
+               <th colSpan={3} className="px-2 py-1.5 text-center font-bold text-white bg-rose-400 border-b border-rose-300">BP Post-Sesi</th>
+               <th rowSpan={2} className="w-10" />
+             </tr>
+             <tr className="bg-slate-50 border-b border-slate-200">
+-              <th className="px-2 py-1.5 text-center font-semibold text-slate-500 border-r border-slate-200 w-16">Jam</th>
+-              <th className="px-2 py-1.5 text-center font-semibold text-slate-500 border-r border-slate-200">Jenis Makanan</th>
++              <th className="px-2 py-1.5 text-center font-semibold text-slate-500 border-r border-slate-200 w-16">Time</th>
++              <th className="px-2 py-1.5 text-center font-semibold text-slate-500 border-r border-slate-200">Food Type</th>
+               <th className="px-2 py-1.5 text-center font-semibold text-blue-700 bg-blue-50 border-r border-blue-100 w-20">Systolic</th>
+               <th className="px-2 py-1.5 text-center font-semibold text-blue-700 bg-blue-50 border-r border-blue-100 w-20">Diastolic</th>
+               <th className="px-2 py-1.5 text-center font-semibold text-blue-700 bg-blue-50 border-r border-slate-200 w-20">Heartrate</th>
+@@ -997,9 +998,9 @@ function MonthJournalBlock({ customerId, month }: { customerId: string; month: s
+                     {r.medicines.length > 0 ? (
+                       <div>
+                         <span className="block truncate text-slate-700">{r.medicines.map((md: any) => md.medicine_name || md.name).join(", ")}</span>
+-                        <span className="text-[10px] text-indigo-500 font-medium">{r.medicines.length} obat</span>
++                        <span className="text-[10px] text-indigo-500 font-medium">{r.medicines.length} medicines</span>
+                       </div>
+-                    ) : <span className="text-slate-400 block text-center">+ Obat</span>}
++                    ) : <span className="text-slate-400 block text-center">+ Medicine</span>}
+                   </button>
+                 </td>
+                 <td className="px-1 py-1 border-r border-slate-100">
+@@ -1016,7 +1017,7 @@ function MonthJournalBlock({ customerId, month }: { customerId: string; month: s
+                           <span className="text-[10px] font-semibold text-amber-600">{r.meals.reduce((s: number, ml: any) => s + (ml.calories ?? 0), 0)} kcal</span>
+                         )}
+                       </div>
+-                    ) : <span className="text-slate-400">+ Pilih makanan</span>}
++                    ) : <span className="text-slate-400">+ Select food</span>}
+                   </button>
+                 </td>
+                 <td className="px-1 py-1 border-r border-slate-100 bg-blue-50/30">
+@@ -1040,7 +1041,7 @@ function MonthJournalBlock({ customerId, month }: { customerId: string; month: s
+                 <td className="px-1 py-1 text-center">
+                   {r.dirty && r.date && (
+                     <button onClick={() => saveRow(idx)} disabled={upsert.isPending}
+-                      className="p-1 rounded bg-sf-deepNavy text-white hover:bg-sf-deepNavy disabled:opacity-50 transition-colors" title="Simpan">
++                      className="p-1 rounded bg-sf-deepNavy text-white hover:bg-sf-deepNavy disabled:opacity-50 transition-colors" title="Save">
+                       {upsert.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                     </button>
+                   )}
+@@ -1091,7 +1092,7 @@ function FoodSelectionModal({ meals, onClose, onSave }: { meals: any[]; onClose:
+   const { data: foodsData } = useFoods({ limit: 200 });
+   const allFoods = (foodsData?.data ?? []) as any[];
+   const [search, setSearch] = useState("");
+-  const [selected, setSelected] = useState<Set<string>>(() => new Set(meals.map((m: any) => m.food_id || m.id).filter(Boolean)));
++  const [selected, setSelected] = useState<any>(() => new Set(meals.map((m: any) => m.food_id || m.id).filter(Boolean)));
+ 
+   const filtered = allFoods.filter((f: any) =>
+     f.name.toLowerCase().includes(search.toLowerCase())
+@@ -1130,7 +1131,7 @@ function FoodSelectionModal({ meals, onClose, onSave }: { meals: any[]; onClose:
+       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+       <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 mb-12 animate-slide-in" onClick={(e) => e.stopPropagation()}>
+         <div className="flex items-center justify-between px-5 py-3 border-b border-slate-100">
+-          <h3 className="font-semibold text-slate-900">Pilih Makanan</h3>
++          <h3 className="font-semibold text-slate-900">Select Food</h3>
+           <button onClick={onClose} className="p-1 rounded-lg hover:bg-slate-100 text-slate-400"><X className="h-5 w-5" /></button>
+         </div>
+ 
+@@ -1138,14 +1139,14 @@ function FoodSelectionModal({ meals, onClose, onSave }: { meals: any[]; onClose:
+         <div className="px-4 pt-3">
+           <input value={search} onChange={(e) => setSearch(e.target.value)} autoFocus
+             className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40"
+-            placeholder="Cari makanan..." />
+-          <p className="text-xs text-slate-400 mt-1">{selected.size} dipilih</p>
++            placeholder="Search food..." />
++          <p className="text-xs text-slate-400 mt-1">{selected.size} selected</p>
+         </div>
+ 
+         {/* Food list */}
+         <div className="max-h-72 overflow-y-auto px-2 py-2">
+           {filtered.length === 0 ? (
+-            <p className="text-center text-sm text-slate-400 py-6">Tidak ditemukan</p>
++            <p className="text-center text-sm text-slate-400 py-6">No results found</p>
+           ) : filtered.map((f: any) => (
+             <label key={f.id}
+               className={cn(
+@@ -1171,7 +1172,7 @@ function FoodSelectionModal({ meals, onClose, onSave }: { meals: any[]; onClose:
+         {selected.size > 0 && (
+           <div className="mx-4 mb-2 p-3 rounded-lg bg-amber-50 border border-amber-100">
+             <div className="flex items-center justify-between">
+-              <span className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Total Nutrisi</span>
++              <span className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Total Nutrition</span>
+               <span className="text-sm font-bold text-amber-800">{totals.calories} kcal</span>
+             </div>
+             <div className="flex gap-4 mt-1">
+@@ -1184,9 +1185,9 @@ function FoodSelectionModal({ meals, onClose, onSave }: { meals: any[]; onClose:
+ 
+         {/* Actions */}
+         <div className="flex gap-2 px-4 py-3 border-t border-slate-100">
+-          <button onClick={onClose} className="btn-secondary flex-1">Batal</button>
++          <button onClick={onClose} className="btn-secondary flex-1">Cancel</button>
+           <button onClick={handleSave} className="btn-primary flex-1">
+-            <Check className="h-4 w-4" /> Simpan ({selected.size})
++            <Check className="h-4 w-4" /> Save ({selected.size})
+           </button>
+         </div>
+       </div>
+@@ -1200,7 +1201,7 @@ function MedicineSelectionModal({ selected, onClose, onSave }: { selected: any[]
+   const { data: medsData } = useMedicines({ limit: 200 });
+   const allMeds = (medsData?.data ?? []) as any[];
+   const [search, setSearch] = useState("");
+-  const [checked, setChecked] = useState<Set<string>>(() => new Set(selected.map((m: any) => m.medicine_id || m.id).filter(Boolean)));
++  const [checked, setChecked] = useState<any>(() => new Set(selected.map((m: any) => m.medicine_id || m.id).filter(Boolean)));
+ 
+   const filtered = allMeds.filter((m: any) =>
+     m.name.toLowerCase().includes(search.toLowerCase()) ||
+@@ -1228,20 +1229,20 @@ function MedicineSelectionModal({ selected, onClose, onSave }: { selected: any[]
+       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+       <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 mb-12 animate-slide-in" onClick={(e) => e.stopPropagation()}>
+         <div className="flex items-center justify-between px-5 py-3 border-b border-slate-100">
+-          <h3 className="font-semibold text-slate-900">Pilih Obat Hari Ini</h3>
++          <h3 className="font-semibold text-slate-900">Select Medicine Today</h3>
+           <button onClick={onClose} className="p-1 rounded-lg hover:bg-slate-100 text-slate-400"><X className="h-5 w-5" /></button>
+         </div>
+ 
+         <div className="px-4 pt-3">
+           <input value={search} onChange={(e) => setSearch(e.target.value)} autoFocus
+             className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40"
+-            placeholder="Cari nama obat..." />
+-          <p className="text-xs text-slate-400 mt-1">{checked.size} dipilih</p>
++            placeholder="Search medicine name..." />
++          <p className="text-xs text-slate-400 mt-1">{checked.size} selected</p>
+         </div>
+ 
+         <div className="max-h-72 overflow-y-auto px-2 py-2">
+           {filtered.length === 0 ? (
+-            <p className="text-center text-sm text-slate-400 py-6">Tidak ditemukan</p>
++            <p className="text-center text-sm text-slate-400 py-6">No results found</p>
+           ) : filtered.map((m: any) => (
+             <label key={m.id}
+               className={cn(
+@@ -1261,9 +1262,9 @@ function MedicineSelectionModal({ selected, onClose, onSave }: { selected: any[]
+         </div>
+ 
+         <div className="flex gap-2 px-4 py-3 border-t border-slate-100">
+-          <button onClick={onClose} className="btn-secondary flex-1">Batal</button>
++          <button onClick={onClose} className="btn-secondary flex-1">Cancel</button>
+           <button onClick={handleSave} className="btn-primary flex-1">
+-            <Check className="h-4 w-4" /> Simpan ({checked.size})
++            <Check className="h-4 w-4" /> Save ({checked.size})
+           </button>
+         </div>
+       </div>
+@@ -1275,7 +1276,7 @@ function MedicineSelectionModal({ selected, onClose, onSave }: { selected: any[]
+ //  Client Subscription & Payment History
+ // ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ 
+-const subStatusColors: Record<string, string> = {
++const subStatusColors: any = {
+   active: "bg-emerald-100 text-emerald-700",
+   cancelled: "bg-rose-100 text-rose-700",
+   expired: "bg-slate-100 text-slate-500",
+@@ -1286,7 +1287,7 @@ const subStatusColors: Record<string, string> = {
+   refunded: "bg-slate-100 text-slate-500",
+ };
+ 
+-const tierStyle: Record<string, { icon: typeof Star; gradient: string; text: string }> = {
++const tierStyle: any = {
+   basic: { icon: Zap, gradient: "from-slate-500 to-slate-600", text: "text-slate-600" },
+   pro: { icon: Star, gradient: "from-brand-500 to-brand-700", text: "text-sf-deepNavy" },
+   elite: { icon: Crown, gradient: "from-amber-500 to-amber-700", text: "text-amber-600" },
+@@ -1324,7 +1325,7 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+       if (group.monthly) {
+         opts.push({
+           value: group.monthly.id,
+-          label: `${group.monthly.name} - ${formatCurrency(group.monthly.price)} / bulan`,
++          label: `${group.monthly.name} - ${formatCurrency(group.monthly.price)} / month`,
+         });
+       }
+       if (group.annual) {
+@@ -1407,31 +1408,31 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+                 <TierIcon className="h-5 w-5" />
+               </div>
+               <div>
+-                <p className="text-sm text-white/70">Langganan Aktif</p>
++                <p className="text-sm text-white/70">Active Subscription</p>
+                 <p className="text-xl font-bold">{activeSub.plan_name}</p>
+               </div>
+             </div>
+             <div className="text-right flex flex-col items-end gap-1.5">
+               <div className="flex items-center gap-1.5 text-white/80 text-sm font-semibold">
+                 <Clock className="h-4 w-4" />
+-                {daysLeft != null && daysLeft > 0 ? `${daysLeft} hari tersisa` : "Expired"}
++                {daysLeft != null && daysLeft > 0 ? `${daysLeft} days left` : "Expired"}
+               </div>
+-              <p className="text-xs text-white/50">s/d {formatDate(activeSub.expires_at)}</p>
++              <p className="text-xs text-white/50">until {formatDate(activeSub.expires_at)}</p>
+               {isFinance && (
+                 <button
+                   onClick={() => setManualSubOpen(true)}
+                   className="mt-2 px-2.5 py-1 text-xs bg-white text-sf-deepNavy font-bold rounded hover:bg-slate-100 transition-colors shadow-sm"
+                 >
+-                  Ubah / Set Paket
++                  Edit / Set Plan
+                 </button>
+               )}
+             </div>
+           </div>
+           <div className="flex items-center gap-4 mt-3 pt-3 border-t border-white/20 text-sm text-white/70">
+-            <span>Mulai: {formatDate(activeSub.started_at)}</span>
+-            <span>Metode: {activeSub.payment_method || "-"}</span>
+-            <span>Total Langganan: {subs.length}x</span>
+-            <span>Total Bayar: {formatCurrency(totalSpent)}</span>
++            <span>Start: {formatDate(activeSub.started_at)}</span>
++            <span>Method: {activeSub.payment_method || "-"}</span>
++            <span>Total Subscription: {subs.length}x</span>
++            <span>Total Paid: {formatCurrency(totalSpent)}</span>
+           </div>
+         </div>
+       ) : (
+@@ -1441,8 +1442,8 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+               <CreditCard className="h-5 w-5 text-slate-400" />
+             </div>
+             <div>
+-              <p className="text-sm font-semibold text-slate-700">Belum Berlangganan</p>
+-              <p className="text-xs text-slate-400">{clientName} belum memiliki langganan aktif</p>
++              <p className="text-sm font-semibold text-slate-700">No Active Subscription</p>
++              <p className="text-xs text-slate-400">{clientName} does not have an active subscription</p>
+             </div>
+           </div>
+           {isFinance && (
+@@ -1450,7 +1451,7 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+               onClick={() => setManualSubOpen(true)}
+               className="btn-primary text-xs px-3 py-1.5 flex items-center gap-1"
+             >
+-              <Plus className="h-3.5 w-3.5" /> Set Paket Langganan
++              <Plus className="h-3.5 w-3.5" /> Set Subscription Plan
+             </button>
+           )}
+         </div>
+@@ -1464,7 +1465,7 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+               <h3 className="font-bold text-slate-900 flex items-center gap-2">
+                 <Crown className="h-5 w-5 text-sf-warmGold" />
+-                Set Paket Langganan Manual
++                Set Manual Subscription Plan
+               </h3>
+               <button onClick={() => setManualSubOpen(false)} className="p-1 rounded-lg hover:bg-slate-100 text-slate-400">
+                 <X className="h-5 w-5" />
+@@ -1473,12 +1474,12 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+ 
+             <div className="space-y-4">
+               <p className="text-sm text-slate-500">
+-                Pilih paket berlangganan untuk client <strong>{clientName}</strong>.
+-                Tindakan ini akan langsung mengaktifkan status langganan dan membuat payment record berstatus completed secara manual.
++                Select subscription plan for client <strong>{clientName}</strong>.
++                This action will immediately activate the subscription status and create a manual completed payment record.
+               </p>
+ 
+               <div>
+-                <label className="label">Pilih Paket *</label>
++                <label className="label">Select Plan *</label>
+                 {plansLoading ? (
+                   <div className="skeleton h-10 w-full rounded-lg" />
+                 ) : (
+@@ -1486,8 +1487,8 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+                     options={planOptions}
+                     value={selectedPlanId}
+                     onChange={setSelectedPlanId}
+-                    placeholder="Pilih paket..."
+-                    searchPlaceholder="Cari paket..."
++                    placeholder="Select plan..."
++                    searchPlaceholder="Search plan..."
+                   />
+                 )}
+               </div>
+@@ -1495,7 +1496,7 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+ 
+             <div className="flex justify-end gap-3 pt-5 border-t border-slate-100 mt-6">
+               <button onClick={() => setManualSubOpen(false)} className="btn-secondary text-sm">
+-                Batal
++                Cancel
+               </button>
+               <button
+                 onClick={handleCreateManualSub}
+@@ -1503,7 +1504,7 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+                 className="btn-primary text-sm px-4 py-2 flex items-center gap-1.5"
+               >
+                 {createManualSub.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+-                Aktifkan Paket
++                Activate Plan
+               </button>
+             </div>
+           </div>
+@@ -1521,7 +1522,7 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+               tab === "subscriptions" ? "text-sf-deepNavy border-b-2 border-sf-deepNavy bg-sf-iceBlue/40" : "text-slate-500 hover:text-slate-700"
+             )}
+           >
+-            Riwayat Langganan ({subs.length})
++            Subscription History ({subs.length})
+           </button>
+           <button
+             onClick={() => setTab("payments")}
+@@ -1529,7 +1530,7 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+               tab === "payments" ? "text-sf-deepNavy border-b-2 border-sf-deepNavy bg-sf-iceBlue/40" : "text-slate-500 hover:text-slate-700"
+             )}
+           >
+-            Riwayat Pembayaran ({payments.length})
++            Payment History ({payments.length})
+           </button>
+         </div>
+ 
+@@ -1537,17 +1538,17 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+           subsLoading ? (
+             <div className="p-4"><div className="skeleton h-32 w-full rounded-lg" /></div>
+           ) : subs.length === 0 ? (
+-            <div className="p-8 text-center text-sm text-slate-400">Belum ada riwayat langganan</div>
++            <div className="p-8 text-center text-sm text-slate-400">No subscription history</div>
+           ) : (
+             <table className="w-full text-sm">
+               <thead>
+                 <tr className="bg-slate-50/50">
+                   <th className="text-left px-4 py-2.5 font-medium text-slate-500">Plan</th>
+                   <th className="text-left px-4 py-2.5 font-medium text-slate-500">Status</th>
+-                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Mulai</th>
+-                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Berakhir</th>
+-                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Metode</th>
+-                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Hasil Lab</th>
++                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Start</th>
++                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">End</th>
++                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Method</th>
++                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Lab Results</th>
+                 </tr>
+               </thead>
+               <tbody>
+@@ -1565,7 +1566,7 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+                     <td className="px-4 py-2.5">
+                       {s.attachment_url ? (
+                         <a href={s.attachment_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs text-sf-systemBlue hover:underline bg-blue-50 px-2 py-1 rounded">
+-                          <File className="h-3 w-3" /> Lihat File
++                          <File className="h-3 w-3" /> View File
+                         </a>
+                       ) : (
+                         <label className="cursor-pointer inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-sf-deepNavy bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded transition-colors">
+@@ -1586,16 +1587,16 @@ function ClientSubscriptionSection({ clientId, clientName }: { clientId: string;
+           payLoading ? (
+             <div className="p-4"><div className="skeleton h-32 w-full rounded-lg" /></div>
+           ) : payments.length === 0 ? (
+-            <div className="p-8 text-center text-sm text-slate-400">Belum ada riwayat pembayaran</div>
++            <div className="p-8 text-center text-sm text-slate-400">No payment history</div>
+           ) : (
+             <table className="w-full text-sm">
+               <thead>
+                 <tr className="bg-slate-50/50">
+-                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Jumlah</th>
++                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Amount</th>
+                   <th className="text-left px-4 py-2.5 font-medium text-slate-500">Status</th>
+-                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Metode</th>
++                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Method</th>
+                   <th className="text-left px-4 py-2.5 font-medium text-slate-500">External ID</th>
+-                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Tanggal</th>
++                  <th className="text-left px-4 py-2.5 font-medium text-slate-500">Date</th>
+                 </tr>
+               </thead>
+               <tbody>

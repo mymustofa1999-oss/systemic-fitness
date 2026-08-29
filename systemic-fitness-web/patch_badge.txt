@@ -1,0 +1,14 @@
+{/* Classification Badge */}
+                <div className='hidden lg:flex items-center shrink-0 w-24'>
+                  {client.classification ? (
+                    <span className='px-3 py-1 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700 uppercase tracking-wider'>
+                      {client.classification}
+                    </span>
+                  ) : (
+                    <span className='px-3 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 uppercase tracking-wider'>
+                      Unclassified
+                    </span>
+                  )}
+                </div>
+
+                {/* Status Badge */}

@@ -377,7 +377,7 @@ func (r *DigitalLibraryRepository) ListMenuItems(ctx context.Context, categoryCo
 }
 
 // AddModulCardItem adds a movement to a specific level. If categoryCode is provided, it adds only to that category.
-func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID string, movementID string, categoryCode *string, setName *string, groupType *string, section *string) error {
+func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID string, movementID string, categoryCode *string, setName *string, groupType *string, section *string, targetGender *string) error {
 	cats, err := r.ListCategories(ctx)
 	if err != nil {
 		return err
@@ -427,9 +427,9 @@ func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID
 		}
 
 		_, err = tx.Exec(ctx, `
-			INSERT INTO dl_menu_items (category_id, level_id, movement_id, body_part, sort_order, set_name, group_type)
-			VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-			c.ID, levelID, movementID, bodyPart, nextSort, setName, groupType)
+			INSERT INTO dl_menu_items (category_id, level_id, movement_id, body_part, sort_order, set_name, group_type, target_gender)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+			c.ID, levelID, movementID, bodyPart, nextSort, setName, groupType, targetGender)
 		if err != nil {
 			return err
 		}

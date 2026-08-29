@@ -1,0 +1,528 @@
+{
+  "Arm Rotation": [
+    {
+      "rowIdx": 2,
+      "movement": "Arm Rotation",
+      "url": "https://youtu.be/_rOmevahtfg",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Arm Rotation",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/_rOmevahtfg",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 13,
+      "movement": "Arm Rotation",
+      "url": "https://youtu.be/KehSzUUpVY8",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Arm Rotation",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/KehSzUUpVY8",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 24,
+      "movement": "Arm Rotation",
+      "url": "https://youtu.be/KehSzUUpVY8",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 3",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Arm Rotation",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/KehSzUUpVY8",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ],
+  "Open V": [
+    {
+      "rowIdx": 3,
+      "movement": "Open V",
+      "url": "https://youtu.be/vW4hYdWDFQs",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Open V",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/vW4hYdWDFQs",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 14,
+      "movement": "Open V",
+      "url": "https://youtu.be/mMvq_ZWa-AU",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Open V",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/mMvq_ZWa-AU",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 25,
+      "movement": "Open V",
+      "url": "https://youtu.be/mMvq_ZWa-AU",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 3",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Open V",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/mMvq_ZWa-AU",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 35,
+      "movement": "Open V",
+      "url": "https://youtu.be/qjKyIhvRSto",
+      "raw": {
+        "SEQUENCE": "MC",
+        "SET/TRACK": "Basic Lower",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_UPPER": "Open V",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/qjKyIhvRSto",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ],
+  "Press Up": [
+    {
+      "rowIdx": 4,
+      "movement": "Press Up",
+      "url": "https://youtu.be/WHqnzb7PNhY",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Press Up",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/WHqnzb7PNhY",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 15,
+      "movement": "Press Up",
+      "url": "https://youtu.be/trlgpxVehok",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Press Up",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/trlgpxVehok",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 26,
+      "movement": "Press Up",
+      "url": "https://youtu.be/trlgpxVehok",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 3",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Press Up",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/trlgpxVehok",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 38,
+      "movement": "Press Up",
+      "url": "https://youtu.be/aFbveSHv7cQ?si=5M1-vlEBLDKZ8fEH",
+      "raw": {
+        "SEQUENCE": "MC",
+        "SET/TRACK": "Basic Lower",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_UPPER": "Press Up",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/aFbveSHv7cQ?si=5M1-vlEBLDKZ8fEH",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ],
+  "Press Front": [
+    {
+      "rowIdx": 5,
+      "movement": "Press Front",
+      "url": "https://youtu.be/-Dt4vpTTveM",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Press Front",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/-Dt4vpTTveM",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 16,
+      "movement": "Press Front",
+      "url": "https://youtu.be/S1AhD6o6tnI",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Press Front",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/S1AhD6o6tnI",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 27,
+      "movement": "Press Front",
+      "url": "https://youtu.be/S1AhD6o6tnI",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 3",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Press Front",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/S1AhD6o6tnI",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ],
+  "Open Arm": [
+    {
+      "rowIdx": 6,
+      "movement": "Open Arm",
+      "url": "https://youtu.be/mT4KBrXiG-0",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Open Arm",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/mT4KBrXiG-0",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 17,
+      "movement": "Open Arm",
+      "url": "https://youtu.be/gIeBMVSQQAI",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Open Arm",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/gIeBMVSQQAI",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 28,
+      "movement": "Open Arm",
+      "url": "https://youtu.be/gIeBMVSQQAI",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 3",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Open Arm",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/gIeBMVSQQAI",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 36,
+      "movement": "Open Arm",
+      "url": "https://youtu.be/VyOHUL9OtoQ",
+      "raw": {
+        "SEQUENCE": "MC",
+        "SET/TRACK": "Basic Lower",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_UPPER": "Open Arm",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/VyOHUL9OtoQ",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ],
+  "Cross Front": [
+    {
+      "rowIdx": 7,
+      "movement": "Cross Front",
+      "url": "https://youtu.be/3sNteqa5dX0",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Cross Front",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/3sNteqa5dX0",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 18,
+      "movement": "Cross Front",
+      "url": "https://youtu.be/iGVTZCT-LIE",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 1",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Cross Front",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/iGVTZCT-LIE",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 29,
+      "movement": "Cross Front",
+      "url": "https://youtu.be/iGVTZCT-LIE",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 3",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Upper",
+        "FEMALE_MOVEMENT_UPPER": "Cross Front",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/iGVTZCT-LIE",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ],
+  "Front Knee Lift": [
+    {
+      "rowIdx": 8,
+      "movement": "Front Knee Lift",
+      "url": "https://youtu.be/2X7EtSq2T6s",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 2",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Front Knee Lift",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/2X7EtSq2T6s",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 19,
+      "movement": "Front Knee Lift",
+      "url": "https://youtu.be/Atb_GRZ8sWE",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 2",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Front Knee Lift",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/Atb_GRZ8sWE",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 30,
+      "movement": "Front Knee Lift",
+      "url": "https://youtu.be/Atb_GRZ8sWE",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 4",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Front Knee Lift",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/Atb_GRZ8sWE",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ],
+  "Front Leg Ext": [
+    {
+      "rowIdx": 9,
+      "movement": "Front Leg Ext",
+      "url": "waitlist",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 2",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Front Leg Ext",
+        "FEMALE_VIDEO_LINK": "waitlist",
+        "FEMALE_STATUS": "TIDAK DITEMUKAN"
+      }
+    },
+    {
+      "rowIdx": 20,
+      "movement": "Front Leg Ext",
+      "url": "waitlist",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 2",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Front Leg Ext",
+        "FEMALE_VIDEO_LINK": "waitlist",
+        "FEMALE_STATUS": "TIDAK DITEMUKAN"
+      }
+    },
+    {
+      "rowIdx": 31,
+      "movement": "Front Leg Ext",
+      "url": "waitlist",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 4",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Front Leg Ext",
+        "FEMALE_VIDEO_LINK": "waitlist",
+        "FEMALE_STATUS": "TIDAK DITEMUKAN"
+      }
+    }
+  ],
+  "Sit Squat TRX": [
+    {
+      "rowIdx": 10,
+      "movement": "Sit Squat TRX",
+      "url": "https://youtu.be/Nk-WOfTOKDk",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 3",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Sit Squat TRX",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/Nk-WOfTOKDk",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 21,
+      "movement": "Sit Squat TRX",
+      "url": "https://youtu.be/Nk-WOfTOKDk",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 2",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Sit Squat TRX",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/Nk-WOfTOKDk",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 32,
+      "movement": "Sit Squat TRX",
+      "url": "https://youtu.be/Nk-WOfTOKDk",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 4",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Sit Squat TRX",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/Nk-WOfTOKDk",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ],
+  "Sit Overhead Squat TRX": [
+    {
+      "rowIdx": 11,
+      "movement": "Sit Overhead Squat TRX",
+      "url": "https://youtu.be/WLXNxVgKWWk",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 3",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Sit Overhead Squat TRX",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/WLXNxVgKWWk",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 22,
+      "movement": "Sit Overhead Squat TRX",
+      "url": "https://youtu.be/WLXNxVgKWWk",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 2",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Sit Overhead Squat TRX",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/WLXNxVgKWWk",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 33,
+      "movement": "Sit Overhead Squat TRX",
+      "url": "https://youtu.be/WLXNxVgKWWk",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 4",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Sit Overhead Squat TRX",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/WLXNxVgKWWk",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ],
+  "Sit Sumo Squat TRX": [
+    {
+      "rowIdx": 12,
+      "movement": "Sit Sumo Squat TRX",
+      "url": "https://youtu.be/KmhFbTEOzq0",
+      "raw": {
+        "SEQUENCE": "FC",
+        "SET/TRACK": "Set 3",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Sit Sumo Squat TRX",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/KmhFbTEOzq0",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 23,
+      "movement": "Sit Sumo Squat TRX",
+      "url": "https://youtu.be/KmhFbTEOzq0",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 2",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Sit Sumo Squat TRX",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/KmhFbTEOzq0",
+        "FEMALE_STATUS": "OK"
+      }
+    },
+    {
+      "rowIdx": 34,
+      "movement": "Sit Sumo Squat TRX",
+      "url": "https://youtu.be/KmhFbTEOzq0",
+      "raw": {
+        "SEQUENCE": "CC",
+        "SET/TRACK": "Set 4",
+        "TYPE": "Isolate",
+        "SECTION": "Sit Lower",
+        "FEMALE_MOVEMENT_LOWER": "Sit Sumo Squat TRX",
+        "FEMALE_VIDEO_LINK": "https://youtu.be/KmhFbTEOzq0",
+        "FEMALE_STATUS": "OK"
+      }
+    }
+  ]
+}

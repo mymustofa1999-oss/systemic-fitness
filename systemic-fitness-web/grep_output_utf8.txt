@@ -1,0 +1,47 @@
+﻿// klien di mobile app — tapi dalam mode preview / read-only. Tujuannya:
+// klien mengisinya. Bukan editor — pertanyaan masih hard-coded di engine
+// (lihat systemic-fitness-api/internal/service/assessment_v2_engine.go).
+/** Radio button preview — semua opsi terlihat, none selected. */
+// SF Phase 3 — Read-only viewer hasil Assessment v2 untuk klien tertentu.
+/** Single-select: tampilkan SEMUA opsi; yang dipilih di-highlight, lainnya abu-abu. */
+/** Multi-select: tampilkan SEMUA opsi; yang dipilih ✓ hijau, yang tidak abu-abu. */
+          {/* Parameter Latihan (Wireframe Layout) */}
+                <Activity className="h-5 w-5 text-sf-warmGold" /> Parameter Latihan
+                      <option value="❎ Not Consumed">❎ Not Consumed (Tidak minum)</option>
+      // auto-start if there is a template, or preset, or at least active customer programs to map Modul Card to
+        // Jika gerakan punya spesifik level, pastikan cocok dengan level Training Card
+        // Jika gerakan tidak ada tag level, anggap general dan bisa dipakai di level berapapun
+            Mulai Latihan (Live Session)
+                Mode lihat saja
+    // Fallback: Jika filter pattern membuat opsi jadi kosong, tampilkan semua agar user tidak stuck
+      // Tampilkan gerakan yang sesuai body_part, atau yang body_part nya kosong (opsional), atau 'whole body'
+    // Jika tidak ada gerakan yang cocok dengan body part, jangan filter agar user tidak stuck
+// SF Phase 7c — Klien Saya.
+// Distinct klien yang pernah Anda sentuh via clinical_notes ATAU lab_consultations.
+        <h1 className="sf-headline text-3xl">Klien Saya</h1>
+          Klien yang pernah Anda layani — entah lewat catatan klinis atau Lab
+// List Asesmen v2 status='submitted' yang belum ada catatan klinis aktif.
+// Tier 3 wajib book sebelum program aktif.
+                <th className="text-left px-4 py-3 font-semibold text-slate-600">Klien</th>
+      apiPost(`/api/digital-library/modul-cards`, data),
+      apiDelete(`/api/digital-library/modul-cards/${data.level_id}/${data.movement_id}`),
+            : "Pantau log sesi, metrik tubuh, dan progres latihan"}
+                    {/* Gerakan */}
+  "Klien": "Clients",
+  "Penilaian Awal": "Initial Assessment",
+  "Penilaian Ulang": "Re-Assessment",
+  "Modul Card": "Training Module",
+  "Obat": "Medicines",
+  "Daftar Obat": "Medicines",
+  "Latihan": "Exercises",
+  "Gerakan": "Exercises",
+  "Jenis Latihan": "Training Types",
+  "Jadwal Latihan": "Training Schedules",
+  "Modul Card": "Training Module",
+  "Modul-Card": "Training Module",
+// SF Phase 7b — Consultant Dashboard hooks (queue, klien saya, clinical notes, lab assign).
+// ─── Klien Saya ────────────────────────────────────────────────────
+// ─── Modul Card Mutations ───────────────────────────────────────
+      apiPost(`/api/digital-library/modul-cards`, data),
+      apiDelete(`/api/digital-library/modul-cards/${data.level_id}/${data.movement_id}`),
+// ─── Medicines (Daftar Obat) ────────────────────────────────────

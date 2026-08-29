@@ -1,0 +1,8282 @@
+[
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/3S5hk1mM9c4"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/HO-6f595dyc"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/8xNbmpUQ4rE"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/uIPb6IDr51w"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/g_LKFDpIdy8"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/FzYB8lcHSPI"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Back step - Chair",
+    "url": "https://youtu.be/YCY0kXQRiKw"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Side Lift Chair",
+    "url": "https://youtu.be/P_H-K-tRju4"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/u7mh_0N10ng"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "High Knee Chair",
+    "url": "https://youtu.be/Ox8pRX6m-uc"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Knee Drive Chair",
+    "url": "https://youtu.be/wFpgh1BJYeE"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Jog-Chair",
+    "url": "https://youtu.be/FSNB9y7s_sU"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Lateral Lunge Chair",
+    "url": "https://youtu.be/A8zrLo4iuns"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Sit Squat TRX",
+    "url": "https://youtu.be/Nk-WOfTOKDk"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Sit Overhead Squat TRX",
+    "url": "https://youtu.be/WLXNxVgKWWk"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Sit Sumo Squat TRX",
+    "url": "https://youtu.be/KmhFbTEOzq0"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/rQG0Qrw3HTE"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/IXmE3KR8HU8"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/y_nx3_UcZ5I"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/S1AhD6o6tnI"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/gIeBMVSQQAI"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/Ipd3w6kNseo"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Back step - Chair",
+    "url": "https://youtu.be/0F48EbjjQTw"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Side Step Chair",
+    "url": "https://youtu.be/3OFDAcpR3cU"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Side Lift Chair",
+    "url": "https://youtu.be/D-ekkwKHtSs"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/JheecrPIpmM"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "High Knee Chair",
+    "url": "https://youtu.be/oOGxaCNDeE4"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Knee Drive Chair",
+    "url": "https://youtu.be/SeEB4tTMy3g"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Front Step Chair",
+    "url": null
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Jog-Chair",
+    "url": "https://youtu.be/qSKkOd9gylg"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/rQG0Qrw3HTE"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/IXmE3KR8HU8"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/y_nx3_UcZ5I"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/S1AhD6o6tnI"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/gIeBMVSQQAI"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/Ipd3w6kNseo"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Back step - Chair",
+    "url": "https://youtu.be/0F48EbjjQTw"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Side Step Chair",
+    "url": "https://youtu.be/3OFDAcpR3cU"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Side Lift Chair",
+    "url": "https://youtu.be/D-ekkwKHtSs"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/JheecrPIpmM"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "High Knee Chair",
+    "url": "https://youtu.be/oOGxaCNDeE4"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Knee Drive Chair",
+    "url": "https://youtu.be/SeEB4tTMy3g"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Front Step Chair",
+    "url": null
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Jog-Chair",
+    "url": "https://youtu.be/qSKkOd9gylg"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Open V",
+    "url": "https://youtu.be/qjKyIhvRSto"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Press Up",
+    "url": "https://youtu.be/aFbveSHv7cQ"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/VyOHUL9OtoQ"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/Q8Et1YRNA1s"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Hip Abductor Band",
+    "url": "https://youtu.be/iBCOKowoozg"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 2,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Rotation-Step Touch",
+    "url": "https://youtu.be/Pug7FAy_KCM"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing Up-Side Step",
+    "url": "https://youtu.be/0D9rCR9uJi4"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/JnjWxwZBp8g"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Back step",
+    "url": "https://youtu.be/FN8yX7ckZjM"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Back step",
+    "url": "https://youtu.be/fe1G9rrdm0g"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/-H7m_nX_Q-4"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/7Ir0I3G4Xl8"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/UJiEOkWT5zc"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/lvhqPnmQbK4"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/1Q1CPPEDaJc"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/1hRyG-nC3a0"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Step Touch",
+    "url": "https://youtu.be/8EQbLb0VKMU"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Step Touch",
+    "url": "https://youtu.be/v7H6_j7illg"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side Down-Side High Knee",
+    "url": "https://youtu.be/EaWOWO7pkEg"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/QoTDyry4MPk"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-High Knee",
+    "url": "https://youtu.be/GbDDU-PLDPI"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/OYQUBXfy92c"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Step Touch",
+    "url": "https://youtu.be/L13gkHEgaCs"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Step Touch",
+    "url": "https://youtu.be/xPhW7qgUAQ4"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/_e8bp-OSX6c"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/blaP3s0N3mI"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/RN-qvp_De3U"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/FSofVNSD3LI"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat TRX",
+    "url": "https://youtu.be/aEXUq7v5EvE"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Overhead Squat TRX",
+    "url": "https://youtu.be/Y6dZVU7lfM4"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Sumo Squat TRX",
+    "url": "https://youtu.be/o-I54NprOe4"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lunges Chair",
+    "url": "https://youtu.be/ekUL39z6KzQ"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Chair",
+    "url": "https://youtu.be/lZbEjnKuygo"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Sumo Squat Chair",
+    "url": "https://youtu.be/O2tJsvOTbiQ"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Step Chair",
+    "url": "https://youtu.be/co1rOOnWJpo"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Rotation-Step Touch",
+    "url": "https://youtu.be/CDkR0Hqu_B4"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Step Touch",
+    "url": "https://youtu.be/lq5xyb4Gbqw"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Step Touch",
+    "url": "https://youtu.be/P1eSuz6kqiY"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Step Touch",
+    "url": "https://youtu.be/pIWz19u3Xw0"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Step Touch",
+    "url": "https://youtu.be/TljKrF6wyW8"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Step Touch",
+    "url": "https://youtu.be/f_eiF3EWWag"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Step Touch",
+    "url": "https://youtu.be/y40KOI19W30"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Step Touch",
+    "url": "https://youtu.be/mzxtN6LZIVU"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Step",
+    "url": "https://youtu.be/yNJjMH64MNY"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Front Step",
+    "url": "https://youtu.be/0tB0YmQVvTA"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/ockOeSpsi6s"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/UQIr_ipsjW4"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Step",
+    "url": "https://youtu.be/RnQyKJJNxww"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Side Step",
+    "url": "https://youtu.be/F8fe5mvdtQc"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/IIpw5QwfaWo"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/vryAReBm_Dg"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/3_8oPYwzqeU"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side Down-Side High Knee",
+    "url": "https://youtu.be/jgOaIUNOQww"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Side High Knee",
+    "url": "https://youtu.be/U-Qm-4TFkbQ"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/h-Qk-6DWgsQ"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-High Knee",
+    "url": "https://youtu.be/0wV-AXp6f7Q"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/D73tCsorelU"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/y2ApZiAYNH0"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/Q7MPMJeCyn0"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/UdXyx4eSKac"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Front Lift",
+    "url": "https://youtu.be/dO05YgtIp18"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/p82SXUL7phw"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/bPdopl2Jf3M"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/h1yDRnY_f_g"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Back step",
+    "url": "https://youtu.be/D6HVuSKpuJY"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Back step",
+    "url": "https://youtu.be/i5TCtKu4DAg"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Back step",
+    "url": "https://youtu.be/OBmYRZeOyWg"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Knee Drive",
+    "url": "https://youtu.be/3vimOX9AHQc"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Knee Drive",
+    "url": "https://youtu.be/70TABG4qum4"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Back-Knee Drive",
+    "url": "https://youtu.be/2_9c9qRI7aM"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open V",
+    "url": "https://youtu.be/qjKyIhvRSto"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Up",
+    "url": "https://youtu.be/aFbveSHv7cQ"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/VyOHUL9OtoQ"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/Q8Et1YRNA1s"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Squat-Band",
+    "url": "https://youtu.be/eeq1nRoE7g8"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Lift",
+    "url": "https://youtu.be/H9WQXpoiE10"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Kick Back",
+    "url": "https://youtu.be/K-TIOy5Vft0"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/JheecrPIpmM"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift",
+    "url": "https://youtu.be/ayg9P-sQsDA"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/za1YR3GowpQ"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/H85rtBQuJ84"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/9Y6TRR6Osow"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/I7JbhtpW5aE"
+  },
+  {
+    "level": 4,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/FYoVP0TwUDQ"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/_rOmevahtfg"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/vW4hYdWDFQs"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/WHqnzb7PNhY"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/-Dt4vpTTveM"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/mT4KBrXiG-0"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/3sNteqa5dX0"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Knee Lift",
+    "url": "https://youtu.be/2X7EtSq2T6s"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Leg Ext",
+    "url": null
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Squat TRX",
+    "url": "https://youtu.be/Nk-WOfTOKDk"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Overhead Squat TRX",
+    "url": "https://youtu.be/WLXNxVgKWWk"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Sumo Squat TRX",
+    "url": "https://youtu.be/KmhFbTEOzq0"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/KehSzUUpVY8"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/mMvq_ZWa-AU"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/trlgpxVehok"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/S1AhD6o6tnI"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/gIeBMVSQQAI"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/iGVTZCT-LIE"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Knee Lift",
+    "url": "https://youtu.be/Atb_GRZ8sWE"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Leg Ext",
+    "url": null
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Squat TRX",
+    "url": "https://youtu.be/Nk-WOfTOKDk"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Overhead Squat TRX",
+    "url": "https://youtu.be/WLXNxVgKWWk"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Sumo Squat TRX",
+    "url": "https://youtu.be/KmhFbTEOzq0"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/KehSzUUpVY8"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/mMvq_ZWa-AU"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/trlgpxVehok"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/S1AhD6o6tnI"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/gIeBMVSQQAI"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/iGVTZCT-LIE"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Knee Lift",
+    "url": "https://youtu.be/Atb_GRZ8sWE"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Leg Ext",
+    "url": null
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Squat TRX",
+    "url": "https://youtu.be/Nk-WOfTOKDk"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Overhead Squat TRX",
+    "url": "https://youtu.be/WLXNxVgKWWk"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Sumo Squat TRX",
+    "url": "https://youtu.be/KmhFbTEOzq0"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Open V",
+    "url": "https://youtu.be/qjKyIhvRSto"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/VyOHUL9OtoQ"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/Q8Et1YRNA1s"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Press Up",
+    "url": "https://youtu.be/aFbveSHv7cQ?si=5M1-vlEBLDKZ8fEH"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Hip Abductor Band",
+    "url": "https://youtu.be/iBCOKowoozg"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 1,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Rotation-Step Touch",
+    "url": "https://youtu.be/Pug7FAy_KCM"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing Up-Side Step",
+    "url": "https://youtu.be/0D9rCR9uJi4"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/JnjWxwZBp8g"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Back step",
+    "url": "https://youtu.be/FN8yX7ckZjM"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Back step",
+    "url": "https://youtu.be/fe1G9rrdm0g"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/-H7m_nX_Q-4"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/7Ir0I3G4Xl8"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/UJiEOkWT5zc"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/lvhqPnmQbK4"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/1Q1CPPEDaJc"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/1hRyG-nC3a0"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Step Touch",
+    "url": "https://youtu.be/8EQbLb0VKMU"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Step Touch",
+    "url": "https://youtu.be/v7H6_j7illg"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side Down-Side High Knee",
+    "url": "https://youtu.be/EaWOWO7pkEg"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/QoTDyry4MPk"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-High Knee",
+    "url": "https://youtu.be/GbDDU-PLDPI"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/OYQUBXfy92c"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Step Touch",
+    "url": "https://youtu.be/L13gkHEgaCs"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Step Touch",
+    "url": "https://youtu.be/xPhW7qgUAQ4"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/_e8bp-OSX6c"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/blaP3s0N3mI"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/RN-qvp_De3U"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/FSofVNSD3LI"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat",
+    "url": "https://youtu.be/XyS-XmW2Pwc"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Overhead Squat",
+    "url": "https://youtu.be/Zz_kb0SUEvM"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Sumo Squat",
+    "url": "https://youtu.be/fLjY9iWHM5g"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Step",
+    "url": "https://youtu.be/lx7tnAYnfqU"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lunges",
+    "url": "https://youtu.be/ZcbOg4goUWY"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lateral Lunge",
+    "url": "https://youtu.be/pIlDIlALdbc"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Curtsy Lunges",
+    "url": "https://youtu.be/7llhcX_p1Qw"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Rotation-Step Touch",
+    "url": "https://youtu.be/CDkR0Hqu_B4"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Step Touch",
+    "url": "https://youtu.be/lq5xyb4Gbqw"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Step Touch",
+    "url": "https://youtu.be/P1eSuz6kqiY"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Step Touch",
+    "url": "https://youtu.be/pIWz19u3Xw0"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Step Touch",
+    "url": "https://youtu.be/TljKrF6wyW8"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Step Touch",
+    "url": "https://youtu.be/f_eiF3EWWag"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Step Touch",
+    "url": "https://youtu.be/y40KOI19W30"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Step Touch",
+    "url": "https://youtu.be/mzxtN6LZIVU"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Step",
+    "url": "https://youtu.be/yNJjMH64MNY"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Front Step",
+    "url": "https://youtu.be/0tB0YmQVvTA"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/ockOeSpsi6s"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/UQIr_ipsjW4"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Step",
+    "url": "https://youtu.be/RnQyKJJNxww"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Side Step",
+    "url": "https://youtu.be/F8fe5mvdtQc"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/IIpw5QwfaWo"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/vryAReBm_Dg"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/3_8oPYwzqeU"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side Down-Side High Knee",
+    "url": "https://youtu.be/jgOaIUNOQww"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Side High Knee",
+    "url": "https://youtu.be/U-Qm-4TFkbQ"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/h-Qk-6DWgsQ"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-High Knee",
+    "url": "https://youtu.be/0wV-AXp6f7Q"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/D73tCsorelU"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/y2ApZiAYNH0"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/Q7MPMJeCyn0"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/UdXyx4eSKac"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Front Lift",
+    "url": "https://youtu.be/dO05YgtIp18"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/p82SXUL7phw"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/bPdopl2Jf3M"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/h1yDRnY_f_g"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Back step",
+    "url": "https://youtu.be/D6HVuSKpuJY"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Back step",
+    "url": "https://youtu.be/i5TCtKu4DAg"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Back step",
+    "url": "https://youtu.be/OBmYRZeOyWg"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Knee Drive",
+    "url": "https://youtu.be/3vimOX9AHQc"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Knee Drive",
+    "url": "https://youtu.be/70TABG4qum4"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Back-Knee Drive",
+    "url": "https://youtu.be/2_9c9qRI7aM"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open V",
+    "url": "https://youtu.be/qjKyIhvRSto"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Up",
+    "url": "https://youtu.be/aFbveSHv7cQ"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/VyOHUL9OtoQ"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/Q8Et1YRNA1s"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Front",
+    "url": "https://youtu.be/gIeBMVSQQAI"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open V",
+    "url": "https://youtu.be/qjKyIhvRSto"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Up - Squat",
+    "url": "https://youtu.be/jiLbbI39koo"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open Arm Squat",
+    "url": "https://youtu.be/Wh_4iamBMMc"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Triceps Extension - Squat",
+    "url": "https://youtu.be/I4aaaCv_qAg"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Up - Squat",
+    "url": "https://youtu.be/h6T2Uc7Q-Go"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Squat-Band",
+    "url": "https://youtu.be/eeq1nRoE7g8"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Lift",
+    "url": "https://youtu.be/H9WQXpoiE10"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Kick Back",
+    "url": "https://youtu.be/K-TIOy5Vft0"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/JheecrPIpmM"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift",
+    "url": "https://youtu.be/ayg9P-sQsDA"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Knee Drive",
+    "url": "https://youtu.be/R2h-CFSiuGU"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Kick",
+    "url": "https://youtu.be/Byb9pR0esso"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Donkey Kick",
+    "url": "https://youtu.be/REjEINo4nJc"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Push Up Plank",
+    "url": "https://youtu.be/qGa0DdAFp8A"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "High Plank",
+    "url": "https://youtu.be/6mFaXOZwqOw"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Plank",
+    "url": "https://youtu.be/J5jGVU32cBc"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Doggy Pee Band",
+    "url": "https://youtu.be/xJXlQ3eAb3U"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Donkey Kick Band",
+    "url": "https://youtu.be/qmOF8yrtw4M"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Kick Back Band",
+    "url": "https://youtu.be/nvSk5r4ZtMY"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Pedal",
+    "url": "https://youtu.be/YxaU2BO814Q"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Glute Bridge",
+    "url": "https://youtu.be/6glP8FobDPo"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Sit Up",
+    "url": "https://youtu.be/Po3qKd74lpg"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Sit Up Band",
+    "url": "https://youtu.be/YOh6Ps9Pd88"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Glute Bridge Band",
+    "url": "https://youtu.be/2DzvTS7g394"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Pedal band",
+    "url": "https://youtu.be/caeEgVqXUxE"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/za1YR3GowpQ"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/H85rtBQuJ84"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/9Y6TRR6Osow"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/I7JbhtpW5aE"
+  },
+  {
+    "level": 5,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/FYoVP0TwUDQ"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Rotation-Step Touch",
+    "url": "https://youtu.be/Pug7FAy_KCM"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing Up-Side Step",
+    "url": "https://youtu.be/0D9rCR9uJi4"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/JnjWxwZBp8g"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Back step",
+    "url": "https://youtu.be/FN8yX7ckZjM"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Back step",
+    "url": "https://youtu.be/fe1G9rrdm0g"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/-H7m_nX_Q-4"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/7Ir0I3G4Xl8"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/UJiEOkWT5zc"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/lvhqPnmQbK4"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/1Q1CPPEDaJc"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/1hRyG-nC3a0"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Step Touch",
+    "url": "https://youtu.be/8EQbLb0VKMU"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Step Touch",
+    "url": "https://youtu.be/v7H6_j7illg"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side Down-Side High Knee",
+    "url": "https://youtu.be/EaWOWO7pkEg"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/QoTDyry4MPk"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-High Knee",
+    "url": "https://youtu.be/GbDDU-PLDPI"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/OYQUBXfy92c"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Step Touch",
+    "url": "https://youtu.be/L13gkHEgaCs"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Step Touch",
+    "url": "https://youtu.be/xPhW7qgUAQ4"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/_e8bp-OSX6c"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/blaP3s0N3mI"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/RN-qvp_De3U"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/FSofVNSD3LI"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat",
+    "url": "https://youtu.be/XyS-XmW2Pwc"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Overhead Squat",
+    "url": "https://youtu.be/Zz_kb0SUEvM"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Sumo Squat",
+    "url": "https://youtu.be/fLjY9iWHM5g"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Step",
+    "url": "https://youtu.be/lx7tnAYnfqU"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lunges",
+    "url": "https://youtu.be/ZcbOg4goUWY"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lateral Lunge",
+    "url": "https://youtu.be/pIlDIlALdbc"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Curtsy Lunges",
+    "url": "https://youtu.be/7llhcX_p1Qw"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Rotation-Step Touch",
+    "url": "https://youtu.be/CDkR0Hqu_B4"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Step Touch",
+    "url": "https://youtu.be/lq5xyb4Gbqw"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Step Touch",
+    "url": "https://youtu.be/P1eSuz6kqiY"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Step Touch",
+    "url": "https://youtu.be/pIWz19u3Xw0"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Step Touch",
+    "url": "https://youtu.be/TljKrF6wyW8"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Step Touch",
+    "url": "https://youtu.be/f_eiF3EWWag"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Step Touch",
+    "url": "https://youtu.be/y40KOI19W30"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Step Touch",
+    "url": "https://youtu.be/mzxtN6LZIVU"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Step",
+    "url": "https://youtu.be/yNJjMH64MNY"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Front Step",
+    "url": "https://youtu.be/0tB0YmQVvTA"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/ockOeSpsi6s"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/UQIr_ipsjW4"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Step",
+    "url": "https://youtu.be/RnQyKJJNxww"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Side Step",
+    "url": "https://youtu.be/F8fe5mvdtQc"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/IIpw5QwfaWo"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/vryAReBm_Dg"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/3_8oPYwzqeU"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side Down-Side High Knee",
+    "url": "https://youtu.be/jgOaIUNOQww"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Side High Knee",
+    "url": "https://youtu.be/U-Qm-4TFkbQ"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/h-Qk-6DWgsQ"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-High Knee",
+    "url": "https://youtu.be/0wV-AXp6f7Q"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/D73tCsorelU"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/y2ApZiAYNH0"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/Q7MPMJeCyn0"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/UdXyx4eSKac"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Front Lift",
+    "url": "https://youtu.be/dO05YgtIp18"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/p82SXUL7phw"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/bPdopl2Jf3M"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/h1yDRnY_f_g"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Back step",
+    "url": "https://youtu.be/D6HVuSKpuJY"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Back step",
+    "url": "https://youtu.be/i5TCtKu4DAg"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Back step",
+    "url": "https://youtu.be/OBmYRZeOyWg"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Knee Drive",
+    "url": "https://youtu.be/3vimOX9AHQc"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Knee Drive",
+    "url": "https://youtu.be/70TABG4qum4"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Back-Knee Drive",
+    "url": "https://youtu.be/2_9c9qRI7aM"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open V",
+    "url": "https://youtu.be/qjKyIhvRSto"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Up",
+    "url": "https://youtu.be/aFbveSHv7cQ"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/VyOHUL9OtoQ"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/Q8Et1YRNA1s"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Front",
+    "url": "https://youtu.be/gIeBMVSQQAI"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open V",
+    "url": "https://youtu.be/qjKyIhvRSto"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Up - Squat",
+    "url": "https://youtu.be/jiLbbI39koo"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open Arm Squat",
+    "url": "https://youtu.be/Wh_4iamBMMc"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Triceps Extension - Squat",
+    "url": "https://youtu.be/I4aaaCv_qAg"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Up - Squat",
+    "url": "https://youtu.be/h6T2Uc7Q-Go"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Squat-Band",
+    "url": "https://youtu.be/eeq1nRoE7g8"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Lift",
+    "url": "https://youtu.be/H9WQXpoiE10"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Kick Back",
+    "url": "https://youtu.be/K-TIOy5Vft0"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/JheecrPIpmM"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift",
+    "url": "https://youtu.be/ayg9P-sQsDA"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Knee Drive",
+    "url": "https://youtu.be/R2h-CFSiuGU"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Kick",
+    "url": "https://youtu.be/Byb9pR0esso"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Donkey Kick",
+    "url": "https://youtu.be/REjEINo4nJc"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Push Up Plank",
+    "url": "https://youtu.be/qGa0DdAFp8A"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "High Plank",
+    "url": "https://youtu.be/6mFaXOZwqOw"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Plank",
+    "url": "https://youtu.be/J5jGVU32cBc"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Doggy Pee Band",
+    "url": "https://youtu.be/xJXlQ3eAb3U"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Donkey Kick Band",
+    "url": "https://youtu.be/qmOF8yrtw4M"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Kick Back Band",
+    "url": "https://youtu.be/nvSk5r4ZtMY"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Pedal",
+    "url": "https://youtu.be/YxaU2BO814Q"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Glute Bridge",
+    "url": "https://youtu.be/6glP8FobDPo"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Sit Up",
+    "url": "https://youtu.be/Po3qKd74lpg"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Sit Up Band",
+    "url": "https://youtu.be/YOh6Ps9Pd88"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Glute Bridge Band",
+    "url": "https://youtu.be/2DzvTS7g394"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Pedal band",
+    "url": "https://youtu.be/caeEgVqXUxE"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/za1YR3GowpQ"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/H85rtBQuJ84"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/9Y6TRR6Osow"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/I7JbhtpW5aE"
+  },
+  {
+    "level": 6,
+    "gender": "Female",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/FYoVP0TwUDQ"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/sDOZ6_IryG4"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/Z0gRsOoH5pM"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/nD7VmQs5PKg"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/YLQENH_iYgQ"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/3HLQsRgNOIQ"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/LuPaSY9FBs8"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Back step - Chair",
+    "url": "https://youtu.be/fBOm3969Yqs"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Side Lift Chair",
+    "url": "https://youtu.be/2le3ZUhrrCo"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/_X3Yay98-iY"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "High Knee Chair",
+    "url": "https://youtu.be/Hs-7YhopeJI"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Knee Drive Chair",
+    "url": "https://youtu.be/wFpgh1BJYeE"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Jog-Chair",
+    "url": "https://youtu.be/xACMI0OBOVc"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Lateral Lunge Chair",
+    "url": "https://youtu.be/O9jBkVxvV6w"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Squat TRX",
+    "url": "https://youtu.be/OJ_dpcSszR8"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Overhead Squat TRX",
+    "url": "https://youtu.be/zuD0fWUmQlc"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Sumo Squat TRX",
+    "url": "https://youtu.be/RMp3AABx4-I"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Lunges Chair",
+    "url": "https://youtu.be/IcfCRJexRx4"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/2DFVVzg7_wA"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Open Arm-Side Step",
+    "url": "https://youtu.be/7QuULk8igKs"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Open Chest-Side Step",
+    "url": "https://youtu.be/OnCUQ1_RYTE"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/uUtxuiIuP10"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/vryAReBm_Dg"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Pull Side-Step Touch",
+    "url": "https://youtu.be/mzxtN6LZIVU"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/BQ2dFuJsOk4"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/9QVyWOnKDNQ"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Open Arm-Front Step",
+    "url": "https://youtu.be/yNJjMH64MNY"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Pull Side-Front Step",
+    "url": "https://youtu.be/0tB0YmQVvTA"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Pull Down-Side High Knee",
+    "url": "https://youtu.be/U-Qm-4TFkbQ"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/E9IzR-wui8o"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "Stand Lower",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/diF01S8vM5c"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Open V",
+    "url": "https://youtu.be/h2JEPSaXsbY"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Press Up",
+    "url": "https://youtu.be/vQl_OVtbI00"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/CmPzKXUH9GQ"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/UkFjVk5QcCY"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Side Lift",
+    "url": "https://youtu.be/XFv3FOuQuqM"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Kick Back",
+    "url": "https://youtu.be/K-TIOy5Vft0"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/R63B9LnlbZE?si=i--yz0eUS4ZQxmWS"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Knee Drive Chair",
+    "url": "https://youtu.be/Rg_XddCoNZ4"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 3,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/pWLo4ASgThA"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/DswiLrjoxxY"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/LwMSkwsyF1k"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/liMXFUIBKO4"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/QgUyFlKn7ss"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/wUElNgGulvo"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Knee Lift",
+    "url": "https://youtu.be/2X7EtSq2T6s"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Leg Ext",
+    "url": null
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Squat TRX",
+    "url": "https://youtu.be/Nk-WOfTOKDk"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Overhead Squat TRX",
+    "url": "https://youtu.be/WLXNxVgKWWk"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Sumo Squat TRX",
+    "url": "https://youtu.be/KmhFbTEOzq0"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/uLK9HMwjYjk"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/h2JEPSaXsbY"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/chw74rCgOjg"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/bhdITmK2Hn8"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/XG233Fngu-0"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/j_V0hvaU93c"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Knee Lift",
+    "url": "https://youtu.be/2X7EtSq2T6s"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Leg Ext",
+    "url": null
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Squat TRX",
+    "url": "https://youtu.be/Nk-WOfTOKDk"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Overhead Squat TRX",
+    "url": "https://youtu.be/WLXNxVgKWWk"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Sumo Squat TRX",
+    "url": "https://youtu.be/KmhFbTEOzq0"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/uLK9HMwjYjk"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/h2JEPSaXsbY"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/chw74rCgOjg"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/bhdITmK2Hn8"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/XG233Fngu-0"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Sit Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/j_V0hvaU93c"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Knee Lift",
+    "url": "https://youtu.be/2X7EtSq2T6s"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Front Leg Ext",
+    "url": null
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Squat TRX",
+    "url": "https://youtu.be/Nk-WOfTOKDk"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Overhead Squat TRX",
+    "url": "https://youtu.be/WLXNxVgKWWk"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Sit Sumo Squat TRX",
+    "url": "https://youtu.be/KmhFbTEOzq0"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Open V",
+    "url": "https://www.youtube.com/watch?v=h2JEPSaXsbY"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/CmPzKXUH9GQ"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/UkFjVk5QcCY"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Press Up",
+    "url": "https://youtu.be/vQl_OVtbI00"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Sit Lower",
+    "movement": "Hip Abductor Band",
+    "url": "https://youtu.be/iBCOKowoozg"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 1,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/sDOZ6_IryG4"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/Z0gRsOoH5pM"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/nD7VmQs5PKg"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/YLQENH_iYgQ"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/3HLQsRgNOIQ"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/LuPaSY9FBs8"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Back step - Chair",
+    "url": "https://youtu.be/fBOm3969Yqs"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Side Lift Chair",
+    "url": "https://youtu.be/2le3ZUhrrCo"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/_X3Yay98-iY"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "High Knee Chair",
+    "url": "https://youtu.be/Hs-7YhopeJI"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Knee Drive Chair",
+    "url": "https://youtu.be/wFpgh1BJYeE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Jog-Chair",
+    "url": "https://youtu.be/xACMI0OBOVc"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Lateral Lunge Chair",
+    "url": "https://youtu.be/O9jBkVxvV6w"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Sit Squat TRX",
+    "url": "https://youtu.be/Nk-WOfTOKDk"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Sit Overhead Squat TRX",
+    "url": "https://youtu.be/WLXNxVgKWWk"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Lower",
+    "movement": "Sit Sumo Squat TRX",
+    "url": "https://youtu.be/KmhFbTEOzq0"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/Gv0JzAjI4wE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/AW-YmbtnQuY"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/iWPFTtwlHwE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/DKVBV1eG9vI"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/8lAB9sXnvHA"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/Fn0SsvZO6D4"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Back step - Chair",
+    "url": "https://youtu.be/2yhPBvyZSUU"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Side Step Chair",
+    "url": "https://youtu.be/VlqR1OxrXhE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Side Lift Chair",
+    "url": "https://youtu.be/XFv3FOuQuqM"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/R63B9LnlbZE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "High Knee Chair",
+    "url": "https://youtu.be/CknG49mGjcs"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Knee Drive Chair",
+    "url": "https://youtu.be/Rg_XddCoNZ4"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Front Step Chair",
+    "url": null
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Jog-Chair",
+    "url": "https://youtu.be/8sWa8vyjwvA"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Arm Rotation",
+    "url": "https://youtu.be/Gv0JzAjI4wE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open V",
+    "url": "https://youtu.be/AW-YmbtnQuY"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Up",
+    "url": "https://youtu.be/iWPFTtwlHwE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Press Front",
+    "url": "https://youtu.be/DKVBV1eG9vI"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/8lAB9sXnvHA"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 3",
+    "type": "Isolate",
+    "section": "Stand Upper",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/Fn0SsvZO6D4"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Back step - Chair",
+    "url": "https://youtu.be/2yhPBvyZSUU"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Side Step Chair",
+    "url": "https://youtu.be/VlqR1OxrXhE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Side Lift Chair",
+    "url": "https://youtu.be/XFv3FOuQuqM"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/R63B9LnlbZE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "High Knee Chair",
+    "url": "https://youtu.be/CknG49mGjcs"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Knee Drive Chair",
+    "url": "https://youtu.be/Rg_XddCoNZ4"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Front Step Chair",
+    "url": null
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 4",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Jog-Chair",
+    "url": "https://youtu.be/8sWa8vyjwvA"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Open V",
+    "url": "https://www.youtube.com/watch?v=h2JEPSaXsbY"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Press Up",
+    "url": "https://youtu.be/vQl_OVtbI00"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/CmPzKXUH9GQ"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/UkFjVk5QcCY"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "Lower Stand",
+    "movement": "Hip Abductor Band",
+    "url": "https://youtu.be/iBCOKowoozg"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 2,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Rotation-Side Step",
+    "url": "https://youtu.be/lj1diXjbLic"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/PD35IcUpkRg"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/WskPENhO6h4"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/tSZRWHtYOnE"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/u5glRn4tBtA"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/7iD6dmofuKA"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/1Q1CPPEDaJc"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/ZwA4_ZFz3MQ"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/QoTDyry4MPk"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Side High Knee",
+    "url": null
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/2-PJzn307D4"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/Wy84RyjVzzE"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Step",
+    "url": null
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Side Step",
+    "url": null
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/_e8bp-OSX6c"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/blaP3s0N3mI"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Step",
+    "url": null
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat TRX",
+    "url": "https://youtu.be/OJ_dpcSszR8"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Overhead Squat TRX",
+    "url": "https://youtu.be/zuD0fWUmQlc"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Sumo Squat TRX",
+    "url": "https://youtu.be/RMp3AABx4-I"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lunges Chair",
+    "url": "https://youtu.be/IcfCRJexRx4"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Chair",
+    "url": "https://youtu.be/xxeOLPbsK7Y"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Sumo Squat Chair",
+    "url": "https://youtu.be/pyAAJmwFpH0"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Step Chair",
+    "url": "https://youtu.be/qY3b9178JnA"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/2DFVVzg7_wA"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Step",
+    "url": "https://youtu.be/7QuULk8igKs"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Side Step",
+    "url": "https://youtu.be/OnCUQ1_RYTE"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/uUtxuiIuP10"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/vryAReBm_Dg"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Front Step",
+    "url": "https://youtu.be/0tB0YmQVvTA"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/BQ2dFuJsOk4"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/9QVyWOnKDNQ"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Step",
+    "url": "https://youtu.be/yNJjMH64MNY"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Back-Front Step",
+    "url": null
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Side High Knee",
+    "url": "https://youtu.be/U-Qm-4TFkbQ"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/E9IzR-wui8o"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/diF01S8vM5c"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Step Touch",
+    "url": "https://youtu.be/pIWz19u3Xw0"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Step Touch",
+    "url": "https://youtu.be/TljKrF6wyW8"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Step Touch",
+    "url": "https://youtu.be/mzxtN6LZIVU"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/Kpcf1EY4ZI0"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/I2ziQ5trgGQ"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/Lv2KrnPLxqk"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/dgGHE1Sdl44"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/p82SXUL7phw"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/pXPbrDo1LOQ"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Back step",
+    "url": "https://youtu.be/dn4rKXIa_t8"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Back step",
+    "url": "https://youtu.be/OBmYRZeOyWg"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Knee Drive",
+    "url": "https://youtu.be/S6zwg686YrY"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Knee Drive",
+    "url": "https://youtu.be/ICoAkaFoMAQ"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Knee Drive",
+    "url": "https://youtu.be/70TABG4qum4"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Back-Knee Drive",
+    "url": "https://youtu.be/2_9c9qRI7aM"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open V",
+    "url": "https://youtu.be/h2JEPSaXsbY"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Up",
+    "url": "https://youtu.be/vQl_OVtbI00"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/CmPzKXUH9GQ"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/UkFjVk5QcCY"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Lift",
+    "url": "https://youtu.be/XFv3FOuQuqM"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Kick Back",
+    "url": "https://youtu.be/K-TIOy5Vft0"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/R63B9LnlbZE?si=FOpP8JLnBwlf-S-p"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift",
+    "url": "https://youtu.be/ayg9P-sQsDA"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Knee Drive",
+    "url": "https://youtu.be/Rg_XddCoNZ4"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/za1YR3GowpQ"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/H85rtBQuJ84"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/9Y6TRR6Osow"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/I7JbhtpW5aE"
+  },
+  {
+    "level": 4,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/FYoVP0TwUDQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Rotation-Side Step",
+    "url": "https://youtu.be/lj1diXjbLic"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/PD35IcUpkRg"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/WskPENhO6h4"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/tSZRWHtYOnE"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/u5glRn4tBtA"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/7iD6dmofuKA"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/1Q1CPPEDaJc"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/ZwA4_ZFz3MQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/QoTDyry4MPk"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Side High Knee",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/2-PJzn307D4"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/Wy84RyjVzzE"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Step",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Side Step",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/_e8bp-OSX6c"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/blaP3s0N3mI"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Step",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat",
+    "url": "https://youtu.be/Z_efCtyd2dQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Overhead Squat",
+    "url": "https://youtu.be/syENYeSA1-4"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Sumo Squat",
+    "url": "https://youtu.be/z669Jt8SD8A"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Step",
+    "url": "https://youtu.be/BnfKGJrSCvk"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lunges",
+    "url": "https://youtu.be/ztKJWHeKSdU"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lateral Lunge",
+    "url": "https://youtu.be/DZI61Qlo3n4"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/2DFVVzg7_wA"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Step",
+    "url": "https://youtu.be/7QuULk8igKs"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Side Step",
+    "url": "https://youtu.be/OnCUQ1_RYTE"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/uUtxuiIuP10"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/vryAReBm_Dg"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Front Step",
+    "url": "https://youtu.be/0tB0YmQVvTA"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/BQ2dFuJsOk4"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/9QVyWOnKDNQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Step",
+    "url": "https://youtu.be/yNJjMH64MNY"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Back-Front Step",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Side High Knee",
+    "url": "https://youtu.be/U-Qm-4TFkbQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/E9IzR-wui8o"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/diF01S8vM5c"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Step Touch",
+    "url": "https://youtu.be/pIWz19u3Xw0"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Step Touch",
+    "url": "https://youtu.be/TljKrF6wyW8"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Step Touch",
+    "url": "https://youtu.be/mzxtN6LZIVU"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/Kpcf1EY4ZI0"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/I2ziQ5trgGQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/Lv2KrnPLxqk"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/dgGHE1Sdl44"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/p82SXUL7phw"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/pXPbrDo1LOQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Back step",
+    "url": "https://youtu.be/dn4rKXIa_t8"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Back step",
+    "url": "https://youtu.be/OBmYRZeOyWg"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Knee Drive",
+    "url": "https://youtu.be/S6zwg686YrY"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Knee Drive",
+    "url": "https://youtu.be/ICoAkaFoMAQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Knee Drive",
+    "url": "https://youtu.be/70TABG4qum4"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Back-Knee Drive",
+    "url": "https://youtu.be/2_9c9qRI7aM"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open V",
+    "url": "https://youtu.be/qjKyIhvRSto"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Up",
+    "url": "https://youtu.be/vQl_OVtbI00"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/CmPzKXUH9GQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/UkFjVk5QcCY"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/j_V0hvaU93c"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Overhead Press",
+    "url": "https://youtu.be/NFsWcXn8HmU"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Raise",
+    "url": "https://youtu.be/VOzvuZKDrL4"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Dumbbell Press",
+    "url": "https://youtu.be/J5wWtoTR-ak"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Chest Press",
+    "url": "https://youtu.be/wuH_zwLy6EM"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Bent Over Fly",
+    "url": "https://youtu.be/prz4V9AacSE"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Bicep Curls",
+    "url": "https://youtu.be/SZKOhGoXcTI"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Barbel Row",
+    "url": "https://youtu.be/dQPys_dgoGY"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Squat Press Up",
+    "url": "https://youtu.be/UR3zf5_kbdU"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Dumbbell Row",
+    "url": "https://youtu.be/_lWZf156Hq0"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Lift",
+    "url": "https://youtu.be/XFv3FOuQuqM"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Kick Back",
+    "url": "https://youtu.be/K-TIOy5Vft0"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/R63B9LnlbZE?si=FOpP8JLnBwlf-S-p"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift",
+    "url": "https://youtu.be/ayg9P-sQsDA"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Knee Drive",
+    "url": "https://youtu.be/Rg_XddCoNZ4"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift  Lunge",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Knee Drive Lunge",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Kick",
+    "url": "https://youtu.be/Byb9pR0esso"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Push Up",
+    "url": "https://youtu.be/Q4fCSHL8FlU"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Plank",
+    "url": "https://youtu.be/vnifs9riEJY"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Spider Lunge",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Spider Push Up",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Mountain Climb",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Pedal Crunch",
+    "url": null
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Seated Knee Tuck",
+    "url": "https://youtu.be/yCu79ggGrME"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Sit Up",
+    "url": "https://youtu.be/CLweukibDg0"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/za1YR3GowpQ"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/H85rtBQuJ84"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/9Y6TRR6Osow"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/I7JbhtpW5aE"
+  },
+  {
+    "level": 5,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/FYoVP0TwUDQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Rotation-Side Step",
+    "url": "https://youtu.be/lj1diXjbLic"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/PD35IcUpkRg"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/WskPENhO6h4"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/tSZRWHtYOnE"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/u5glRn4tBtA"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/7iD6dmofuKA"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/1Q1CPPEDaJc"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/ZwA4_ZFz3MQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/QoTDyry4MPk"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Side High Knee",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/2-PJzn307D4"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/Wy84RyjVzzE"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Step",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Side Step",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/_e8bp-OSX6c"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/blaP3s0N3mI"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Step",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat",
+    "url": "https://youtu.be/Z_efCtyd2dQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Overhead Squat",
+    "url": "https://youtu.be/syENYeSA1-4"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Sumo Squat",
+    "url": "https://youtu.be/z669Jt8SD8A"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Squat Step",
+    "url": "https://youtu.be/BnfKGJrSCvk"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lunges",
+    "url": "https://youtu.be/ztKJWHeKSdU"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "FC",
+    "set": "Set 3",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Lateral Lunge",
+    "url": "https://youtu.be/DZI61Qlo3n4"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Side Step",
+    "url": "https://youtu.be/2DFVVzg7_wA"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Step",
+    "url": "https://youtu.be/7QuULk8igKs"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Side Step",
+    "url": "https://youtu.be/OnCUQ1_RYTE"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Side Step",
+    "url": "https://youtu.be/uUtxuiIuP10"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Up-Side Step",
+    "url": "https://youtu.be/vryAReBm_Dg"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Front Step",
+    "url": "https://youtu.be/0tB0YmQVvTA"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Step",
+    "url": "https://youtu.be/BQ2dFuJsOk4"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Step",
+    "url": "https://youtu.be/9QVyWOnKDNQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Step",
+    "url": "https://youtu.be/yNJjMH64MNY"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Back-Front Step",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Side High Knee",
+    "url": "https://youtu.be/U-Qm-4TFkbQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-High Knee",
+    "url": "https://youtu.be/E9IzR-wui8o"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-High Knee",
+    "url": "https://youtu.be/diF01S8vM5c"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Chest-Step Touch",
+    "url": "https://youtu.be/pIWz19u3Xw0"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Step Touch",
+    "url": "https://youtu.be/TljKrF6wyW8"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 1",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Side-Step Touch",
+    "url": "https://youtu.be/mzxtN6LZIVU"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Front Lift",
+    "url": "https://youtu.be/Kpcf1EY4ZI0"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Front Lift",
+    "url": "https://youtu.be/I2ziQ5trgGQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Front Lift",
+    "url": "https://youtu.be/Lv2KrnPLxqk"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Arm Swing-Side Lift",
+    "url": "https://youtu.be/dgGHE1Sdl44"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open Arm-Side Lift",
+    "url": "https://youtu.be/p82SXUL7phw"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Back step",
+    "url": "https://youtu.be/pXPbrDo1LOQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Up-Back step",
+    "url": "https://youtu.be/dn4rKXIa_t8"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Press Front-Back step",
+    "url": "https://youtu.be/OBmYRZeOyWg"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Down-Knee Drive",
+    "url": "https://youtu.be/S6zwg686YrY"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Open V-Knee Drive",
+    "url": "https://youtu.be/ICoAkaFoMAQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Cross Front-Knee Drive",
+    "url": "https://youtu.be/70TABG4qum4"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CC",
+    "set": "Set 2",
+    "type": "Dynamic",
+    "section": "",
+    "movement": "Pull Back-Knee Drive",
+    "url": "https://youtu.be/2_9c9qRI7aM"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open V",
+    "url": "https://youtu.be/qjKyIhvRSto"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Press Up",
+    "url": "https://youtu.be/vQl_OVtbI00"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Open Arm",
+    "url": "https://youtu.be/CmPzKXUH9GQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Triceps Extension",
+    "url": "https://youtu.be/UkFjVk5QcCY"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Up",
+    "url": "https://youtu.be/qy2ldvISD2Y"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Cross Front",
+    "url": "https://youtu.be/j_V0hvaU93c"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Overhead Press",
+    "url": "https://youtu.be/NFsWcXn8HmU"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Raise",
+    "url": "https://youtu.be/VOzvuZKDrL4"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Dumbbell Press",
+    "url": "https://youtu.be/J5wWtoTR-ak"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Chest Press",
+    "url": "https://youtu.be/wuH_zwLy6EM"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Bent Over Fly",
+    "url": "https://youtu.be/prz4V9AacSE"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Bicep Curls",
+    "url": "https://youtu.be/SZKOhGoXcTI"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Barbel Row",
+    "url": "https://youtu.be/dQPys_dgoGY"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Squat Press Up",
+    "url": "https://youtu.be/UR3zf5_kbdU"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Upper",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Dumbbell Row",
+    "url": "https://youtu.be/_lWZf156Hq0"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Lift",
+    "url": "https://youtu.be/XFv3FOuQuqM"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Kick Back",
+    "url": "https://youtu.be/K-TIOy5Vft0"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift Chair",
+    "url": "https://youtu.be/R63B9LnlbZE?si=FOpP8JLnBwlf-S-p"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift",
+    "url": "https://youtu.be/ayg9P-sQsDA"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Knee Drive",
+    "url": "https://youtu.be/Rg_XddCoNZ4"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Front Lift  Lunge",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Knee Drive Lunge",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Basic Lower",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Side Kick",
+    "url": "https://youtu.be/Byb9pR0esso"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Push Up",
+    "url": "https://youtu.be/Q4fCSHL8FlU"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Plank",
+    "url": "https://youtu.be/vnifs9riEJY"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Spider Lunge",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Spider Push Up",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Mountain Climb",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Pedal Crunch",
+    "url": null
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Seated Knee Tuck",
+    "url": "https://youtu.be/yCu79ggGrME"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "MC",
+    "set": "Core",
+    "type": "Isolate",
+    "section": "",
+    "movement": "Sit Up",
+    "url": "https://youtu.be/CLweukibDg0"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/tOhv0VRVejo"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/V4mn6TbnWNQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/MJA4uPj84gY"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/zOPb6M65i-w"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/okZldHu7Ia0"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "6",
+    "url": "https://youtu.be/wuHLXsC9dEw"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "7",
+    "url": "https://youtu.be/At7NNBl1epE"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Basic",
+    "type": "Stretching",
+    "section": "",
+    "movement": "8",
+    "url": "https://youtu.be/4URSj-qYyQo"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "1",
+    "url": "https://youtu.be/za1YR3GowpQ"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "2",
+    "url": "https://youtu.be/H85rtBQuJ84"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "3",
+    "url": "https://youtu.be/9Y6TRR6Osow"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "4",
+    "url": "https://youtu.be/I7JbhtpW5aE"
+  },
+  {
+    "level": 6,
+    "gender": "Male",
+    "sequence": "CD",
+    "set": "Mat",
+    "type": "Stretching",
+    "section": "",
+    "movement": "5",
+    "url": "https://youtu.be/FYoVP0TwUDQ"
+  }
+]

@@ -1,91 +1,333 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2, Loader2, Video, Search, ChevronRight, X, Pencil, Save } from "lucide-react";
+import { Plus, Trash2, Loader2, Video, Search, ChevronRight, X, Pencil, Save, PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   useDLLevels,
   useDLMenuItems,
   useDLMovements,
-  useUpdateDLMenuItem
+  useUpdateDLMenuItem,
+  useCreateDLMovement
 } from "@/hooks/useDigitalLibrary";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiPost, apiDelete } from "@/lib/api";
+import { toast } from "@/stores/toastStore";
 
+// Hooks
 function useAddModulCardItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: { level_id: string; movement_id: string }) =>
+    mutationFn: (data: { level_id: string; movement_id: string; category_code?: string; set_name?: string; group_type?: string; section?: string; target_gender?: string }) =>
       apiPost(`/api/digital-library/modul-cards`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dl-menu"] });
+      toast.success("Exercise added successfully");
     },
+    onError: () => {
+      toast.error("Failed to add exercise");
+    }
   });
 }
 
 function useDeleteModulCardItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: { level_id: string; movement_id: string }) =>
-      apiDelete(`/api/digital-library/modul-cards/${data.level_id}/${data.movement_id}`),
+    mutationFn: (id: string) => apiDelete(`/api/digital-library/menu/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dl-menu"] });
+      toast.success("Exercise deleted");
     },
   });
 }
 
-const LEVEL_THEMES: Record<number, { headerBg: string; accent: string }> = {
-  1: { headerBg: "bg-amber-500",   accent: "bg-amber-50" },
-  2: { headerBg: "bg-sky-600",     accent: "bg-sky-50" },
-  3: { headerBg: "bg-emerald-600", accent: "bg-emerald-50" },
-  4: { headerBg: "bg-violet-600",  accent: "bg-violet-50" },
-  5: { headerBg: "bg-rose-600",    accent: "bg-rose-50" },
-};
+// Sub-components
+function EditVideoModal({ item, onClose }: { item: any; onClose: () => void }) {
+  const updateMutation = useUpdateDLMenuItem();
+  const gender = item.target_gender === 'female' ? 'Female' : 'Male';
+  const initialUrl = item.target_gender === 'female' ? item.video_url_female : item.video_url_male;
+  const [url, setUrl] = useState(initialUrl || "");
 
-function getYouTubeEmbedUrl(url: string) {
-  if (!url) return '';
-  let videoId = '';
-  if (url.includes('youtu.be/')) {
-    videoId = url.split('youtu.be/')[1]?.split('?')[0];
-  } else if (url.includes('youtube.com/watch')) {
-    const params = new URLSearchParams(url.split('?')[1]);
-    videoId = params.get('v') || '';
-  } else if (url.includes('youtube.com/shorts/')) {
-    videoId = url.split('youtube.com/shorts/')[1]?.split('?')[0];
-  }
-  return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+  const handleSave = async () => {
+    try {
+      if (item.target_gender === 'female') {
+        await updateMutation.mutateAsync({ id: item.id, data: { video_url_female: url } });
+      } else {
+        await updateMutation.mutateAsync({ id: item.id, data: { video_url_male: url } });
+      }
+      onClose();
+    } catch (err) {}
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col">
+        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+          <h3 className="font-semibold text-slate-900">Edit Video URL ({gender})</h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X className="h-5 w-5" /></button>
+        </div>
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Video URL</label>
+            <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="https://..." />
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Batal</button>
+            <button onClick={handleSave} disabled={updateMutation.isPending} className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg flex items-center gap-2">
+              {updateMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Simpan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AddMovementModal({
+  level,
+  gender,
+  onClose,
+  onAdd,
+  isLoading,
+}: {
+  level: any;
+  gender: string;
+  onClose: () => void;
+  onAdd: (data: any) => void;
+  isLoading: boolean;
+}) {
+  const [tab, setTab] = useState<'search'|'create'>('search');
+  
+  // Search state
+  const [search, setSearch] = useState("");
+  const { data: movementsData } = useDLMovements({ page: 1, limit: 50, search: search.length >= 2 ? search : undefined });
+  const movements = (movementsData?.data || []) as any[];
+  const [selectedMovementId, setSelectedMovementId] = useState("");
+
+  // Create state
+  const [newName, setNewName] = useState("");
+  const [newBodyPart, setNewBodyPart] = useState("upper");
+  const [newVideoUrl, setNewVideoUrl] = useState("");
+  const createMutation = useCreateDLMovement();
+
+  // Position state
+  const [sequence, setSequence] = useState("FC");
+  const [setTrack, setSetTrack] = useState("Set 1");
+  const [groupType, setGroupType] = useState("Isolate");
+  const [section, setSection] = useState("Sit Upper");
+
+  const handleSubmit = async () => {
+    if (tab === 'search') {
+      if (!selectedMovementId) return toast.error("Please select an exercise");
+      onAdd({
+        movement_id: selectedMovementId,
+        category_code: sequence,
+        set_name: setTrack,
+        group_type: groupType,
+        section: section,
+        target_gender: gender.toLowerCase()
+      });
+    } else {
+      if (!newName.trim()) return toast.error("Please enter exercise name");
+      try {
+        const res = await createMutation.mutateAsync({
+          name: newName,
+          body_part: newBodyPart,
+          video_url_male: gender.toLowerCase() === 'male' ? newVideoUrl : undefined,
+          video_url_female: gender.toLowerCase() === 'female' ? newVideoUrl : undefined,
+          target_gender: "universal"
+        });
+        const newMovId = res.data?.id;
+        if (newMovId) {
+          onAdd({
+            movement_id: newMovId,
+            category_code: sequence,
+            set_name: setTrack,
+            group_type: groupType,
+            section: section,
+            target_gender: gender.toLowerCase()
+          });
+        }
+      } catch (err) {
+        toast.error("Failed to create exercise");
+      }
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl flex flex-col max-h-[90vh]">
+        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 rounded-t-2xl">
+          <div>
+            <h3 className="font-bold text-lg text-slate-900">Add Exercise to {level.name} {gender}</h3>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X className="h-6 w-6" /></button>
+        </div>
+
+        <div className="flex border-b border-slate-200">
+          <button onClick={() => setTab('search')} className={cn("flex-1 py-3 text-sm font-medium border-b-2 transition-colors", tab === 'search' ? "border-sf-warmGold text-sf-warmGold" : "border-transparent text-slate-500 hover:text-slate-700")}>
+            Search Existing
+          </button>
+          <button onClick={() => setTab('create')} className={cn("flex-1 py-3 text-sm font-medium border-b-2 transition-colors", tab === 'create' ? "border-sf-warmGold text-sf-warmGold" : "border-transparent text-slate-500 hover:text-slate-700")}>
+            Create New Exercise
+          </button>
+        </div>
+
+        <div className="p-6 overflow-y-auto space-y-8">
+          {tab === 'create' ? (
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider">1. New Exercise Details</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <label className="block text-xs font-medium text-slate-500 mb-1">Exercise Name</label>
+                  <input type="text" value={newName} onChange={e => setNewName(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm" placeholder="e.g., Push Up" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-500 mb-1">Body Part</label>
+                  <select value={newBodyPart} onChange={e => setNewBodyPart(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white">
+                    <option value="upper">Upper</option>
+                    <option value="lower">Lower</option>
+                    <option value="core">Core</option>
+                    <option value="full">Full Body</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-500 mb-1">Video URL ({gender})</label>
+                  <input type="text" value={newVideoUrl} onChange={e => setNewVideoUrl(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm" placeholder="https://..." />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider">1. Select Existing Exercise</h4>
+              <div className="relative">
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                <input type="text" placeholder="Search exercises..." value={search} onChange={e => setSearch(e.target.value)} className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold" />
+              </div>
+              <div className="border border-slate-200 rounded-lg max-h-[150px] overflow-y-auto divide-y divide-slate-100">
+                {movements.length === 0 ? (
+                  <div className="p-3 text-center text-sm text-slate-500">No exercises found.</div>
+                ) : (
+                  movements.map(m => (
+                    <button key={m.id} onClick={() => setSelectedMovementId(m.id)} className={cn("w-full text-left p-3 text-sm hover:bg-slate-50 flex justify-between items-center", selectedMovementId === m.id && "bg-blue-50 hover:bg-blue-50")}>
+                      <span className="font-medium text-slate-800">{m.name}</span>
+                      <span className="text-xs text-slate-500 capitalize">{m.body_part}</span>
+                    </button>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider">2. Position in Training Module</h4>
+            <div className="grid grid-cols-4 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Sequence (Category)</label>
+                <select value={sequence} onChange={e => setSequence(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white">
+                  <option value="FC">FC (Floor Conditioning)</option>
+                  <option value="CC">CC (Core Conditioning)</option>
+                  <option value="MC">MC (Muscle Conditioning)</option>
+                  <option value="CD">CD (Cool Down)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Set / Track</label>
+                <select value={setTrack} onChange={e => setSetTrack(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white">
+                  <option value="Set 1">Set 1</option>
+                  <option value="Set 2">Set 2</option>
+                  <option value="Set 3">Set 3</option>
+                  <option value="Set 4">Set 4</option>
+                  <option value="Set 5">Set 5</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Type (Group)</label>
+                <select value={groupType} onChange={e => setGroupType(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white">
+                  <option value="Isolate">Isolate</option>
+                  <option value="Dynamic">Dynamic</option>
+                  <option value="Static">Static</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Section (Pattern)</label>
+                <select value={section} onChange={e => setSection(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white">
+                  <option value="Sit Upper">Sit Upper</option>
+                  <option value="Sit Lower">Sit Lower</option>
+                  <option value="Stand Upper">Stand Upper</option>
+                  <option value="Stand Lower">Stand Lower</option>
+                  <option value="Core">Core</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 border-t border-slate-100 flex justify-end gap-3 bg-slate-50/50 rounded-b-2xl">
+          <button onClick={onClose} className="px-5 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
+            Cancel
+          </button>
+          <button onClick={handleSubmit} disabled={isLoading || createMutation.isPending} className="px-5 py-2 text-sm font-medium bg-sf-warmGold text-white hover:bg-sf-warmGold/90 rounded-lg transition-colors flex items-center gap-2">
+            {(isLoading || createMutation.isPending) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            Save Exercise
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function ModulCardPage() {
-  // force recompile
   const { data: levelsData, isLoading: isLoadingLevels } = useDLLevels();
-  const levels = (levelsData?.data ?? []) as any[];
-  
-  const activeLevels = levels.filter((l: any) => l.level_number > 0).sort((a: any, b: any) => a.level_number - b.level_number);
-  
-  const [selectedLevel, setSelectedLevel] = useState<number>(1);
-  const selectedLevelData = activeLevels.find((l: any) => l.level_number === selectedLevel);
-  
-  const [selectedGender, setSelectedGender] = useState<'Male'|'Female'>('Male');
-  const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", selectedLevel, selectedGender.toLowerCase());
-  const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", selectedLevel, selectedGender.toLowerCase());
-  const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", selectedLevel, selectedGender.toLowerCase());
-  const { data: cdData, isLoading: isLoadingCD } = useDLMenuItems("cd", selectedLevel, selectedGender.toLowerCase());
-  
-  const isLoadingItems = isLoadingFC || isLoadingCC || isLoadingMC || isLoadingCD;
-  
-  const fcItems = Array.isArray(fcData?.data) ? fcData.data : [];
-  const ccItems = Array.isArray(ccData?.data) ? ccData.data : [];
-  const mcItems = Array.isArray(mcData?.data) ? mcData.data : [];
-  const cdItems = Array.isArray(cdData?.data) ? cdData.data : [];
+  const activeLevels = (levelsData?.data || []).filter((l: any) => l.is_active).sort((a: any, b: any) => a.level_number - b.level_number);
 
+  const tabs = activeLevels.flatMap((lvl: any) => [
+    { level: lvl, gender: "Female", label: \`\${lvl.name} Female\` },
+    { level: lvl, gender: "Male", label: \`\${lvl.name} Male\` }
+  ]);
+
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const activeTab = tabs[activeTabIndex] || null;
+  const selectedLevel = activeTab?.level?.level_number;
+  const selectedGender = activeTab?.gender;
+  
+  const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", selectedLevel, selectedGender?.toLowerCase());
+  const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", selectedLevel, selectedGender?.toLowerCase());
+  const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", selectedLevel, selectedGender?.toLowerCase());
+  const { data: cdData, isLoading: isLoadingCD } = useDLMenuItems("cd", selectedLevel, selectedGender?.toLowerCase());
+
+  const isLoadingItems = isLoadingFC || isLoadingCC || isLoadingMC || isLoadingCD;
+  const addMutation = useAddModulCardItem();
+  const deleteMutation = useDeleteModulCardItem();
+  
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<any>(null);
+  const [itemToEdit, setItemToEdit] = useState<any>(null);
+
+  if (isLoadingLevels) {
+    return (
+      <div className="p-8 flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-sf-warmGold" />
+      </div>
+    );
+  }
+
+  if (tabs.length === 0) {
+    return (
+      <div className="p-8">
+        <EmptyState icon={Search} title="Tidak Ada Level" description="Belum ada level yang aktif di Digital Library." />
+      </div>
+    );
+  }
+
+  // Combine and group data
   const allItems = [
-    ...fcItems.map((i: any) => ({ ...i, sequence: "FC" })),
-    ...ccItems.map((i: any) => ({ ...i, sequence: "CC" })),
-    ...mcItems.map((i: any) => ({ ...i, sequence: "MC" })),
-    ...cdItems.map((i: any) => ({ ...i, sequence: "CD" }))
+    ...(fcData?.data || []).map((i: any) => ({ ...i, sequence: "FC" })),
+    ...(ccData?.data || []).map((i: any) => ({ ...i, sequence: "CC" })),
+    ...(mcData?.data || []).map((i: any) => ({ ...i, sequence: "MC" })),
+    ...(cdData?.data || []).map((i: any) => ({ ...i, sequence: "CD" }))
   ];
 
   const groupedData: any[] = [];
@@ -108,10 +350,9 @@ export default function ModulCardPage() {
     for (const [setName, setItems] of Array.from(setsMap.entries())) {
       const patternsMap = new Map<string, any[]>();
       for (const item of setItems) {
-        // Excel TYPE column is stored in item.group_type
-        const typeName = item.group_type || "Isolate";
-        if (!patternsMap.has(typeName)) patternsMap.set(typeName, []);
-        patternsMap.get(typeName)!.push(item);
+        const patternName = item.group_type || "Uncategorized";
+        if (!patternsMap.has(patternName)) patternsMap.set(patternName, []);
+        patternsMap.get(patternName)!.push(item);
       }
 
       let isFirstSetRow = true;
@@ -120,8 +361,7 @@ export default function ModulCardPage() {
       for (const [patternName, patternItems] of Array.from(patternsMap.entries())) {
         const sectionsMap = new Map<string, any[]>();
         for (const item of patternItems) {
-          // Excel SECTION column is stored in item.movement?.pattern
-          const sectionName = item.movement?.pattern || "-";
+          const sectionName = item.body_part || "Uncategorized";
           if (!sectionsMap.has(sectionName)) sectionsMap.set(sectionName, []);
           sectionsMap.get(sectionName)!.push(item);
         }
@@ -151,228 +391,138 @@ export default function ModulCardPage() {
     }
   }
 
-  const addMutation = useAddModulCardItem();
-  const deleteMutation = useDeleteModulCardItem();
-  const updateMovementMutation = useUpdateDLMenuItem();
-  
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<any>(null);
-  const [itemToEdit, setItemToEdit] = useState<any>(null);
-  const [videoModalUrl, setVideoModalUrl] = useState<string | null>(null);
-
-  const theme = LEVEL_THEMES[selectedLevel] || { headerBg: "bg-slate-600", accent: "bg-slate-50" };
-
-  if (isLoadingLevels) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-sf-systemBlue" />
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Modul Card</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Kelola daftar latihan berdasarkan Level persis seperti format Excel.
-          </p>
-        </div>
+    <div className="p-8 max-w-[1400px] mx-auto space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Training Module</h1>
+        <p className="text-slate-500 mt-1">Manage exercise lists by Level exactly like Excel format.</p>
       </div>
 
+      {/* Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-        {activeLevels.map((lvl) => {
-          const isActive = selectedLevel === lvl.level_number;
-          const lt = LEVEL_THEMES[lvl.level_number] || { headerBg: "bg-slate-600", accent: "bg-slate-50" };
+        {tabs.map((tab, idx) => {
+          const isActive = activeTabIndex === idx;
           return (
             <button
-              key={lvl.id}
-              onClick={() => setSelectedLevel(lvl.level_number)}
+              key={idx}
+              onClick={() => setActiveTabIndex(idx)}
               className={cn(
-                "flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all border",
+                "px-5 py-2.5 rounded-full text-sm font-medium transition-all whitespace-nowrap border",
                 isActive
-                  ? `text-white ${lt.headerBg} shadow-sm border-transparent`
-                  : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                  ? "bg-[#f09a1a] border-[#f09a1a] text-white shadow-md shadow-[#f09a1a]/20"
+                  : "bg-white border-slate-200 text-slate-600 hover:border-[#f09a1a] hover:text-[#f09a1a]"
               )}
             >
-              <span>{lvl.name}</span>
+              {tab.label}
             </button>
           );
         })}
-      
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex bg-slate-100 p-1 rounded-lg w-fit">
-          {['Male', 'Female'].map((g) => (
-            <button
-              key={g}
-              onClick={() => setSelectedGender(g as 'Male' | 'Female')}
-              className={cn(
-                "px-6 py-2 rounded-md text-sm font-medium transition-all",
-                selectedGender === g
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:text-slate-700"
-              )}
-            >
-              {g}
-            </button>
-          ))}
-        </div>
       </div>
 
-</div>
-
+      {/* Main Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className={cn("px-6 py-4 flex justify-between items-center text-white", theme.headerBg)}>
+        {/* Orange Banner Header */}
+        <div className="bg-[#f09a1a] p-4 flex justify-between items-center text-white">
           <div>
-            <h2 className="font-semibold text-lg">{selectedLevelData?.name}</h2>
-            <p className="text-white/80 text-sm">{selectedLevelData?.name_id}</p>
+            <h2 className="text-xl font-bold">{activeTab?.label}</h2>
+            <p className="text-sm opacity-90">{activeTab?.level?.name} - {activeTab?.gender}</p>
           </div>
-          <button
+          <button 
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 transition-colors rounded-lg text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 transition-colors rounded-lg text-sm font-medium border border-white/20"
           >
-            <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">Tambah Latihan</span>
+            <Plus className="h-4 w-4" /> Add Exercise
           </button>
         </div>
 
-        <div className="p-0 overflow-x-auto">
-          {isLoadingItems ? (
-            <div className="flex justify-center p-12">
-              <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
-            </div>
-          ) : allItems.length === 0 ? (
-            <EmptyState
-              icon={Video}
-              title="Belum ada latihan"
-              description={`Tambahkan latihan pertama untuk ${selectedLevelData?.name}`}
-              action={
-                <button 
-                  onClick={() => setIsAddModalOpen(true)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
-                >
-                  Tambah Latihan
-                </button>
-              }
-            />
-          ) : (
+        {/* Content */}
+        {isLoadingItems ? (
+          <div className="p-12 flex justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-[#f09a1a]" />
+          </div>
+        ) : groupedData.length === 0 ? (
+          <div className="p-12">
+            <EmptyState icon={Search} title="Tidak Ada Latihan" description={`Belum ada latihan untuk ${activeTab?.label}.`} />
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
             <table className="w-full text-sm text-left border-collapse">
-              <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
+              <thead className="bg-white text-slate-600 border-b border-slate-200">
                 <tr>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-16 text-center">SEQUENCE</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">SET/TRACK</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">TYPE</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-32 text-center">SECTION</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200 text-center">MOVEMENT & VIDEO ({selectedGender})</th>
-                  <th className="px-4 py-3 font-semibold w-20 text-center"></th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-16 text-center text-xs uppercase tracking-wider">SEQUENCE</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center text-xs uppercase tracking-wider">SET/TRACK</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center text-xs uppercase tracking-wider">TYPE</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 w-32 text-center text-xs uppercase tracking-wider">SECTION</th>
+                  <th className="px-4 py-3 font-semibold text-xs uppercase tracking-wider">EXERCISE</th>
+                  <th className="px-4 py-3 w-32"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
-                {groupedData.map((row, idx) => (
-                  <tr key={row.id} className="hover:bg-slate-50/50 transition-colors">
+              <tbody className="divide-y divide-slate-100">
+                {groupedData.map((row) => (
+                  <tr key={row.id} className="hover:bg-slate-50 transition-colors group">
                     {row.renderSeq && (
-                      <td 
-                        rowSpan={row.renderSeq.span} 
-                        className="px-4 py-3 border-r border-slate-200 text-center font-bold text-slate-700 align-top"
-                      >
+                      <td rowSpan={row.renderSeq.span} className="px-4 py-3 border-r border-slate-200 text-center font-bold text-slate-700 align-top bg-white">
                         {row.renderSeq.name}
                       </td>
                     )}
                     {row.renderSet && (
-                      <td 
-                        rowSpan={row.renderSet.span} 
-                        className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top font-medium"
-                      >
+                      <td rowSpan={row.renderSet.span} className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top font-medium bg-white">
                         {row.renderSet.name}
                       </td>
                     )}
                     {row.renderPattern && (
-                      <td 
-                        rowSpan={row.renderPattern.span} 
-                        className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top"
-                      >
+                      <td rowSpan={row.renderPattern.span} className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top bg-white">
                         {row.renderPattern.name}
                       </td>
                     )}
                     {row.renderSection && (
-                      <td 
-                        rowSpan={row.renderSection.span} 
-                        className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top"
-                      >
+                      <td rowSpan={row.renderSection.span} className="px-4 py-3 border-r border-slate-200 text-center text-slate-600 align-top bg-white">
                         {row.renderSection.name}
                       </td>
                     )}
-                    
-                    <td className="px-4 py-3 border-r border-slate-200">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium text-slate-900">{row.movement?.name ? row.movement.name.replace(/\s*\[L\d+\]$/, "") : ""}</span>
-                        {(selectedGender === 'Male' ? row.video_url_male : row.video_url_female) ? (
-                          <button onClick={() => setVideoModalUrl(selectedGender === 'Male' ? row.video_url_male : row.video_url_female)} className="text-blue-500 hover:text-blue-700 focus:outline-none" title="Tonton Video">
-                            <Video className="w-4 h-4" />
-                          </button>
-                        ) : (
-                          <span className="text-xs text-slate-400 italic">Waitlist</span>
-                        )}
+                    <td className="px-4 py-3">
+                      <span className="font-medium text-slate-800">{row.movement?.name}</span>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onClick={() => setItemToEdit(row)} className="p-1.5 text-blue-500 hover:bg-blue-50 rounded" title="Edit Video">
+                          <Video className="h-4 w-4" />
+                        </button>
+                        <button onClick={() => setItemToEdit(row)} className="p-1.5 text-slate-400 hover:bg-slate-100 rounded" title="Edit">
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button onClick={() => setItemToDelete(row)} className="p-1.5 text-red-500 hover:bg-red-50 rounded" title="Hapus">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                       </div>
                     </td>
-
-                    
-                    <td className="px-4 py-3 text-center align-top whitespace-nowrap flex justify-center items-center gap-1">
-                      <button
-                        onClick={() => setItemToEdit(row)}
-                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                        title="Edit URL Video"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={async () => {
-                          if (confirm('Clear video override untuk ' + selectedGender + '?')) {
-                            await updateMovementMutation.mutateAsync({
-                              id: row.id,
-                              data: {
-                                video_url_male: selectedGender === 'Male' ? null : row.video_url_male,
-                                video_url_female: selectedGender === 'Female' ? null : row.video_url_female
-                              }
-                            });
-                          }
-                        }}
-                        className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors"
-                        title="Clear Video"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => setItemToDelete(row)}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                        title="Hapus dari Modul"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </td>
-
                   </tr>
                 ))}
               </tbody>
             </table>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      {isAddModalOpen && selectedLevelData && (
+      {isAddModalOpen && activeTab && (
         <AddMovementModal
-          level={selectedLevelData}
+          level={activeTab.level}
+          gender={activeTab.gender}
           onClose={() => setIsAddModalOpen(false)}
-          onAdd={async (movementId) => {
+          onAdd={async (data) => {
             await addMutation.mutateAsync({
-              level_id: selectedLevelData.id,
-              movement_id: movementId,
+              level_id: activeTab.level.id,
+              ...data
             });
             setIsAddModalOpen(false);
           }}
           isLoading={addMutation.isPending}
         />
+      )}
+
+      {itemToEdit && (
+        <EditVideoModal item={itemToEdit} onClose={() => setItemToEdit(null)} />
       )}
 
       <ConfirmDialog
@@ -385,167 +535,9 @@ export default function ModulCardPage() {
           }
         }}
         title="Hapus Latihan"
-        description={`Apakah Anda yakin ingin menghapus "${itemToDelete?.movement?.name}"?`}
+        description={`Hapus "${itemToDelete?.movement?.name}" dari ${activeTab?.label}?`}
         confirmLabel={deleteMutation.isPending ? "Menghapus..." : "Hapus"}
       />
-
-      {itemToEdit && (
-        <EditVideoModal
-          item={itemToEdit}
-          selectedGender={selectedGender}
-          onClose={() => setItemToEdit(null)}
-          onSave={async (url: string) => {
-            await updateMovementMutation.mutateAsync({
-              id: itemToEdit.id,
-              data: {
-                video_url_male: selectedGender === 'Male' ? url : itemToEdit.video_url_male,
-                video_url_female: selectedGender === 'Female' ? url : itemToEdit.video_url_female
-              }
-            });
-            setItemToEdit(null);
-          }}
-          isLoading={updateMovementMutation.isPending}
-        />
-      )}
-
-      {/* Video Modal */}
-      {videoModalUrl && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={() => setVideoModalUrl(null)}>
-          <div className="relative bg-black rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-700" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center p-3 bg-slate-900 border-b border-slate-800">
-              <h3 className="font-medium text-slate-200 text-sm">Video Preview</h3>
-              <button 
-                onClick={() => setVideoModalUrl(null)}
-                className="p-1 hover:bg-slate-800 rounded-full transition-colors text-slate-400 hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="w-full aspect-video bg-black">
-              <iframe
-                src={getYouTubeEmbedUrl(videoModalUrl)}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
-
-// ─── Add Movement Modal ─────────────────────────────────────────
-
-function AddMovementModal({
-  level,
-  onClose,
-  onAdd,
-  isLoading,
-}: {
-  level: any;
-  onClose: () => void;
-  onAdd: (movementId: string) => void;
-  isLoading: boolean;
-}) {
-  const [search, setSearch] = useState("");
-  const { data: movementsData, isLoading: isLoadingMovements } = useDLMovements({
-    page: 1,
-    limit: 50,
-    search: search.length >= 2 ? search : undefined,
-  });
-
-  const movements = (movementsData?.data || []) as any[];
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[85vh]">
-        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-          <div>
-            <h3 className="font-semibold text-slate-900">Tambah Latihan</h3>
-            <p className="text-xs text-slate-500">ke {level.name}</p>
-          </div>
-          <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-600 rounded-lg">
-            <Trash2 className="h-4 w-4 hidden" /> {/* dummy to match size */}
-            <span className="text-2xl leading-none">&times;</span>
-          </button>
-        </div>
-
-        <div className="p-4 border-b border-slate-100">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Cari latihan... (min. 2 karakter)"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sf-systemBlue/20 focus:border-sf-systemBlue"
-            />
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-2">
-          {isLoadingMovements ? (
-            <div className="flex justify-center p-8">
-              <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
-            </div>
-          ) : movements.length === 0 ? (
-            <div className="text-center p-8 text-slate-500 text-sm">
-              Tidak ada hasil ditemukan.
-            </div>
-          ) : (
-            <div className="space-y-1">
-              {movements.map((m: any) => (
-                <button
-                  key={m.id}
-                  onClick={() => onAdd(m.id)}
-                  disabled={isLoading}
-                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 text-left transition-colors group disabled:opacity-50"
-                >
-                  <div>
-                    <p className="font-medium text-slate-900">{m.name}</p>
-                    <p className="text-xs text-slate-500 capitalize">{m.body_part}</p>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-sf-systemBlue transition-colors" />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function EditVideoModal({ item, selectedGender, onClose, onSave, isLoading }: { item: any, selectedGender: string, onClose: () => void, onSave: (url: string) => void, isLoading: boolean }) {
-  const [url, setUrl] = useState(selectedGender === 'Male' ? (item?.video_url_male || "") : (item?.video_url_female || ""));
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col">
-        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-          <h3 className="font-semibold text-slate-800">Edit Video URL ({selectedGender})</h3>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200/50">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-        <div className="p-6 space-y-4 flex-1 overflow-y-auto">
-          <p className="text-sm font-medium text-slate-700 bg-slate-100 p-3 rounded-lg mb-4">{item?.movement?.name}</p>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Video URL</label>
-            <input type="url" value={url} onChange={e => setUrl(e.target.value)} placeholder="https://youtube.com/..." className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm" />
-          </div>
-        </div>
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-          <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">Batal</button>
-          <button onClick={() => onSave(url)} disabled={isLoading} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg transition-colors">
-            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            <span>Simpan</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-

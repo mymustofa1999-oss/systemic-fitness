@@ -217,12 +217,13 @@ func (h *DigitalLibraryHandler) AddModulCardItem(w http.ResponseWriter, r *http.
 		SetName      *string `json:"set_name,omitempty"`
 		GroupType    *string `json:"group_type,omitempty"`
 		Section      *string `json:"section,omitempty"`
+		TargetGender *string `json:"target_gender,omitempty"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		response.BadRequest(w, "Invalid request body")
 		return
 	}
-	if err := h.dlService.AddModulCardItem(r.Context(), req.LevelID, req.MovementID, req.CategoryCode, req.SetName, req.GroupType, req.Section); err != nil {
+	if err := h.dlService.AddModulCardItem(r.Context(), req.LevelID, req.MovementID, req.CategoryCode, req.SetName, req.GroupType, req.Section, req.TargetGender); err != nil {
 		response.InternalError(w, "Failed to add modul card item")
 		return
 	}

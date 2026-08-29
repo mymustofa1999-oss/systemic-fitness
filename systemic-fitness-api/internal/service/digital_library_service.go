@@ -247,8 +247,8 @@ func (s *DigitalLibraryService) ListMenuItems(ctx context.Context, code string, 
 	return items, nil
 }
 
-func (s *DigitalLibraryService) AddModulCardItem(ctx context.Context, levelID string, movementID string, categoryCode *string, setName *string, groupType *string, section *string) error {
-	err := s.dlRepo.AddModulCardItem(ctx, levelID, movementID, categoryCode, setName, groupType, section)
+func (s *DigitalLibraryService) AddModulCardItem(ctx context.Context, levelID string, movementID string, categoryCode *string, setName *string, groupType *string, section *string, targetGender *string) error {
+	err := s.dlRepo.AddModulCardItem(ctx, levelID, movementID, categoryCode, setName, groupType, section, targetGender)
 	if err != nil {
 		s.logger.Error("add modul card item", "level_id", levelID, "movement_id", movementID, "error", err)
 		return err

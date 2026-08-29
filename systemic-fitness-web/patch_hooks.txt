@@ -1,0 +1,21 @@
+  const { isSuperAdmin, isConsultant } = useAuth();
+  const canEditClass = isSuperAdmin || isConsultant;
+
+  const [isEditingClass, setIsEditingClass] = useState(false);
+  const [selectedClass, setSelectedClass] = useState<string>(profile?.classification || '');
+
+  useEffect(() => {
+    if (!isEditingClass) setSelectedClass(profile?.classification || '');
+  }, [profile?.classification, isEditingClass]);
+
+  function handleSaveClass() {
+    updateUser.mutate(
+      { id: customerId, data: { classification: selectedClass || null } as any },
+      { onSuccess: () => setIsEditingClass(false) }
+    );
+  }
+
+  function handleAssign(staffId: string, roleType: string) {
+    if (!staffId) return;
+    assignStaff.mutate({ customerId, staff_id: staffId, role_type: roleType });
+  }

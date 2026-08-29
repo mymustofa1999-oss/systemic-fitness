@@ -1,0 +1,82 @@
+UPDATE: 'Arm Rotation' -> https://youtu.be/pWLo4ASgThA
+UPDATE: 'Open V' -> https://youtu.be/DswiLrjoxxY
+UPDATE: 'Press Up' -> https://youtu.be/LwMSkwsyF1k
+UPDATE: 'Press Front' -> https://youtu.be/liMXFUIBKO4
+UPDATE: 'Open Arm' -> https://youtu.be/QgUyFlKn7ss
+UPDATE: 'Cross Front' -> https://youtu.be/wUElNgGulvo
+NOT FOUND IN DB: 'Front Knee Lift'
+NOT FOUND IN DB: 'Front Leg Ext'
+UPDATE: 'Arm Rotation' -> https://youtu.be/uLK9HMwjYjk
+UPDATE: 'Open V' -> https://youtu.be/h2JEPSaXsbY
+UPDATE: 'Press Up' -> https://youtu.be/chw74rCgOjg
+UPDATE: 'Press Front' -> https://youtu.be/bhdITmK2Hn8
+UPDATE: 'Open Arm' -> https://youtu.be/XG233Fngu-0
+UPDATE: 'Cross Front' -> https://youtu.be/j_V0hvaU93c
+NOT FOUND IN DB: 'Front Knee Lift'
+NOT FOUND IN DB: 'Front Leg Ext'
+UPDATE: 'Arm Rotation' -> https://youtu.be/uLK9HMwjYjk
+UPDATE: 'Open V' -> https://youtu.be/h2JEPSaXsbY
+UPDATE: 'Press Up' -> https://youtu.be/chw74rCgOjg
+UPDATE: 'Press Front' -> https://youtu.be/bhdITmK2Hn8
+UPDATE: 'Open Arm' -> https://youtu.be/XG233Fngu-0
+UPDATE: 'Cross Front' -> https://youtu.be/j_V0hvaU93c
+NOT FOUND IN DB: 'Front Knee Lift'
+NOT FOUND IN DB: 'Front Leg Ext'
+UPDATE: 'Open V' -> https://www.youtube.com/watch?v=h2JEPSaXsbY
+UPDATE: 'Triceps Extension' -> https://youtu.be/UkFjVk5QcCY
+UPDATE: 'Cross Up' -> https://youtu.be/qy2ldvISD2Y
+NOT FOUND IN DB: 'Hip Abductor Band'
+NOT FOUND IN DB: '1'
+NOT FOUND IN DB: '2'
+NOT FOUND IN DB: '3'
+NOT FOUND IN DB: '4'
+NOT FOUND IN DB: '5'
+NOT FOUND IN DB: '6'
+NOT FOUND IN DB: '7'
+NOT FOUND IN DB: '8'
+
+UPDATE: 'Arm Rotation' -> https://youtu.be/_rOmevahtfg
+UPDATE: 'Open V' -> https://youtu.be/vW4hYdWDFQs
+UPDATE: 'Press Up' -> https://youtu.be/WHqnzb7PNhY
+UPDATE: 'Press Front' -> https://youtu.be/-Dt4vpTTveM
+UPDATE: 'Open Arm' -> https://youtu.be/mT4KBrXiG-0
+UPDATE: 'Cross Front' -> https://youtu.be/3sNteqa5dX0
+NOT FOUND IN DB: 'Front Knee Lift'
+NOT FOUND IN DB: 'Front Leg Ext'
+UPDATE: 'Sit Squat TRX' -> https://youtu.be/Nk-WOfTOKDk
+UPDATE: 'Sit Overhead Squat TRX' -> https://youtu.be/WLXNxVgKWWk
+UPDATE: 'Sit Sumo Squat TRX' -> https://youtu.be/KmhFbTEOzq0
+UPDATE: 'Arm Rotation' -> https://youtu.be/KehSzUUpVY8
+UPDATE: 'Open V' -> https://youtu.be/mMvq_ZWa-AU
+UPDATE: 'Press Up' -> https://youtu.be/trlgpxVehok
+UPDATE: 'Press Front' -> https://youtu.be/S1AhD6o6tnI
+UPDATE: 'Open Arm' -> https://youtu.be/gIeBMVSQQAI
+UPDATE: 'Cross Front' -> https://youtu.be/iGVTZCT-LIE
+NOT FOUND IN DB: 'Front Knee Lift'
+NOT FOUND IN DB: 'Front Leg Ext'
+UPDATE: 'Sit Squat TRX' -> https://youtu.be/Nk-WOfTOKDk
+UPDATE: 'Sit Overhead Squat TRX' -> https://youtu.be/WLXNxVgKWWk
+UPDATE: 'Sit Sumo Squat TRX' -> https://youtu.be/KmhFbTEOzq0
+UPDATE: 'Arm Rotation' -> https://youtu.be/KehSzUUpVY8
+UPDATE: 'Open V' -> https://youtu.be/mMvq_ZWa-AU
+UPDATE: 'Press Up' -> https://youtu.be/trlgpxVehok
+UPDATE: 'Press Front' -> https://youtu.be/S1AhD6o6tnI
+UPDATE: 'Open Arm' -> https://youtu.be/gIeBMVSQQAI
+UPDATE: 'Cross Front' -> https://youtu.be/iGVTZCT-LIE
+NOT FOUND IN DB: 'Front Knee Lift'
+NOT FOUND IN DB: 'Front Leg Ext'
+UPDATE: 'Sit Squat TRX' -> https://youtu.be/Nk-WOfTOKDk
+UPDATE: 'Sit Overhead Squat TRX' -> https://youtu.be/WLXNxVgKWWk
+UPDATE: 'Sit Sumo Squat TRX' -> https://youtu.be/KmhFbTEOzq0
+UPDATE: 'Open Arm' -> https://youtu.be/VyOHUL9OtoQ
+UPDATE: 'Triceps Extension' -> https://youtu.be/Q8Et1YRNA1s
+UPDATE: 'Press Up' -> https://youtu.be/aFbveSHv7cQ?si=5M1-vlEBLDKZ8fEH
+NOT FOUND IN DB: 'Hip Abductor Band'
+NOT FOUND IN DB: '1'
+NOT FOUND IN DB: '2'
+NOT FOUND IN DB: '3'
+NOT FOUND IN DB: '4'
+NOT FOUND IN DB: '5'
+NOT FOUND IN DB: '6'
+NOT FOUND IN DB: '7'
+NOT FOUND IN DB: '8'

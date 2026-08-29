@@ -1,0 +1,20 @@
+{
+  "male": {
+    "excelRecords": 47,
+    "matched": 47,
+    "missing": 0,
+    "urlMatched": 35,
+    "urlMismatch": 12,
+    "waitlist": 3,
+    "duplicate": 0
+  },
+  "female": {
+    "excelRecords": 47,
+    "matched": 47,
+    "missing": 0,
+    "urlMatched": 34,
+    "urlMismatch": 13,
+    "waitlist": 3,
+    "duplicate": 0
+  }
+}
