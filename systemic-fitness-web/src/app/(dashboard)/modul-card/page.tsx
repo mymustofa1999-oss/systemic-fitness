@@ -139,7 +139,7 @@ function AddMovementModal({
           video_url_female: gender.toLowerCase() === 'female' ? newVideoUrl : undefined,
           target_gender: "universal"
         });
-        const newMovId = res.data?.id;
+        const newMovId = (res as any)?.data?.id || (res as any)?.id;
         if (newMovId) {
           onAdd({
             movement_id: newMovId,
@@ -281,11 +281,11 @@ function AddMovementModal({
 
 export default function ModulCardPage() {
   const { data: levelsData, isLoading: isLoadingLevels } = useDLLevels();
-  const activeLevels = (levelsData?.data || []).filter((l: any) => l.is_active).sort((a: any, b: any) => a.level_number - b.level_number);
+  const activeLevels = ((levelsData as any)?.data || []).filter((l: any) => l.is_active).sort((a: any, b: any) => a.level_number - b.level_number);
 
   const tabs = activeLevels.flatMap((lvl: any) => [
-    { level: lvl, gender: "Female", label: \`\${lvl.name} Female\` },
-    { level: lvl, gender: "Male", label: \`\${lvl.name} Male\` }
+    { level: lvl, gender: "Female", label: `${lvl.name} Female` },
+    { level: lvl, gender: "Male", label: `${lvl.name} Male` }
   ]);
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -324,10 +324,10 @@ export default function ModulCardPage() {
 
   // Combine and group data
   const allItems = [
-    ...(fcData?.data || []).map((i: any) => ({ ...i, sequence: "FC" })),
-    ...(ccData?.data || []).map((i: any) => ({ ...i, sequence: "CC" })),
-    ...(mcData?.data || []).map((i: any) => ({ ...i, sequence: "MC" })),
-    ...(cdData?.data || []).map((i: any) => ({ ...i, sequence: "CD" }))
+    ...((fcData as any)?.data || []).map((i: any) => ({ ...i, sequence: "FC" })),
+    ...((ccData as any)?.data || []).map((i: any) => ({ ...i, sequence: "CC" })),
+    ...((mcData as any)?.data || []).map((i: any) => ({ ...i, sequence: "MC" })),
+    ...((cdData as any)?.data || []).map((i: any) => ({ ...i, sequence: "CD" }))
   ];
 
   const groupedData: any[] = [];
@@ -401,7 +401,7 @@ export default function ModulCardPage() {
 
       {/* Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-        {tabs.map((tab, idx) => {
+        {tabs.map((tab: any, idx: number) => {
           const isActive = activeTabIndex === idx;
           return (
             <button
