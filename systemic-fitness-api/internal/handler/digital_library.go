@@ -397,3 +397,13 @@ func (h *DigitalLibraryHandler) UpdateMenuItem(w http.ResponseWriter, r *http.Re
 	response.OK(w, nil)
 }
 
+
+func (h *DigitalLibraryHandler) DeleteMenuItem(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	if err := h.dlService.RemoveMenuItem(r.Context(), id); err != nil {
+		response.InternalError(w, "Failed to remove modul card item")
+		return
+	}
+	response.SuccessMessage(w, "Movement removed from level")
+}
+

@@ -334,3 +334,7 @@ func (s *DigitalLibraryService) GetProgramOverview(ctx context.Context, category
 		DynamicItems: dynamicItems,
 	}, nil
 }
+
+func (s *DigitalLibraryService) RemoveMenuItem(ctx context.Context, id string) error {
+	return s.dlRepo.DeleteMenuItem(ctx, id)
+}

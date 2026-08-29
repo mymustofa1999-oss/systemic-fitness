@@ -22,3 +22,10 @@
 .idea/
 .vscode/
 *.swp
+
+check_db*.js
+check_db_remote.js
+fix_*.js
+patch_*.js
+import_*.js
+dry_run*.js

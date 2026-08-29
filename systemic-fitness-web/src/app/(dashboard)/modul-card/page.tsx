@@ -7,7 +7,7 @@ import {
   useDLLevels,
   useDLMenuItems,
   useDLMovements,
-  useUpdateDLMovement
+  useUpdateDLMenuItem
 } from "@/hooks/useDigitalLibrary";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
@@ -153,7 +153,7 @@ export default function ModulCardPage() {
 
   const addMutation = useAddModulCardItem();
   const deleteMutation = useDeleteModulCardItem();
-  const updateMovementMutation = useUpdateDLMovement();
+  const updateMovementMutation = useUpdateDLMenuItem();
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
@@ -200,7 +200,27 @@ export default function ModulCardPage() {
             </button>
           );
         })}
+      
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex bg-slate-100 p-1 rounded-lg w-fit">
+          {['Male', 'Female'].map((g) => (
+            <button
+              key={g}
+              onClick={() => setSelectedGender(g as 'Male' | 'Female')}
+              className={cn(
+                "px-6 py-2 rounded-md text-sm font-medium transition-all",
+                selectedGender === g
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              )}
+            >
+              {g}
+            </button>
+          ))}
+        </div>
       </div>
+
+</div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className={cn("px-6 py-4 flex justify-between items-center text-white", theme.headerBg)}>
@@ -244,8 +264,7 @@ export default function ModulCardPage() {
                   <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">SET/TRACK</th>
                   <th className="px-4 py-3 font-semibold border-r border-slate-200 w-24 text-center">TYPE</th>
                   <th className="px-4 py-3 font-semibold border-r border-slate-200 w-32 text-center">SECTION</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200">FEMALE</th>
-                  <th className="px-4 py-3 font-semibold border-r border-slate-200">MALE</th>
+                  <th className="px-4 py-3 font-semibold border-r border-slate-200 text-center">MOVEMENT & VIDEO ({selectedGender})</th>
                   <th className="px-4 py-3 font-semibold w-20 text-center"></th>
                 </tr>
               </thead>
@@ -284,33 +303,45 @@ export default function ModulCardPage() {
                         {row.renderSection.name}
                       </td>
                     )}
+                    
                     <td className="px-4 py-3 border-r border-slate-200">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium text-slate-900">{row.movement?.name ? row.movement.name.split(" | ")[0].replace(/\s*\[L\d+\]$/, "") : ""}</span>
-                        {row.movement?.video_url_female && (
-                          <button onClick={() => setVideoModalUrl(row.movement.video_url_female)} className="text-blue-500 hover:text-blue-700 focus:outline-none">
+                        <span className="font-medium text-slate-900">{row.movement?.name ? row.movement.name.replace(/\s*\[L\d+\]$/, "") : ""}</span>
+                        {(selectedGender === 'Male' ? row.video_url_male : row.video_url_female) ? (
+                          <button onClick={() => setVideoModalUrl(selectedGender === 'Male' ? row.video_url_male : row.video_url_female)} className="text-blue-500 hover:text-blue-700 focus:outline-none" title="Tonton Video">
                             <Video className="w-4 h-4" />
                           </button>
+                        ) : (
+                          <span className="text-xs text-slate-400 italic">Waitlist</span>
                         )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 border-r border-slate-200">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium text-slate-900">{row.movement?.name ? (row.movement.name.split(" | ").length > 1 ? row.movement.name.split(" | ")[1].replace(/\s*\[L\d+\]$/, "") : row.movement.name.split(" | ")[0].replace(/\s*\[L\d+\]$/, "")) : ""}</span>
-                        {row.movement?.video_url_male && (
-                          <button onClick={() => setVideoModalUrl(row.movement.video_url_male)} className="text-blue-500 hover:text-blue-700 focus:outline-none">
-                            <Video className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-center align-top whitespace-nowrap">
+
+                    
+                    <td className="px-4 py-3 text-center align-top whitespace-nowrap flex justify-center items-center gap-1">
                       <button
                         onClick={() => setItemToEdit(row)}
-                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors mr-1"
+                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
                         title="Edit URL Video"
                       >
                         <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={async () => {
+                          if (confirm('Clear video override untuk ' + selectedGender + '?')) {
+                            await updateMovementMutation.mutateAsync({
+                              id: row.id,
+                              data: {
+                                video_url_male: selectedGender === 'Male' ? null : row.video_url_male,
+                                video_url_female: selectedGender === 'Female' ? null : row.video_url_female
+                              }
+                            });
+                          }
+                        }}
+                        className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors"
+                        title="Clear Video"
+                      >
+                        <X className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => setItemToDelete(row)}
@@ -320,6 +351,7 @@ export default function ModulCardPage() {
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -348,10 +380,7 @@ export default function ModulCardPage() {
         onClose={() => setItemToDelete(null)}
         onConfirm={async () => {
           if (itemToDelete) {
-            await deleteMutation.mutateAsync({
-              level_id: itemToDelete.level_id,
-              movement_id: itemToDelete.movement_id
-            });
+            await deleteMutation.mutateAsync(itemToDelete.id);
             setItemToDelete(null);
           }
         }}
@@ -363,13 +392,14 @@ export default function ModulCardPage() {
       {itemToEdit && (
         <EditVideoModal
           item={itemToEdit}
+          selectedGender={selectedGender}
           onClose={() => setItemToEdit(null)}
-          onSave={async (femaleUrl, maleUrl) => {
+          onSave={async (url: string) => {
             await updateMovementMutation.mutateAsync({
-              id: itemToEdit.movement_id,
+              id: itemToEdit.id,
               data: {
-                video_url_female: femaleUrl,
-                video_url_male: maleUrl
+                video_url_male: selectedGender === 'Male' ? url : itemToEdit.video_url_male,
+                video_url_female: selectedGender === 'Female' ? url : itemToEdit.video_url_female
               }
             });
             setItemToEdit(null);
@@ -488,15 +518,14 @@ function AddMovementModal({
   );
 }
 
-function EditVideoModal({ item, onClose, onSave, isLoading }: { item: any, onClose: () => void, onSave: (f: string, m: string) => void, isLoading: boolean }) {
-  const [fUrl, setFUrl] = useState(item?.movement?.video_url_female || "");
-  const [mUrl, setMUrl] = useState(item?.movement?.video_url_male || "");
+function EditVideoModal({ item, selectedGender, onClose, onSave, isLoading }: { item: any, selectedGender: string, onClose: () => void, onSave: (url: string) => void, isLoading: boolean }) {
+  const [url, setUrl] = useState(selectedGender === 'Male' ? (item?.video_url_male || "") : (item?.video_url_female || ""));
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col">
         <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-          <h3 className="font-semibold text-slate-800">Edit Video URL</h3>
+          <h3 className="font-semibold text-slate-800">Edit Video URL ({selectedGender})</h3>
           <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200/50">
             <X className="w-5 h-5" />
           </button>
@@ -504,17 +533,13 @@ function EditVideoModal({ item, onClose, onSave, isLoading }: { item: any, onClo
         <div className="p-6 space-y-4 flex-1 overflow-y-auto">
           <p className="text-sm font-medium text-slate-700 bg-slate-100 p-3 rounded-lg mb-4">{item?.movement?.name}</p>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Video URL (Female)</label>
-            <input type="url" value={fUrl} onChange={e => setFUrl(e.target.value)} placeholder="https://youtube.com/..." className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm" />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Video URL (Male)</label>
-            <input type="url" value={mUrl} onChange={e => setMUrl(e.target.value)} placeholder="https://youtube.com/..." className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm" />
+            <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Video URL</label>
+            <input type="url" value={url} onChange={e => setUrl(e.target.value)} placeholder="https://youtube.com/..." className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm" />
           </div>
         </div>
         <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
           <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">Batal</button>
-          <button onClick={() => onSave(fUrl, mUrl)} disabled={isLoading} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg transition-colors">
+          <button onClick={() => onSave(url)} disabled={isLoading} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg transition-colors">
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             <span>Simpan</span>
           </button>

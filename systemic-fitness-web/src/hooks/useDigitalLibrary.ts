@@ -130,8 +130,8 @@ export function useAddModulCardItem() {
 export function useDeleteModulCardItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: { level_id: string; movement_id: string }) =>
-      apiDelete(`/api/digital-library/modul-cards/${data.level_id}/${data.movement_id}`),
+    mutationFn: (id: string) =>
+      apiDelete(`/api/digital-library/modul-cards/menu/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dl-menu"] });
     },
