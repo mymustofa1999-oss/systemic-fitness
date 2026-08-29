@@ -281,7 +281,7 @@ function AddMovementModal({
 
 export default function ModulCardPage() {
   const { data: levelsData, isLoading: isLoadingLevels } = useDLLevels();
-  const activeLevels = ((levelsData as any)?.data || []).filter((l: any) => l.is_active).sort((a: any, b: any) => a.level_number - b.level_number);
+  const activeLevels = ((levelsData as any)?.data || []).sort((a: any, b: any) => a.level_number - b.level_number);
 
   const tabs = activeLevels.flatMap((lvl: any) => [
     { level: lvl, gender: "Female", label: `${lvl.name} Female` },
