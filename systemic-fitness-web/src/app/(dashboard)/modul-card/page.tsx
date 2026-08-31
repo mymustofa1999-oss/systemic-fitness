@@ -43,6 +43,76 @@ function useDeleteModulCardItem() {
   });
 }
 
+// Helper for Video Preview
+function extractYouTubeId(url: string): string | null {
+  if (!url) return null;
+  const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+  if (shortMatch) return shortMatch[1];
+  const longMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+  if (longMatch) return longMatch[1];
+  const embedMatch = url.match(/embed\/([a-zA-Z0-9_-]{11})/);
+  if (embedMatch) return embedMatch[1];
+  return null;
+}
+
+function SingleVideoPreviewModal({ item, gender, onClose }: { item: any; gender: string; onClose: () => void }) {
+  const url = gender === 'Female' ? item.video_url_female : item.video_url_male;
+  const videoId = extractYouTubeId(url || "");
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      <div
+        className="relative bg-white rounded-2xl shadow-2xl mx-4 max-w-3xl w-full animate-slide-in overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-lg bg-blue-100 flex items-center justify-center">
+              <Video className="h-4.5 w-4.5 text-blue-600" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">{item.movement?.name || 'Preview Video'}</h2>
+              <p className="text-xs text-slate-500 font-medium">For {gender}</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 rounded-full transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="p-6 bg-slate-50/50">
+          {!url ? (
+            <div className="aspect-video bg-slate-100 rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-slate-200">
+              <Video className="h-10 w-10 text-slate-300 mb-2" />
+              <p className="text-slate-500 text-sm font-medium">No video URL available for {gender}.</p>
+            </div>
+          ) : !videoId ? (
+            <div className="aspect-video bg-slate-100 rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-slate-200">
+              <p className="text-slate-500 text-sm font-medium">Invalid or unsupported video URL.</p>
+              <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline mt-2 text-xs">
+                {url}
+              </a>
+            </div>
+          ) : (
+            <div className="aspect-video bg-black rounded-xl overflow-hidden shadow-inner relative">
+              <iframe
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full border-0"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Sub-components
 function EditVideoModal({ item, onClose }: { item: any; onClose: () => void }) {
   const updateMutation = useUpdateDLMenuItem();
@@ -347,6 +417,7 @@ export default function ModulCardPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
   const [itemToEdit, setItemToEdit] = useState<any>(null);
+  const [previewItem, setPreviewItem] = useState<any>(null);
 
   if (isLoadingLevels) {
     return (
@@ -531,7 +602,7 @@ export default function ModulCardPage() {
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => setItemToEdit(row)} className="p-1.5 text-blue-500 hover:bg-blue-50 rounded" title="Edit Video">
+                        <button onClick={() => setPreviewItem(row)} className="p-1.5 text-blue-500 hover:bg-blue-50 rounded" title="Preview Video">
                           <Video className="h-4 w-4" />
                         </button>
                         <button onClick={() => setItemToEdit(row)} className="p-1.5 text-slate-400 hover:bg-slate-100 rounded" title="Edit">
@@ -568,6 +639,14 @@ export default function ModulCardPage() {
 
       {itemToEdit && (
         <EditVideoModal item={itemToEdit} onClose={() => setItemToEdit(null)} />
+      )}
+
+      {previewItem && (
+        <SingleVideoPreviewModal 
+          item={previewItem} 
+          gender={activeTab.gender} 
+          onClose={() => setPreviewItem(null)} 
+        />
       )}
 
       <ConfirmDialog
