@@ -165,9 +165,9 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
              <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
                <Crown className="h-4 w-4 text-sf-warmGold" /> Tim Penanganan
              </h2>
-             <div className="space-y-4">
-               <StaffCard customerId={params.id} staff={setup?.staff} />
-             </div>
+              <div className="space-y-4">
+                <StaffCard customerId={params.id} staff={setup?.staff} profile={profile} />
+              </div>
           </div>
         </div>
 
@@ -346,56 +346,20 @@ function ClientInfoCard({ userId, user, profile, age }: { userId: string; user: 
 //  Staff Card (Consultant + Trainer + Prioritas, editable)
 // ═══════════════════════════════════════════════════════════════
 
-function StaffCard({ customerId, staff }: { customerId: string; staff: any }) {
+function StaffCard({ customerId, staff, profile }: { customerId: string; staff: any; profile: any }) {
   const { data: teamData } = useTeam({ limit: 100 });
   const teamMembers = (teamData?.data ?? []) as any[];
   const assignStaff = useAssignStaff();
-  const updatePriority = useUpdateCustomerPriority();
-
-  // Parse priority as array from comma-separated string
-  const parsePriorities = (val: string | undefined | null): string[] =>
-    (val || "").split(",").map((s: string) => s.trim()).filter(Boolean);
-
-  const [priorities, setPriorities] = useState<string[]>(() => parsePriorities(staff?.priority));
-  const [inputVal, setInputVal] = useState("");
-  const [editingPriority, setEditingPriority] = useState(false);
-
-  // Re-sync when props change
-  useEffect(() => {
-    if (!editingPriority) setPriorities(parsePriorities(staff?.priority));
-  }, [staff?.priority, editingPriority]);
+  const updateUser = useUpdateUser();
 
   function handleAssign(staffId: string, roleType: string) {
     if (!staffId) return;
     assignStaff.mutate({ customerId, staff_id: staffId, role_type: roleType });
   }
 
-  function addPriority() {
-    const trimmed = inputVal.trim();
-    if (!trimmed || priorities.includes(trimmed)) return;
-    setPriorities([...priorities, trimmed]);
-    setInputVal("");
-  }
-
-  function removePriority(idx: number) {
-    setPriorities(priorities.filter((_, i) => i !== idx));
-  }
-
-  function handleSavePriority() {
-    // Include any pending input that hasn't been added yet
-    const final = [...priorities];
-    const pending = inputVal.trim();
-    if (pending && !final.includes(pending)) final.push(pending);
-    if (final.length === 0) return; // backend requires non-empty
-    updatePriority.mutate({ customerId, priority: final.join(", ") }, {
-      onSuccess: () => { setEditingPriority(false); setInputVal(""); },
-    });
-  }
-
-  function cancelEditPriority() {
-    setEditingPriority(false);
-    setPriorities(parsePriorities(staff?.priority));
-    setInputVal("");
+  function handleClassChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const val = e.target.value;
+    updateUser.mutate({ id: customerId, data: { classification: val } });
   }
 
   const staffOptions = teamMembers.map((m: any) => ({
@@ -437,65 +401,21 @@ function StaffCard({ customerId, staff }: { customerId: string; staff: any }) {
               />
             </td>
           </tr>
-          {/* Prioritas — multi-tag editable */}
+          {/* Client Classification */}
           <tr>
-            <td className={cn(lbl, "w-24 align-top")}>Prioritas</td>
+            <td className={cn(lbl, "w-24 align-middle")}>Classification</td>
             <td colSpan={3} className={val}>
-              {editingPriority ? (
-                <div className="space-y-2">
-                  {/* Tags */}
-                  {priorities.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {priorities.map((p, i) => (
-                        <span key={i} className="inline-flex items-center gap-1 bg-sf-iceBlue text-sf-deepNavy border border-sf-iceBlue rounded-full px-2.5 py-0.5 text-xs font-medium">
-                          {p}
-                          <button type="button" onClick={() => removePriority(i)} className="hover:text-red-500 transition-colors">
-                            <X className="h-3 w-3" />
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  {/* Input */}
-                  <div className="flex items-center gap-2">
-                    <input
-                      value={inputVal}
-                      onChange={(e) => setInputVal(e.target.value)}
-                      className="flex-1 border border-slate-200 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-sf-warmGold/40"
-                      placeholder="Ketik prioritas lalu Enter..."
-                      autoFocus
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") { e.preventDefault(); addPriority(); }
-                        if (e.key === "Escape") cancelEditPriority();
-                      }}
-                    />
-                    <button type="button" onClick={handleSavePriority} disabled={updatePriority.isPending}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-sf-deepNavy text-white text-xs font-medium hover:bg-sf-deepNavy disabled:opacity-50">
-                      {updatePriority.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-                      Simpan
-                    </button>
-                    <button type="button" onClick={cancelEditPriority}
-                      className="p-1 rounded hover:bg-slate-100 text-slate-400" title="Batal">
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button type="button" onClick={() => setEditingPriority(true)}
-                  className="text-sm font-medium hover:bg-slate-50 rounded px-1 py-0.5 -mx-1 transition-colors w-full text-left">
-                  {priorities.length > 0 ? (
-                    <div className="flex flex-wrap gap-1.5">
-                      {priorities.map((p, i) => (
-                        <span key={i} className="inline-flex items-center bg-sf-iceBlue text-sf-deepNavy border border-sf-iceBlue rounded-full px-2.5 py-0.5 text-xs font-medium">
-                          {p}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <span className="text-slate-400">- Klik untuk edit -</span>
-                  )}
-                </button>
-              )}
+              <select
+                value={profile?.classification || ""}
+                onChange={handleClassChange}
+                disabled={updateUser.isPending}
+                className="w-full border border-slate-200 rounded px-2 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-sf-warmGold/40 bg-white"
+              >
+                <option value="">- Pilih Classification -</option>
+                <option value="personal">Personal</option>
+                <option value="group">Group</option>
+                <option value="online">Online</option>
+              </select>
             </td>
           </tr>
         </tbody>
