@@ -73,11 +73,29 @@ function EditVideoModal({ item, onClose }: { item: any; onClose: () => void }) {
             <label className="block text-sm font-medium text-slate-700 mb-1">Video URL</label>
             <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="https://..." />
           </div>
-          <div className="flex justify-end gap-2 pt-2">
-            <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Batal</button>
-            <button onClick={handleSave} disabled={updateMutation.isPending} className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg flex items-center gap-2">
-              {updateMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Simpan
+          <div className="flex justify-between items-center pt-2">
+            <button 
+              onClick={async () => {
+                try {
+                  if (item.target_gender === 'female') {
+                    await updateMutation.mutateAsync({ id: item.id, data: { video_url_female: "" } });
+                  } else {
+                    await updateMutation.mutateAsync({ id: item.id, data: { video_url_male: "" } });
+                  }
+                  onClose();
+                } catch (err) {}
+              }}
+              disabled={updateMutation.isPending}
+              className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg"
+            >
+              Clear Video
             </button>
+            <div className="flex gap-2">
+              <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Batal</button>
+              <button onClick={handleSave} disabled={updateMutation.isPending} className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg flex items-center gap-2">
+                {updateMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Simpan
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -102,7 +120,13 @@ function AddMovementModal({
   
   // Search state
   const [search, setSearch] = useState("");
-  const { data: movementsData } = useDLMovements({ page: 1, limit: 50, search: search.length >= 2 ? search : undefined });
+  const { data: movementsData } = useDLMovements({ 
+    page: 1, 
+    limit: 50, 
+    search: search.length >= 2 ? search : undefined,
+    level: level?.level_number,
+    target_gender: gender?.toLowerCase()
+  });
   const movements = (movementsData?.data || []) as any[];
   const [selectedMovementId, setSelectedMovementId] = useState("");
 
@@ -226,40 +250,56 @@ function AddMovementModal({
             <div className="grid grid-cols-4 gap-4">
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1">Sequence (Category)</label>
-                <select value={sequence} onChange={e => setSequence(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white">
-                  <option value="FC">FC (Floor Conditioning)</option>
-                  <option value="CC">CC (Core Conditioning)</option>
-                  <option value="MC">MC (Muscle Conditioning)</option>
-                  <option value="CD">CD (Cool Down)</option>
-                </select>
+                <input list="sequence-options" value={sequence} onChange={e => setSequence(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white" placeholder="FC, Set 1..." />
+                <datalist id="sequence-options">
+                  <option value="FC" />
+                  <option value="CC" />
+                  <option value="MC" />
+                  <option value="CD" />
+                  <option value="Set 1" />
+                  <option value="Set 2" />
+                  <option value="Set 3" />
+                  <option value="Basic Upper" />
+                  <option value="Basic Lower" />
+                  <option value="Basic" />
+                </datalist>
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1">Set / Track</label>
-                <select value={setTrack} onChange={e => setSetTrack(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white">
-                  <option value="Set 1">Set 1</option>
-                  <option value="Set 2">Set 2</option>
-                  <option value="Set 3">Set 3</option>
-                  <option value="Set 4">Set 4</option>
-                  <option value="Set 5">Set 5</option>
-                </select>
+                <input list="set-options" value={setTrack} onChange={e => setSetTrack(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white" placeholder="Set 1..." />
+                <datalist id="set-options">
+                  <option value="Set 1" />
+                  <option value="Set 2" />
+                  <option value="Set 3" />
+                  <option value="Set 4" />
+                  <option value="Basic Upper" />
+                  <option value="Basic Lower" />
+                  <option value="Basic" />
+                  <option value="Mat" />
+                  <option value="Core" />
+                </datalist>
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1">Type (Group)</label>
-                <select value={groupType} onChange={e => setGroupType(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white">
-                  <option value="Isolate">Isolate</option>
-                  <option value="Dynamic">Dynamic</option>
-                  <option value="Static">Static</option>
-                </select>
+                <input list="type-options" value={groupType} onChange={e => setGroupType(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white" placeholder="Isolate..." />
+                <datalist id="type-options">
+                  <option value="Isolate" />
+                  <option value="Dynamic" />
+                  <option value="Stretching" />
+                </datalist>
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1">Section (Pattern)</label>
-                <select value={section} onChange={e => setSection(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white">
-                  <option value="Sit Upper">Sit Upper</option>
-                  <option value="Sit Lower">Sit Lower</option>
-                  <option value="Stand Upper">Stand Upper</option>
-                  <option value="Stand Lower">Stand Lower</option>
-                  <option value="Core">Core</option>
-                </select>
+                <input list="section-options" value={section} onChange={e => setSection(e.target.value)} className="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white" placeholder="Stand Upper..." />
+                <datalist id="section-options">
+                  <option value="Stand Upper" />
+                  <option value="Stand Lower" />
+                  <option value="Lower Stand" />
+                  <option value="Sit Upper" />
+                  <option value="Sit Lower" />
+                  <option value="Arm Rotation-Step Touch" />
+                  <option value="Arm Swing Up-Side Step" />
+                </datalist>
               </div>
             </div>
           </div>
@@ -485,6 +525,9 @@ export default function ModulCardPage() {
                     )}
                     <td className="px-4 py-3">
                       <span className="font-medium text-slate-800">{row.movement?.name}</span>
+                      {!(activeTab.gender === 'Female' ? row.video_url_female : row.video_url_male) && (
+                        <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 tracking-wider">WAITLIST</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

@@ -58,10 +58,20 @@ func (h *DigitalLibraryHandler) ListLevels(w http.ResponseWriter, r *http.Reques
 // GET /api/digital-library/movements?body_part=upper&category=fc&search=arm&page=1&limit=20
 func (h *DigitalLibraryHandler) ListMovements(w http.ResponseWriter, r *http.Request) {
 	params := paginationFromQuery(r)
+	
+	var levelPtr *int
+	if lvlStr := r.URL.Query().Get("level"); lvlStr != "" {
+		if lvl, err := strconv.Atoi(lvlStr); err == nil {
+			levelPtr = &lvl
+		}
+	}
+
 	f := repository.DLMovementFilter{
-		BodyPart: queryString(r, "body_part"),
-		Category: queryString(r, "category"),
-		Search:   params.Search,
+		BodyPart:     queryString(r, "body_part"),
+		Category:     queryString(r, "category"),
+		Search:       params.Search,
+		Level:        levelPtr,
+		TargetGender: queryString(r, "target_gender"),
 	}
 
 	movements, meta, err := h.dlService.ListMovements(r.Context(), params, f)
@@ -224,6 +234,10 @@ func (h *DigitalLibraryHandler) AddModulCardItem(w http.ResponseWriter, r *http.
 		return
 	}
 	if err := h.dlService.AddModulCardItem(r.Context(), req.LevelID, req.MovementID, req.CategoryCode, req.SetName, req.GroupType, req.Section, req.TargetGender); err != nil {
+		if err.Error() == "This exercise already exists in this Training Module position" {
+			response.BadRequest(w, err.Error())
+			return
+		}
 		response.InternalError(w, "Failed to add modul card item")
 		return
 	}

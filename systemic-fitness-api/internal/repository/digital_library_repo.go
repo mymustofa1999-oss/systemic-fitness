@@ -112,9 +112,11 @@ type DLDynamicItem struct {
 // ─── Filters ────────────────────────────────────────────────────
 
 type DLMovementFilter struct {
-	BodyPart *string
-	Category *string
-	Search   string
+	BodyPart     *string
+	Category     *string
+	Search       string
+	Level        *int
+	TargetGender *string
 }
 
 // ─── Categories ─────────────────────────────────────────────────
@@ -200,6 +202,16 @@ func (r *DigitalLibraryRepository) ListMovements(ctx context.Context, params mod
 	if f.Category != nil {
 		where += fmt.Sprintf(" AND categories @> ARRAY[$%d]::training_category[]", idx)
 		args = append(args, *f.Category)
+		idx++
+	}
+	if f.Level != nil {
+		where += fmt.Sprintf(" AND level = $%d", idx)
+		args = append(args, *f.Level)
+		idx++
+	}
+	if f.TargetGender != nil {
+		where += fmt.Sprintf(" AND (target_gender = $%d OR target_gender = 'universal' OR target_gender IS NULL)", idx)
+		args = append(args, *f.TargetGender)
 		idx++
 	}
 	if f.Search != "" {
@@ -416,14 +428,24 @@ func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID
 			continue
 		}
 
-		// Check if it already exists to avoid duplicates
+		// Check if it already exists to avoid duplicates based on logical identity
 		var exists bool
-		err = tx.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM dl_menu_items WHERE category_id = $1 AND level_id = $2 AND movement_id = $3)", c.ID, levelID, movementID).Scan(&exists)
+		queryCheck := `
+			SELECT EXISTS(
+				SELECT 1 FROM dl_menu_items 
+				WHERE category_id = $1 
+				AND level_id = $2 
+				AND movement_id = $3
+				AND target_gender IS NOT DISTINCT FROM $4
+				AND set_name IS NOT DISTINCT FROM $5
+				AND group_type IS NOT DISTINCT FROM $6
+			)`
+		err = tx.QueryRow(ctx, queryCheck, c.ID, levelID, movementID, targetGender, setName, groupType).Scan(&exists)
 		if err != nil {
 			return err
 		}
 		if exists {
-			continue
+			return errors.New("This exercise already exists in this Training Module position")
 		}
 
 		_, err = tx.Exec(ctx, `
@@ -649,7 +671,37 @@ type DLProgramOverview struct {
 }
 
 func (r *DigitalLibraryRepository) UpdateMenuItem(ctx context.Context, id string, videoUrlMale *string, videoUrlFemale *string) error {
-	query := `UPDATE dl_menu_items SET video_url_male = $1, video_url_female = $2, updated_at = NOW() WHERE id = $3`
-	_, err := r.db.Exec(ctx, query, videoUrlMale, videoUrlFemale, id)
+	setClauses := []string{"updated_at = NOW()"}
+	args := []any{}
+	argIdx := 1
+
+	if videoUrlMale != nil {
+		setClauses = append(setClauses, fmt.Sprintf("video_url_male = $%d", argIdx))
+		if *videoUrlMale == "" {
+			args = append(args, nil)
+		} else {
+			args = append(args, *videoUrlMale)
+		}
+		argIdx++
+	}
+
+	if videoUrlFemale != nil {
+		setClauses = append(setClauses, fmt.Sprintf("video_url_female = $%d", argIdx))
+		if *videoUrlFemale == "" {
+			args = append(args, nil)
+		} else {
+			args = append(args, *videoUrlFemale)
+		}
+		argIdx++
+	}
+
+	if len(setClauses) == 1 {
+		return nil // Nothing to update
+	}
+
+	query := fmt.Sprintf("UPDATE dl_menu_items SET %s WHERE id = $%d", strings.Join(setClauses, ", "), argIdx)
+	args = append(args, id)
+
+	_, err := r.db.Exec(ctx, query, args...)
 	return err
 }

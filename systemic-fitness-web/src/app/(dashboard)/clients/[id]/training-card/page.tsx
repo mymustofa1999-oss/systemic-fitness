@@ -405,20 +405,6 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     return match ? match[0] : "";
   }, [physicalLevel]);
 
-  const parsedMappedLevel = parseInt(mappedLevel) || 1;
-  const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", parsedMappedLevel);
-  const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", parsedMappedLevel);
-  const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", parsedMappedLevel);
-  const { data: cdData, isLoading: isLoadingCD } = useDLMenuItems("cd", parsedMappedLevel);
-  const isLoadingMenu = isLoadingFC || isLoadingCC || isLoadingMC || isLoadingCD;
-
-  const { data: templateData, isLoading: isLoadingTemplate } = useTemplate(mappedLevel);
-  const templateCard = templateData?.data as any;
-
-  const upsertCard = useUpsertTrainerCard();
-  const publishCard = usePublishTrainerCard();
-  const deleteCard = useDeleteTrainerCard();
-
   const user = (userData?.data as any)?.user;
   const profile = (userData?.data as any)?.profile;
   const dbCard = cardData?.data as any;
@@ -436,6 +422,20 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
   const assessmentPayload = latestAssessmentData?.data?.phase_a;
   const assessmentGender = assessmentPayload?.gender === "women" ? "female" : assessmentPayload?.gender === "men" ? "male" : undefined;
   const effectiveGender = profile?.gender || assessmentGender;
+
+  const parsedMappedLevel = parseInt(mappedLevel) || 1;
+  const { data: fcData, isLoading: isLoadingFC } = useDLMenuItems("fc", parsedMappedLevel, effectiveGender?.toLowerCase());
+  const { data: ccData, isLoading: isLoadingCC } = useDLMenuItems("cc", parsedMappedLevel, effectiveGender?.toLowerCase());
+  const { data: mcData, isLoading: isLoadingMC } = useDLMenuItems("mc", parsedMappedLevel, effectiveGender?.toLowerCase());
+  const { data: cdData, isLoading: isLoadingCD } = useDLMenuItems("cd", parsedMappedLevel, effectiveGender?.toLowerCase());
+  const isLoadingMenu = isLoadingFC || isLoadingCC || isLoadingMC || isLoadingCD;
+
+  const { data: templateData, isLoading: isLoadingTemplate } = useTemplate(mappedLevel);
+  const templateCard = templateData?.data as any;
+
+  const upsertCard = useUpsertTrainerCard();
+  const publishCard = usePublishTrainerCard();
+  const deleteCard = useDeleteTrainerCard();
 
   const recs = useMemo(() => {
     return getClientCategoryAndLoads(effectiveGender, age, profile?.height_cm);
