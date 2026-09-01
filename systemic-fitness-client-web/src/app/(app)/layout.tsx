@@ -312,8 +312,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     return (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="fixed inset-0 z-[9999] bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-soft shadow-glow-gold/10">
+        <div className="fixed inset-0 z-[9999] bg-slate-900/90 backdrop-blur-md overflow-y-auto">
+          <div className="min-h-full flex items-center justify-center p-4 py-8">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md md:max-w-2xl p-6 shadow-soft shadow-glow-gold/10">
             <div className="flex justify-between items-center mb-4">
               <div className="w-10 h-10 rounded-xl bg-sf-warmGold/10 flex items-center justify-center">
                 <span className="text-sf-warmGold font-bold text-base">SF</span>
@@ -338,6 +339,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </div>
               )}
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                   {t.dob}
@@ -366,7 +368,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   <option value="female" className="bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white">{t.female}</option>
                 </select>
               </div>
+              </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                   {t.weight}
@@ -395,6 +399,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   onChange={(e) => setHeight(e.target.value)}
                   className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sf-warmGold/40 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
                 />
+              </div>
               </div>
 
               <div>
@@ -546,6 +551,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </button>
             </form>
           </div>
+        </div>
         </div>
       </ThemeProvider>
     );
