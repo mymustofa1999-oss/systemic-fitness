@@ -378,7 +378,7 @@ export default function SystemicAssessmentPage({
                   <input type="checkbox" checked={functionalMet} onChange={e => setFunctionalMet(e.target.checked)} className="mt-0.5 w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-600" />
                   <div>
                     <span className="block text-sm font-bold text-slate-800">Functional Met</span>
-                    <span className="block text-[10px] text-slate-500 mt-1 leading-tight">{EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.functional || ""}</span>
+                    <span className="block text-[10px] text-slate-500 mt-1 leading-tight whitespace-pre-wrap">{EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.functional || ""}</span>
                   </div>
                 </label>
               </div>
@@ -388,7 +388,7 @@ export default function SystemicAssessmentPage({
                   <input type="checkbox" checked={movementMet} onChange={e => setMovementMet(e.target.checked)} className="mt-0.5 w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-600" />
                   <div>
                     <span className="block text-sm font-bold text-slate-800">Movement Quality Met</span>
-                    <span className="block text-[10px] text-slate-500 mt-1 leading-tight">{EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.movement || ""}</span>
+                    <span className="block text-[10px] text-slate-500 mt-1 leading-tight whitespace-pre-wrap">{EXIT_CRITERIA[currentLevel as keyof typeof EXIT_CRITERIA]?.movement || ""}</span>
                   </div>
                 </label>
               </div>
