@@ -469,15 +469,15 @@ func (r *TrainerCardRepository) UpsertCard(ctx context.Context, card *TrainerCar
 				batch.Queue(
 					`INSERT INTO trainer_card_set_items
 					    (id, set_id, movement_id, movement_name, body_part, equipment, reps, sets_count, sort_order,
-					     breathing_core, breathing_diaphragm, allowed_tiers)
+					     breathing_core, breathing_diaphragm, allowed_tiers, video_url_snapshot)
 					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 					 ON CONFLICT (id) DO UPDATE SET
 					     movement_id = EXCLUDED.movement_id, movement_name = EXCLUDED.movement_name, body_part = EXCLUDED.body_part, equipment = EXCLUDED.equipment,
 					     reps = EXCLUDED.reps, sets_count = EXCLUDED.sets_count, sort_order = EXCLUDED.sort_order,
-					     breathing_core = EXCLUDED.breathing_core, breathing_diaphragm = EXCLUDED.breathing_diaphragm, allowed_tiers = EXCLUDED.allowed_tiers = EXCLUDED.video_url_snapshot, updated_at = NOW()`,
+					     breathing_core = EXCLUDED.breathing_core, breathing_diaphragm = EXCLUDED.breathing_diaphragm, allowed_tiers = EXCLUDED.allowed_tiers, video_url_snapshot = EXCLUDED.video_url_snapshot, updated_at = NOW()`,
 					item.ID, item.SetID, item.MovementID, item.MovementName,
 					item.BodyPart, item.Equipment, item.Reps, item.SetsCount, item.SortOrder,
-					item.BreathingCore, item.BreathingDiaphragm, nonNilTiers(item.AllowedTiers),
+					item.BreathingCore, item.BreathingDiaphragm, nonNilTiers(item.AllowedTiers), nil,
 				)
 			}
 		}

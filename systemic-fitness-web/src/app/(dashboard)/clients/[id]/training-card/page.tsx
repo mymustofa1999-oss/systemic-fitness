@@ -650,22 +650,10 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
         const currentLevel = form?.level ? parseInt(form.level) : parsedMappedLevel;
         if (!currentLevel) return true;
 
-        const nameMatch = m.name.match(/\((FC|CC|MC)\s*-\s*Level\s*(\d+)\)/i);
-        const altMatch = m.name.match(/\[L(\d+)\]/i);
-
-        let mLevel = -1;
-        if (nameMatch) {
-            mLevel = parseInt(nameMatch[2]);
-        } else if (altMatch) {
-            mLevel = parseInt(altMatch[1]);
+        // Strict filtering: Only allow movements present in Training Module for this level/gender
+        if (!menuCategoryMap.has(m.id)) {
+            return false;
         }
-
-        // Jika gerakan punya spesifik level, pastikan cocok dengan level Training Card
-        if (mLevel !== -1) {
-            return mLevel === currentLevel;
-        }
-
-        // Jika gerakan tidak ada tag level, anggap general dan bisa dipakai di level berapapun
         return true;
       })
       .map((m: any) => {
@@ -1865,20 +1853,6 @@ function MovementSelect({
     // Fallback: Jika filter pattern membuat opsi jadi kosong, tampilkan semua agar user tidak stuck
     if (patFiltered.length > 0) {
       filtered = patFiltered;
-    }
-  }
-
-  // Filter by bodyPart
-  if (bodyPart) {
-    const bpLower = bodyPart.toLowerCase();
-    const bpFiltered = filtered.filter(m => {
-      const mSub = (m.sublabel || "").trim().toLowerCase();
-      // Tampilkan gerakan yang sesuai body_part, atau yang body_part nya kosong (opsional), atau 'whole body'
-      return mSub.includes(bpLower) || mSub === "" || mSub.includes("whole body");
-    });
-    // Jika tidak ada gerakan yang cocok dengan body part, jangan filter agar user tidak stuck
-    if (bpFiltered.length > 0) {
-      filtered = bpFiltered;
     }
   }
 
