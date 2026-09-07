@@ -1,0 +1,78 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: ./systemic-fitness-api
+      dockerfile: Dockerfile
+    container_name: systemic-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      ENV: "production"
+      DATABASE_URL: ${DATABASE_URL}
+      DB_MAX_CONNS: "20"
+      DB_MIN_CONNS: "5"
+      REDIS_URL: "redis://redis:6379"
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_EXPIRY: "720h"
+      JWT_REFRESH_EXPIRY: "720h"
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      BCRYPT_COST: "12"
+      MAX_UPLOAD_SIZE_MB: "10"
+      UPLOAD_DIR: "/app/uploads"
+      BASE_URL: ${BASE_URL}
+    volumes:
+      - api_uploads:/app/uploads
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - systemic-net
+
+  web:
+    build:
+      context: ./systemic-fitness-web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXTAUTH_URL: ${NEXTAUTH_URL}
+        NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+    container_name: systemic-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXT_TELEMETRY_DISABLED: "1"
+    depends_on:
+      - api
+    networks:
+      - systemic-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: systemic-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - systemic-net
+
+volumes:
+  api_uploads:
+  redis_data:
+
+networks:
+  systemic-net:
+    driver: bridge

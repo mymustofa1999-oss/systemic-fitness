@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   // Prevent stale chunk errors by setting proper cache headers
   async headers() {
     return [
@@ -20,6 +21,12 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
+        port: "8080",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "http",
+        hostname: "192.168.12.16",
         port: "8080",
         pathname: "/uploads/**",
       },
