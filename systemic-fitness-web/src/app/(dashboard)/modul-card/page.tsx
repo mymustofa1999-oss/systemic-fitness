@@ -227,12 +227,13 @@ function AddMovementModal({
       if (!newName.trim()) return toast.error("Please enter exercise name");
       try {
         const res = await createMutation.mutateAsync({
-          name: newName,
-          body_part: newBodyPart,
-          video_url_male: gender.toLowerCase() === 'male' ? newVideoUrl : undefined,
-          video_url_female: gender.toLowerCase() === 'female' ? newVideoUrl : undefined,
-          target_gender: "universal"
-        });
+  name: newName,
+  body_part: newBodyPart.toLowerCase(),
+  categories: [sequence],
+  video_url_male: (gender.toLowerCase() === 'male' && newVideoUrl.trim()) ? newVideoUrl.trim() : undefined,
+  video_url_female: (gender.toLowerCase() === 'female' && newVideoUrl.trim()) ? newVideoUrl.trim() : undefined,
+  target_gender: "universal"
+});
         const newMovId = (res as any)?.data?.id || (res as any)?.id;
         if (newMovId) {
           onAdd({
