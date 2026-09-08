@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const API_URL = process.env.INTERNAL_API_URL || "http://192.168.12.16:8080";
 
 /**
  * Calls the Go API refresh endpoint to get new tokens.

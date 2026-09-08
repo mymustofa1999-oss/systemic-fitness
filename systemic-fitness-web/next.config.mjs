@@ -43,8 +43,8 @@ const nextConfig = {
     const apiUrl = process.env.INTERNAL_API_URL || "http://192.168.12.16:8080";
     return [
       {
-        source: "/api/v1/:path*",
-        destination: `${apiUrl}/api/v1/:path*`,
+        source: "/backend-api/:path*",
+        destination: `${apiUrl}/api/:path*`,
       },
       {
         source: "/uploads/:path*",
