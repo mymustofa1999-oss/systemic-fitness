@@ -367,7 +367,7 @@ function ensureUids(sequences: any[]) {
       ...set,
       items: (set.items || []).map((item: any) => ({
         ...item,
-        _uid: item._uid || crypto.randomUUID()
+        _uid: item._uid || (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9))
       }))
     }))
   }));
