@@ -37,6 +37,21 @@ const nextConfig = {
       },
     ],
   },
+  // Proxy requests to the backend API so we don't need to expose port 8080
+  async rewrites() {
+    // Determine the API URL: prioritize internal Docker network name, fallback to localhost
+    const apiUrl = process.env.INTERNAL_API_URL || "http://192.168.12.16:8080";
+    return [
+      {
+        source: "/api/v1/:path*",
+        destination: `${apiUrl}/api/v1/:path*`,
+      },
+      {
+        source: "/uploads/:path*",
+        destination: `${apiUrl}/uploads/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

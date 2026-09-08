@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -e
 
 SERVER_IP="192.168.12.16"
@@ -48,12 +48,12 @@ cat > .env << 'ENVEOF'
 # ── API ──────────────────────────────────────────
 DATABASE_URL=postgres://postgres.udaihnvoqvrfzniqzqun:Fitcoach2026@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres?default_query_exec_mode=simple_protocol&statement_cache_capacity=0
 JWT_SECRET=systemic-fitness-super-secret-jwt-key-2026-production
-CORS_ALLOWED_ORIGINS=http://192.168.12.16:3000,http://localhost:3000
+CORS_ALLOWED_ORIGINS=http://192.168.12.16:3000,http://localhost:3000,http://vpn.smkn6garut.sch.id:8888,http://vpn.smkn6garut.sch.id:3000
 BASE_URL=http://192.168.12.16:8080
 
 # ── Web ───────────────────────────────────────────
-NEXT_PUBLIC_API_URL=http://192.168.12.16:8080
-NEXTAUTH_URL=http://192.168.12.16:3000
+NEXT_PUBLIC_API_URL=
+NEXTAUTH_URL=http://vpn.smkn6garut.sch.id:8888
 NEXTAUTH_SECRET=systemic-fitness-nextauth-secret-2026-production
 ENVEOF
 echo ".env file created."

@@ -229,7 +229,7 @@ function AddMovementModal({
         const res = await createMutation.mutateAsync({
   name: newName,
   body_part: newBodyPart.toLowerCase(),
-  categories: [sequence],
+  categories: [sequence.toLowerCase()],
   video_url_male: (gender.toLowerCase() === 'male' && newVideoUrl.trim()) ? newVideoUrl.trim() : undefined,
   video_url_female: (gender.toLowerCase() === 'female' && newVideoUrl.trim()) ? newVideoUrl.trim() : undefined,
   target_gender: "universal"
