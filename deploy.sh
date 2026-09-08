@@ -46,7 +46,7 @@ cd "$APP_DIR"
 echo "[5/7] Writing environment configuration..."
 cat > .env << 'ENVEOF'
 # ── API ──────────────────────────────────────────
-DATABASE_URL=postgres://postgres.udaihnvoqvrfzniqzqun:Fitcoach2026@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres?default_query_exec_mode=simple_protocol&statement_cache_capacity=0
+DATABASE_URL=postgres://fitadmin:Fitcoach2026!@db:5432/systemic_fitness?sslmode=disable
 JWT_SECRET=systemic-fitness-super-secret-jwt-key-2026-production
 CORS_ALLOWED_ORIGINS=http://192.168.12.16:3000,http://localhost:3000,http://vpn.smkn6garut.sch.id:8888,http://vpn.smkn6garut.sch.id:3000
 BASE_URL=http://192.168.12.16:8080

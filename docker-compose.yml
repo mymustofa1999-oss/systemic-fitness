@@ -29,6 +29,8 @@ services:
     depends_on:
       redis:
         condition: service_healthy
+      db:
+        condition: service_healthy
     networks:
       - systemic-net
 
@@ -69,9 +71,30 @@ services:
     networks:
       - systemic-net
 
+  db:
+    image: postgres:15-alpine
+    container_name: systemic-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fitadmin
+      POSTGRES_PASSWORD: Fitcoach2026!
+      POSTGRES_DB: systemic_fitness
+    volumes:
+      - systemic_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fitadmin -d systemic_fitness"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - systemic-net
+
 volumes:
   api_uploads:
   redis_data:
+  systemic_pgdata:
 
 networks:
   systemic-net:
