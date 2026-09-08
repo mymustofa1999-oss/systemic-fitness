@@ -1037,7 +1037,9 @@ export default function TrainingCardPage({ params }: { params: { id: string } })
     const seqs = [...form.sequences];
     const sets = [...seqs[si].sets];
     const items = [...sets[seti].items];
+    const newUid = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9);
     items.push({
+      _uid: newUid,
       movement_id: null, movement_name: "", body_part: bodyPart,
       equipment: "", reps: 20, sets_count: 1, breathing_core: "", breathing_diaphragm: "", sort_order: items.length,
     });
@@ -1750,12 +1752,12 @@ function SetBlock({
         ) : (
           
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={set.items.map((i: any) => i._uid || i.movement_id || String(Math.random()))} strategy={verticalListSortingStrategy}>
+            <SortableContext items={set.items.map((i: any) => i._uid)} strategy={verticalListSortingStrategy}>
               <div className="space-y-3 mb-4">
                 {set.items.map((item, ii) => (
                   <SortableItemRow
-                    key={item._uid || ii}
-                    id={item._uid || ii}
+                    key={item._uid}
+                    id={item._uid}
                     item={item}
                     ii={ii}
                     editing={editing}
