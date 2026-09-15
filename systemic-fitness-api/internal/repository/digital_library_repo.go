@@ -440,14 +440,10 @@ func (r *DigitalLibraryRepository) AddModulCardItem(ctx context.Context, levelID
 		return err
 	}
 	
-	// Update pattern if section is provided
-	if section != nil && *section != "" {
-		_, err = tx.Exec(ctx, "UPDATE dl_movements SET pattern = $1 WHERE id = $2", *section, movementID)
-		if err != nil {
-			return err
-		}
-	}
-
+	// Issue #2 Fix: Removed side-effect that mutates dl_movements.pattern here.
+	// We cannot store 'section' / 'pattern' in dl_menu_items because there is genuinely no suitable field for it.
+	// (dl_menu_items has no 'pattern' or 'section' column).
+	
 	for _, c := range cats {
 		// Filter by category if provided
 		if categoryCode != nil && *categoryCode != "" && !strings.EqualFold(c.Code, *categoryCode) {

@@ -141,7 +141,7 @@ export function useDeleteModulCardItem() {
 export function useUpdateDLMenuItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string, data: any }) => apiPut(`/api/digital-library/menu/${id}`, data),
+    mutationFn: ({ id, data }: { id: string, data: any }) => apiPut(`/api/digital-library/modul-cards/menu/${id}`, data),
     onSuccess: () => {
       toast.success("Menu item updated");
       queryClient.invalidateQueries({ queryKey: ["dl-menu-items"] });

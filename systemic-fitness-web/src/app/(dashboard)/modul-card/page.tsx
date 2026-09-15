@@ -8,7 +8,8 @@ import {
   useDLMenuItems,
   useDLMovements,
   useUpdateDLMenuItem,
-  useCreateDLMovement
+  useCreateDLMovement,
+  useDeleteModulCardItem
 } from "@/hooks/useDigitalLibrary";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
@@ -32,16 +33,7 @@ function useAddModulCardItem() {
   });
 }
 
-function useDeleteModulCardItem() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (id: string) => apiDelete(`/api/digital-library/menu/${id}`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dl-menu"] });
-      toast.success("Exercise deleted");
-    },
-  });
-}
+
 
 // Helper for Video Preview
 function extractYouTubeId(url: string): string | null {
