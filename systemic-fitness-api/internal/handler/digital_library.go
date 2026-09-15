@@ -66,12 +66,24 @@ func (h *DigitalLibraryHandler) ListMovements(w http.ResponseWriter, r *http.Req
 		}
 	}
 
+	var isActivePtr *bool
+	if status := r.URL.Query().Get("status"); status != "" {
+		if status == "active" {
+			val := true
+			isActivePtr = &val
+		} else if status == "inactive" {
+			val := false
+			isActivePtr = &val
+		}
+	}
+
 	f := repository.DLMovementFilter{
 		BodyPart:     queryString(r, "body_part"),
 		Category:     queryString(r, "category"),
 		Search:       params.Search,
 		Level:        levelPtr,
 		TargetGender: queryString(r, "target_gender"),
+		IsActive:     isActivePtr,
 	}
 
 	movements, meta, err := h.dlService.ListMovements(r.Context(), params, f)
@@ -175,15 +187,21 @@ func (h *DigitalLibraryHandler) UpdateMovement(w http.ResponseWriter, r *http.Re
 // DELETE /api/digital-library/movements/{id}
 func (h *DigitalLibraryHandler) DeleteMovement(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
+
 	if err := h.dlService.DeleteMovement(r.Context(), id); err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
 			response.NotFound(w, "Movement not found")
+			return
+		}
+		if errors.Is(err, repository.ErrReferenced) {
+			response.Conflict(w, "This exercise is currently used by Training Modules and cannot be permanently deleted. You can deactivate it instead.")
 			return
 		}
 		slog.Error("[DL.DeleteMovement] failed", "id", id, "error", err)
 		response.InternalError(w, "Failed to delete movement")
 		return
 	}
+
 	response.SuccessMessage(w, "Movement deleted")
 }
 

@@ -14,6 +14,7 @@ import (
 )
 
 var ErrDuplicateName = errors.New("movement name already exists")
+var ErrReferenced = errors.New("movement is referenced by training modules or cards and cannot be deleted")
 
 // ════════════════════════════════════════════════════════════════════
 //  Digital Library Repository
@@ -117,6 +118,7 @@ type DLMovementFilter struct {
 	Search       string
 	Level        *int
 	TargetGender *string
+	IsActive     *bool
 }
 
 // ─── Categories ─────────────────────────────────────────────────
@@ -214,6 +216,11 @@ func (r *DigitalLibraryRepository) ListMovements(ctx context.Context, params mod
 		args = append(args, *f.TargetGender)
 		idx++
 	}
+	if f.IsActive != nil {
+		where += fmt.Sprintf(" AND is_active = $%d", idx)
+		args = append(args, *f.IsActive)
+		idx++
+	}
 	if f.Search != "" {
 		where += fmt.Sprintf(" AND name ILIKE $%d", idx)
 		args = append(args, "%"+f.Search+"%")
@@ -305,6 +312,25 @@ func (r *DigitalLibraryRepository) DeleteMovement(ctx context.Context, id string
 		return err
 	}
 	defer tx.Rollback(ctx)
+
+	// Check if referenced
+	var count int
+	
+	// Check dl_menu_items (Training Modules)
+	err = tx.QueryRow(ctx, `SELECT COUNT(*) FROM dl_menu_items WHERE movement_id = $1`, id).Scan(&count)
+	if err == nil && count > 0 { return ErrReferenced }
+	
+	// Check dl_isolate_items
+	err = tx.QueryRow(ctx, `SELECT COUNT(*) FROM dl_isolate_items WHERE movement_id = $1`, id).Scan(&count)
+	if err == nil && count > 0 { return ErrReferenced }
+
+	// Check trainer_card_set_items (Training Cards)
+	err = tx.QueryRow(ctx, `SELECT COUNT(*) FROM trainer_card_set_items WHERE movement_id = $1`, id).Scan(&count)
+	if err == nil && count > 0 { return ErrReferenced }
+	
+	// Check trainer_card_template_set_items
+	err = tx.QueryRow(ctx, `SELECT COUNT(*) FROM trainer_card_template_set_items WHERE movement_id = $1`, id).Scan(&count)
+	if err == nil && count > 0 { return ErrReferenced }
 
 	// 1. Delete dl_dynamic_items where this movement is the only movement
 	_, err = tx.Exec(ctx, `

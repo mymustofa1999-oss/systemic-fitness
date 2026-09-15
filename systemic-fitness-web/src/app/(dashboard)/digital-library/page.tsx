@@ -20,7 +20,6 @@ import { SearchableSelect } from "@/components/shared/SearchableSelect";
 // ── Constants ───────────────────────────────────────────────────
 
 const TABS = [
-  { key: "movements", label: "Movements" },
   { key: "menu",      label: "Menu Program" },
   { key: "isolate",   label: "Isolate" },
   { key: "dynamic",   label: "Dynamic" },
@@ -138,12 +137,11 @@ function GuidePanel() {
           {/* Alur Kerja */}
           <div>
             <h4 className="text-sm font-bold text-slate-800 mb-2">Alur Pengisian Data</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-              {[
-                { step: "1", title: "Tambah Gerakan", desc: "Buat data gerakan di tab Movements dengan nama, body part, dan kategori." },
-                { step: "2", title: "Isi Menu Program", desc: "Masukkan gerakan ke setiap level (0-5) per kategori. Ini adalah tahapan utama deteksi." },
-                { step: "3", title: "Isi Isolate", desc: "Tentukan gerakan individual per posisi (Duduk / Berdiri) untuk latihan terfokus." },
-                { step: "4", title: "Isi Dynamic", desc: "Buat pasangan gerakan Upper + Lower body yang dilakukan bergantian." },
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {[
+                  { step: "1", title: "Isi Menu Program", desc: "Masukkan gerakan ke setiap level (0-5) per kategori. Ini adalah tahapan utama deteksi." },
+                  { step: "2", title: "Isi Isolate", desc: "Tentukan gerakan individual per posisi (Duduk / Berdiri) untuk latihan terfokus." },
+                  { step: "3", title: "Isi Dynamic", desc: "Buat pasangan gerakan Upper + Lower body yang dilakukan bergantian." },
               ].map((s) => (
                 <div key={s.step} className="rounded-lg bg-white border border-sky-100 p-3">
                   <div className="flex items-center gap-2 mb-1.5">
@@ -220,7 +218,7 @@ function GuidePanel() {
 // ── Main Page ───────────────────────────────────────────────────
 
 export default function DigitalLibraryPage() {
-  const [tab, setTab] = useState<TabKey>("movements");
+  const [tab, setTab] = useState<TabKey>("menu");
 
   return (
     <div className="space-y-5">
@@ -254,7 +252,6 @@ export default function DigitalLibraryPage() {
       </div>
 
       {/* Tab Content */}
-      {tab === "movements" && <MovementsTab />}
       {tab === "menu"      && <MenuTab />}
       {tab === "isolate"   && <IsolateTab />}
       {tab === "dynamic"   && <DynamicTab />}
