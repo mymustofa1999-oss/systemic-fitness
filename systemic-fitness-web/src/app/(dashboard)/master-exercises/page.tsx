@@ -316,7 +316,7 @@ function MovementFormModal({ movement, onClose, onSaved }: { movement?: any, onC
         <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
           <div>
             <h4 className="text-sm font-semibold text-slate-900">Status</h4>
-            <p className="text-xs text-slate-500">Inactive exercises won't appear in the consultant dropdowns.</p>
+            <p className="text-xs text-slate-500">Inactive exercises won&apos;t appear in the consultant dropdowns.</p>
           </div>
           <label className="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" className="sr-only peer" checked={isActive} onChange={e => setIsActive(e.target.checked)} />
